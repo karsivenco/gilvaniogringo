@@ -28,7 +28,6 @@
         /* Estilos Personalizados */
         body {
             font-family: 'Inter', sans-serif;
-            scroll-padding-top: 80px; /* Offset for fixed navbar */
         }
 
         .header-carousel .owl-item.active {
@@ -38,7 +37,21 @@
         .accordion-link.active {
             background-color: #004989;
             color: white;
-            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+        
+        .accordion-link:not(.active) {
+            background-color: #f3f4f6;
+            color: #004989;
+        }
+
+        .btn-primary {
+            background-color: #004989;
+            border-color: #004989;
+        }
+
+        .btn-primary:hover {
+            background-color: #003d70;
+            border-color: #003d70;
         }
         
         /* Setas de Navegação do Carrossel */
@@ -102,34 +115,10 @@
         a {
             text-decoration: none !important;
         }
-
-        /* Imagens do Carrossel */
-        .carousel-background {
-            background-size: cover;
-            background-position: center;
-        }
-        
-        /* Imagens para Mobile */
-        .carousel-background-1 {
-            background-image: url('img/carrossel-1.png');
-        }
-        .carousel-background-2 {
-            background-image: url('img/carrossel-2.png');
-        }
-
-        /* Imagens para Desktop - Media Query */
-        @media (min-width: 768px) {
-            .carousel-background-1 {
-                background-image: url('img/carousel-1.jpg');
-            }
-            .carousel-background-2 {
-                background-image: url('img/carousel-2.jpg');
-            }
-        }
     </style>
 </head>
 
-<body class="bg-gray-50 text-gray-800">
+<body class="bg-white">
 
     <!-- Spinner Start -->
     <div id="spinner" class="fixed inset-0 z-50 flex items-center justify-center bg-white">
@@ -164,7 +153,10 @@
         <!-- Carousel Start -->
         <section class="header-carousel-container relative w-full pt-20">
             <div class="header-carousel owl-carousel">
-                <div class="header-carousel-item relative h-[85vh] carousel-background carousel-background-1">
+                <div class="header-carousel-item relative h-[85vh]">
+                    <img src="img/carrossel-1.png" class="absolute inset-0 h-full w-full object-cover md:hidden" alt="Gilvani o Gringo">
+                    <img src="img/carousel-1.jpg" class="absolute inset-0 h-full w-full object-cover hidden md:block" alt="Gilvani o Gringo">
+
                     <div class="absolute inset-0 flex items-center bg-gradient-to-r from-black/20 to-transparent">
                         <div class="container mx-auto px-6 md:px-8">
                             <div class="w-full text-center sm:w-4/5 md:w-3/5 lg:w-1/2 sm:text-left animate__animated animate__fadeInLeft">
@@ -181,7 +173,10 @@
                         </div>
                     </div>
                 </div>
-                 <div class="header-carousel-item relative h-[85vh] carousel-background carousel-background-2">
+                 <div class="header-carousel-item relative h-[85vh]">
+                    <img src="img/carrossel-2.png" class="absolute inset-0 h-full w-full object-cover md:hidden" alt="Projetos do Gringo">
+                    <img src="img/carousel-2.jpg" class="absolute inset-0 h-full w-full object-cover hidden md:block" alt="Projetos do Gringo">
+
                     <div class="absolute inset-0 flex items-center">
                         <div class="container mx-auto px-6 md:px-8 flex justify-center sm:justify-start">
                             <div class="w-full text-center sm:w-4/5 md:w-3/5 lg:w-1/2 sm:text-left animate__animated animate__fadeInLeft">
@@ -254,8 +249,8 @@
                     <h2 class="mb-4 text-3xl md:text-4xl font-bold text-[#005075]">Conheça o Gringo</h2>
                     <p class="text-lg text-gray-600">Com uma história de luta e dedicação, Gringo atua em emergências ambientais, ajuda na recuperação de bairros e desenvolve projetos inovadores para fazer a diferença na sua comunidade!</p>
                 </div>
-                <div class="flex flex-col lg:flex-row items-center gap-8">
-                    <div class="w-full lg:w-5/12 wow animate__animated animate__fadeInLeft">
+                <div class="flex flex-wrap items-center -mx-4">
+                     <div class="w-full lg:w-5/12 px-4 mb-8 lg:mb-0 wow animate__animated animate__fadeInLeft">
                         <div class="space-y-4">
                             <a class="accordion-link flex w-full rounded-lg p-4 text-left text-lg font-medium transition-all duration-300 active" data-target="#collapseOne">Apoio em situações de emergência</a>
                             <a class="accordion-link flex w-full rounded-lg p-4 text-left text-lg font-medium transition-all duration-300" data-target="#collapseTwo">Projetos para melhorar o saneamento básico</a>
@@ -263,41 +258,57 @@
                             <a class="accordion-link flex w-full rounded-lg p-4 text-left text-lg font-medium transition-all duration-300" data-target="#collapseFour">A saúde pede socorro</a>
                         </div>
                     </div>
-                    <div class="w-full lg:w-7/12 mt-8 lg:mt-0 wow animate__animated animate__fadeInRight">
+                    <div class="w-full lg:w-7/12 px-4 mt-8 lg:mt-0 wow animate__animated animate__fadeInRight">
                         <div class="tab-content relative">
                             <div id="collapseOne" class="tab-pane active">
-                                <div class="bg-white rounded-xl shadow-xl overflow-hidden">
-                                    <img src="img/_ATF6132.jpg" class="w-full h-64 object-cover" alt="Gringo em apoio a emergências" onerror="this.onerror=null;this.src='https://placehold.co/600x400/cccccc/ffffff?text=Imagem+Indisponível';">
-                                    <div class="p-6">
-                                        <p class="mb-4 text-gray-700">Com uma trajetória marcada por ações diretas, atuei em muitos bairros em momentos críticos, ajudando famílias afetadas por enchentes e crises ambientais.</p>
-                                        <a class="btn-primary inline-block rounded-full py-2 px-5 text-white" href="https://www.instagram.com/reel/DKDIkdjRLxl/?igsh=cDNtcmZ5emc2cGhn" target="_blank">Saiba Mais</a>
+                                <div class="flex flex-wrap items-center -mx-2">
+                                    <div class="w-full md:w-7/12 px-2 mb-4 md:mb-0">
+                                        <img src="img/_ATF6132.jpg" class="w-full rounded-lg shadow-lg aspect-square object-cover" alt="Gringo em apoio a emergências" onerror="this.onerror=null;this.src='https://placehold.co/600x400/cccccc/ffffff?text=Imagem+Indisponível';">
+                                    </div>
+                                    <div class="w-full md:w-5/12 px-2">
+                                        <div class="bg-white p-6 rounded-lg shadow-xl">
+                                            <p class="mb-4 text-gray-700">Com uma trajetória marcada por ações diretas, atuei em muitos bairros em momentos críticos, ajudando famílias afetadas por enchentes e crises ambientais.</p>
+                                            <a class="btn-primary inline-block rounded-full py-2 px-5 text-white" href="https://www.instagram.com/reel/DKDIkdjRLxl/?igsh=cDNtcmZ5emc2cGhn" target="_blank">Saiba Mais</a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                             <div id="collapseTwo" class="tab-pane hidden">
-                                 <div class="bg-white rounded-xl shadow-xl overflow-hidden">
-                                    <img src="img/_FSA8055.jpg" class="w-full h-64 object-cover" alt="Gringo em projeto de saneamento" onerror="this.onerror=null;this.src='https://placehold.co/600x400/cccccc/ffffff?text=Imagem+Indisponível';">
-                                    <div class="p-6">
-                                        <p class="mb-4 text-gray-700">Luto por soluções eficientes e duradouras para o saneamento básico, garantindo mais qualidade de vida e segurança para todas as famílias.</p>
-                                        <a class="btn-primary inline-block rounded-full py-2 px-5 text-white" href="https://www.instagram.com/reel/DKspWvpg93X/?igsh=MWhybTRjZG53aTJ3Mw==" target="_blank">Saiba Mais</a>
+                                 <div class="flex flex-wrap items-center -mx-2">
+                                    <div class="w-full md:w-7/12 px-2 mb-4 md:mb-0">
+                                        <img src="img/_FSA8055.jpg" class="w-full rounded-lg shadow-lg aspect-square object-cover" alt="Gringo em projeto de saneamento" onerror="this.onerror=null;this.src='https://placehold.co/600x400/cccccc/ffffff?text=Imagem+Indisponível';">
+                                    </div>
+                                    <div class="w-full md:w-5/12 px-2">
+                                        <div class="bg-white p-6 rounded-lg shadow-xl">
+                                            <p class="mb-4 text-gray-700">Luto por soluções eficientes e duradouras para o saneamento básico, garantindo mais qualidade de vida e segurança para todas as famílias.</p>
+                                            <a class="btn-primary inline-block rounded-full py-2 px-5 text-white" href="https://www.instagram.com/reel/DKspWvpg93X/?igsh=MWhybTRjZG53aTJ3Mw==" target="_blank">Saiba Mais</a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                             <div id="collapseThree" class="tab-pane hidden">
-                                <div class="bg-white rounded-xl shadow-xl overflow-hidden">
-                                    <img src="img/_JCM4249.jpg" class="w-full h-64 object-cover" alt="Gringo em projeto de segurança contra enchentes" onerror="this.onerror=null;this.src='https://placehold.co/600x400/cccccc/ffffff?text=Imagem+Indisponível';">
-                                    <div class="p-6">
-                                        <p class="mb-4 text-gray-700">O trabalhador precisa de uma melhoria de serviço, e isso começa com o meu apoio ao motorista.</p>
-                                        <a class="btn-primary inline-block rounded-full py-2 px-5 text-white" href="https://www.instagram.com/reel/DKcSVQZAaxJ/?igsh=MTJuejVnbDV6c3p3bQ==" target="_blank">Saiba Mais</a>
+                                <div class="flex flex-wrap items-center -mx-2">
+                                    <div class="w-full md:w-7/12 px-2 mb-4 md:mb-0">
+                                        <img src="img/_JCM4249.jpg" class="w-full rounded-lg shadow-lg aspect-square object-cover" alt="Gringo em projeto de segurança contra enchentes" onerror="this.onerror=null;this.src='https://placehold.co/600x400/cccccc/ffffff?text=Imagem+Indisponível';">
+                                    </div>
+                                    <div class="w-full md:w-5/12 px-2">
+                                        <div class="bg-white p-6 rounded-lg shadow-xl">
+                                            <p class="mb-4 text-gray-700">O trabalhador precisa de uma melhoria de serviço, e isso começa com o meu apoio ao motorista.</p>
+                                            <a class="btn-primary inline-block rounded-full py-2 px-5 text-white" href="https://www.instagram.com/reel/DKcSVQZAaxJ/?igsh=MTJuejVnbDV6c3p3bQ==" target="_blank">Saiba Mais</a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                             <div id="collapseFour" class="tab-pane hidden">
-                                <div class="bg-white rounded-xl shadow-xl overflow-hidden">
-                                    <img src="img/_JCM7134.jpg" class="w-full h-64 object-cover" alt="Gringo em comunicação com a população" onerror="this.onerror=null;this.src='https://placehold.co/600x400/cccccc/ffffff?text=Imagem+Indisponível';"></div>
-                                    <div class="p-6">
-                                        <p class="mb-4 text-gray-700">Estou ao lado de quem mais precisa de saúde e a minha luta é pela solução, uma dor que Porto Alegre encara a cada dia.</p>
-                                        <a class="btn-primary inline-block rounded-full py-2 px-5 text-white" href="https://www.instagram.com/reel/DKKglPAA-cn/?igsh=MXdxNG02eDZkMHd0Nw==" target="_blank">Saiba Mais</a>
+                                <div class="flex flex-wrap items-center -mx-2">
+                                    <div class="w-full md:w-7/12 px-2 mb-4 md:mb-0">
+                                        <img src="img/_JCM7134.jpg" class="w-full rounded-lg shadow-lg aspect-square object-cover" alt="Gringo em comunicação com a população" onerror="this.onerror=null;this.src='https://placehold.co/600x400/cccccc/ffffff?text=Imagem+Indisponível';">
+                                    </div>
+                                    <div class="w-full md:w-5/12 px-2">
+                                        <div class="bg-white p-6 rounded-lg shadow-xl">
+                                            <p class="mb-4 text-gray-700">Estou ao lado de quem mais precisa de saúde e a minha luta é pela solução, uma dor que Porto Alegre encara a cada dia.</p>
+                                            <a class="btn-primary inline-block rounded-full py-2 px-5 text-white" href="https://www.instagram.com/reel/DKKglPAA-cn/?igsh=MXdxNG02eDZkMHd0Nw==" target="_blank">Saiba Mais</a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
