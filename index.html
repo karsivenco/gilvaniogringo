@@ -120,6 +120,8 @@
             background-size: cover;
             background-position: center;
         }
+
+        /* Mobile Images */
         .carousel-background-1 {
             background-image: url('img/carrossel-1.png');
         }
@@ -127,6 +129,15 @@
             background-image: url('img/carrossel-2.png');
         }
 
+        /* Desktop Images - Media Query */
+        @media (min-width: 768px) { /* Corresponds to md: breakpoint in Tailwind */
+            .carousel-background-1 {
+                background-image: url('img/carousel-1.jpg');
+            }
+            .carousel-background-2 {
+                background-image: url('img/carousel-2.jpg');
+            }
+        }
 
     </style>
 </head>
@@ -168,11 +179,11 @@
     <div class="header-carousel-container relative w-full mt-20">
         <div class="header-carousel owl-carousel">
             <div class="header-carousel-item relative h-[85vh] carousel-background carousel-background-1">
-                <div class="absolute inset-0 flex items-center">
+                <div class="absolute inset-0 flex items-center bg-gradient-to-r from-black/10 to-transparent">
                     <div class="container mx-auto px-6 md:px-8">
                         <div class="w-full text-center sm:w-4/5 md:w-3/5 lg:w-1/2 sm:text-left animate__animated animate__fadeInLeft">
-                            <h4 class="mb-2 text-md font-bold uppercase text-white">CONTATO DIRETO COMIGO</h4>
-                            <h1 class="mb-4 text-4xl lg:text-5xl font-bold uppercase text-white">Sua voz, <br>sua comunidade, <br>nossa ação.</h1>
+                            <h4 class="mb-2 text-sm md:text-md font-bold uppercase text-white" style="text-shadow: 1px 1px 3px rgba(0,0,0,0.4)">CONTATO DIRETO COMIGO</h4>
+                            <h1 class="mb-4 text-3xl md:text-4xl lg:text-5xl font-bold uppercase text-white" style="text-shadow: 1px 1px 4px rgba(0,0,0,0.5)">Sua voz, <br>sua comunidade, <br>nossa ação.</h1>
                             <a class="btn-primary mb-4 inline-block rounded-full py-3 px-8 text-white" href="https://wa.me/+5551981221708">Saiba mais.</a>
                             <div class="flex items-center justify-center sm:justify-start space-x-2">
                                 <a class="flex h-10 w-10 items-center justify-center rounded-full bg-white/80 text-[#004989] hover:bg-white transition-colors" href="https://www.facebook.com/gilvanigringors" target="_blank"><i class="fab fa-facebook-f"></i></a>
@@ -185,12 +196,12 @@
                 </div>
             </div>
              <div class="header-carousel-item relative h-[85vh] carousel-background carousel-background-2">
-                <div class="absolute inset-0 flex items-center">
+                <div class="absolute inset-0 flex items-center bg-gradient-to-r from-black/10 to-transparent">
                     <div class="container mx-auto px-6 md:px-8 flex justify-center sm:justify-start">
                         <div class="w-full text-center sm:w-4/5 md:w-3/5 lg:w-1/2 sm:text-left animate__animated animate__fadeInLeft">
-                            <h4 class="mb-2 text-md font-bold uppercase text-white">CONHEÇA OS</h4>
-                            <h1 class="mb-4 text-4xl lg:text-5xl font-bold uppercase text-white">MEUS PROJETOS</h1>
-                            <p class="mb-4 text-white">
+                            <h4 class="mb-2 text-sm md:text-md font-bold uppercase text-white" style="text-shadow: 1px 1px 3px rgba(0,0,0,0.4)">CONHEÇA OS</h4>
+                            <h1 class="mb-4 text-3xl md:text-4xl lg:text-5xl font-bold uppercase text-white" style="text-shadow: 1px 1px 4px rgba(0,0,0,0.5)">MEUS PROJETOS</h1>
+                            <p class="mb-4 text-sm md:text-base text-white" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5)">
                                 Drenagem eficiente para acabar com os alagamentos<br>
                                 Casas de bombas modernizadas para mais segurança<br>
                                 Ampliação dos diques para proteger nossa cidade<br>
