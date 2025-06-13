@@ -102,6 +102,30 @@
         a {
             text-decoration: none !important;
         }
+
+        /* Imagens do Carrossel */
+        .carousel-background {
+            background-size: cover;
+            background-position: center;
+        }
+        
+        /* Imagens para Mobile */
+        .carousel-background-1 {
+            background-image: url('img/carrossel-1.png');
+        }
+        .carousel-background-2 {
+            background-image: url('img/carrossel-2.png');
+        }
+
+        /* Imagens para Desktop - Media Query */
+        @media (min-width: 768px) {
+            .carousel-background-1 {
+                background-image: url('img/carousel-1.jpg');
+            }
+            .carousel-background-2 {
+                background-image: url('img/carousel-2.jpg');
+            }
+        }
     </style>
 </head>
 
@@ -126,25 +150,21 @@
             </button>
             <div class="hidden w-full lg:flex lg:w-auto" id="navbarCollapse">
                 <div class="absolute lg:static top-20 left-0 w-full bg-gradient-to-r from-[#004989] to-[#3e6f98] lg:bg-none p-4 lg:p-0 flex flex-col space-y-4 lg:flex-row lg:space-x-2 lg:space-y-0">
-                    <a href="#Contato-com-o-Gringo" class="nav-item nav-link rounded-md px-4 py-2 text-white hover:bg-white/20 font-medium transition-colors">Contato</a>
-                    <a href="#Ultimas-noticias" class="nav-item nav-link rounded-md px-4 py-2 text-white hover:bg-white/20 font-medium transition-colors">Notícias</a>
-                    <a href="#Principais-Pautas" class="nav-item nav-link rounded-md px-4 py-2 text-white hover:bg-white/20 font-medium transition-colors">Pautas</a>
-                    <a href="#Conheca-o-Gringo" class="nav-item nav-link rounded-md px-4 py-2 text-white hover:bg-white/20 font-medium transition-colors">O Gringo</a>
+                    <a href="#Contato-com-o-Gringo" class="nav-item nav-link rounded-md px-4 py-2 text-white hover:bg-white/20 font-medium transition-colors">Contato com o Gringo</a>
+                    <a href="#Ultimas-noticias" class="nav-item nav-link rounded-md px-4 py-2 text-white hover:bg-white/20 font-medium transition-colors">Últimas Notícias</a>
+                    <a href="#Principais-Pautas" class="nav-item nav-link rounded-md px-4 py-2 text-white hover:bg-white/20 font-medium transition-colors">Principais Pautas</a>
+                    <a href="#Conheca-o-Gringo" class="nav-item nav-link rounded-md px-4 py-2 text-white hover:bg-white/20 font-medium transition-colors">Conheça o Gringo</a>
                 </div>
-            </nav>
+            </div>
         </div>
-    </header>
+    </nav>
     <!-- Navbar End -->
 
     <main>
         <!-- Carousel Start -->
         <section class="header-carousel-container relative w-full pt-20">
             <div class="header-carousel owl-carousel">
-                <div class="header-carousel-item relative h-[85vh]">
-                    <!-- Imagens Responsivas -->
-                    <img src="img/carrossel-1.png" class="absolute inset-0 h-full w-full object-cover md:hidden" alt="Gilvani o Gringo">
-                    <img src="img/carousel-1.jpg" class="absolute inset-0 h-full w-full object-cover hidden md:block" alt="Gilvani o Gringo">
-
+                <div class="header-carousel-item relative h-[85vh] carousel-background carousel-background-1">
                     <div class="absolute inset-0 flex items-center bg-gradient-to-r from-black/20 to-transparent">
                         <div class="container mx-auto px-6 md:px-8">
                             <div class="w-full text-center sm:w-4/5 md:w-3/5 lg:w-1/2 sm:text-left animate__animated animate__fadeInLeft">
@@ -161,11 +181,7 @@
                         </div>
                     </div>
                 </div>
-                 <div class="header-carousel-item relative h-[85vh]">
-                    <!-- Imagens Responsivas -->
-                    <img src="img/carrossel-2.png" class="absolute inset-0 h-full w-full object-cover md:hidden" alt="Projetos do Gringo">
-                    <img src="img/carousel-2.jpg" class="absolute inset-0 h-full w-full object-cover hidden md:block" alt="Projetos do Gringo">
-
+                 <div class="header-carousel-item relative h-[85vh] carousel-background carousel-background-2">
                     <div class="absolute inset-0 flex items-center">
                         <div class="container mx-auto px-6 md:px-8 flex justify-center sm:justify-start">
                             <div class="w-full text-center sm:w-4/5 md:w-3/5 lg:w-1/2 sm:text-left animate__animated animate__fadeInLeft">
