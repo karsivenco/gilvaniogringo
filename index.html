@@ -33,16 +33,13 @@
         .header-carousel .owl-item.active {
             animation: fadeIn 0.7s forwards;
         }
-
-        .accordion-link.active h5 {
-            color: white !important;
-        }
         
         .accordion-link.active {
             background-color: #004989; /* Cor de fundo para o link ativo */
         }
         
-        .accordion-link h5 {
+        .accordion-link:not(.active) {
+            background-color: #f3f4f6; /* bg-gray-100 */
              color: #004989; /* Cor do texto para links inativos */
         }
 
@@ -55,6 +52,31 @@
             background-color: #003d70;
             border-color: #003d70;
         }
+
+        .owl-nav button {
+            color: #fff !important;
+            font-size: 2rem !important;
+            margin: 0 10px !important;
+            background: rgba(0, 0, 0, 0.3) !important;
+            width: 40px;
+            height: 40px;
+            border-radius: 50% !important;
+        }
+
+        .owl-nav button:hover {
+             background: rgba(0, 0, 0, 0.6) !important;
+        }
+
+        .owl-dots .owl-dot span {
+            background: #fff !important;
+            opacity: 0.6;
+        }
+
+        .owl-dots .owl-dot.active span {
+            opacity: 1;
+            background: #004989 !important;
+        }
+
     </style>
 </head>
 
@@ -72,7 +94,7 @@
     <nav id="navbar" class="fixed top-0 left-0 z-40 w-full bg-gradient-to-r from-[#004989] to-[#3e6f98] transition-all duration-300">
         <div class="container mx-auto flex h-20 items-center justify-between px-4">
             <a href="index.html" class="navbar-brand p-0">
-                <h1 class="text-white"><img src="https://placehold.co/150x50/ffffff/004989?text=Logo" alt="Logo" class="h-10 md:h-12"></h1>
+                <h1 class="text-white"><img src="img/logo.png" alt="Logo" class="h-10 md:h-12"></h1>
             </a>
             <button id="navbar-toggler" class="rounded border border-white p-2 text-white lg:hidden" type="button" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                 <i class="fa fa-bars text-xl"></i>
@@ -94,13 +116,13 @@
     <!-- Carousel Start -->
     <div class="header-carousel owl-carousel mt-20">
         <div class="header-carousel-item relative">
-            <img src="https://placehold.co/1920x800/cccccc/ffffff?text=Slide+1" class="h-auto w-full" alt="Image">
+            <img src="img/carousel-1.jpg" class="h-auto w-full object-cover" style="max-height: 80vh;" alt="Imagem do carrossel 1" onerror="this.onerror=null;this.src='https://placehold.co/1920x800/cccccc/ffffff?text=Imagem+Indisponível';">
             <div class="carousel-caption absolute inset-0 flex items-center bg-black bg-opacity-30">
                 <div class="container mx-auto px-4">
                     <div class="flex flex-wrap items-center justify-end">
                         <div class="w-full text-center md:w-3/5 md:text-right animate__animated animate__fadeInLeft">
-                            <h4 class="mb-4 text-lg font-bold uppercase" style="color: #004989;">CONTATO DIRETO COMIGO</h4>
-                            <h1 class="mb-4 text-4xl font-bold uppercase text-white md:text-6xl">Sua voz, <br>sua comunidade, <br>nossa ação.</h1>
+                            <h4 class="mb-4 text-lg font-bold uppercase text-white drop-shadow-md" style="color: #004989; background-color: rgba(255,255,255,0.7); display: inline-block; padding: 0.25rem 0.5rem; border-radius: 0.25rem;">CONTATO DIRETO COMIGO</h4>
+                            <h1 class="mb-4 text-4xl font-bold uppercase text-white md:text-6xl drop-shadow-lg">Sua voz, <br>sua comunidade, <br>nossa ação.</h1>
                             <a class="btn-primary mb-4 inline-block rounded-full py-3 px-8 text-white" href="https://wa.me/+5551981221708">Saiba mais.</a>
                             <div class="flex items-center justify-center md:justify-end space-x-2">
                                 <a class="flex h-10 w-10 items-center justify-center rounded-full bg-white text-[#004989] hover:bg-gray-200" href="https://www.facebook.com/gilvanigringors" target="_blank"><i class="fab fa-facebook-f"></i></a>
@@ -114,14 +136,14 @@
             </div>
         </div>
         <div class="header-carousel-item relative">
-            <img src="https://placehold.co/1920x800/bbbbbb/ffffff?text=Slide+2" class="h-auto w-full" alt="Image">
+            <img src="img/carousel-2.jpg" class="h-auto w-full object-cover" style="max-height: 80vh;" alt="Imagem do carrossel 2" onerror="this.onerror=null;this.src='https://placehold.co/1920x800/bbbbbb/ffffff?text=Imagem+Indisponível';">
             <div class="carousel-caption absolute inset-0 flex items-center bg-black bg-opacity-30">
                 <div class="container mx-auto px-4">
                     <div class="flex flex-wrap items-center">
                         <div class="w-full text-center md:w-1/2 md:text-left animate__animated animate__fadeInLeft">
-                            <h4 class="mb-4 text-lg font-bold uppercase" style="color: #FFBF00;">CONHEÇA OS</h4>
-                            <h1 class="mb-4 text-4xl font-bold uppercase text-white md:text-6xl">MEUS PROJETOS</h1>
-                            <p class="mb-4 text-white">
+                            <h4 class="mb-4 text-lg font-bold uppercase text-white drop-shadow-md" style="color: #FFBF00; background-color: rgba(0,0,0,0.5); display: inline-block; padding: 0.25rem 0.5rem; border-radius: 0.25rem;">CONHEÇA OS</h4>
+                            <h1 class="mb-4 text-4xl font-bold uppercase text-white md:text-6xl drop-shadow-lg">MEUS PROJETOS</h1>
+                            <p class="mb-4 text-white drop-shadow-sm">
                                 Drenagem eficiente para acabar com os alagamentos<br>
                                 Casas de bombas modernizadas para mais segurança<br>
                                 Ampliação dos diques para proteger nossa cidade<br>
@@ -186,8 +208,8 @@
                 <p class="text-lg text-gray-600">Com uma história de luta e dedicação, Gringo atua em emergências ambientais, ajuda na recuperação de bairros e desenvolve projetos inovadores para fazer a diferença na sua comunidade!</p>
             </div>
             <div class="flex flex-wrap items-center -mx-4">
-                <div class="w-full lg:w-5/12 px-4 wow animate__animated animate__fadeInLeft">
-                    <div class="space-y-4 rounded-lg bg-gray-100 p-4 md:p-8">
+                <div class="w-full lg:w-5/12 px-4 mb-8 lg:mb-0 wow animate__animated animate__fadeInLeft">
+                    <div class="space-y-4 rounded-lg p-4 md:p-8">
                         <a class="accordion-link block rounded-lg p-4 text-center text-lg font-bold transition-all duration-300 active" data-target="#collapseOne">Apoio em situações de emergência</a>
                         <a class="accordion-link block rounded-lg p-4 text-center text-lg font-bold transition-all duration-300" data-target="#collapseTwo">Projetos para melhorar o saneamento básico</a>
                         <a class="accordion-link block rounded-lg p-4 text-center text-lg font-bold transition-all duration-300" data-target="#collapseThree">Segurança contra enchentes</a>
@@ -198,7 +220,7 @@
                     <div class="tab-content relative">
                         <div id="collapseOne" class="tab-pane active">
                             <div class="flex flex-wrap items-center -mx-2">
-                                <div class="w-full md:w-7/12 px-2 mb-4 md:mb-0"><img src="https://placehold.co/600x400/004989/ffffff?text=Emergência" class="w-full rounded-lg shadow-lg" alt=""></div>
+                                <div class="w-full md:w-7/12 px-2 mb-4 md:mb-0"><img src="img/gringo-ajuda.png" class="w-full rounded-lg shadow-lg" alt="Gringo ajudando em emergência" onerror="this.onerror=null;this.src='https://placehold.co/600x400/004989/ffffff?text=Imagem+Indisponível';"></div>
                                 <div class="w-full md:w-5/12 px-2">
                                     <div class="rounded-lg bg-white p-6 shadow-xl">
                                         <p class="mb-4 text-gray-700">Com uma trajetória marcada por ações diretas, atuei em muitos bairros em momentos críticos, ajudando famílias afetadas por enchentes e crises ambientais.</p>
@@ -209,7 +231,7 @@
                         </div>
                         <div id="collapseTwo" class="tab-pane hidden">
                              <div class="flex flex-wrap items-center -mx-2">
-                                <div class="w-full md:w-7/12 px-2 mb-4 md:mb-0"><img src="https://placehold.co/600x400/004989/ffffff?text=Saneamento" class="w-full rounded-lg shadow-lg" alt=""></div>
+                                <div class="w-full md:w-7/12 px-2 mb-4 md:mb-0"><img src="img/gringo-saneamento.png" class="w-full rounded-lg shadow-lg" alt="Gringo em projeto de saneamento" onerror="this.onerror=null;this.src='https://placehold.co/600x400/004989/ffffff?text=Imagem+Indisponível';"></div>
                                 <div class="w-full md:w-5/12 px-2">
                                     <div class="rounded-lg bg-white p-6 shadow-xl">
                                         <p class="mb-4 text-gray-700">Luto por soluções eficientes e duradouras para o saneamento básico, garantindo mais qualidade de vida e segurança para todas as famílias.</p>
@@ -220,7 +242,7 @@
                         </div>
                         <div id="collapseThree" class="tab-pane hidden">
                             <div class="flex flex-wrap items-center -mx-2">
-                                <div class="w-full md:w-7/12 px-2 mb-4 md:mb-0"><img src="https://placehold.co/600x400/004989/ffffff?text=Segurança" class="w-full rounded-lg shadow-lg" alt=""></div>
+                                <div class="w-full md:w-7/12 px-2 mb-4 md:mb-0"><img src="img/gringo-seguranca.png" class="w-full rounded-lg shadow-lg" alt="Gringo em projeto de segurança contra enchentes" onerror="this.onerror=null;this.src='https://placehold.co/600x400/004989/ffffff?text=Imagem+Indisponível';"></div>
                                 <div class="w-full md:w-5/12 px-2">
                                     <div class="rounded-lg bg-white p-6 shadow-xl">
                                         <p class="mb-4 text-gray-700">Trabalho em projetos para a ampliação dos diques e melhorias nas casas de bombas, visando fortalecer a segurança contra enchentes nas áreas mais vulneráveis.</p>
@@ -231,7 +253,7 @@
                         </div>
                         <div id="collapseFour" class="tab-pane hidden">
                             <div class="flex flex-wrap items-center -mx-2">
-                                <div class="w-full md:w-7/12 px-2 mb-4 md:mb-0"><img src="https://placehold.co/600x400/004989/ffffff?text=Comunicação" class="w-full rounded-lg shadow-lg" alt=""></div>
+                                <div class="w-full md:w-7/12 px-2 mb-4 md:mb-0"><img src="img/gringo-comunicacao.png" class="w-full rounded-lg shadow-lg" alt="Gringo em comunicação com a população" onerror="this.onerror=null;this.src='https://placehold.co/600x400/004989/ffffff?text=Imagem+Indisponível';"></div>
                                 <div class="w-full md:w-5/12 px-2">
                                     <div class="rounded-lg bg-white p-6 shadow-xl">
                                         <p class="mb-4 text-gray-700">Estou sempre presente nas comunidades, ouvindo de perto as demandas e preocupações para buscar soluções eficazes ao lado das pessoas.</p>
@@ -309,7 +331,7 @@
                 if ($('#spinner').length > 0) {
                     $('#spinner').removeClass('show').hide();
                 }
-            }, 1000);
+            }, 1);
 
             // WOW.js initialization
             new WOW().init();
@@ -350,16 +372,21 @@
             });
 
             // Smooth scrolling for anchor links
-            $('a.nav-link[href*="#"]').on('click', function(e) {
-                e.preventDefault();
-                var target = $(this.hash);
-                if (target.length) {
-                    $('html, body').animate({
-                        scrollTop: target.offset().top - 80 // Adjust for fixed navbar height
-                    }, 500);
-                     // Hide mobile menu after click
-                    if($(window).width() < 1024) {
-                        $('#navbarCollapse').addClass('hidden');
+            $('a.nav-link[href*="#"], a[href="#Conheca-o-Gringo"]').on('click', function(e) {
+                // Check if the link is a navbar link or another on-page link
+                if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') && location.hostname == this.hostname) {
+                    var target = $(this.hash);
+                    target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
+                    if (target.length) {
+                         e.preventDefault();
+                        $('html, body').animate({
+                            scrollTop: target.offset().top - 80 // Adjust for fixed navbar height
+                        }, 500);
+
+                        // Hide mobile menu after click
+                        if($(window).width() < 1024) {
+                            $('#navbarCollapse').addClass('hidden');
+                        }
                     }
                 }
             });
@@ -369,12 +396,12 @@
                 e.preventDefault();
                 var target = $(this).data('target');
                 
-                // Update active link
+                // Update active link style
                 $('.accordion-link').removeClass('active');
                 $(this).addClass('active');
                 
                 // Show/hide content panes
-                $('.tab-pane').addClass('hidden');
+                $('.tab-content .tab-pane').addClass('hidden');
                 $(target).removeClass('hidden');
             });
 
