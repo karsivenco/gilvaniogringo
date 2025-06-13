@@ -53,27 +53,61 @@
             background-color: #003d70;
             border-color: #003d70;
         }
+        
+        /* Carousel Navigation Arrows */
+        .header-carousel-container .owl-nav {
+            position: absolute;
+            top: 50%;
+            left: 0.5rem;
+            right: 0.5rem;
+            transform: translateY(-50%);
+            display: flex;
+            justify-content: space-between;
+            pointer-events: none;
+        }
 
-        .owl-nav button {
+        .header-carousel-container .owl-nav button {
+            pointer-events: all;
             color: #fff !important;
-            font-size: 2rem !important;
-            margin: 0 10px !important;
-            background: rgba(0, 0, 0, 0.3) !important;
+            font-size: 1.5rem !important; /* Smaller arrows for a sleeker look */
+            background: rgba(0, 0, 0, 0.4) !important;
             width: 40px;
             height: 40px;
             border-radius: 50% !important;
+            transition: background-color 0.3s ease;
+        }
+        
+        @media (min-width: 768px) {
+             .header-carousel-container .owl-nav {
+                left: 1.5rem;
+                right: 1.5rem;
+             }
+            .header-carousel-container .owl-nav button {
+                 font-size: 2rem !important;
+                 width: 50px;
+                 height: 50px;
+            }
         }
 
-        .owl-nav button:hover {
-             background: rgba(0, 0, 0, 0.6) !important;
+        .header-carousel-container .owl-nav button:hover {
+             background: rgba(0, 73, 137, 0.8) !important;
         }
 
-        .owl-dots .owl-dot span {
+        /* Carousel Dots */
+        .header-carousel-container .owl-dots {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .header-carousel-container .owl-dots .owl-dot span {
             background: #fff !important;
-            opacity: 0.6;
+            opacity: 0.7;
+            margin: 0 5px !important;
         }
 
-        .owl-dots .owl-dot.active span {
+        .header-carousel-container .owl-dots .owl-dot.active span {
             opacity: 1;
             background: #004989 !important;
         }
@@ -115,35 +149,33 @@
     <!-- Navbar End -->
 
     <!-- Carousel Start -->
-    <div class="header-carousel owl-carousel mt-20">
-        <div class="header-carousel-item relative">
-            <img src="img/carousel-1.jpg" class="h-auto w-full object-cover" style="max-height: 80vh;" alt="Imagem do carrossel 1" onerror="this.onerror=null;this.src='https://placehold.co/1920x800/cccccc/ffffff?text=Imagem+Indisponível';">
-            <div class="carousel-caption absolute inset-0 flex items-center">
-                <div class="container mx-auto px-4">
-                    <div class="flex flex-wrap items-center justify-end">
-                        <div class="w-full text-center md:w-3/5 md:text-right animate__animated animate__fadeInLeft">
-                            <h4 class="mb-4 text-lg font-bold uppercase" style="color: #004989; text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.9), -1px -1px 2px rgba(255, 255, 255, 0.9);">CONTATO DIRETO COMIGO</h4>
-                            <h1 class="mb-4 text-4xl font-bold uppercase text-white md:text-6xl" style="text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.8);">Sua voz, <br>sua comunidade, <br>nossa ação.</h1>
+    <div class="header-carousel-container relative w-full mt-20">
+        <div class="header-carousel owl-carousel">
+            <div class="header-carousel-item relative h-[75vh] md:h-[85vh]">
+                <img src="img/carousel-1.jpg" class="h-full w-full object-cover object-center md:object-center" alt="Imagem do carrossel 1" onerror="this.onerror=null;this.src='https://placehold.co/1920x1080/cccccc/ffffff?text=Imagem+Indisponível';">
+                <div class="absolute inset-0 flex items-center bg-gradient-to-r from-black/30 to-transparent">
+                    <div class="container mx-auto px-4 md:px-8">
+                        <div class="w-full text-center md:w-3/5 lg:w-1/2 md:text-left animate__animated animate__fadeInLeft">
+                            <h4 class="mb-2 text-lg font-bold uppercase" style="color: #004989; text-shadow: 0px 0px 10px rgba(255, 255, 255, 1);">CONTATO DIRETO COMIGO</h4>
+                            <h1 class="mb-4 text-4xl lg:text-5xl font-bold uppercase text-white" style="text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.7);">Sua voz, <br>sua comunidade, <br>nossa ação.</h1>
                             <a class="btn-primary mb-4 inline-block rounded-full py-3 px-8 text-white" href="https://wa.me/+5551981221708">Saiba mais.</a>
-                            <div class="flex items-center justify-center md:justify-end space-x-2">
-                                <a class="flex h-10 w-10 items-center justify-center rounded-full bg-white text-[#004989] hover:bg-gray-200" href="https://www.facebook.com/gilvanigringors" target="_blank"><i class="fab fa-facebook-f"></i></a>
-                                <a class="flex h-10 w-10 items-center justify-center rounded-full bg-white text-[#004989] hover:bg-gray-200" href="https://www.tiktok.com/@gilvaniogringo" target="_blank"><i class="fab fa-tiktok"></i></a>
-                                <a class="flex h-10 w-10 items-center justify-center rounded-full bg-white text-[#004989] hover:bg-gray-200" href="https://www.instagram.com/gilvaniogringo/" target="_blank"><i class="fab fa-instagram"></i></a>
-                                <a class="flex h-10 w-10 items-center justify-center rounded-full bg-white text-[#004989] hover:bg-gray-200" href="https://www.youtube.com/@GilvanioGringo" target="_blank"><i class="fab fa-youtube"></i></a>
+                            <div class="flex items-center justify-center md:justify-start space-x-2">
+                                <a class="flex h-10 w-10 items-center justify-center rounded-full bg-white text-[#004989] hover:bg-gray-200 transition-colors" href="https://www.facebook.com/gilvanigringors" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                                <a class="flex h-10 w-10 items-center justify-center rounded-full bg-white text-[#004989] hover:bg-gray-200 transition-colors" href="https://www.tiktok.com/@gilvaniogringo" target="_blank"><i class="fab fa-tiktok"></i></a>
+                                <a class="flex h-10 w-10 items-center justify-center rounded-full bg-white text-[#004989] hover:bg-gray-200 transition-colors" href="https://www.instagram.com/gilvaniogringo/" target="_blank"><i class="fab fa-instagram"></i></a>
+                                <a class="flex h-10 w-10 items-center justify-center rounded-full bg-white text-[#004989] hover:bg-gray-200 transition-colors" href="https://www.youtube.com/@GilvanioGringo" target="_blank"><i class="fab fa-youtube"></i></a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="header-carousel-item relative">
-            <img src="img/carousel-2.jpg" class="h-auto w-full object-cover" style="max-height: 80vh;" alt="Imagem do carrossel 2" onerror="this.onerror=null;this.src='https://placehold.co/1920x800/bbbbbb/ffffff?text=Imagem+Indisponível';">
-            <div class="carousel-caption absolute inset-0 flex items-center">
-                <div class="container mx-auto px-4">
-                    <div class="flex flex-wrap items-center">
-                        <div class="w-full text-center md:w-1/2 md:text-left animate__animated animate__fadeInLeft">
-                            <h4 class="mb-4 text-lg font-bold uppercase" style="color: #FFBF00; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);">CONHEÇA OS</h4>
-                            <h1 class="mb-4 text-4xl font-bold uppercase text-white md:text-6xl" style="text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.8);">MEUS PROJETOS</h1>
+            <div class="header-carousel-item relative h-[75vh] md:h-[85vh]">
+                <img src="img/carousel-2.jpg" class="h-full w-full object-cover object-center" alt="Imagem do carrossel 2" onerror="this.onerror=null;this.src='https://placehold.co/1920x1080/bbbbbb/ffffff?text=Imagem+Indisponível';">
+                <div class="absolute inset-0 flex items-center bg-gradient-to-r from-black/50 to-transparent">
+                    <div class="container mx-auto px-4 md:px-8">
+                        <div class="w-full text-center md:w-3/5 lg:w-1/2 md:text-left animate__animated animate__fadeInLeft">
+                            <h4 class="mb-2 text-lg font-bold uppercase" style="color: #FFBF00; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);">CONHEÇA OS</h4>
+                            <h1 class="mb-4 text-4xl lg:text-5xl font-bold uppercase text-white" style="text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.7);">MEUS PROJETOS</h1>
                             <p class="mb-4 text-white" style="text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);">
                                 Drenagem eficiente para acabar com os alagamentos<br>
                                 Casas de bombas modernizadas para mais segurança<br>
@@ -221,7 +253,7 @@
                     <div class="tab-content relative">
                         <div id="collapseOne" class="tab-pane active">
                             <div class="flex flex-wrap items-center -mx-2">
-                                <div class="w-full md:w-7/12 px-2 mb-4 md:mb-0"><img src="img/gringo-ajuda.png" class="w-full rounded-lg shadow-lg" alt="Gringo ajudando em emergência" onerror="this.onerror=null;this.src='https://placehold.co/600x400/004989/ffffff?text=Imagem+Indisponível';"></div>
+                                <div class="w-full md:w-7/12 px-2 mb-4 md:mb-0"><img src="img/_ATF6132.jpg" class="w-full rounded-lg shadow-lg" alt="Gringo em apoio a emergências" onerror="this.onerror=null;this.src='https://placehold.co/600x400/cccccc/ffffff?text=Imagem+Indisponível';"></div>
                                 <div class="w-full md:w-5/12 px-2">
                                     <div class="rounded-lg bg-white p-6 shadow-xl">
                                         <p class="mb-4 text-gray-700">Com uma trajetória marcada por ações diretas, atuei em muitos bairros em momentos críticos, ajudando famílias afetadas por enchentes e crises ambientais.</p>
@@ -232,7 +264,7 @@
                         </div>
                         <div id="collapseTwo" class="tab-pane hidden">
                              <div class="flex flex-wrap items-center -mx-2">
-                                <div class="w-full md:w-7/12 px-2 mb-4 md:mb-0"><img src="img/gringo-saneamento.png" class="w-full rounded-lg shadow-lg" alt="Gringo em projeto de saneamento" onerror="this.onerror=null;this.src='https://placehold.co/600x400/004989/ffffff?text=Imagem+Indisponível';"></div>
+                                <div class="w-full md:w-7/12 px-2 mb-4 md:mb-0"><img src="img/_FSA8055.jpg" class="w-full rounded-lg shadow-lg" alt="Gringo em projeto de saneamento" onerror="this.onerror=null;this.src='https://placehold.co/600x400/cccccc/ffffff?text=Imagem+Indisponível';"></div>
                                 <div class="w-full md:w-5/12 px-2">
                                     <div class="rounded-lg bg-white p-6 shadow-xl">
                                         <p class="mb-4 text-gray-700">Luto por soluções eficientes e duradouras para o saneamento básico, garantindo mais qualidade de vida e segurança para todas as famílias.</p>
@@ -243,7 +275,7 @@
                         </div>
                         <div id="collapseThree" class="tab-pane hidden">
                             <div class="flex flex-wrap items-center -mx-2">
-                                <div class="w-full md:w-7/12 px-2 mb-4 md:mb-0"><img src="img/gringo-seguranca.png" class="w-full rounded-lg shadow-lg" alt="Gringo em projeto de segurança contra enchentes" onerror="this.onerror=null;this.src='https://placehold.co/600x400/004989/ffffff?text=Imagem+Indisponível';"></div>
+                                <div class="w-full md:w-7/12 px-2 mb-4 md:mb-0"><img src="img/_JCM4249.jpg" class="w-full rounded-lg shadow-lg" alt="Gringo em projeto de segurança contra enchentes" onerror="this.onerror=null;this.src='https://placehold.co/600x400/cccccc/ffffff?text=Imagem+Indisponível';"></div>
                                 <div class="w-full md:w-5/12 px-2">
                                     <div class="rounded-lg bg-white p-6 shadow-xl">
                                         <p class="mb-4 text-gray-700">Trabalho em projetos para a ampliação dos diques e melhorias nas casas de bombas, visando fortalecer a segurança contra enchentes nas áreas mais vulneráveis.</p>
@@ -254,7 +286,7 @@
                         </div>
                         <div id="collapseFour" class="tab-pane hidden">
                             <div class="flex flex-wrap items-center -mx-2">
-                                <div class="w-full md:w-7/12 px-2 mb-4 md:mb-0"><img src="img/gringo-comunicacao.png" class="w-full rounded-lg shadow-lg" alt="Gringo em comunicação com a população" onerror="this.onerror=null;this.src='https://placehold.co/600x400/004989/ffffff?text=Imagem+Indisponível';"></div>
+                                <div class="w-full md:w-7/12 px-2 mb-4 md:mb-0"><img src="img/_JCM7134.jpg" class="w-full rounded-lg shadow-lg" alt="Gringo em comunicação com a população" onerror="this.onerror=null;this.src='https://placehold.co/600x400/cccccc/ffffff?text=Imagem+Indisponível';"></div>
                                 <div class="w-full md:w-5/12 px-2">
                                     <div class="rounded-lg bg-white p-6 shadow-xl">
                                         <p class="mb-4 text-gray-700">Estou sempre presente nas comunidades, ouvindo de perto as demandas e preocupações para buscar soluções eficazes ao lado das pessoas.</p>
