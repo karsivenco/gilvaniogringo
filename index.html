@@ -1,218 +1,241 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br" class="scroll-smooth">
 
 <head>
     <meta charset="utf-8">
     <title>Gilvani, O Gringo</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <meta content="" name="keywords">
-    <meta content="" name="description">
+    <meta content="vereador, porto alegre, gilvani, gringo, projetos, comunidade, política" name="keywords">
+    <meta content="Site oficial de Gilvani Dall Oglio, o Gringo. Conheça os projetos, pautas e formas de contato para melhorar nossa comunidade em Porto Alegre." name="description">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
 
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
 
     <!-- Icon Font Stylesheet -->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" xintegrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <!-- Libraries Stylesheet -->
-    <link rel="stylesheet" href="lib/animate/animate.min.css" />
-    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
-    <link href="lib/owlcarousel/assets/owl.theme.default.min.css" rel="stylesheet">
-
-    <!-- Customized Bootstrap Stylesheet -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Template Stylesheet -->
-    <link href="css/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
 
     <style>
-        /* Navbar */
-        .navbar {
-            height: 80px; /* Altura da navbar */
-            background: linear-gradient(to right, #004989, #3e6f98); /* Fundo gradiente */
-            position: fixed; /* Fixando a navbar no topo */
-            width: 100%; /* Largura total */
-            z-index: 1000; /* Acima de outros elementos */
-            transition: background-color 0.3s; /* Transição suave para a cor de fundo */
-        }
-
-        .navbar.scrolled {
-            background: linear-gradient(to right, #004989, #3e6f98);
-            color: white /* Mantém o gradiente ao rolar */
-        }
-
-        .navbar-nav .nav-link {
-            padding: 30px; /* Espaçamento dos links */
-            color: white; /* Cor do texto inicial */
-            transition: background 0.3s, color 0.3s; /* Efeito de transição */
-        }
-
-        .navbar-nav .nav-link:hover {
-            background: transparent; /* Sem cor de fundo ao passar o mouse */
-            color: #ffffff; /* Cor do texto ao passar o mouse */
-        }
-
-        .header-carousel {
-            margin-top: 80px; /* Deixando espaço para a navbar */
-        }
-
-        .header-carousel-item {
-            transition: none; /* Remover efeito de fade durante a transição */
-            background: transparent; /* Fundo transparente para o item do carrossel */
-        }
-
-        .header-carousel-item h4 {
-            color: #004989; /* Cor padrão para h4 */
-        }
-
-        .header-carousel-item:nth-child(1) h4 {
-            color: #004989; /* Cor para "CONTATO DIRETO COMIGO" */
-        }
-
-        .header-carousel-item:nth-child(2) h4 {
-            color: #ffbf00; /* Cor para "CONHEÇA OS" */
-        }
-
-        .header-carousel-item h1 {
-            color: transparent; /* Cor do texto inicial */
-        }
-
-        .header-carousel-item p {
-            color: transparent; /* Cor do texto no parágrafo */
-        }
-
-        .line {
-            height: 1px;
-            background-color: transparent; /* Cor da linha como transparente */
-            margin-top: 10px; /* Espaço acima das linhas */
-            transition: background-color 0.3s; /* Transição suave para a cor da linha */
-        }
-
-        .navbar.scrolled + .line {
-            background-color: transparent; /* Cor da linha ao rolar */
-        }
-
-        .header-carousel .owl-carousel {
-            position: relative;
-            overflow: hidden; /* Evita overflow indesejado */
-        }
-
-        .header-carousel .owl-item {
-            opacity: 0; /* Começa invisível */
-            color: none;
-            transition: opacity 0.5s ease-in-out; /* Transição suave */
+        /* Custom Styles to complement Tailwind */
+        body {
+            font-family: 'Inter', sans-serif;
         }
 
         .header-carousel .owl-item.active {
-            opacity: 1; /* Opacidade total para a imagem ativa */
-            color: none;
+            animation: fadeIn 0.7s forwards;
+        }
+
+        .accordion-link.active h5 {
+            color: white !important;
+        }
+        
+        .accordion-link.active {
+            background-color: #004989; /* Cor de fundo para o link ativo */
+        }
+        
+        .accordion-link h5 {
+             color: #004989; /* Cor do texto para links inativos */
+        }
+
+        .btn-primary {
+            background-color: #004989;
+            border-color: #004989;
+        }
+
+        .btn-primary:hover {
+            background-color: #003d70;
+            border-color: #003d70;
         }
     </style>
 </head>
 
-<body>
+<body class="bg-white">
 
     <!-- Spinner Start -->
-    <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
-        <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+    <div id="spinner" class="fixed inset-0 z-50 flex items-center justify-center bg-white">
+        <div class="h-12 w-12 animate-spin rounded-full border-4 border-solid border-blue-800 border-t-transparent" role="status">
             <span class="sr-only">@GILVANIOGRINGO</span>
         </div>
     </div>
     <!-- Spinner End -->
 
     <!-- Navbar Start -->
-    <nav class="navbar navbar-expand-lg navbar-light">
-        <a href="index.html" class="navbar-brand p-0">
-            <h1 class="text-white"><img src="img/logo.png" alt="Logo"></h1>
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
-            <span class="fa fa-bars text-white"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarCollapse">
-            <div class="navbar-nav ms-auto py-0">
-                <a href="#Contato-com-o-Gringo" class="nav-item nav-link active text-white">Contato com o Gringo</a>
-                <a href="#Ultimas-noticias" class="nav-item nav-link text-white">Últimas Notícias</a>
-                <a href="#Principais-Pautas" class="nav-item nav-link text-white">Principais Pautas</a>
-                <a href="#Conheca-Gringo" class="nav-item nav-link text-white">Conheça o Gringo</a>
+    <nav id="navbar" class="fixed top-0 left-0 z-40 w-full bg-gradient-to-r from-[#004989] to-[#3e6f98] transition-all duration-300">
+        <div class="container mx-auto flex h-20 items-center justify-between px-4">
+            <a href="index.html" class="navbar-brand p-0">
+                <h1 class="text-white"><img src="https://placehold.co/150x50/ffffff/004989?text=Logo" alt="Logo" class="h-10 md:h-12"></h1>
+            </a>
+            <button id="navbar-toggler" class="rounded border border-white p-2 text-white lg:hidden" type="button" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <i class="fa fa-bars text-xl"></i>
+            </button>
+            <div class="hidden w-full lg:flex lg:w-auto" id="navbarCollapse">
+                <div class="absolute right-0 top-20 w-full bg-gradient-to-r from-[#004989] to-[#3e6f98] p-4 lg:static lg:flex lg:w-auto lg:bg-none lg:p-0">
+                    <div class="flex flex-col space-y-2 lg:flex-row lg:space-x-2 lg:space-y-0">
+                        <a href="#Contato-com-o-Gringo" class="nav-item nav-link rounded px-4 py-2 text-white hover:bg-[#003d70] transition-colors">Contato com o Gringo</a>
+                        <a href="#Ultimas-noticias" class="nav-item nav-link rounded px-4 py-2 text-white hover:bg-[#003d70] transition-colors">Últimas Notícias</a>
+                        <a href="#Principais-Pautas" class="nav-item nav-link rounded px-4 py-2 text-white hover:bg-[#003d70] transition-colors">Principais Pautas</a>
+                        <a href="#Conheca-o-Gringo" class="nav-item nav-link rounded px-4 py-2 text-white hover:bg-[#003d70] transition-colors">Conheça o Gringo</a>
+                    </div>
+                </div>
             </div>
         </div>
     </nav>
     <!-- Navbar End -->
 
-<!-- Carousel Start -->
-<div class="header-carousel owl-carousel">
-    <div class="header-carousel-item">
-        <img src="img/carousel-1.jpg" class="img-fluid w-100" alt="Image">
-        <div class="carousel-caption">
-            <div class="container">
-                <div class="row gy-0 gx-5">
-                    <div class="col-lg-0 col-xl-5"></div>
-                    <div class="col-xl-7 animated fadeInLeft">
-                        <div class="text-sm-center text-md-end">
-                            <h4 class="text-uppercase fw-bold mb-4" style="color: #004989;">CONTATO DIRETO COMIGO</h4>
-                            <h1 class="display-4 text-uppercase text-white mb-4">Sua voz, <br>sua comunidade, <br>nossa ação.</h1>
-                            <div class="d-flex justify-content-center justify-content-md-end flex-shrink-0 mb-4">
-                                <a class="btn btn-primary rounded-pill py-3 px-4 px-md-5 ms-2" href="https://wa.me/+5551981221708" style="color: white;">Saiba mais.</a>
-                            </div>
-                            <div class="d-flex align-items-center justify-content-center justify-content-md-end">
-                                <div class="d-flex justify-content-end ms-2">
-                                    <a class="btn btn-md-square btn-light rounded-circle me-2" href="https://www.facebook.com/gilvanigringors" target="_blank">
-                                        <i class="fab fa-facebook-f"></i>
-                                    </a>
-                                    <a class="btn btn-md-square btn-light rounded-circle mx-2" href="https://www.tiktok.com/@gilvaniogringo" target="_blank">
-                                        <i class="fab fa-tiktok"></i> <!-- Ícone para TikTok -->
-                                    </a>
-                                    <a class="btn btn-md-square btn-light rounded-circle mx-2" href="https://www.instagram.com/gilvaniogringo/" target="_blank">
-                                        <i class="fab fa-instagram"></i>
-                                    </a>
-                                    <a class="btn btn-md-square btn-light rounded-circle ms-2" href="https://www.youtube.com/@GilvanioGringo" target="_blank">
-                                        <i class="fab fa-youtube"></i> <!-- Ícone para YouTube -->
-                                    </a>
-                                </div>
+    <!-- Carousel Start -->
+    <div class="header-carousel owl-carousel mt-20">
+        <div class="header-carousel-item relative">
+            <img src="https://placehold.co/1920x800/cccccc/ffffff?text=Slide+1" class="h-auto w-full" alt="Image">
+            <div class="carousel-caption absolute inset-0 flex items-center bg-black bg-opacity-30">
+                <div class="container mx-auto px-4">
+                    <div class="flex flex-wrap items-center justify-end">
+                        <div class="w-full text-center md:w-3/5 md:text-right animate__animated animate__fadeInLeft">
+                            <h4 class="mb-4 text-lg font-bold uppercase" style="color: #004989;">CONTATO DIRETO COMIGO</h4>
+                            <h1 class="mb-4 text-4xl font-bold uppercase text-white md:text-6xl">Sua voz, <br>sua comunidade, <br>nossa ação.</h1>
+                            <a class="btn-primary mb-4 inline-block rounded-full py-3 px-8 text-white" href="https://wa.me/+5551981221708">Saiba mais.</a>
+                            <div class="flex items-center justify-center md:justify-end space-x-2">
+                                <a class="flex h-10 w-10 items-center justify-center rounded-full bg-white text-[#004989] hover:bg-gray-200" href="https://www.facebook.com/gilvanigringors" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                                <a class="flex h-10 w-10 items-center justify-center rounded-full bg-white text-[#004989] hover:bg-gray-200" href="https://www.tiktok.com/@gilvaniogringo" target="_blank"><i class="fab fa-tiktok"></i></a>
+                                <a class="flex h-10 w-10 items-center justify-center rounded-full bg-white text-[#004989] hover:bg-gray-200" href="https://www.instagram.com/gilvaniogringo/" target="_blank"><i class="fab fa-instagram"></i></a>
+                                <a class="flex h-10 w-10 items-center justify-center rounded-full bg-white text-[#004989] hover:bg-gray-200" href="https://www.youtube.com/@GilvanioGringo" target="_blank"><i class="fab fa-youtube"></i></a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="header-carousel-item">
-        <img src="img/carousel-2.jpg" class="img-fluid w-100" alt="Image">
-        <div class="carousel-caption">
-            <div class="container">
-                <div class="row g-5">
-                    <div class="col-12 col-lg-6 animated fadeInLeft">
-                        <div class="text-left">
-                            <h4 class="text-uppercase fw-bold mb-4" style="color: #FFBF00;">CONHEÇA OS</h4>
-                            <h1 class="display-4 text-uppercase text-white mb-4">MEUS PROJETOS</h1>
+        <div class="header-carousel-item relative">
+            <img src="https://placehold.co/1920x800/bbbbbb/ffffff?text=Slide+2" class="h-auto w-full" alt="Image">
+            <div class="carousel-caption absolute inset-0 flex items-center bg-black bg-opacity-30">
+                <div class="container mx-auto px-4">
+                    <div class="flex flex-wrap items-center">
+                        <div class="w-full text-center md:w-1/2 md:text-left animate__animated animate__fadeInLeft">
+                            <h4 class="mb-4 text-lg font-bold uppercase" style="color: #FFBF00;">CONHEÇA OS</h4>
+                            <h1 class="mb-4 text-4xl font-bold uppercase text-white md:text-6xl">MEUS PROJETOS</h1>
                             <p class="mb-4 text-white">
-                                Drenagem eficiente para acabar com os alagamentos
-                                <br>
-                                Casas de bombas modernizadas para mais segurança
-                                <br>
-                                Ampliação dos diques para proteger nossa cidade
-                                <br>
+                                Drenagem eficiente para acabar com os alagamentos<br>
+                                Casas de bombas modernizadas para mais segurança<br>
+                                Ampliação dos diques para proteger nossa cidade<br>
                                 Planos de recuperação de áreas afetadas por enchentes
                             </p>
-                            <div class="mb-4">
-                                <a class="btn btn-primary rounded-pill py-3 px-4 px-md-5" href="projetos.pdf" style="color: white;">Saiba mais.</a>
-                                <div class="d-flex align-items-center justify-content-center justify-content-md-end">
-                                    <div class="d-flex justify-content-end ms-2">
-                                        <a class="btn btn-md-square btn-light rounded-circle me-2" href="https://www.facebook.com/gilvanigringors" target="_blank">
-                                            <i class="fab fa-facebook-f"></i>
-                                        </a>
-                                        <a class="btn btn-md-square btn-light rounded-circle mx-2" href="https://www.tiktok.com/@gilvaniogringo" target="_blank">
-                                            <i class="fab fa-tiktok"></i> <!-- Ícone para TikTok -->
-                                        </a>
-                                        <a class="btn btn-md-square btn-light rounded-circle mx-2" href="https://www.instagram.com/gilvaniogringo/" target="_blank">
-                                            <i class="fab fa-instagram"></i>
-                                        </a>
-                                        <a class="btn btn-md-square btn-light rounded-circle ms-2" href="https://www.youtube.com/@GilvanioGringo" target="_blank">
-                                            <i class="fab fa-youtube"></i> <!-- Ícone para YouTube -->
-                                        </a>
+                            <a class="btn-primary inline-block rounded-full py-3 px-8 text-white" href="projetos.pdf">Saiba mais.</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Carousel End -->
+
+    <!-- Ultimas noticias start -->
+    <div class="container-fluid py-12 md:py-20" id="Ultimas-noticias">
+        <div class="container mx-auto px-4">
+            <div class="mx-auto max-w-3xl text-center wow animate__animated animate__fadeInUp">
+                <h4 class="mb-4 text-2xl font-bold" style="color: #005075;">Últimas Notícias</h4>
+                <p class="text-lg text-gray-600">
+                    Aqui você fica sabendo em primeira mão as notícias e novidades sobre o trabalho do vereador Gilvani.
+                </p>
+            </div>
+            <div class="mt-8 wow animate__animated animate__fadeInUp" data-wow-delay="0.2s">
+                <div class="overflow-hidden rounded-lg border shadow-lg">
+                    <iframe src="https://gilvaniogringo.blogspot.com/" width="100%" height="800" class="border-0">
+                        Carregando…
+                    </iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Ultimas noticias end -->
+
+    <!-- Principais Pautas Start -->
+    <section id="Principais-Pautas" class="py-12 md:py-20 bg-gray-50">
+        <div class="container mx-auto px-4 wow animate__animated animate__fadeInUp">
+            <div class="mx-auto max-w-4xl text-center">
+                <h4 class="mb-4 text-2xl font-bold" style="color: #005075;">Principais Pautas</h4>
+                <h2 class="mb-6 text-4xl font-bold text-gray-800">Gestão Compartilhada</h2>
+                <div class="text-left text-lg text-gray-700 space-y-4">
+                    <p>O Gestão Compartilhada do Gringo representa uma nova abordagem na forma de governar, onde cada comunidade, rua ou bairro terá a oportunidade de contar com um representante dedicado às suas necessidades específicas. Este projeto visa criar uma rede de comunicação e ação, permitindo que as demandas locais sejam reconhecidas e atendidas de maneira eficaz.</p>
+                    <p>Os representantes terão a responsabilidade de articular as necessidades da comunidade, organizando eventos que promovam a participação cidadã e a integração entre os moradores. Além disso, estarão à frente da abertura de chamados na Central de Atendimento ao Cidadão (156), facilitando o acesso a serviços públicos. Para mais informações, acesse: <a href="https://prefeitura.poa.br/carta-de-servicos/156-central-de-atendimento-ao-cidadao" target="_blank" class="text-blue-600 hover:underline">Clique aqui</a>.</p>
+                    <p>Um dos pilares deste mandato é a atuação direta nas demandas da população. Através de abaixo-assinados e mobilizações, o Gringo se compromete a cobrar as autoridades competentes para que as soluções sejam implementadas.</p>
+                    <p>Se você deseja se envolver ativamente e ser um apoiador ou representante da sua comunidade, entre em contato conosco. Sua participação é fundamental. Envie uma mensagem pelo WhatsApp: <a href="https://wa.me/5551981221708" target="_blank" class="text-blue-600 hover:underline">Clique aqui</a>.</p>
+                    <p class="mt-6 font-bold">Por que acompanhar?</p>
+                    <p><b>Transparência:</b> Manteremos você informado sobre as propostas em votação.<br>
+                       <b>Participação Ativa:</b> Seu feedback é fundamental para que as decisões reflitam as necessidades da população.<br>
+                       <b>Responsabilidade:</b> Juntos, podemos fiscalizar e garantir que as ações estejam alinhadas com os interesses da comunidade.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Principais Pautas End -->
+
+    <!-- Conheça o Gringo Start -->
+    <div class="container-fluid py-12 md:py-20" id="Conheca-o-Gringo">
+        <div class="container mx-auto px-4">
+            <div class="mx-auto max-w-3xl text-center pb-10 wow animate__animated animate__fadeInUp">
+                <h4 class="mb-4 text-2xl font-bold" style="color: #005075;">Conheça o Gringo</h4>
+                <h1 class="text-4xl font-bold text-gray-800 mb-4">Gilvani Dall Oglio, o Gringo, com você e por você!</h1>
+                <p class="text-lg text-gray-600">Com uma história de luta e dedicação, Gringo atua em emergências ambientais, ajuda na recuperação de bairros e desenvolve projetos inovadores para fazer a diferença na sua comunidade!</p>
+            </div>
+            <div class="flex flex-wrap items-center -mx-4">
+                <div class="w-full lg:w-5/12 px-4 wow animate__animated animate__fadeInLeft">
+                    <div class="space-y-4 rounded-lg bg-gray-100 p-4 md:p-8">
+                        <a class="accordion-link block rounded-lg p-4 text-center text-lg font-bold transition-all duration-300 active" data-target="#collapseOne">Apoio em situações de emergência</a>
+                        <a class="accordion-link block rounded-lg p-4 text-center text-lg font-bold transition-all duration-300" data-target="#collapseTwo">Projetos para melhorar o saneamento básico</a>
+                        <a class="accordion-link block rounded-lg p-4 text-center text-lg font-bold transition-all duration-300" data-target="#collapseThree">Segurança contra enchentes</a>
+                        <a class="accordion-link block rounded-lg p-4 text-center text-lg font-bold transition-all duration-300" data-target="#collapseFour">Comunicação direta com a população</a>
+                    </div>
+                </div>
+                <div class="w-full lg:w-7/12 px-4 mt-8 lg:mt-0 wow animate__animated animate__fadeInRight">
+                    <div class="tab-content relative">
+                        <div id="collapseOne" class="tab-pane active">
+                            <div class="flex flex-wrap items-center -mx-2">
+                                <div class="w-full md:w-7/12 px-2 mb-4 md:mb-0"><img src="https://placehold.co/600x400/004989/ffffff?text=Emergência" class="w-full rounded-lg shadow-lg" alt=""></div>
+                                <div class="w-full md:w-5/12 px-2">
+                                    <div class="rounded-lg bg-white p-6 shadow-xl">
+                                        <p class="mb-4 text-gray-700">Com uma trajetória marcada por ações diretas, atuei em muitos bairros em momentos críticos, ajudando famílias afetadas por enchentes e crises ambientais.</p>
+                                        <a class="btn-primary inline-block rounded-full py-2 px-5 text-white" href="https://www.instagram.com/p/DAWeTKDgrhu/">Saiba Mais</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="collapseTwo" class="tab-pane hidden">
+                             <div class="flex flex-wrap items-center -mx-2">
+                                <div class="w-full md:w-7/12 px-2 mb-4 md:mb-0"><img src="https://placehold.co/600x400/004989/ffffff?text=Saneamento" class="w-full rounded-lg shadow-lg" alt=""></div>
+                                <div class="w-full md:w-5/12 px-2">
+                                    <div class="rounded-lg bg-white p-6 shadow-xl">
+                                        <p class="mb-4 text-gray-700">Luto por soluções eficientes e duradouras para o saneamento básico, garantindo mais qualidade de vida e segurança para todas as famílias.</p>
+                                        <a class="btn-primary inline-block rounded-full py-2 px-5 text-white" href="https://www.instagram.com/p/C_yNsD0OtSB/">Saiba Mais</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="collapseThree" class="tab-pane hidden">
+                            <div class="flex flex-wrap items-center -mx-2">
+                                <div class="w-full md:w-7/12 px-2 mb-4 md:mb-0"><img src="https://placehold.co/600x400/004989/ffffff?text=Segurança" class="w-full rounded-lg shadow-lg" alt=""></div>
+                                <div class="w-full md:w-5/12 px-2">
+                                    <div class="rounded-lg bg-white p-6 shadow-xl">
+                                        <p class="mb-4 text-gray-700">Trabalho em projetos para a ampliação dos diques e melhorias nas casas de bombas, visando fortalecer a segurança contra enchentes nas áreas mais vulneráveis.</p>
+                                        <a class="btn-primary inline-block rounded-full py-2 px-5 text-white" href="https://www.instagram.com/p/C_0WhTCoNrn/">Saiba Mais</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="collapseFour" class="tab-pane hidden">
+                            <div class="flex flex-wrap items-center -mx-2">
+                                <div class="w-full md:w-7/12 px-2 mb-4 md:mb-0"><img src="https://placehold.co/600x400/004989/ffffff?text=Comunicação" class="w-full rounded-lg shadow-lg" alt=""></div>
+                                <div class="w-full md:w-5/12 px-2">
+                                    <div class="rounded-lg bg-white p-6 shadow-xl">
+                                        <p class="mb-4 text-gray-700">Estou sempre presente nas comunidades, ouvindo de perto as demandas e preocupações para buscar soluções eficazes ao lado das pessoas.</p>
+                                        <a class="btn-primary inline-block rounded-full py-2 px-5 text-white" href="https://www.instagram.com/p/C_tQhHONoHi/">Saiba Mais</a>
                                     </div>
                                 </div>
                             </div>
@@ -222,277 +245,141 @@
             </div>
         </div>
     </div>
-</div>
-<!-- Carousel End -->
+    <!-- Conheça o Gringo End -->
 
-<!-- Ultimas noticias start--!>
-    <div class="container-fluid py-5" id="Ultimas-noticias" style="background-color: #ffffff;">
-    <div class="container py-5">
-        <div class="text-center mx-auto pb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 800px;">
-            <h4 class="text-black mb-4" style="color: #005075;">Últimas Notícias</h4>
-            <p style="font-size: 1.1rem; color: #6c757d;">
-                Aqui você fica sabendo em primeira mão as notícias e novidades sobre o trabalho do vereador Gilvani.
-            </p>
-        </div>
-        <div class="wow fadeInUp" data-wow-delay="0.2s">
-            <div class="blog-container">
-                <iframe src="https://gilvaniogringo.blogspot.com/" width="100%" height="800">
-                    Carregando…
-                </iframe>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Ultimas noticias end --!>
-
-<!-- Principais Pautas Start -->
-<div class="container-fluid feature pb-5">
-        <div class="text-center mx-auto pb-5 wow fadeInUp" data-wow-delay="0.2s";>
-            <section id="Principais-Pautas" class="py-5">
-                <h4 class="text-black mb-4" style="color: #005075;">Principais Pautas</h4>
-                <BR>
-                     <h2>Gestão Compartilhada</h2>
-                    <br>
-                    <p class="mb-0">O Gestão Compartilhada do Gringo representa uma nova abordagem na forma de governar, onde cada comunidade, rua ou bairro terá a oportunidade de contar com um representante dedicado às suas necessidades específicas. Este projeto visa criar uma rede de comunicação e ação, permitindo que as demandas locais sejam reconhecidas e atendidas de maneira eficaz.
-                        <br>
-                        Os representantes terão a responsabilidade de articular as necessidades da comunidade, organizando eventos que promovam a participação cidadã e a integração entre os moradores. Além disso, estarão à frente da abertura de chamados na Central de Atendimento ao Cidadão (156), facilitando o acesso a serviços públicos e garantindo que questões de infraestrutura, como saneamento, hidráulica, elétrica e pavimentação, sejam tratadas com a devida atenção. Para mais informações sobre os serviços disponíveis, você pode acessar o site da Central de Atendimento ao Cidadão 156: <br>
-                        <a class="mb-0" href="https://prefeitura.poa.br/carta-de-servicos/156-central-de-atendimento-ao-cidadao" target="_blank">Clique aqui</a><br>
-                        <br>
-                        Um dos pilares deste mandato é a atuação direta nas demandas da população. Através de abaixo-assinados e mobilizações, o Gringo se compromete a cobrar as autoridades competentes para que as soluções sejam implementadas. As podas de árvores e outras questões ambientais também serão priorizadas, garantindo que a qualidade de vida da comunidade seja sempre preservada.
-                        <br>
-                        O Gestão Compartilhada não se limita apenas a ouvir; ele promove uma ação efetiva e organizada, onde a voz de cada morador será considerada. Acreditamos que a verdadeira mudança começa na base, e é por isso que estamos empenhados em fortalecer essa relação direta entre representantes e a administração municipal.
-                        <br>
-                        Se você deseja se envolver ativamente e ser um apoiador ou representante da sua comunidade, entre em contato conosco. Sua participação é fundamental para que possamos juntos transformar nossa cidade. Para mais informações, clique no link abaixo para enviar uma mensagem pelo WhatsApp:
-                        <br>
-                        <a class="mb-0" href="https://wa.me/5551981221708" target="_blank">Clique aqui</a>
-                        <br>
-                        <br>
-                        Junte-se a nós nessa jornada de transformação e faça a diferença em sua comunidade!</p>
-                        <br>
-<p class="mb-0"><b>Por que acompanhar?</b></p>
-<br>
-<p class="mb-0"><b>Transparência:</b> Manteremos você informado sobre as propostas em votação, suas implicações e como elas podem impactar a sua vida e a de sua comunidade.
-<br>
-<b>Participação Ativa:</b> Estamos comprometidos em abrir canais de comunicação para que você possa expressar suas opiniões e sugestões. O seu feedback é fundamental para que as decisões tomadas na Câmara reflitam realmente as necessidades da população.
-<br>
-<b>Responsabilidade:</b> Acompanhar as pautas de votação nos ajuda a fiscalizar e garantir que as ações do Gringo na Câmara estejam alinhadas com os interesses da comunidade. Juntos, podemos fazer valer a nossa voz e defender os nossos direitos.</p>
-
-
-                   </div>
-            </div>
-                                
-</section>
-<!-- Principais Pautas End -->
-
-<!-- Conheça o Gringo Start -->
-<div class="container-fluid offer-section pb-5">
-    <div class="container pb-5">
-        <div class="text-center mx-auto pb-5 wow fadeInUp" data-wow-delay="0.2s" style="max-width: 800px;">
-            <section id="Conheça-o-Gringo" class="py-5">
-                <h4 class="text-black mb-4" style="color: #005075;">Conheça o Gringo</h4>
-                <h1 class="display-5 mb-4">Gilvani Dall Oglio, o Gringo, com você e por você!</h1>
-                <p class="mb-0">Gilvani Dall Oglio, mais conhecido como Gringo, tem uma história de luta e dedicação para transformar a vida das pessoas. Atuando em emergências ambientais, ajudando na recuperação de bairros e desenvolvendo projetos inovadores, o Gringo está aqui para fazer a diferença na sua comunidade!</p>
-            </section>
-        </div>
-        <div class="row g-5 align-items-center">
-            <div class="col-xl-5 wow fadeInLeft" data-wow-delay="0.2s">
-                <div class="nav nav-pills bg-light rounded p-5">
-                    <a class="accordion-link p-4 active mb-4" data-bs-toggle="pill" href="#collapseOne">
-                        <h5 class="mb-0" style="color: white;">Apoio em situações de emergência</h5>
-                    </a>
-                    <a class="accordion-link p-4 mb-4" data-bs-toggle="pill" href="#collapseTwo">
-                        <h5 class="mb-0" style="color: white;">Projetos para melhorar o saneamento básico</h5>
-                    </a>
-                    <a class="accordion-link p-4 mb-4" data-bs-toggle="pill" href="#collapseThree">
-                        <h5 class="mb-0" style="color: white;">Segurança contra enchentes</h5>
-                    </a>    
-                    <a class="accordion-link p-4 mb-0" data-bs-toggle="pill" href="#collapseFour">
-                        <h5 class="mb-0" style="color: white;">Comunicação direta com a população</h5>
-                    </a>
+    <!-- Footer Start -->
+    <div class="wow animate__animated animate__fadeIn bg-gradient-to-r from-[#004989] to-[#3e6f98] py-12 text-white" data-wow-delay="0.2s">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
+                <div>
+                    <h4 class="mb-4 text-xl font-bold">Conheça o Gringo</h4>
+                    <p class="mb-4">Com ampla experiência em saneamento e emergências ambientais, atuo para trazer soluções práticas para os desafios de Porto Alegre.</p>
+                    <a href="#Conheca-o-Gringo" class="hover:underline"><i class="fas fa-angle-right me-2"></i>Sobre o Gringo</a>
                 </div>
-            </div>
-            <div class="col-xl-7 wow fadeInRight" data-wow-delay="0.4s">
-                <div class="tab-content">
-                    <div id="collapseOne" class="tab-pane fade show p-0 active">
-                        <div class="row g-4">
-                            <div class="col-md-7">
-                                <img src="img/gringo-ajuda.png" class="img-fluid w-100 rounded" alt="">
-                            </div>
-                            <div class="col-md-5">
-                                <div class="shadow-wrapper p-4"> <!-- Wrapper com sombra -->
-                                    <p class="mb-4">Tenho uma trajetória marcada por ações diretas em diversas comunidades de Porto Alegre. Eu já atuei em muitos bairros, especialmente em momentos críticos, ajudando famílias afetadas por enchentes, alagamentos e crises ambientais. Sempre buscando soluções de longo prazo, estou sempre presente, colocando as pessoas em primeiro lugar.</p>
-                                    <a class="btn btn-primary rounded-pill py-2 px-4" href="https://www.instagram.com/p/DAWeTKDgrhu/" style="color: white;">Saiba Mais</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="collapseTwo" class="tab-pane fade show p-0">
-                        <div class="row g-4">
-                            <div class="col-md-7">
-                                <img src="img/gringo-saneamento.png" class="img-fluid w-100 rounded" alt="">
-                            </div>
-                            <div class="col-md-5">
-                                <div class="shadow-wrapper p-4"> <!-- Wrapper com sombra -->
-                                    <p class="mb-4">Estou lutando por soluções eficientes e duradouras para o saneamento básico em Porto Alegre. O meu compromisso é garantir que cada comunidade tenha acesso a um saneamento adequado, proporcionando mais qualidade de vida e segurança para todas as famílias. </p>
-                                    <a class="btn btn-primary rounded-pill py-2 px-4" href="https://www.instagram.com/p/C_yNsD0OtSB/" style="color: white;">Saiba Mais</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="collapseThree" class="tab-pane fade show p-0">
-                        <div class="row g-4">
-                            <div class="col-md-7">
-                                <img src="img/gringo-seguranca.png" class="img-fluid w-100 rounded" alt="">
-                            </div>
-                            <div class="col-md-5">
-                                <div class="shadow-wrapper p-4"> <!-- Wrapper com sombra -->
-                                    <p class="mb-4">Estou trabalhando em projetos para a ampliação dos diques e melhorias nas casas de bombas, visando fortalecer a segurança contra enchentes nas áreas mais vulneráveis. Meu objetivo é garantir que todas as comunidades, especialmente aquelas em áreas de risco, tenham a proteção necessária para enfrentar períodos de chuvas intensas.</p>
-                                    <a class="btn btn-primary rounded-pill py-2 px-4" href="https://www.instagram.com/p/C_0WhTCoNrn/" style="color: white;">Saiba Mais</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="collapseFour" class="tab-pane fade show p-0">
-                        <div class="row g-4">
-                            <div class="col-md-7">
-                                <img src="img/gringo-comunicacao.png" class="img-fluid w-100 rounded" alt="">
-                            </div>
-                            <div class="col-md-5">
-                                <div class="shadow-wrapper p-4"> <!-- Wrapper com sombra -->
-                                    <p class="mb-4">Estou sempre presente nas comunidades, ouvindo de perto as demandas e preocupações de cada bairro. Acredito que a melhor forma de buscar soluções é estando ao lado das pessoas, conhecendo seus problemas de perto.</p>
-                                    <a class="btn btn-primary rounded-pill py-2 px-4" href="https://www.instagram.com/p/C_tQhHONoHi/" style="color: white;">Saiba Mais</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <div>
+                    <h4 class="mb-4 text-xl font-bold">Links Úteis</h4>
+                    <a href="#Principais-Pautas" class="block hover:underline mb-2"><i class="fas fa-angle-right me-2"></i>Projetos do Gringo</a>
+                    <a href="https://wa.me/5551981221708" target="_blank" class="block hover:underline"><i class="fas fa-angle-right me-2"></i>Seja um Apoiador</a>
+                </div>
+                <div>
+                    <h4 class="mb-4 text-xl font-bold">Contato</h4>
+                    <p class="flex items-center mb-2"><i class="fas fa-envelope mr-3"></i><a href="mailto:contato@gilvaniogringo.com" class="hover:underline">contato@gilvaniogringo.com</a></p>
+                    <p class="flex items-center mb-2"><i class="fa fa-phone-alt mr-3"></i><a href="https://wa.me/+5551981221708" class="hover:underline">(51) 98122-1708</a></p>
+                    <p class="flex items-center"><i class="fab fa-instagram mr-3"></i><a href="https://www.instagram.com/gilvaniogringo/" class="hover:underline">@gilvaniogringo</a></p>
+                </div>
+                 <div>
+                    <h4 class="mb-4 text-xl font-bold">Redes Sociais</h4>
+                     <div class="flex space-x-3">
+                         <a class="flex h-10 w-10 items-center justify-center rounded-full bg-white text-[#004989] hover:bg-gray-200" href="https://www.facebook.com/gilvanigringors" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                         <a class="flex h-10 w-10 items-center justify-center rounded-full bg-white text-[#004989] hover:bg-gray-200" href="https://www.tiktok.com/@gilvaniogringo" target="_blank"><i class="fab fa-tiktok"></i></a>
+                         <a class="flex h-10 w-10 items-center justify-center rounded-full bg-white text-[#004989] hover:bg-gray-200" href="https://www.instagram.com/gilvaniogringo/" target="_blank"><i class="fab fa-instagram"></i></a>
+                         <a class="flex h-10 w-10 items-center justify-center rounded-full bg-white text-[#004989] hover:bg-gray-200" href="https://www.youtube.com/@GilvanioGringo" target="_blank"><i class="fab fa-youtube"></i></a>
+                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<!-- Conheça o Gringo End -->
+    <!-- Footer End -->
 
-<!-- Estilo para o wrapper com sombra -->
-<style>
-    .shadow-wrapper {
-        background-color: transparent; /* Cor de fundo do wrapper */
-        border-radius: 10px; /* Bordas arredondadas */
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Sombra */
-        color: rgb(0, 0, 0); /* Cor do texto */
-    }
-</style>
-
-<!-- Footer Start -->
-<div class="container-fluid footer py-5 wow fadeIn" data-wow-delay="0.2s" style="background: linear-gradient(to right, #004989, #3e6f98);">
-    <div class="container py-5" style="border: 1px solid transparent; border-image: linear-gradient(to right, #004989, #3e6f98) 1;">
-        <div class="row g-5">
-            <!-- Conheça o Gringo -->
-            <div class="col-md-6 col-lg-6 col-xl-3">
-                <div class="footer-item">
-                    <h4 class="text-white mb-4" style="color: #005075;">Conheça o Gringo</h4>
-                    <p class="text-white mb-4">Gilvani Dall Oglio, mais conhecido como Gringo, possui uma ampla experiência em saneamento e emergências ambientais. Atua para trazer soluções práticas para os desafios das enchentes e saneamento em Porto Alegre.</p>
-                    <a href="#Conheca-Gringo" class="text-white"><i class="fas fa-angle-right me-2"></i> Sobre o Gringo</a>
-                </div>
-            </div>
-            <!-- Projetos do Gringo -->
-            <div class="col-md-6 col-lg-6 col-xl-3">
-                <div class="footer-item">
-                    <h4 class="text-white mb-4">Projetos do Gringo</h4>
-                    <a href="blog.html" class="text-white"><i class="fas fa-angle-right me-2"></i> Projetos</a>
-                </div>
-            </div>
-            <!-- Seja um Apoiador -->
-            <div class="col-md-6 col-lg-6 col-xl-3">
-                <div class="footer-item">
-                    <h4 class="text-white mb-4">Seja um Apoiador</h4>
-                    <a href="seja-um-apoiador.html" class="text-white"><i class="fas fa-angle-right me-2"></i> Apoiadores</a>
-                </div>
-            </div>
-            <!-- Contato -->
-            <div class="col-md-6 col-lg-6 col-xl-3">
-                <div class="footer-item">
-                    <h4 class="text-white mb-4">Contato</h4>
-                    <div class="d-flex align-items-center">
-                        <i class="fas fa-envelope text-white me-3"></i>
-                        <p class="text-white mb-0"> <a href="mailto:contato@gilvaniogringo.com" style="color: white; text-decoration: none;">
-                            contato@gilvaniogringo.com
-                        </a></p>
-                    </div>
-                    <div class="d-flex align-items-center">
-                        <i class="fa fa-phone-alt text-white me-3"></i>
-                        <p class="text-white mb-0"><a href="https://wa.me/+5551981221708">(+55) 51 98122-1708</p></a>
-                    </div>
-                    <div class="d-flex align-items-center">
-                        <i class="fab fa-instagram text-white me-3"></i>
-                        <a href="https://www.instagram.com/gilvaniogringo/" class="text-white mb-0">@gilvaniogringo</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Footer End -->
-
-<!-- Copyright Start -->
-<div class="container-fluid copyright py-4" style="background-color: #01131c;">
-    <div class="container">
-        <div class="row g-4 align-items-center">
-            <div class="col-md-6 text-center text-md-start mb-md-0">
+    <!-- Copyright Start -->
+    <div class="py-4" style="background-color: #01131c;">
+        <div class="container mx-auto px-4">
+            <div class="text-center text-gray-400">
                 <span class="text-body">
-                    <a href="#" class="border-bottom text-white"><i class="fas fa-copyright text-light me-2"></i>Gringo.rs</a>, Todos os direitos reservados.
+                    <a href="#" class="border-b border-transparent text-white hover:border-white"><i class="fas fa-copyright text-light me-2"></i>Gringo.rs</a>, Todos os direitos reservados.
                 </span>
             </div>
-        
         </div>
     </div>
-</div>
-<!-- Copyright End -->
+    <!-- Copyright End -->
 
+    <!-- Back to Top -->
+    <a href="#" class="back-to-top fixed bottom-5 right-5 z-50 hidden h-12 w-12 items-center justify-center rounded-full bg-[#004989] text-white shadow-lg transition-opacity hover:bg-[#003d70]"><i class="fa fa-arrow-up"></i></a>
 
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.min.js"></script>
 
-        <!-- Back to Top -->
-        <a href="#" class="btn btn-primary btn-lg-square rounded-circle back-to-top"><i class="fa fa-arrow-up text-white"></i></a>   
+    <!-- Template Javascript -->
+    <script>
+        $(document).ready(function() {
+            // Spinner
+            setTimeout(function() {
+                if ($('#spinner').length > 0) {
+                    $('#spinner').removeClass('show').hide();
+                }
+            }, 1000);
 
-        
-        <!-- JavaScript Libraries -->
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="lib/owlcarousel/owl.carousel.min.js"></script>
-        <script src="lib/wow/wow.min.js"></script>
-        <script src="lib/waypoints/waypoints.min.js"></script>
-        <script src="lib/counterup/counterup.min.js"></script>
-        <script src="lib/lightbox/js/lightbox.min.js"></script>
-        <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+            // WOW.js initialization
+            new WOW().init();
 
+            // Back to Top button
+            $(window).scroll(function() {
+                if ($(this).scrollTop() > 300) {
+                    $('.back-to-top').fadeIn('slow');
+                } else {
+                    $('.back-to-top').fadeOut('slow');
+                }
+            });
+            $('.back-to-top').click(function(e) {
+                e.preventDefault();
+                $('html, body').animate({
+                    scrollTop: 0
+                }, 800);
+                return false;
+            });
 
-   <!-- JavaScript Libraries -->
+            // Header Carousel
+            $(".header-carousel").owlCarousel({
+                autoplay: true,
+                smartSpeed: 1500,
+                items: 1,
+                dots: true,
+                loop: true,
+                nav: true,
+                navText: [
+                    '<i class="fa fa-chevron-left"></i>',
+                    '<i class="fa fa-chevron-right"></i>'
+                ]
+            });
 
+            // Mobile Navbar Toggle
+            $('#navbar-toggler').click(function() {
+                $('#navbarCollapse').toggleClass('hidden');
+            });
 
-   <!-- Template Javascript -->
-   <script src="js/main.js"></script>
+            // Smooth scrolling for anchor links
+            $('a.nav-link[href*="#"]').on('click', function(e) {
+                e.preventDefault();
+                var target = $(this.hash);
+                if (target.length) {
+                    $('html, body').animate({
+                        scrollTop: target.offset().top - 80 // Adjust for fixed navbar height
+                    }, 500);
+                     // Hide mobile menu after click
+                    if($(window).width() < 1024) {
+                        $('#navbarCollapse').addClass('hidden');
+                    }
+                }
+            });
+            
+            // Accordion/Tab functionality for "Conheça o Gringo" section
+            $('.accordion-link').on('click', function(e) {
+                e.preventDefault();
+                var target = $(this).data('target');
+                
+                // Update active link
+                $('.accordion-link').removeClass('active');
+                $(this).addClass('active');
+                
+                // Show/hide content panes
+                $('.tab-pane').addClass('hidden');
+                $(target).removeClass('hidden');
+            });
 
-   <script>
-       $(document).ready(function () {
-           // Smooth scrolling for navbar links
-           $('.navbar-nav a').on('click', function (e) {
-               e.preventDefault();
-               var target = $(this).attr('href');
-               $('html, body').animate({
-                   scrollTop: $(target).offset().top - 100 // Adjust for navbar height
-               }, 500);
-           });
-
-           // Change navbar color on scroll
-           $(window).on('scroll', function () {
-               if ($(this).scrollTop() > 50) {
-                   $('.navbar').addClass('scrolled');
-               } else {
-                   $('.navbar').removeClass('scrolled');
-               }
-           });
-       });
-   </script>
-    </body>
+        });
+    </script>
+</body>
 
 </html>
