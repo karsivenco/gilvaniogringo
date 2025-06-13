@@ -215,7 +215,7 @@
         </div>
     </div>
     <!-- Carousel End -->
-
+    
     <!-- Ultimas noticias start -->
     <div class="container-fluid py-12 md:py-20" id="Ultimas-noticias">
         <div class="container mx-auto px-4">
@@ -262,7 +262,7 @@
         <div class="container mx-auto px-4">
             <div class="mx-auto max-w-3xl text-center pb-10 wow animate__animated animate__fadeInUp">
                 <h4 class="mb-4 text-2xl font-bold" style="color: #005075;">Conheça o Gringo</h4>
-                <h1 class="text-4xl font-bold text-gray-800 mb-4">Gilvani Dall Oglio, o Gringo, com você e por você!</h1>
+                <h1 class="text-4xl font-bold text-gray-800 mb-4">Gilvani Dall Oglio, o Gringo</h1>
                 <p class="text-lg text-gray-600">Com uma história de luta e dedicação, Gringo atua em emergências ambientais, ajuda na recuperação de bairros e desenvolve projetos inovadores para fazer a diferença na sua comunidade!</p>
             </div>
             <div class="flex flex-wrap items-center -mx-4">
@@ -373,51 +373,79 @@
     </div>
     <!-- Copyright End -->
 
-  
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.min.js"></script>
 
     <!-- Template Javascript -->
-        <!-- JavaScript Libraries -->
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="lib/owlcarousel/owl.carousel.min.js"></script>
-        <script src="lib/wow/wow.min.js"></script>
-        <script src="lib/waypoints/waypoints.min.js"></script>
-        <script src="lib/counterup/counterup.min.js"></script>
-        <script src="lib/lightbox/js/lightbox.min.js"></script>
-        <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Spinner
+            setTimeout(function() {
+                if ($('#spinner').length > 0) {
+                    $('#spinner').removeClass('show').hide();
+                }
+            }, 1);
 
+            // WOW.js initialization
+            new WOW().init();
 
-   <!-- JavaScript Libraries -->
+            // Header Carousel
+            $(".header-carousel").owlCarousel({
+                autoplay: true,
+                smartSpeed: 1500,
+                items: 1,
+                dots: true,
+                loop: true,
+                nav: true,
+                navText: [
+                    '<i class="fa fa-chevron-left"></i>',
+                    '<i class="fa fa-chevron-right"></i>'
+                ]
+            });
 
+            // Mobile Navbar Toggle
+            $('#navbar-toggler').click(function() {
+                $('#navbarCollapse').toggleClass('hidden');
+            });
 
-   <!-- Template Javascript -->
-   <script src="js/main.js"></script>
+            // Smooth scrolling for anchor links
+            $('a.nav-link[href*="#"], a[href="#Conheca-o-Gringo"]').on('click', function(e) {
+                // Check if the link is a navbar link or another on-page link
+                if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') && location.hostname == this.hostname) {
+                    var target = $(this.hash);
+                    target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
+                    if (target.length) {
+                         e.preventDefault();
+                        $('html, body').animate({
+                            scrollTop: target.offset().top - 80 // Adjust for fixed navbar height
+                        }, 500);
 
-   <script>
-       $(document).ready(function () {
-           // Smooth scrolling for navbar links
-           $('.navbar-nav a').on('click', function (e) {
-               e.preventDefault();
-               var target = $(this).attr('href');
-               $('html, body').animate({
-                   scrollTop: $(target).offset().top - 100 // Adjust for navbar height
-               }, 500);
-           });
+                        // Hide mobile menu after click
+                        if($(window).width() < 1024) {
+                            $('#navbarCollapse').addClass('hidden');
+                        }
+                    }
+                }
+            });
+            
+            // Accordion/Tab functionality for "Conheça o Gringo" section
+            $('.accordion-link').on('click', function(e) {
+                e.preventDefault();
+                var target = $(this).data('target');
+                
+                // Update active link style
+                $('.accordion-link').removeClass('active');
+                $(this).addClass('active');
+                
+                // Show/hide content panes
+                $('.tab-content .tab-pane').addClass('hidden');
+                $(target).removeClass('hidden');
+            });
 
-           // Change navbar color on scroll
-           $(window).on('scroll', function () {
-               if ($(this).scrollTop() > 50) {
-                   $('.navbar').addClass('scrolled');
-               } else {
-                   $('.navbar').removeClass('scrolled');
-               }
-           });
-       });
-   </script>
+        });
+    </script>
 </body>
 
 </html>
