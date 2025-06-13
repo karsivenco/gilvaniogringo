@@ -201,12 +201,6 @@
                         <div class="w-full text-center sm:w-4/5 md:w-3/5 lg:w-1/2 sm:text-left animate__animated animate__fadeInLeft">
                             <h4 class="mb-2 text-sm md:text-md font-bold uppercase text-yellow-400">CONHEÇA OS</h4>
                             <h1 class="mb-4 text-3xl md:text-4xl lg:text-5xl font-bold uppercase text-white">MEUS PROJETOS</h1>
-                            <p class="mb-4 text-sm md:text-base text-white">
-                                Drenagem eficiente para acabar com os alagamentos<br>
-                                Casas de bombas modernizadas para mais segurança<br>
-                                Ampliação dos diques para proteger nossa cidade<br>
-                                Planos de recuperação de áreas afetadas por enchentes
-                            </p>
                              <a class="inline-block rounded-full bg-yellow-400 py-3 px-8 text-[#004989] font-bold mb-4" href="projetos.pdf">Saiba mais.</a>
                              <div class="flex items-center justify-center sm:justify-start space-x-2">
                                 <a class="flex h-10 w-10 items-center justify-center rounded-full bg-white/80 text-[#004989] hover:bg-white transition-colors" href="https://www.facebook.com/gilvanigringors" target="_blank"><i class="fab fa-facebook-f"></i></a>
@@ -379,9 +373,7 @@
     </div>
     <!-- Copyright End -->
 
-    <!-- Back to Top -->
-    <a href="#" class="back-to-top fixed bottom-5 right-5 z-50 hidden h-12 w-12 rounded-full bg-[#004989] text-white shadow-lg transition-opacity hover:bg-[#003d70] flex items-center justify-center"><i class="fa fa-arrow-up"></i></a>
-
+  
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
@@ -468,75 +460,6 @@
                 $('.tab-content .tab-pane').addClass('hidden');
                 $(target).removeClass('hidden');
             });
-
-            // Gemini API Functionality
-            $('#gerar-pauta-btn').on('click', async function() {
-                const userInput = $('#pauta-input').val();
-                if (!userInput.trim()) {
-                    alert('Por favor, descreva o problema antes de gerar a sugestão.');
-                    return;
-                }
-
-                // Show loader and result container
-                $('#pauta-result').show();
-                $('#loader').show();
-                $('#pauta-content').hide();
-                
-                // Prepare the prompt for the Gemini API
-                const prompt = `Aja como um assessor legislativo experiente. Baseado no seguinte problema descrito por um cidadão, elabore uma sugestão de pauta formal e bem estruturada para o vereador Gilvani, O Gringo. A resposta deve ser em português e formatada em Markdown, contendo:
-                1.  Um título curto e impactante para a pauta.
-                2.  Uma justificativa clara e concisa, explicando a importância do problema.
-                3.  Uma seção de "Ações Sugeridas" com pelo menos duas ações práticas que o vereador pode tomar.
-                
-                O problema descrito pelo cidadão é: "${userInput}"`;
-
-                try {
-                    // Gemini API call configuration
-                    let chatHistory = [];
-                    chatHistory.push({ role: "user", parts: [{ text: prompt }] });
-                    const payload = { contents: chatHistory };
-                    const apiKey = ""; // A chave da API será injetada pelo ambiente
-                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
-
-                    const response = await fetch(apiUrl, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
-                    });
-
-                    if (!response.ok) {
-                        throw new Error(`Erro na API: ${response.statusText}`);
-                    }
-
-                    const result = await response.json();
-                    
-                    let text = 'Não foi possível gerar uma sugestão. Tente novamente.';
-                    if (result.candidates && result.candidates.length > 0 &&
-                        result.candidates[0].content && result.candidates[0].content.parts &&
-                        result.candidates[0].content.parts.length > 0) {
-                        text = result.candidates[0].content.parts[0].text;
-                    }
-
-                    // Format Markdown to HTML
-                    let htmlContent = text
-                        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // Bold
-                        .replace(/\*(.*?)\*/g, '<em>$1</em>')     // Italic
-                        .replace(/\n/g, '<br>');                  // Newlines
-
-                    // Display the result
-                    $('#pauta-content').html(htmlContent);
-
-                } catch (error) {
-                    console.error("Erro ao chamar a API Gemini:", error);
-                    $('#pauta-content').html('<p class="text-red-500">Ocorreu um erro ao gerar a sugestão. Por favor, tente novamente mais tarde.</p>');
-                } finally {
-                    // Hide loader and show content
-                    $('#loader').hide();
-                    $('#pauta-content').show();
-                }
-            });
-
-        });
     </script>
 </body>
 
