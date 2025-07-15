@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="pt-br" class="scroll-smooth">
+
+<head>
+    <meta charset="utf-8">
+    <title>Gilvani, O Gringo</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="vereador, porto alegre, gilvani, gringo, projetos, comunidade, política" name="keywords">
+    <meta content="Site oficial de Gilvani Dall Oglio, o Gringo. Conheça os projetos, pautas e formas de contato para melhorar nossa comunidade em Porto Alegre." name="description">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+    <!-- Icon Font Stylesheet -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" xintegrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- Libraries Stylesheet -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
+
+    <style>
+        /* Estilos Personalizados */
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-padding-top: 80px; /* Offset for fixed navbar */
+        }
+
+        .header-carousel .owl-item.active {
+            animation: fadeIn 0.7s forwards;
+        }
+        
+        .accordion-link.active {
+            background-color: #004989;
+            color: white;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+        
+        /* Setas de Navegação do Carrossel */
+        .header-carousel-container .owl-nav {
+            position: absolute;
+            top: 50%;
+            left: 0.5rem;
+            right: 0.5rem;
+            transform: translateY(-50%);
+            display: flex;
+            justify-content: space-between;
+            pointer-events: none;
+        }
+
+        .header-carousel-container .owl-nav button {
+            pointer-events: all;
+            color: #fff !important;
+            font-size: 1.5rem !important;
+            background: rgba(0, 0, 0, 0.4) !important;
+            width: 40px;
+            height: 40px;
+            border-radius: 50% !important;
+            transition: background-color 0.3s ease;
+        }
+        
+        @media (min-width: 768px) {
+             .header-carousel-container .owl-nav {
+                left: 1.5rem;
+                right: 1.5rem;
+             }
+            .header-carousel-container .owl-nav button {
+                 font-size: 2rem !important;
+                 width: 50px;
+                 height: 50px;
+            }
+        }
+
+        .header-carousel-container .owl-nav button:hover {
+             background: rgba(0, 73, 137, 0.8) !important;
+        }
+
+        /* Pontos do Carrossel */
+        .header-carousel-container .owl-dots {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .header-carousel-container .owl-dots .owl-dot span {
+            background: #fff !important;
+            opacity: 0.7;
+            margin: 0 5px !important;
+        }
+
+        .header-carousel-container .owl-dots .owl-dot.active span {
+            opacity: 1;
+            background: #004989 !important;
+        }
+        
+        a {
+            text-decoration: none !important;
+        }
+
+        /* Imagens do Carrossel */
+        .carousel-background {
+            background-size: cover;
+            background-position: center;
+        }
+        
+        /* Imagens para Mobile */
+        .carousel-background-1 {
+            background-image: url('img/carrossel-1.png');
+        }
+        .carousel-background-2 {
+            background-image: url('img/carrossel-2.png');
+        }
+
+        /* Imagens para Desktop - Media Query */
+        @media (min-width: 768px) {
+            .carousel-background-1 {
+                background-image: url('img/carousel-1.jpg');
+            }
+            .carousel-background-2 {
+                background-image: url('img/carousel-2.jpg');
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 text-gray-800">
+
+    <!-- Spinner Start -->
+    <div id="spinner" class="fixed inset-0 z-50 flex items-center justify-center bg-white">
+        <div class="h-12 w-12 animate-spin rounded-full border-4 border-solid border-blue-800 border-t-transparent" role="status">
+            <span class="sr-only">Carregando...</span>
+        </div>
+    </div>
+    <!-- Spinner End -->
+
+    <!-- Navbar Start -->
+    <nav id="navbar" class="fixed top-0 left-0 z-40 w-full bg-gradient-to-r from-[#004989] to-[#3e6f98] transition-all duration-300">
+        <div class="container mx-auto flex h-20 items-center justify-between px-4">
+            <a href="index.html" class="navbar-brand p-0">
+                <img src="img/logo.png" alt="Logo Gilvani O Gringo" class="h-12">
+            </a>
+            <button id="navbar-toggler" class="rounded border border-white p-2 text-white lg:hidden" type="button" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <i class="fa fa-bars text-xl"></i>
+            </button>
+            <div class="hidden lg:flex" id="navbarCollapse">
+                <div class="absolute lg:static top-20 left-0 w-full bg-gradient-to-r from-[#004989] to-[#3e6f98] lg:bg-none p-4 lg:p-0 flex flex-col space-y-4 lg:flex-row lg:space-x-2 lg:space-y-0">
+                    <a href="https://wa.me/+5551981221708" target="_blank" class="nav-item nav-link rounded-md px-4 py-2 text-white hover:bg-white/20 font-medium transition-colors">Contato com o Gringo</a>
+                    <a href="#Ultimas-noticias" class="nav-item nav-link rounded-md px-4 py-2 text-white hover:bg-white/20 font-medium transition-colors">Últimas Notícias</a>
+                    <a href="#Principais-Pautas" class="nav-item nav-link rounded-md px-4 py-2 text-white hover:bg-white/20 font-medium transition-colors">Principais Pautas</a>
+                    <a href="#Conheca-o-Gringo" class="nav-item nav-link rounded-md px-4 py-2 text-white hover:bg-white/20 font-medium transition-colors">Conheça o Gringo</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <!-- Navbar End -->
+
+    <main>
+        <!-- Carousel Start -->
+        <section class="header-carousel-container relative w-full pt-20">
+            <div class="header-carousel owl-carousel">
+                <div class="header-carousel-item relative h-[85vh] carousel-background carousel-background-1">
+                    <div class="absolute inset-0 flex items-center bg-gradient-to-r from-black/20 to-transparent">
+                        <div class="container mx-auto px-6 md:px-8">
+                            <div class="w-full text-center sm:w-4/5 md:w-3/5 lg:w-1/2 sm:text-left animate__animated animate__fadeInLeft">
+                                <h4 class="mb-2 text-md font-bold uppercase text-yellow-400">CONTATO DIRETO COMIGO</h4>
+                                <h1 class="mb-4 text-4xl lg:text-5xl font-bold uppercase text-white">Sua voz, <br>sua comunidade, <br>nossa ação.</h1>
+                                <a class="mb-4 inline-block rounded-full bg-yellow-400 py-3 px-8 text-[#004989] font-bold shadow-lg transition-transform hover:scale-105" href="https://wa.me/+5551981221708">Saiba mais.</a>
+                                <div class="flex items-center justify-center sm:justify-start space-x-2">
+                                    <a class="flex h-10 w-10 items-center justify-center rounded-full bg-white/80 text-[#004989] hover:bg-white transition-all" href="https://www.facebook.com/gilvanigringors" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                                    <a class="flex h-10 w-10 items-center justify-center rounded-full bg-white/80 text-[#004989] hover:bg-white transition-all" href="https://www.tiktok.com/@gilvaniogringo" target="_blank"><i class="fab fa-tiktok"></i></a>
+                                    <a class="flex h-10 w-10 items-center justify-center rounded-full bg-white/80 text-[#004989] hover:bg-white transition-all" href="https://www.instagram.com/gilvaniogringo/" target="_blank"><i class="fab fa-instagram"></i></a>
+                                    <a class="flex h-10 w-10 items-center justify-center rounded-full bg-white/80 text-[#004989] hover:bg-white transition-all" href="https://www.youtube.com/@GilvanioGringo" target="_blank"><i class="fab fa-youtube"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                 <div class="header-carousel-item relative h-[85vh] carousel-background carousel-background-2">
+                    <div class="absolute inset-0 flex items-center">
+                        <div class="container mx-auto px-6 md:px-8 flex justify-center sm:justify-start">
+                            <div class="w-full text-center sm:w-4/5 md:w-3/5 lg:w-1/2 sm:text-left animate__animated animate__fadeInLeft">
+                                <h4 class="mb-2 text-sm md:text-md font-bold uppercase" style="color:#004989;">CONHEÇA OS</h4>
+                                <h1 class="mb-4 text-3xl md:text-4xl lg:text-5xl font-bold uppercase text-white">MEUS PROJETOS</h1>
+                                 <a class="btn-primary mb-4 inline-block rounded-full bg-[#004989] py-3 px-8 font-bold text-yellow-400 shadow-lg transition-transform hover:scale-105" href="projetos.pdf">Saiba mais.</a>
+                                 <div class="flex items-center justify-center sm:justify-start space-x-2">
+                                    <a class="flex h-10 w-10 items-center justify-center rounded-full bg-white/80 text-[#004989] hover:bg-white transition-all" href="https://www.facebook.com/gilvanigringors" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                                    <a class="flex h-10 w-10 items-center justify-center rounded-full bg-white/80 text-[#004989] hover:bg-white transition-all" href="https://www.tiktok.com/@gilvaniogringo" target="_blank"><i class="fab fa-tiktok"></i></a>
+                                    <a class="flex h-10 w-10 items-center justify-center rounded-full bg-white/80 text-[#004989] hover:bg-white transition-all" href="https://www.instagram.com/gilvaniogringo/" target="_blank"><i class="fab fa-instagram"></i></a>
+                                    <a class="flex h-10 w-10 items-center justify-center rounded-full bg-white/80 text-[#004989] hover:bg-white transition-all" href="https://www.youtube.com/@GilvanioGringo" target="_blank"><i class="fab fa-youtube"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Carousel End -->
+
+	<!-- Projeto start -->
+     <section class="py-12 md:py-20" id="Projeto">
+  <div class="container mx-auto px-4">
+    <div class="mx-auto max-w-3xl text-center wow animate__animated animate__fadeInUp">
+      <h2 class="mb-4 text-3xl md:text-4xl font-bold text-[#005075]">
+        Especialistas alertam para risco que as contaminantes emergentes podem causar à saúde da população em Porto Alegre
+      </h2>
+        <br><b>14/07/2025</b>
+      <br><br>
+      Você já parou para pensar na <b>qualidade da água que sai da sua torneira</b>? Em Porto Alegre, a maior parte da água consumida pela população vem do Guaíba. Segundo especialistas que investigam o tema, esse manancial está cada vez mais comprometido pela <b>poluição dos principais rios da Região Metropolitana</b>, como o Gravataí, Sinos, Caí e Jacuí, que despejam no Guaíba substâncias altamente perigosas, entre elas, os chamados <b>contaminantes emergentes</b>.<br><br>
+
+      Esses poluentes têm preocupado autoridades e pesquisadores, e foram tema de debate durante o Seminário de Meio Ambiente da Câmara Municipal de Porto Alegre. Na ocasião, o vereador Gilvani “O Gringo” alertou para os <b>riscos silenciosos à saúde causados por compostos químicos que não são completamente eliminados nos sistemas tradicionais de tratamento de água</b>.<br><br>
+
+      <b>Mas o que são contaminantes emergentes?</b><br><br>
+
+      São substâncias químicas que ainda não possuem regulamentação específica nas normas sanitárias brasileiras e que resistem ao processo de filtragem convencional. Estão nesse grupo resíduos de medicamentos como antibióticos, antidepressivos e anti-inflamatórios, além de hormônios, produtos de limpeza, itens de higiene pessoal, microplásticos, pesticidas e aditivos industriais.<br><br>
+
+      Segundo especialistas, esses contaminantes chegam aos rios através do esgoto doméstico e industrial, descarte incorreto de resíduos e uso excessivo de produtos químicos no campo e na cidade. A água do Guaíba, mesmo tratada, ainda pode conter vestígios desses compostos, que são ingeridos diariamente pela população.<br><br>
+
+      A preocupação do vereador Gilvani é de que a exposição contínua a essas substâncias possa estar associada a problemas de saúde como <b>infertilidade, alterações hormonais, resistência bacteriana a antibióticos, doenças neurológicas (como Alzheimer e Parkinson), distúrbios metabólicos, câncer e comprometimento do desenvolvimento cognitivo em crianças</b>.<br><br>
+
+      O alerta mais grave é que, atualmente, <b>não existem limites legais definidos para essas substâncias na água potável</b>. A legislação brasileira ainda não regulamenta o monitoramento ou o controle dos contaminantes emergentes nos mananciais que abastecem a população.<br><br>
+
+      Em sua fala durante o seminário, o vereador Gilvani “O Gringo” expressou preocupação com a situação. <i>“Água limpa e segura não é luxo, é direito. Estamos falando de saúde pública. Tem gente que ainda não se deu conta da gravidade desse assunto. Se a gente não agir agora, vai pagar um preço alto no futuro.”</i><br><br>
+
+      Entre as medidas que o vereador propõe está a <b>criação do Banco de Água Mineral de Porto Alegre</b>, projeto de lei que prevê a distribuição de água potável para famílias em situação de vulnerabilidade, por meio de doações da iniciativa privada – tudo isso sem gerar custos ao município.<br><br>
+
+      Com atuação destacada na área ambiental, o vereador também defende a <b>criação de um plano de segurança da água</b>, previsto nas diretrizes nacionais, e a modernização do sistema de saneamento. Ele cobra investimentos na fiscalização ambiental, atualização tecnológica das estações de tratamento e ações efetivas de despoluição dos rios da Região Metropolitana.<br><br>
+
+      Para o biólogo e pesquisador Dr. Jackson Muller, a preocupação do vereador é legítima. Segundo ele, a cobertura e eficiência do tratamento de esgoto na Região Metropolitana de Porto Alegre ainda são muito baixas, o que favorece o acúmulo de contaminantes emergentes nos corpos d’água. Esses compostos, destaca o especialista, impactam não apenas a saúde humana, mas também a biodiversidade e o equilíbrio dos ecossistemas.
+    </div>
+  </div>
+</section>
+
+        
+<!-- Materia end -->
+
+    <!-- Footer Start -->
+    <footer class="bg-gradient-to-r from-[#004989] to-[#3e6f98] py-12 text-white" >
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 gap-8 text-center md:text-left md:grid-cols-2 lg:grid-cols-4">
+                <div>
+                    <h4 class="mb-4 text-xl font-bold">Conheça o Gringo</h4>
+                    <p class="mb-4 opacity-80">Com ampla experiência em saneamento e emergências ambientais, atuo para trazer soluções práticas para os desafios de Porto Alegre.</p>
+                    <a href="/conheca-gringo.html" class="no-underline hover:opacity-100 opacity-80"><i class="fas fa-angle-right me-2"></i>Sobre o Gringo</a>
+                </div>
+                <div>
+                    <h4 class="mb-4 text-xl font-bold">Links Úteis</h4>
+                    <a href="/projetos.pdf" class="block mb-2 no-underline hover:opacity-100 opacity-80"><i class="fas fa-angle-right me-2"></i>Projetos do Gringo</a>
+                    <a href="https://wa.me/+5551981221708" target="_blank" class="block no-underline hover:opacity-100 opacity-80"><i class="fas fa-angle-right me-2"></i>Seja um Apoiador</a>
+                </div>
+                <div>
+                    <h4 class="mb-4 text-xl font-bold">Contato</h4>
+                    <p class="flex items-center justify-center md:justify-start mb-2"><i class="fas fa-envelope mr-3"></i><a href="mailto:contato@gilvaniogringo.com" class="no-underline hover:opacity-100 opacity-80">contato@gilvaniogringo.com</a></p>
+                    <p class="flex items-center justify-center md:justify-start mb-2"><i class="fa fa-phone-alt mr-3"></i><a href="https://wa.me/+5551981221708" class="no-underline hover:opacity-100 opacity-80">(51) 98122-1708</a></p>
+                    <p class="flex items-center justify-center md:justify-start"><i class="fab fa-instagram mr-3"></i><a href="https://www.instagram.com/gilvaniogringo/" class="no-underline hover:opacity-100 opacity-80">@gilvaniogringo</a></p>
+                </div>
+                 <div>
+                    <h4 class="mb-4 text-xl font-bold">Redes Sociais</h4>
+                     <div class="flex justify-center md:justify-start space-x-3">
+                         <a class="flex h-10 w-10 items-center justify-center rounded-full bg-white text-[#004989] transition-transform hover:scale-110" href="https://www.facebook.com/gilvanigringors" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                         <a class="flex h-10 w-10 items-center justify-center rounded-full bg-white text-[#004989] transition-transform hover:scale-110" href="https://www.tiktok.com/@gilvaniogringo" target="_blank"><i class="fab fa-tiktok"></i></a>
+                         <a class="flex h-10 w-10 items-center justify-center rounded-full bg-white text-[#004989] transition-transform hover:scale-110" href="https://www.instagram.com/gilvaniogringo/" target="_blank"><i class="fab fa-instagram"></i></a>
+                         <a class="flex h-10 w-10 items-center justify-center rounded-full bg-white text-[#004989] transition-transform hover:scale-110" href="https://www.youtube.com/@GilvanioGringo" target="_blank"><i class="fab fa-youtube"></i></a>
+                     </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- Footer End -->
+
+    <!-- Copyright Start -->
+    <div class="py-4" style="background-color: #01131c;">
+        <div class="container mx-auto px-4">
+            <div class="text-center text-gray-400 text-sm">
+                <span class="text-body">
+                    <a href="#" class="border-b border-transparent text-white no-underline"><i class="fas fa-copyright text-light me-2"></i>Gringo.rs</a>, Todos os direitos reservados.
+                </span>
+            </div>
+        </div>
+    </div>
+    <!-- Copyright End -->
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.min.js"></script>
+
+    <!-- Template Javascript -->
+    <script>
+        $(document).ready(function() {
+            // Spinner
+            setTimeout(function() {
+                if ($('#spinner').length > 0) {
+                    $('#spinner').removeClass('show').hide();
+                }
+            }, 1);
+
+            // WOW.js initialization
+            new WOW().init();
+
+            // Header Carousel
+            $(".header-carousel").owlCarousel({
+                autoplay: true,
+                smartSpeed: 1500,
+                items: 1,
+                dots: true,
+                loop: true,
+                nav: true,
+                navText: [
+                    '<i class="fa fa-chevron-left"></i>',
+                    '<i class="fa fa-chevron-right"></i>'
+                ]
+            });
+
+            // Mobile Navbar Toggle
+            const navbarToggler = $('#navbar-toggler');
+            const navbarCollapse = $('#navbarCollapse');
+            
+            navbarToggler.click(function() {
+                if (navbarCollapse.is(':visible')) {
+                    navbarCollapse.addClass('hidden');
+                } else {
+                    navbarCollapse.removeClass('hidden');
+                }
+            });
+            
+            // Hide mobile menu on link click
+            $('#navbarCollapse a').on('click', function() {
+                if (navbarCollapse.is(':visible') && $(window).width() < 1024) {
+                    navbarCollapse.addClass('hidden');
+                }
+            });
+
+
+            // Smooth scrolling for anchor links
+            $('a.nav-link[href*="#"]').on('click', function(e) {
+                if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') && location.hostname == this.hostname) {
+                    var target = $(this.hash);
+                    target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
+                    if (target.length) {
+                         e.preventDefault();
+                        $('html, body').animate({
+                            scrollTop: target.offset().top
+                        }, 500);
+                    }
+                }
+            });
+            
+            // Accordion/Tab functionality for "Conheça o Gringo" section
+            $('.accordion-link').on('click', function(e) {
+                e.preventDefault();
+                var target = $(this).data('target');
+                
+                // Update active link style
+                $('.accordion-link').removeClass('active');
+                $(this).addClass('active');
+                
+                // Show/hide content panes
+                $('.tab-content .tab-pane').addClass('hidden').removeClass('active');
+                $(target).removeClass('hidden').addClass('active');
+            });
+            
+        });
+    </script>
+</body>
+
+</html>
