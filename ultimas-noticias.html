@@ -203,59 +203,55 @@
         </section>
         <!-- Carousel End -->
 
-<!-- Principais pautas start -->
-<section class="py-12 md:py-20 bg-white" id="Principais pautas">
+<!-- Últimas Notícias start -->
+<section class="py-12 md:py-20" id="Ultimas-noticias">
   <div class="container mx-auto px-4">
-    <div class="mx-auto max-w-4xl text-left wow animate__animated animate__fadeInUp">
-      <h2 class="mb-6 text-3xl md:text-4xl font-bold text-[#005075] text-center">Principais Pautas</h2>
+    <div class="mx-auto max-w-3xl text-center wow animate__animated animate__fadeInUp">
+      <h2 class="mb-4 text-3xl md:text-4xl font-bold text-[#005075]">Últimas Notícias</h2>
+      <p class="text-lg text-gray-600">
+        Aqui você fica sabendo em primeira mão as notícias e novidades sobre o trabalho do vereador Gilvani.
+      </p>
+    </div>
 
-      <h3 class="text-2xl font-semibold text-[#005075] mb-2">⚠️ Qualidade da Água e Saúde Pública</h3>
-      <p class="mb-6 text-lg text-gray-700 leading-relaxed">
-        Você já parou para pensar na qualidade da água que sai da sua torneira? Em Porto Alegre, boa parte da água consumida vem do Guaíba, um manancial constantemente impactado pela poluição dos rios Gravataí, Sinos, Caí e Jacuí. Estudos apontam que esses rios estão carregando <strong>contaminantes emergentes e metais pesados</strong>, como o mercúrio, que podem comprometer a saúde da população.
-      </p>
-      <p class="mb-6 text-lg text-gray-700 leading-relaxed">
-        O Gringo atua fortemente na denúncia desses riscos, propondo ações concretas de monitoramento, transparência na divulgação da qualidade da água e investimento em saneamento. A pauta da água é uma prioridade: <strong>não há saúde sem água limpa</strong>.
-      </p>
-
-      <h3 class="text-2xl font-semibold text-[#005075] mb-2">🌱 Projetos para Melhorar a Cidade</h3>
-      <p class="mb-6 text-lg text-gray-700 leading-relaxed">
-        A atuação do Gringo vai além da denúncia: ele apresenta e cobra soluções. Entre os projetos e ações já em curso, destacam-se:
-      </p>
-      <ul class="list-disc pl-6 mb-6 text-lg text-gray-700 leading-relaxed">
-        <li>Instalação de sistemas de drenagem urbana sustentável em áreas com alagamentos frequentes;</li>
-        <li>Requalificação de espaços públicos, praças e áreas verdes;</li>
-        <li>Melhorias no transporte público e pavimentação de ruas com problemas crônicos;</li>
-        <li>Plantio de árvores e controle de podas para evitar riscos e aumentar a qualidade do ar.</li>
-      </ul>
-
-      <h3 class="text-2xl font-semibold text-[#005075] mb-2">🤝 Gestão Compartilhada</h3>
-      <p class="mb-6 text-lg text-gray-700 leading-relaxed">
-        O <strong>Gestão Compartilhada</strong> é uma nova forma de governar, onde cada bairro, vila ou comunidade pode ter um representante local atuando ao lado do mandato do Gringo. A proposta é construir uma rede direta entre população e poder público, tornando a administração mais ágil, justa e eficiente.
-      </p>
-      <p class="mb-6 text-lg text-gray-700 leading-relaxed">
-        Os representantes organizam as demandas da região, mobilizam os moradores e acompanham os protocolos na Central de Atendimento ao Cidadão (156), facilitando o acesso a serviços como saneamento, hidráulica, elétrica, pavimentação, iluminação e limpeza urbana.
-        <br>
-        👉 <a href="https://prefeitura.poa.br/carta-de-servicos/156-central-de-atendimento-ao-cidadao" target="_blank" class="text-[#005075] underline">Saiba mais sobre os serviços do 156</a>
-      </p>
-      <p class="mb-6 text-lg text-gray-700 leading-relaxed">
-        Acreditamos que a verdadeira mudança começa com a participação de cada um. Se você quer representar sua comunidade ou ser um apoiador do projeto, fale diretamente com o Gringo:
-      </p>
-      <div class="text-center mb-10">
-        <a href="https://wa.me/5551981221708" target="_blank" class="inline-block bg-[#005075] text-white text-lg font-semibold py-3 px-6 rounded-xl hover:bg-[#003d5c] transition">
-          Clique aqui e fale no WhatsApp
-        </a>
-      </div>
-
-      <h3 class="text-2xl font-semibold text-[#005075] mb-2">📢 Por que acompanhar o mandato?</h3>
-      <p class="mb-4 text-lg text-gray-700 leading-relaxed">
-        <strong>Transparência:</strong> Você será informado sobre os projetos em votação, seus impactos e como eles podem afetar sua comunidade.<br>
-        <strong>Participação ativa:</strong> Canais abertos para que suas ideias e necessidades cheguem até a Câmara.<br>
-        <strong>Responsabilidade:</strong> Fiscalizar o mandato é um direito e um dever coletivo — juntos, fazemos a diferença.
-      </p>
+    <div class="mt-12 wow animate__animated animate__fadeInUp" data-wow-delay="0.2s">
+      <div id="blog-posts" class="grid gap-6 md:grid-cols-2 lg:grid-cols-3"></div>
     </div>
   </div>
 </section>
-<!-- Principais pautas end -->
+<!-- Últimas Notícias end -->
+
+<script>
+  async function carregarNoticias() {
+    const url = "https://api.rss2json.com/v1/api.json?rss_url=https://gilvaniogringo.blogspot.com/feeds/posts/default?alt=rss";
+    
+    try {
+      const res = await fetch(url);
+      const data = await res.json();
+
+      const postsContainer = document.getElementById("blog-posts");
+      postsContainer.innerHTML = "";
+
+      data.items.slice(0, 6).forEach(post => {
+        const postCard = `
+          <div class="border rounded-xl shadow-lg p-5 hover:shadow-xl transition">
+            <h3 class="text-xl font-semibold text-[#005075] mb-2">${post.title}</h3>
+            <p class="text-gray-600 text-sm mb-4">${new Date(post.pubDate).toLocaleDateString()}</p>
+            <p class="text-gray-700 mb-4">${post.description.slice(0, 120)}...</p>
+            <a href="${post.link}" target="_blank" class="text-blue-600 font-medium hover:underline">Leia mais</a>
+          </div>
+        `;
+        postsContainer.innerHTML += postCard;
+      });
+
+    } catch (error) {
+      document.getElementById("blog-posts").innerHTML = `
+        <p class="text-red-600">Erro ao carregar notícias. Tente novamente mais tarde.</p>
+      `;
+    }
+  }
+
+  carregarNoticias();
+</script>
 
     
 <!-- Estilo para o wrapper com sombra -->
