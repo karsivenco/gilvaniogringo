@@ -219,25 +219,65 @@
 </section>
 <!-- Principais pautas end -->
 
-        <section class="py-12 md:py-20" id="Ultimas-noticias">
-            <div class="container mx-auto px-4">
-                <div class="mx-auto max-w-3xl text-center wow animate__animated animate__fadeInUp">
-                    <h2 class="mb-4 text-3xl md:text-4xl font-bold text-[#005075]">Últimas Notícias</h2>
-                    <p class="text-lg text-gray-600">
-                        Aqui você fica sabendo em primeira mão as notícias e novidades sobre o trabalho do vereador Gilvani.
-                    </p>
-                </div>
-                <div class="mt-12 wow animate__animated animate__fadeInUp" data-wow-delay="0.2s">
-                    <div class="relative h-[800px] w-full overflow-hidden rounded-xl border shadow-lg">
-                        <iframe src="https://gilvaniogringo.blogspot.com/" class="absolute top-0 left-0 w-full border-0" style="height: calc(100% + 80px);" >
-                            Carregando…
-                        </iframe>
-                    </div>
-                </div>
-            </div>
-        </section>
+        <!-- Divisor visual -->
+<div class="h-16 bg-gradient-to-r from-[#005075]/10 to-transparent"></div>
+        
+       <!-- Últimas Notícias start -->
+<section class="py-12 md:py-20" id="Ultimas-noticias">
+  <div class="container mx-auto px-4">
+    <div class="mx-auto max-w-3xl text-center wow animate__animated animate__fadeInUp">
+      <h2 class="mb-4 text-3xl md:text-4xl font-bold text-[#005075]">Últimas Notícias</h2>
+      <p class="text-lg text-gray-600">
+        Aqui você fica sabendo em primeira mão as notícias e novidades sobre o trabalho do vereador Gilvani.
+      </p>
+    </div>
+
+    <div class="mt-12 wow animate__animated animate__fadeInUp" data-wow-delay="0.2s">
+      <div id="blog-posts" class="grid gap-6 md:grid-cols-2 lg:grid-cols-3"></div>
+    </div>
+  </div>
+</section>
+<!-- Últimas Notícias end -->
+
+<script>
+  async function carregarNoticias() {
+    const url = "https://api.rss2json.com/v1/api.json?rss_url=https://gilvaniogringo.blogspot.com/feeds/posts/default?alt=rss";
+    
+    try {
+      const res = await fetch(url);
+      const data = await res.json();
+
+      const postsContainer = document.getElementById("blog-posts");
+      postsContainer.innerHTML = "";
+
+      data.items.slice(0, 2).forEach(post => {
+        const postCard = `
+          <div class="border rounded-xl shadow-lg p-5 hover:shadow-xl transition">
+            <h3 class="text-xl font-semibold text-[#005075] mb-2">${post.title}</h3>
+            <p class="text-gray-600 text-sm mb-4">${new Date(post.pubDate).toLocaleDateString()}</p>
+            <p class="text-gray-700 mb-4">${post.description.slice(0, 120)}...</p>
+            <a href="${post.link}" target="_blank" class="text-blue-600 font-medium hover:underline">Leia mais</a>
+          </div>
+        `;
+        postsContainer.innerHTML += postCard;
+      });
+
+    } catch (error) {
+      document.getElementById("blog-posts").innerHTML = `
+        <p class="text-red-600">Erro ao carregar notícias. Tente novamente mais tarde.</p>
+      `;
+    }
+  }
+
+  carregarNoticias();
+</script>
+
+         <strong><a href="/contaminantes.html" class="text-[#005075] hover:underline">clique aqui e leia mais notíticas</a></strong>
         <!-- Ultimas noticias end -->
 
+        <!-- Divisor visual -->
+<div class="h-16 bg-gradient-to-r from-[#005075]/10 to-transparent"></div>
+        
         <!-- Principais Pautas Start -->
         <section id="Principais-Pautas" class="py-12 md:py-20 bg-white">
             <div class="container mx-auto px-4 wow animate__animated animate__fadeInUp">
@@ -262,7 +302,10 @@
             </div>
         </section>
         <!-- Principais Pautas End -->
-
+        
+<!-- Divisor visual -->
+<div class="h-16 bg-gradient-to-r from-[#005075]/10 to-transparent"></div>
+        
         <!-- Conheça o Gringo Start -->
         <section class="py-12 md:py-20" id="Conheca-o-Gringo">
             <div class="container mx-auto px-4">
