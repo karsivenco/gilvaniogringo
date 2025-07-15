@@ -1,231 +1,208 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br" class="scroll-smooth">
 
 <head>
     <meta charset="utf-8">
     <title>Gilvani, O Gringo</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <meta content="" name="keywords">
-    <meta content="" name="description">
+    <meta content="vereador, porto alegre, gilvani, gringo, projetos, comunidade, política" name="keywords">
+    <meta content="Site oficial de Gilvani Dall Oglio, o Gringo. Conheça os projetos, pautas e formas de contato para melhorar nossa comunidade em Porto Alegre." name="description">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
 
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
 
     <!-- Icon Font Stylesheet -->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" xintegrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <!-- Libraries Stylesheet -->
-    <link rel="stylesheet" href="lib/animate/animate.min.css" />
-    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
-    <link href="lib/owlcarousel/assets/owl.theme.default.min.css" rel="stylesheet">
-
-    <!-- Customized Bootstrap Stylesheet -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Template Stylesheet -->
-    <link href="css/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
 
     <style>
-        /* Navbar */
-        .navbar {
-            height: 80px; /* Altura da navbar */
-            background: linear-gradient(to right, #004989, #3e6f98); /* Fundo gradiente */
-            position: fixed; /* Fixando a navbar no topo */
-            width: 100%; /* Largura total */
-            z-index: 1000; /* Acima de outros elementos */
-            transition: background-color 0.3s; /* Transição suave para a cor de fundo */
-        }
-
-        .navbar.scrolled {
-            background: linear-gradient(to right, #004989, #3e6f98);
-            color: white /* Mantém o gradiente ao rolar */
-        }
-
-        .navbar-nav .nav-link {
-            padding: 30px; /* Espaçamento dos links */
-            color: white; /* Cor do texto inicial */
-            transition: background 0.3s, color 0.3s; /* Efeito de transição */
-        }
-
-        .navbar-nav .nav-link:hover {
-            background: transparent; /* Sem cor de fundo ao passar o mouse */
-            color: #ffffff; /* Cor do texto ao passar o mouse */
-        }
-
-        .header-carousel {
-            margin-top: 80px; /* Deixando espaço para a navbar */
-        }
-
-        .header-carousel-item {
-            transition: none; /* Remover efeito de fade durante a transição */
-            background: transparent; /* Fundo transparente para o item do carrossel */
-        }
-
-        .header-carousel-item h4 {
-            color: #004989; /* Cor padrão para h4 */
-        }
-
-        .header-carousel-item:nth-child(1) h4 {
-            color: #004989; /* Cor para "CONTATO DIRETO COMIGO" */
-        }
-
-        .header-carousel-item:nth-child(2) h4 {
-            color: #ffbf00; /* Cor para "CONHEÇA OS" */
-        }
-
-        .header-carousel-item h1 {
-            color: transparent; /* Cor do texto inicial */
-        }
-
-        .header-carousel-item p {
-            color: transparent; /* Cor do texto no parágrafo */
-        }
-
-        .line {
-            height: 1px;
-            background-color: transparent; /* Cor da linha como transparente */
-            margin-top: 10px; /* Espaço acima das linhas */
-            transition: background-color 0.3s; /* Transição suave para a cor da linha */
-        }
-
-        .navbar.scrolled + .line {
-            background-color: transparent; /* Cor da linha ao rolar */
-        }
-
-        .header-carousel .owl-carousel {
-            position: relative;
-            overflow: hidden; /* Evita overflow indesejado */
-        }
-
-        .header-carousel .owl-item {
-            opacity: 0; /* Começa invisível */
-            color: none;
-            transition: opacity 0.5s ease-in-out; /* Transição suave */
+        /* Estilos Personalizados */
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-padding-top: 80px; /* Offset for fixed navbar */
         }
 
         .header-carousel .owl-item.active {
-            opacity: 1; /* Opacidade total para a imagem ativa */
-            color: none;
+            animation: fadeIn 0.7s forwards;
+        }
+        
+        .accordion-link.active {
+            background-color: #004989;
+            color: white;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+        
+        /* Setas de Navegação do Carrossel */
+        .header-carousel-container .owl-nav {
+            position: absolute;
+            top: 50%;
+            left: 0.5rem;
+            right: 0.5rem;
+            transform: translateY(-50%);
+            display: flex;
+            justify-content: space-between;
+            pointer-events: none;
+        }
+
+        .header-carousel-container .owl-nav button {
+            pointer-events: all;
+            color: #fff !important;
+            font-size: 1.5rem !important;
+            background: rgba(0, 0, 0, 0.4) !important;
+            width: 40px;
+            height: 40px;
+            border-radius: 50% !important;
+            transition: background-color 0.3s ease;
+        }
+        
+        @media (min-width: 768px) {
+             .header-carousel-container .owl-nav {
+                left: 1.5rem;
+                right: 1.5rem;
+             }
+            .header-carousel-container .owl-nav button {
+                 font-size: 2rem !important;
+                 width: 50px;
+                 height: 50px;
+            }
+        }
+
+        .header-carousel-container .owl-nav button:hover {
+             background: rgba(0, 73, 137, 0.8) !important;
+        }
+
+        /* Pontos do Carrossel */
+        .header-carousel-container .owl-dots {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .header-carousel-container .owl-dots .owl-dot span {
+            background: #fff !important;
+            opacity: 0.7;
+            margin: 0 5px !important;
+        }
+
+        .header-carousel-container .owl-dots .owl-dot.active span {
+            opacity: 1;
+            background: #004989 !important;
+        }
+        
+        a {
+            text-decoration: none !important;
+        }
+
+        /* Imagens do Carrossel */
+        .carousel-background {
+            background-size: cover;
+            background-position: center;
+        }
+        
+        /* Imagens para Mobile */
+        .carousel-background-1 {
+            background-image: url('img/carrossel-1.png');
+        }
+        .carousel-background-2 {
+            background-image: url('img/carrossel-2.png');
+        }
+
+        /* Imagens para Desktop - Media Query */
+        @media (min-width: 768px) {
+            .carousel-background-1 {
+                background-image: url('img/carousel-1.jpg');
+            }
+            .carousel-background-2 {
+                background-image: url('img/carousel-2.jpg');
+            }
         }
     </style>
 </head>
 
-<body>
+<body class="bg-gray-50 text-gray-800">
 
     <!-- Spinner Start -->
-    <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
-        <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
-            <span class="sr-only">@GILVANIOGRINGO</span>
+    <div id="spinner" class="fixed inset-0 z-50 flex items-center justify-center bg-white">
+        <div class="h-12 w-12 animate-spin rounded-full border-4 border-solid border-blue-800 border-t-transparent" role="status">
+            <span class="sr-only">Carregando...</span>
         </div>
     </div>
     <!-- Spinner End -->
 
     <!-- Navbar Start -->
-    <nav class="navbar navbar-expand-lg navbar-light">
-        <a href="index.html" class="navbar-brand p-0">
-            <h1 class="text-white"><img src="img/logo.png" alt="Logo"></h1>
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
-            <span class="fa fa-bars text-white"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarCollapse">
-            <div class="navbar-nav ms-auto py-0">
-                <a href="index.html" class="nav-item nav-link active text-white">Contato com o Gringo</a>
-                <a href="blog.html" class="nav-item nav-link text-white">Nossos Projetos</a>
-                <a href="Principais-Pautas.html" class="nav-item nav-link text-white">Principais Pautas</a>
-                <a href="Conheca-Gringo.html" class="nav-item nav-link text-white">Conheça o Gringo</a>
+    <nav id="navbar" class="fixed top-0 left-0 z-40 w-full bg-gradient-to-r from-[#004989] to-[#3e6f98] transition-all duration-300">
+        <div class="container mx-auto flex h-20 items-center justify-between px-4">
+            <a href="index.html" class="navbar-brand p-0">
+                <img src="img/logo.png" alt="Logo Gilvani O Gringo" class="h-12">
+            </a>
+            <button id="navbar-toggler" class="rounded border border-white p-2 text-white lg:hidden" type="button" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <i class="fa fa-bars text-xl"></i>
+            </button>
+            <div class="hidden lg:flex" id="navbarCollapse">
+                <div class="absolute lg:static top-20 left-0 w-full bg-gradient-to-r from-[#004989] to-[#3e6f98] lg:bg-none p-4 lg:p-0 flex flex-col space-y-4 lg:flex-row lg:space-x-2 lg:space-y-0">
+                    <a href="https://wa.me/+5551981221708" target="_blank" class="nav-item nav-link rounded-md px-4 py-2 text-white hover:bg-white/20 font-medium transition-colors">Contato com o Gringo</a>
+                    <a href="#Ultimas-noticias" class="nav-item nav-link rounded-md px-4 py-2 text-white hover:bg-white/20 font-medium transition-colors">Últimas Notícias</a>
+                    <a href="#Principais-Pautas" class="nav-item nav-link rounded-md px-4 py-2 text-white hover:bg-white/20 font-medium transition-colors">Principais Pautas</a>
+                    <a href="#Conheca-o-Gringo" class="nav-item nav-link rounded-md px-4 py-2 text-white hover:bg-white/20 font-medium transition-colors">Conheça o Gringo</a>
+                </div>
             </div>
         </div>
     </nav>
     <!-- Navbar End -->
-<!-- Carousel Start -->
-<div class="header-carousel owl-carousel">
-    <div class="header-carousel-item">
-        <img src="img/carousel-1.jpg" class="img-fluid w-100" alt="Image">
-        <div class="carousel-caption">
-            <div class="container">
-                <div class="row gy-0 gx-5">
-                    <div class="col-lg-0 col-xl-5"></div>
-                    <div class="col-xl-7 animated fadeInLeft">
-                        <div class="text-sm-center text-md-end">
-                            <h4 class="text-uppercase fw-bold mb-4" style="color: #004989;">CONTATO DIRETO COMIGO</h4>
-                            <h1 class="display-4 text-uppercase text-white mb-4">Sua voz, <br>sua comunidade, <br>nossa ação.</h1>
-                            <div class="d-flex justify-content-center justify-content-md-end flex-shrink-0 mb-4">
-                                <a class="btn btn-primary rounded-pill py-3 px-4 px-md-5 ms-2" href="https://wa.me/+5551981221708" style="color: white;">Saiba mais.</a>
+
+    <main>
+        <!-- Carousel Start -->
+        <section class="header-carousel-container relative w-full pt-20">
+            <div class="header-carousel owl-carousel">
+                <div class="header-carousel-item relative h-[85vh] carousel-background carousel-background-1">
+                    <div class="absolute inset-0 flex items-center bg-gradient-to-r from-black/20 to-transparent">
+                        <div class="container mx-auto px-6 md:px-8">
+                            <div class="w-full text-center sm:w-4/5 md:w-3/5 lg:w-1/2 sm:text-left animate__animated animate__fadeInLeft">
+                                <h4 class="mb-2 text-md font-bold uppercase text-yellow-400">CONTATO DIRETO COMIGO</h4>
+                                <h1 class="mb-4 text-4xl lg:text-5xl font-bold uppercase text-white">Sua voz, <br>sua comunidade, <br>nossa ação.</h1>
+                                <a class="mb-4 inline-block rounded-full bg-yellow-400 py-3 px-8 text-[#004989] font-bold shadow-lg transition-transform hover:scale-105" href="https://wa.me/+5551981221708">Saiba mais.</a>
+                                <div class="flex items-center justify-center sm:justify-start space-x-2">
+                                    <a class="flex h-10 w-10 items-center justify-center rounded-full bg-white/80 text-[#004989] hover:bg-white transition-all" href="https://www.facebook.com/gilvanigringors" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                                    <a class="flex h-10 w-10 items-center justify-center rounded-full bg-white/80 text-[#004989] hover:bg-white transition-all" href="https://www.tiktok.com/@gilvaniogringo" target="_blank"><i class="fab fa-tiktok"></i></a>
+                                    <a class="flex h-10 w-10 items-center justify-center rounded-full bg-white/80 text-[#004989] hover:bg-white transition-all" href="https://www.instagram.com/gilvaniogringo/" target="_blank"><i class="fab fa-instagram"></i></a>
+                                    <a class="flex h-10 w-10 items-center justify-center rounded-full bg-white/80 text-[#004989] hover:bg-white transition-all" href="https://www.youtube.com/@GilvanioGringo" target="_blank"><i class="fab fa-youtube"></i></a>
+                                </div>
                             </div>
-                            <div class="d-flex align-items-center justify-content-center justify-content-md-end">
-                                <div class="d-flex justify-content-end ms-2">
-                                    <a class="btn btn-md-square btn-light rounded-circle me-2" href="https://www.facebook.com/gilvanigringors" target="_blank">
-                                        <i class="fab fa-facebook-f"></i>
-                                    </a>
-                                    <a class="btn btn-md-square btn-light rounded-circle mx-2" href="https://www.tiktok.com/@gilvaniogringo" target="_blank">
-                                        <i class="fab fa-tiktok"></i> <!-- Ícone para TikTok -->
-                                    </a>
-                                    <a class="btn btn-md-square btn-light rounded-circle mx-2" href="https://www.instagram.com/gilvaniogringo/" target="_blank">
-                                        <i class="fab fa-instagram"></i>
-                                    </a>
-                                    <a class="btn btn-md-square btn-light rounded-circle ms-2" href="https://www.youtube.com/@GilvanioGringo" target="_blank">
-                                        <i class="fab fa-youtube"></i> <!-- Ícone para YouTube -->
-                                    </a>
+                        </div>
+                    </div>
+                </div>
+                 <div class="header-carousel-item relative h-[85vh] carousel-background carousel-background-2">
+                    <div class="absolute inset-0 flex items-center">
+                        <div class="container mx-auto px-6 md:px-8 flex justify-center sm:justify-start">
+                            <div class="w-full text-center sm:w-4/5 md:w-3/5 lg:w-1/2 sm:text-left animate__animated animate__fadeInLeft">
+                                <h4 class="mb-2 text-sm md:text-md font-bold uppercase" style="color:#004989;">CONHEÇA OS</h4>
+                                <h1 class="mb-4 text-3xl md:text-4xl lg:text-5xl font-bold uppercase text-white">MEUS PROJETOS</h1>
+                                 <a class="btn-primary mb-4 inline-block rounded-full bg-[#004989] py-3 px-8 font-bold text-yellow-400 shadow-lg transition-transform hover:scale-105" href="projetos.pdf">Saiba mais.</a>
+                                 <div class="flex items-center justify-center sm:justify-start space-x-2">
+                                    <a class="flex h-10 w-10 items-center justify-center rounded-full bg-white/80 text-[#004989] hover:bg-white transition-all" href="https://www.facebook.com/gilvanigringors" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                                    <a class="flex h-10 w-10 items-center justify-center rounded-full bg-white/80 text-[#004989] hover:bg-white transition-all" href="https://www.tiktok.com/@gilvaniogringo" target="_blank"><i class="fab fa-tiktok"></i></a>
+                                    <a class="flex h-10 w-10 items-center justify-center rounded-full bg-white/80 text-[#004989] hover:bg-white transition-all" href="https://www.instagram.com/gilvaniogringo/" target="_blank"><i class="fab fa-instagram"></i></a>
+                                    <a class="flex h-10 w-10 items-center justify-center rounded-full bg-white/80 text-[#004989] hover:bg-white transition-all" href="https://www.youtube.com/@GilvanioGringo" target="_blank"><i class="fab fa-youtube"></i></a>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-    <div class="header-carousel-item">
-        <img src="img/carousel-2.jpg" class="img-fluid w-100" alt="Image">
-        <div class="carousel-caption">
-            <div class="container">
-                <div class="row g-5">
-                    <div class="col-12 col-lg-6 animated fadeInLeft">
-                        <div class="text-left">
-                            <h4 class="text-uppercase fw-bold mb-4" style="color: #FFBF00;">CONHEÇA OS</h4>
-                            <h1 class="display-4 text-uppercase text-white mb-4">MEUS PROJETOS</h1>
-                            <p class="mb-4 text-white">
-                                Drenagem eficiente para acabar com os alagamentos
-                                <br>
-                                Casas de bombas modernizadas para mais segurança
-                                <br>
-                                Ampliação dos diques para proteger nossa cidade
-                                <br>
-                                Planos de recuperação de áreas afetadas por enchentes
-                            </p>
-                            <div class="mb-4">
-                                <a class="btn btn-primary rounded-pill py-3 px-4 px-md-5" href="projetos.pdf" style="color: white;">Saiba mais.</a>
-                                <div class="d-flex align-items-center justify-content-center justify-content-md-end">
-                                    <div class="d-flex justify-content-end ms-2">
-                                        <a class="btn btn-md-square btn-light rounded-circle me-2" href="https://www.facebook.com/gilvanigringors" target="_blank">
-                                            <i class="fab fa-facebook-f"></i>
-                                        </a>
-                                        <a class="btn btn-md-square btn-light rounded-circle mx-2" href="https://www.tiktok.com/@gilvaniogringo" target="_blank">
-                                            <i class="fab fa-tiktok"></i> <!-- Ícone para TikTok -->
-                                        </a>
-                                        <a class="btn btn-md-square btn-light rounded-circle mx-2" href="https://www.instagram.com/gilvaniogringo/" target="_blank">
-                                            <i class="fab fa-instagram"></i>
-                                        </a>
-                                        <a class="btn btn-md-square btn-light rounded-circle ms-2" href="https://www.youtube.com/@GilvanioGringo" target="_blank">
-                                            <i class="fab fa-youtube"></i> <!-- Ícone para YouTube -->
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Carousel End -->
+        </section>
+        <!-- Carousel End -->
 
-
-<!-- Blog Start -->
+<!-- Principais pautas Start -->
 <div class="container-fluid blog py-5">
     <div class="container py-5">
         <div class="text-center mx-auto pb-5 wow fadeInUp" data-wow-delay="0.2s" style="max-width: 800px;">
