@@ -201,51 +201,47 @@
             </div>
         </section>
         <!-- Carousel End -->
-<!-- Destaques da Semana - Start -->
-<section class="py-12 md:py-20 bg-white" id="materia-em-destaque">
+<!-- Matéria em destaque: Contaminantes Emergentes -->
+<section class="py-12 md:py-20 bg-white" id="materia-em-destaque-1">
   <div class="container mx-auto px-4">
-    <h2 class="mb-8 text-3xl md:text-4xl font-bold text-center text-[#005075]">Destaques da Semana</h2>
-    <div id="blog-posts" class="flex flex-wrap justify-center gap-6"></div>
+    <div class="mx-auto max-w-3xl text-center wow animate__animated animate__fadeInUp">
+      <h2 class="mb-4 text-3xl md:text-4xl font-bold text-[#005075]">Destaques da Semana</h2>
+      <p class="text-lg text-gray-600">
+        <strong>VEREADOR GILVANI “O GRINGO” ALERTA PARA A QUALIDADE DA ÁGUA CONSUMIDA EM PORTO ALEGRE</strong> 
+        <br><br>
+        Você já parou para pensar na qualidade da água que sai da sua torneira? Em Porto Alegre, grande parte da água vem do Guaíba, cada vez mais comprometido pela poluição dos rios Gravataí, Sinos, Caí e Jacuí. Substâncias tóxicas e contaminantes emergentes, como hormônios e medicamentos, passam despercebidos pelo tratamento convencional e afetam silenciosamente a saúde da população.
+      </p>
+      <div class="mt-6">
+        <a href="https://gilvaniogringo.com/contaminantes" class="text-[#005075] text-lg font-semibold inline-block">
+          CLIQUE AQUI E LEIA A MATÉRIA COMPLETA
+        </a>
+      </div>
+    </div>
   </div>
 </section>
 
-<script>
-  // Lista de destaques fixos
-  const destaquesFixos = [
-    {
-      title: "Contaminantes emergentes: perigo invisível nas torneiras de Porto Alegre",
-      pubDate: "2025-07-10",
-      description: "Você já parou para pensar na qualidade da água que sai da sua torneira? Substâncias tóxicas como hormônios e medicamentos não são removidas no tratamento atual.",
-      link: "https://gilvaniogringo.com/contaminantes"
-    },
-    {
-      title: "Banco de Água Mineral POA: Projeto do Gringo garante água potável gratuita",
-      pubDate: "2025-07-12",
-      description: "O PL 203/25 cria um programa que arrecada e distribui água mineral para famílias de baixa renda, enfrentando a crise hídrica com dignidade e saúde.",
-      link: "https://gilvaniogringo.com/banco-agua-mineral.html"
-    }
-  ];
+<!-- Divisor visual -->
+<div class="h-16 bg-gradient-to-r from-[#005075]/10 to-transparent"></div>
 
-  // Renderiza os cards
-  const postsContainer = document.getElementById("blog-posts");
-  postsContainer.className = "flex flex-wrap justify-center gap-6";
-  postsContainer.innerHTML = "";
-
-  destaquesFixos.forEach(post => {
-    const postCard = `
-      <div class="w-full max-w-md border rounded-xl shadow-lg p-5 hover:shadow-xl transition text-center bg-white">
-        <h3 class="text-xl font-semibold text-[#005075] mb-2">${post.title}</h3>
-        <p class="text-gray-600 text-sm mb-4">${new Date(post.pubDate).toLocaleDateString('pt-BR')}</p>
-        <p class="text-gray-700 mb-4">${post.description}</p>
-        <a href="${post.link}" target="_blank" class="inline-block mt-2 px-4 py-2 bg-[#005075] text-white font-medium rounded hover:bg-[#003b56] transition">
-          Leia mais
+<!-- Matéria em destaque: Banco de Água Mineral POA -->
+<section class="py-12 md:py-20 bg-white" id="materia-em-destaque-2">
+  <div class="container mx-auto px-4">
+    <div class="mx-auto max-w-3xl text-center wow animate__animated animate__fadeInUp">
+      <h2 class="mb-4 text-3xl md:text-4xl font-bold text-[#005075]">Destaques da Semana</h2>
+      <p class="text-lg text-gray-600">
+        <strong>PROJETO DO VEREADOR GRINGO PROPÕE DISTRIBUIÇÃO DE ÁGUA MINERAL GRATUITA EM PORTO ALEGRE</strong>
+        <br><br>
+        O PL 203/25, de autoria do vereador Gilvani “O Gringo”, propõe a criação do "Banco de Água Mineral POA", programa que prevê a arrecadação e doação de água mineral a famílias de baixa renda, com apoio de empresas e instituições. A iniciativa surge diante da crise hídrica e da preocupação com a saúde pública agravada pelos contaminantes presentes na água distribuída atualmente.
+      </p>
+      <div class="mt-6">
+        <a href="https://gilvaniogringo.com/banco-agua-mineral.html" class="text-[#005075] text-lg font-semibold inline-block">
+          CLIQUE AQUI E LEIA A MATÉRIA COMPLETA
         </a>
       </div>
-    `;
-    postsContainer.innerHTML += postCard;
-  });
-</script>
-<!-- Destaques da Semana - End -->
+    </div>
+  </div>
+</section>
+
         
         <!-- Divisor visual -->
 <div class="h-16 bg-gradient-to-r from-[#005075]/10 to-transparent"></div>
