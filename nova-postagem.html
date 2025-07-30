@@ -90,7 +90,11 @@
   </header>
 
   <main class="max-w-5xl mx-auto px-6 py-10">
-   
+    <div class="assistant-box">
+      <strong>GringoGPT sugere:</strong>
+      <p>Quer uma dica? Comece seu texto com uma frase impactante. Evite parágrafos muito longos. Use subtítulos (você pode usar <b>negrito</b> para isso). Finalize com uma chamada de ação ou reflexão.</p>
+    </div>
+
     <form id="form-postagem">
       <label class="block text-sm font-medium mb-1">Título da Matéria</label>
       <input type="text" id="titulo" class="w-full border rounded px-4 py-2 mb-4" required>
@@ -105,7 +109,7 @@
         <button type="button" onclick="execCmd('underline')">Sublinhado</button><span class="separator">|</span>
         <button type="button" onclick="execCmd('insertUnorderedList')">Lista •</button><span class="separator">|</span>
         <button type="button" onclick="execCmd('insertOrderedList')">Lista 1.</button><span class="separator">|</span>
-        <button type="button" onclick="createLink()">Link</button><span class="separator">|</span>
+        <button type="button" onclick="customLinkPrompt()">Link</button><span class="separator">|</span>
         <select id="fontSelector" onchange="changeFont(this.value)">
           <option value="">Fonte padrão</option>
           <option value="Arial">Arial</option>
@@ -133,7 +137,7 @@
     <iframe src="https://chat.openai.com" class="mt-12 w-full h-[600px] rounded shadow-md border" title="GringoGPT"></iframe>
   </main>
 
-<script>
+  <script>
     const emojis = "😀 😃 😄 😁 😆 😅 🤣 😂 🙂 🙃 😉 😊 😇 🥰 😍 🤩 😘 😗 ☺️ 😚 😙 😋 😛 😜 🤪 😝 🤑 🤗 🤭 🤫 🤔 🤐 😐 😑 😶 😏 😒 🙄 😬 😌 😔 😪 🤤 😴 😷 🤒 🤕 🤢 🤮 🤧 🥵 🥶 🥴 😵 🤯 🤠 🥳 😎 🤓 🧐 😕 🙁 ☹️ 😮 😯 😲 😳 🥺 😦 😧 😨 😰 😥 😢 😭 😱 😖 😣 😞 😓 😩 😫 😤 😡 😠 🤬 😈 👿 💀 ☠️ 💩 🤡 👹 👺 👻 👽 👾 🤖";
 
     function toggleEmojiPanel() {
@@ -150,9 +154,13 @@
       if (font) document.execCommand('fontName', false, font);
     }
 
-    function createLink() {
-      const url = prompt("Digite a URL:");
-      if (url) document.execCommand("createLink", false, url);
+    function customLinkPrompt() {
+      const url = prompt("Digite a URL (comece com https://):");
+      if (!url) return;
+      const texto = prompt("Digite o texto que será exibido no link:");
+      if (!texto) return;
+      const linkHTML = `<a href='${url}' target='_blank' rel='noopener noreferrer'>${texto}</a>`;
+      document.execCommand('insertHTML', false, linkHTML);
     }
 
     function insertEmoji(emoji) {
