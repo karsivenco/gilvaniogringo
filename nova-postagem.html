@@ -4,23 +4,41 @@
   <meta charset="UTF-8">
   <title>Nova Postagem - Intranet do Gringo</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     body {
       font-family: 'Inter', sans-serif;
     }
-    .toolbar button, .toolbar select {
-      font-size: 14px;
-      padding: 8px 10px;
-      background-color: #e5f0f7;
-      border: 1px solid #ccc;
+    .toolbar {
+      background-color: #004766;
       border-radius: 0.375rem;
-      cursor: pointer;
-      transition: background-color 0.2s;
-      color: #333;
+      padding: 0.75rem 1rem;
+      color: #e5e7eb;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 14px;
+      font-weight: 500;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
-    .toolbar button:hover {
-      background-color: #d3e3ef;
+    .toolbar span, .toolbar select, .toolbar button {
+      background: transparent;
+      color: #e5e7eb;
+      border: none;
+      padding: 0;
+      margin: 0;
+    }
+    .toolbar button:hover, .toolbar select:hover {
+      color: #fff;
+    }
+    .toolbar select {
+      background-color: #003f5c;
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.25rem;
+    }
+    .separator {
+      color: #94a3b8;
     }
     #editor {
       min-height: 500px;
@@ -51,17 +69,19 @@
     }
   </style>
 </head>
-<body class="bg-[#005075] min-h-screen text-gray-200">
+<body class="bg-gray-100 text-gray-800 min-h-screen">
 
-  <header class="bg-[#003f5c] py-6 shadow">
-    <div class="text-center">
-      <img src="img/logo.png" alt="Logo" class="mx-auto h-12 mb-2">
-      <h1 class="text-2xl font-bold text-white">Intranet do Gringo</h1>
+  <header class="bg-[#004766] shadow-md">
+    <div class="max-w-7xl mx-auto px-6 py-5 flex justify-between items-center">
+      <div class="flex items-center gap-3">
+        <img src="img/logo.png" alt="Logo" class="h-10">
+        <h1 class="text-2xl font-semibold text-gray-100">Nova Postagem - Intranet do Gringo</h1>
+      </div>
+      <a href="painel.html" class="text-gray-200 hover:underline">Voltar</a>
     </div>
   </header>
 
-  <main class="max-w-5xl mx-auto mt-8 bg-white p-6 rounded shadow text-gray-800">
-    <h2 class="text-xl font-semibold text-[#005075] mb-6">Nova Postagem</h2>
+  <main class="max-w-5xl mx-auto px-6 py-10">
     <form id="form-postagem">
       <label class="block text-sm font-medium mb-1">Título da Matéria</label>
       <input type="text" id="titulo" class="w-full border rounded px-4 py-2 mb-4" required>
@@ -70,13 +90,19 @@
       <input type="text" id="link" class="w-full border rounded px-4 py-2 mb-4">
 
       <label class="block text-sm font-medium mb-1">Texto</label>
-      <div class="toolbar flex flex-wrap gap-2 mb-3">
-        <button type="button" onclick="execCmd('bold')"><b>Negrito</b></button>
-        <button type="button" onclick="execCmd('italic')"><i>Itálico</i></button>
-        <button type="button" onclick="execCmd('underline')"><u>Sublinhado</u></button>
+      <div class="toolbar">
+        <button type="button" onclick="execCmd('bold')">Negrito</button>
+        <span class="separator">|</span>
+        <button type="button" onclick="execCmd('italic')">Itálico</button>
+        <span class="separator">|</span>
+        <button type="button" onclick="execCmd('underline')">Sublinhado</button>
+        <span class="separator">|</span>
         <button type="button" onclick="execCmd('insertUnorderedList')">Lista •</button>
+        <span class="separator">|</span>
         <button type="button" onclick="execCmd('insertOrderedList')">Lista 1.</button>
-        <button type="button" onclick="createLink()">Link 🔗</button>
+        <span class="separator">|</span>
+        <button type="button" onclick="createLink()">Link </button>
+        <span class="separator">|</span>
         <select id="fontSelector" onchange="changeFont(this.value)">
           <option value="">Fonte padrão</option>
           <option value="Arial">Arial</option>
@@ -87,9 +113,11 @@
           <option value="Trebuchet MS">Trebuchet</option>
           <option value="Verdana">Verdana</option>
         </select>
+        <span class="separator">|</span>
         <input type="file" id="imagemUpload" accept="image/*" onchange="uploadImagem(this)" class="hidden">
-        <button type="button" onclick="document.getElementById('imagemUpload').click()">Imagem 🖼️</button>
-        <button type="button" onclick="toggleEmojiPanel()">Emojis 😊</button>
+        <button type="button" onclick="document.getElementById('imagemUpload').click()">Imagem</button>
+        <span class="separator">|</span>
+        <button type="button" onclick="toggleEmojiPanel()">Emojis</button>
       </div>
       <div id="emojiPanel"></div>
       <div id="editor" contenteditable="true" class="mb-4"></div>
@@ -97,93 +125,10 @@
       <div class="flex gap-4">
         <button type="submit" class="bg-[#005075] text-white px-6 py-2 rounded hover:bg-[#003f5c]">Publicar</button>
         <button type="button" onclick="salvarRascunho()" class="bg-gray-500 text-white px-6 py-2 rounded hover:bg-gray-600">Salvar como Rascunho</button>
-        <a href="painel.html" class="text-[#005075] font-semibold hover:underline self-center">← Voltar ao Painel</a>
       </div>
+      <p id="mensagem" class="mt-4 text-green-600 hidden">Postagem salva com sucesso!</p>
     </form>
-    <p id="mensagem" class="mt-4 text-green-600 hidden">Postagem salva com sucesso!</p>
   </main>
-
-  <script>
-    const emojis = "😀 😃 😄 😁 😆 😅 🤣 😂 🙂 🙃 😉 😊 😇 🥰 😍 🤩 😘 😗 ☺️ 😚 😙 😋 😛 😜 🤪 😝 🤑 🤗 🤭 🤫 🤔 🤐 😐 😑 😶 😏 😒 🙄 😬 😌 😔 😪 🤤 😴 😷 🤒 🤕 🤢 🤮 🤧 🥵 🥶 🥴 😵 🤯 🤠 🥳 😎 🤓 🧐 😕 🙁 ☹️ 😮 😯 😲 😳 🥺 😦 😧 😨 😰 😥 😢 😭 😱 😖 😣 😞 😓 😩 😫 😤 😡 😠 🤬 😈 👿 💀 ☠️ 💩 🤡 👹 👺 👻 👽 👾 🤖";
-
-    function toggleEmojiPanel() {
-      const panel = document.getElementById("emojiPanel");
-      panel.innerHTML = emojis.split(' ').map(e => `<span onclick="insertEmoji('${e}')">${e}</span>`).join('');
-      panel.style.display = panel.style.display === "block" ? "none" : "block";
-    }
-
-    function execCmd(command) {
-      document.execCommand(command, false, null);
-    }
-
-    function changeFont(font) {
-      if (font) document.execCommand('fontName', false, font);
-    }
-
-    function createLink() {
-      const url = prompt("Digite a URL:");
-      if (url) document.execCommand("createLink", false, url);
-    }
-
-    function insertEmoji(emoji) {
-      document.execCommand('insertText', false, emoji);
-      document.getElementById("emojiPanel").style.display = "none";
-    }
-
-    function uploadImagem(input) {
-      const file = input.files[0];
-      if (!file) return;
-      const formData = new FormData();
-      formData.append("imagem", file);
-      fetch("upload-imagem.php", {
-        method: "POST",
-        body: formData
-      })
-      .then(res => res.text())
-      .then(url => {
-        document.execCommand("insertImage", false, url);
-      })
-      .catch(() => alert("Erro ao enviar imagem."));
-    }
-
-    document.getElementById("form-postagem").addEventListener("submit", async function (e) {
-      e.preventDefault();
-      await salvarPostagem("salvar.php");
-    });
-
-    async function salvarRascunho() {
-      await salvarPostagem("salvar-rascunho.php");
-    }
-
-    async function salvarPostagem(url) {
-      const titulo = document.getElementById("titulo").value;
-      const link = document.getElementById("link").value;
-      const texto = document.getElementById("editor").innerHTML;
-      const data = new Date().toISOString();
-
-      const formData = new FormData();
-      formData.append("titulo", titulo);
-      formData.append("data", data);
-      formData.append("link", link);
-      formData.append("texto", texto);
-
-      const res = await fetch(url, {
-        method: "POST",
-        body: formData
-      });
-
-      if (res.ok) {
-        document.getElementById("mensagem").classList.remove("hidden");
-        document.getElementById("form-postagem").reset();
-        document.getElementById("editor").innerHTML = "";
-        setTimeout(() => {
-          window.location.href = "painel.html";
-        }, 1500);
-      } else {
-        alert("Erro ao salvar a postagem.");
-      }
-    }
-  </script>
 
 </body>
 </html>
