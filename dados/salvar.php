@@ -1,40 +1,52 @@
 <?php
-header('Content-Type: application/json');
+// salvar.php
 
-$arquivo = 'postagens.json'; // Salva no mesmo diretório
-
-// Validação dos dados
-$titulo = $_POST['titulo'] ?? '';
-$link = $_POST['link'] ?? '';
-$texto = $_POST['texto'] ?? '';
-$data = $_POST['data'] ?? '';
-$data_formatada = $_POST['data_formatada'] ?? '';
-
-if (!$titulo || !$texto || !$data || !$data_formatada) {
-  http_response_code(400);
-  echo json_encode(['erro' => 'Dados incompletos']);
-  exit;
+// Verifica se os dados necessários foram enviados
+if (
+    !isset($_POST['titulo']) ||
+    !isset($_POST['texto']) ||
+    empty(trim($_POST['titulo'])) ||
+    empty(trim($_POST['texto']))
+) {
+    http_response_code(400);
+    echo "Título e texto são obrigatórios.";
+    exit;
 }
 
-// Lê conteúdo atual
-$existentes = file_exists($arquivo) ? json_decode(file_get_contents($arquivo), true) : [];
+$titulo = strip_tags($_POST['titulo']);
+$link = isset($_POST['link']) ? strip_tags($_POST['link']) : '';
+$texto = $_POST['texto']; // Mantemos HTML do conteúdo
+$data_iso = $_POST['data'] ?? date('c');
+$data_formatada = $_POST['data_formatada'] ?? date('d/m/Y H:i');
 
-// Novo conteúdo
-$nova_postagem = [
-  'titulo' => $titulo,
-  'link' => $link,
-  'texto' => $texto,
-  'data' => $data,
-  'data_formatada' => $data_formatada
+// Estrutura do novo post
+$post = [
+    'titulo' => $titulo,
+    'link' => $link,
+    'texto' => $texto,
+    'data' => $data_iso,
+    'data_formatada' => $data_formatada
 ];
 
-// Adiciona no topo da lista
-array_unshift($existentes, $nova_postagem);
+// Caminho do arquivo JSON
+$arquivo = __DIR__ . '/postagens.json';
 
-// Salva de volta
-if (file_put_contents($arquivo, json_encode($existentes, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE))) {
-  echo json_encode(['status' => 'ok']);
+// Se o arquivo não existir, cria um vazio
+if (!file_exists($arquivo)) {
+    file_put_contents($arquivo, '[]');
+}
+
+// Lê os posts existentes
+$posts = json_decode(file_get_contents($arquivo), true);
+if (!is_array($posts)) $posts = [];
+
+// Adiciona o novo post no início da lista
+array_unshift($posts, $post);
+
+// Salva o novo conteúdo no JSON
+if (file_put_contents($arquivo, json_encode($posts, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE))) {
+    echo "Postagem salva com sucesso!";
 } else {
-  http_response_code(500);
-  echo json_encode(['erro' => 'Falha ao salvar']);
+    http_response_code(500);
+    echo "Erro ao salvar a postagem.";
 }
