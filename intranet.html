@@ -4,11 +4,54 @@
   <meta charset="UTF-8">
   <title>Login - Intranet Gringo</title>
   <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-100 flex items-center justify-center h-screen">
+  <style>
+    body {
+      background: linear-gradient(to right, #dbeafe, #eff6ff);
+    }
 
-  <div class="bg-white p-8 rounded shadow-md w-full max-w-sm">
-    <h2 class="text-2xl font-bold text-center mb-6 text-[#005075]">Intranet do Gringo</h2>
+    .water-text {
+      font-weight: bold;
+      font-size: 1.125rem;
+      color: #005075;
+      animation: wave 2.5s infinite linear;
+      display: inline-block;
+    }
+
+    @keyframes wave {
+      0% { transform: translateY(0); }
+      25% { transform: translateY(-2px); }
+      50% { transform: translateY(2px); }
+      75% { transform: translateY(-1px); }
+      100% { transform: translateY(0); }
+    }
+
+    .logo-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .logo-img {
+      height: 80px;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+  </style>
+</head>
+<body class="flex items-center justify-center min-h-screen">
+
+  <div class="bg-white p-8 rounded-xl shadow-lg w-full max-w-sm">
+    <div class="logo-container">
+      <img src="img/logop.png" alt="Logo Gringo" class="logo-img mb-2">
+      <span class="water-text">@gilvaniogringo</span>
+    </div>
+
+    <h2 class="text-xl font-bold text-center mb-6 text-[#005075]">Intranet do Gringo</h2>
 
     <form onsubmit="return login()">
       <label class="block mb-2 text-sm font-medium text-gray-700">Usuário:</label>
