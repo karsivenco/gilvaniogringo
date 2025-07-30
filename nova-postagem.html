@@ -9,16 +9,16 @@
     body {
       font-family: 'Inter', sans-serif;
     }
-    .toolbar button {
+    .toolbar button, .toolbar select {
       font-size: 16px;
-      padding: 8px;
-      background-color: #f1f5f9;
-      border: 1px solid #ccc;
+      padding: 8px 12px;
+      background-color: #f8fafc;
+      border: 1px solid #cbd5e1;
       border-radius: 0.375rem;
       cursor: pointer;
       transition: background-color 0.2s;
     }
-    .toolbar button:hover {
+    .toolbar button:hover, .toolbar select:hover {
       background-color: #e2e8f0;
     }
     .toolbar button.active {
@@ -63,83 +63,58 @@
 </head>
 <body class="bg-gray-100 min-h-screen text-base">
 
-  <header class="bg-white shadow px-6 py-4 flex justify-between items-center border-b">
-    <div class="flex items-center gap-4">
-      <img src="logo.png" alt="Logo" class="h-8">
-      <h1 class="text-xl font-semibold text-gray-800">Nova Postagem</h1>
+  <header class="bg-[#004766] shadow-lg">
+    <div class="max-w-7xl mx-auto px-4 py-6 flex items-center justify-between">
+      <div class="flex items-center gap-4">
+        <img src="logo.png" alt="Logo" class="h-10">
+        <h1 class="text-xl font-bold text-gray-100">Intranet do Gringo</h1>
+      </div>
+      <button onclick="logout()" class="text-gray-200 hover:underline">Sair</button>
     </div>
-    <button onclick="logout()" class="text-gray-600 hover:underline">Sair</button>
   </header>
 
-  <div class="flex gap-8 p-6 relative">
-    <main class="flex-1">
-      <form id="form-postagem">
-        <label class="block text-sm font-medium text-gray-700 mb-1">Título da Matéria</label>
-        <input type="text" id="titulo" class="w-full border rounded px-4 py-2 mb-4" required>
+  <main class="max-w-5xl mx-auto mt-8 bg-white p-6 rounded shadow">
+    <h2 class="text-xl font-semibold text-[#005075] mb-6">Nova Postagem</h2>
+    <form id="form-postagem">
+      <label class="block text-sm font-medium text-gray-700 mb-1">Título da Matéria</label>
+      <input type="text" id="titulo" class="w-full border rounded px-4 py-2 mb-4" required>
 
-        <label class="block text-sm font-medium text-gray-700 mb-1">Data</label>
-        <input type="date" id="data" class="w-full border rounded px-4 py-2 mb-4" required>
+      <label class="block text-sm font-medium text-gray-700 mb-1">Texto</label>
+      <div class="toolbar flex flex-wrap gap-2 mb-2 bg-gray-50 p-2 border rounded">
+        <button type="button" onclick="execCmd('bold')">B</button>
+        <button type="button" onclick="execCmd('italic')">I</button>
+        <button type="button" onclick="execCmd('underline')">U̲</button>
+        <button type="button" onclick="execCmd('insertUnorderedList')">• Lista</button>
+        <button type="button" onclick="execCmd('insertOrderedList')">1. Lista</button>
+        <select id="fontSelector" onchange="changeFont(this.value)">
+          <option value="">Fonte padrão</option>
+          <option value="Arial">Arial</option>
+          <option value="Courier New">Courier</option>
+          <option value="Georgia">Geórgia</option>
+          <option value="Helvetica">Helvetica</option>
+          <option value="Times New Roman">Times</option>
+          <option value="Trebuchet MS">Trebuchet</option>
+          <option value="Verdana">Verdana</option>
+        </select>
+        <button type="button" onclick="toggleEmojiPanel()">😊 Emojis</button>
+        <button type="button" onclick="createLink()">🔗 Link</button>
+        <input type="file" id="imagemUpload" accept="image/*" onchange="uploadImagem(this)" class="hidden">
+        <button type="button" onclick="document.getElementById('imagemUpload').click()">🖼️ Imagem</button>
+      </div>
+      <div id="emojiPanel"></div>
+      <div id="editor" contenteditable="true" class="mb-4"></div>
 
-        <label class="block text-sm font-medium text-gray-700 mb-1">Texto</label>
-        <div class="toolbar flex flex-wrap gap-2 mb-2">
-          <button type="button" onclick="execCmd('bold')">🅱️</button>
-          <button type="button" onclick="execCmd('italic')">𝑖</button>
-          <button type="button" onclick="execCmd('underline')">U̲</button>
-          <button type="button" onclick="execCmd('insertUnorderedList')">• Lista</button>
-          <button type="button" onclick="execCmd('insertOrderedList')">1. Lista</button>
-          <select id="fontSelector" onchange="changeFont(this.value)">
-            <option value="">Fonte padrão</option>
-            <option value="Arial">Arial</option>
-            <option value="Courier New">Courier</option>
-            <option value="Georgia">Geórgia</option>
-            <option value="Helvetica">Helvetica</option>
-            <option value="Times New Roman">Times</option>
-            <option value="Trebuchet MS">Trebuchet</option>
-            <option value="Verdana">Verdana</option>
-          </select>
-          <button type="button" onclick="toggleEmojiPanel()">😊 Emojis</button>
-          <button type="button" onclick="createLink()">🔗 Link</button>
-          <input type="file" id="imagemUpload" accept="image/*" onchange="uploadImagem(this)" class="hidden">
-          <button type="button" onclick="document.getElementById('imagemUpload').click()">🖼️ Imagem</button>
-        </div>
-        <div id="emojiPanel"></div>
-        <div id="editor" contenteditable="true" class="mb-4"></div>
+      <label class="block text-sm font-medium text-gray-700 mb-1">Link relacionado (opcional)</label>
+      <input type="text" id="link" class="w-full border rounded px-4 py-2 mb-4">
 
-        <label class="block text-sm font-medium text-gray-700 mb-1">Link relacionado (opcional)</label>
-        <input type="text" id="link" class="w-full border rounded px-4 py-2 mb-4">
-
-        <div class="flex gap-4">
-          <button type="submit" class="bg-[#005075] text-white px-6 py-2 rounded hover:bg-[#003f5c]">Publicar</button>
-          <button type="button" onclick="salvarRascunho()" class="bg-gray-500 text-white px-6 py-2 rounded hover:bg-gray-600">Salvar como Rascunho</button>
-          <a href="painel.html" class="text-[#005075] font-semibold hover:underline self-center">&larr; Voltar ao Painel</a>
-        </div>
-      </form>
-      <p id="mensagem" class="mt-4 text-green-600 hidden">Postagem salva com sucesso!</p>
-    </main>
-
-    <aside class="w-80 p-4 bg-white border rounded shadow-sm text-sm space-y-6">
-      <div>
-        <h2 class="font-semibold text-gray-700">Marcadores</h2>
-        <input type="text" class="mt-1 w-full border px-3 py-2 rounded" placeholder="Separar por vírgulas">
+      <div class="flex gap-4">
+        <button type="submit" class="bg-[#005075] text-white px-6 py-2 rounded hover:bg-[#003f5c]">Publicar</button>
+        <button type="button" onclick="salvarRascunho()" class="bg-gray-500 text-white px-6 py-2 rounded hover:bg-gray-600">Salvar como Rascunho</button>
+        <a href="painel.html" class="text-[#005075] font-semibold hover:underline self-center">&larr; Voltar ao Painel</a>
       </div>
-      <div>
-        <h2 class="font-semibold text-gray-700">Publicada em</h2>
-        <p class="mt-1 text-gray-600">30/07/2025 13:14</p>
-      </div>
-      <div>
-        <h2 class="font-semibold text-gray-700">Link permanente</h2>
-        <p class="mt-1 text-gray-600">(gerado automaticamente)</p>
-      </div>
-      <div>
-        <h2 class="font-semibold text-gray-700">Local</h2>
-        <p class="mt-1 text-gray-600">Porto Alegre - RS</p>
-      </div>
-      <div>
-        <h2 class="font-semibold text-gray-700">Opções</h2>
-        <p class="mt-1 text-gray-600">Rascunho / Publicar</p>
-      </div>
-    </aside>
-  </div>
+    </form>
+    <p id="mensagem" class="mt-4 text-green-600 hidden">Postagem salva com sucesso!</p>
+  </main>
 
   <script>
     const emojis = "😀😃😄😁😆😅🤣😂🙂🙃😉😊😇🥰😍🤩😘😗☺️😚😙😋😛😜🤪😝🤑🤗🤭🤫🤔🤐😐😑😶😏😒🙄😬😌😔😪🤤😴😷🤒🤕🤢🤮🤧🥵🥶🥴😵🤯🤠🥳😎🤓🧐😕🙁☹️😮😯😲😳🥺😦😧😨😰😥😢😭😱😖😣😞😓😩😫😤😡😠🤬😈👿💀☠️💩🤡👹👺👻👽👾🤖";
@@ -208,13 +183,14 @@
 
     async function salvarPostagem(url) {
       const titulo = document.getElementById("titulo").value;
-      const data = document.getElementById("data").value;
       const link = document.getElementById("link").value;
       const texto = document.getElementById("editor").innerHTML;
+      const now = new Date();
+      const dataPublicacao = `${now.getDate().toString().padStart(2, '0')}/${(now.getMonth()+1).toString().padStart(2, '0')}/${now.getFullYear()} ${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
 
       const formData = new FormData();
       formData.append("titulo", titulo);
-      formData.append("data", data);
+      formData.append("data", dataPublicacao);
       formData.append("link", link);
       formData.append("texto", texto);
 
