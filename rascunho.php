@@ -1,42 +1,51 @@
-<?php
-header('Content-Type: application/json');
-
-$arquivo = 'rascunhos.json';
-
-// Receber dados do formulário via POST
-$titulo = $_POST['titulo'] ?? '';
-$data = $_POST['data'] ?? '';
-$link = $_POST['link'] ?? '';
-$texto = $_POST['texto'] ?? '';
-
-if (empty($titulo) || empty($data) || empty($texto)) {
-    http_response_code(400);
-    echo json_encode(['erro' => 'Dados incompletos.']);
-    exit;
+function salvarRascunho() {
+  publicar("salvar-rascunho.php");
 }
 
-// Cria estrutura do rascunho
-$rascunho = [
-    'titulo' => $titulo,
-    'data' => $data,
-    'link' => $link,
-    'texto' => $texto,
-    'data_formatada' => date('d/m/Y', strtotime(substr($data, 0, 10)))
-];
+function publicar(url = "salvar.php") {
+  const titulo = document.getElementById("titulo").value.trim();
+  const link = document.getElementById("link").value.trim();
+  const texto = document.getElementById("editor").innerHTML.trim();
+  const agora = new Date();
 
-// Lê o arquivo de rascunhos existente
-$rascunhos = file_exists($arquivo) ? json_decode(file_get_contents($arquivo), true) : [];
+  const dataISO = agora.toISOString();
+  const data_formatada = `${agora.toLocaleDateString()} ${agora.toLocaleTimeString([], {
+    hour: '2-digit',
+    minute: '2-digit'
+  })}`;
 
-// Adiciona no início da lista
-array_unshift($rascunhos, $rascunho);
+  // Validação mínima obrigatória
+  if (!titulo || !texto || texto === "<br>" || texto === "") {
+    alert("Por favor, preencha o título e escreva algo no texto.");
+    return;
+  }
 
-// Salva o novo arquivo de rascunhos
-if (!file_put_contents($arquivo, json_encode($rascunhos, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE))) {
-    http_response_code(500);
-    echo json_encode(['erro' => 'Erro ao salvar rascunho.']);
-    exit;
+  const formData = new FormData();
+  formData.append("titulo", titulo);
+  formData.append("link", link);
+  formData.append("texto", texto);
+  formData.append("data", dataISO);
+  formData.append("data_formatada", data_formatada);
+
+  fetch(url, {
+    method: "POST",
+    body: formData
+  })
+    .then(response => {
+      if (!response.ok) throw new Error("Erro ao enviar os dados.");
+      return response.text();
+    })
+    .then(res => {
+      console.log("Retorno do servidor:", res);
+      document.getElementById("mensagem").classList.remove("hidden");
+      document.getElementById("form-postagem").reset();
+      document.getElementById("editor").innerHTML = "";
+      setTimeout(() => {
+        window.location.href = "painel.html";
+      }, 1500);
+    })
+    .catch(err => {
+      console.error(err);
+      alert("Erro ao salvar a postagem. Verifique se o arquivo PHP está correto e acessível.");
+    });
 }
-
-http_response_code(200);
-echo json_encode(['status' => 'rascunho_salvo']);
-exit;
