@@ -1,11 +1,12 @@
 <?php
-// salvar.php - recebe dados via POST (JSON) e salva em postagens.json e atualiza ultimas-noticias.html
+// salvar.php - publica a nova postagem em postagens.json e atualiza a div no ultimas-noticias.html
 
 header('Content-Type: application/json');
 
 $arquivo = 'postagens.json';
 $paginaNoticias = 'ultimas-noticias.html';
 
+// Receber dados JSON
 $input = json_decode(file_get_contents('php://input'), true);
 if (!$input || !isset($input['titulo']) || !isset($input['data']) || !isset($input['texto'])) {
     http_response_code(400);
@@ -15,13 +16,16 @@ if (!$input || !isset($input['titulo']) || !isset($input['data']) || !isset($inp
 
 $input['data_formatada'] = date('d/m/Y', strtotime($input['data']));
 
+// Salvar no JSON
 $postagens = file_exists($arquivo) ? json_decode(file_get_contents($arquivo), true) : [];
 array_unshift($postagens, $input);
-file_put_contents($arquivo, json_encode($postagens, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+if (!file_put_contents($arquivo, json_encode($postagens, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE))) {
+    http_response_code(500);
+    echo json_encode(['erro' => 'Erro ao salvar no arquivo JSON.']);
+    exit;
+}
 
-// Geração do HTML para ultimas-noticias.html
-$html = file_get_contents($paginaNoticias);
-
+// Gerar HTML dos cards
 $novaLista = "";
 foreach ($postagens as $post) {
     $novaLista .= "<div class=\"w-full max-w-md border rounded-xl shadow-lg p-5 hover:shadow-xl transition text-center bg-white\">\n";
@@ -31,14 +35,29 @@ foreach ($postagens as $post) {
     $novaLista .= "</div>\n";
 }
 
-// Substitui o conteúdo entre <div id="blog-posts">...</div> na página
-$html = preg_replace(
-    '/<div id="blog-posts" class="[^"]*">.*?<\/div>/s',
-    '<div id="blog-posts" class="flex flex-wrap justify-center gap-6">' . $novaLista . '</div>',
+// Carregar HTML da página
+$html = file_get_contents($paginaNoticias);
+if (!$html) {
+    http_response_code(500);
+    echo json_encode(['erro' => 'Erro ao carregar a página HTML.']);
+    exit;
+}
+
+// Substituir a div inteira por nova lista de cards (div multilinha)
+$html = preg_replace_callback(
+    '/<div id="blog-posts"[^>]*>(.*?)<\/div>/s',
+    function($matches) use ($novaLista) {
+        return '<div id="blog-posts" class="flex flex-wrap justify-center gap-6">' . $novaLista . '</div>';
+    },
     $html
 );
 
-file_put_contents($paginaNoticias, $html);
+// Salvar HTML atualizado
+if (!file_put_contents($paginaNoticias, $html)) {
+    http_response_code(500);
+    echo json_encode(['erro' => 'Erro ao salvar a página HTML.']);
+    exit;
+}
 
 http_response_code(200);
 echo json_encode(['status' => 'sucesso']);
