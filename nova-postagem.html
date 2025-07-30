@@ -202,51 +202,64 @@ function uploadImagem(input) {
       insertHTMLAtCursor(`<img src="${url}" alt="Imagem" style="max-width:100%;">`);
     })
     .catch(() => alert("Erro ao enviar imagem."));
-}
+});
+</script>
 
+  <script>
 function salvarRascunho() {
   publicar("salvar-rascunho.php");
 }
 
 function publicar(url = "salvar.php") {
-  const titulo = document.getElementById("titulo").value;
-  const link = document.getElementById("link").value;
-  const texto = document.getElementById("editor").innerHTML;
+  const titulo = document.getElementById("titulo").value.trim();
+  const link = document.getElementById("link").value.trim();
+  const texto = document.getElementById("editor").innerHTML.trim();
   const agora = new Date();
-  const data = agora.toISOString();
-  const data_formatada = `${agora.toLocaleDateString()} ${agora.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`;
+
+  const dataISO = agora.toISOString();
+  const data_formatada = `${agora.toLocaleDateString()} ${agora.toLocaleTimeString([], {
+    hour: '2-digit',
+    minute: '2-digit'
+  })}`;
+
+  // Validação mínima obrigatória
+  if (!titulo || !texto || texto === "<br>" || texto === "") {
+    alert("Por favor, preencha o título e escreva algo no texto.");
+    return;
+  }
 
   const formData = new FormData();
   formData.append("titulo", titulo);
   formData.append("link", link);
   formData.append("texto", texto);
-  formData.append("data", data);
+  formData.append("data", dataISO);
   formData.append("data_formatada", data_formatada);
 
   fetch(url, {
     method: "POST",
     body: formData
   })
-  .then(res => {
-    if (res.ok) {
+    .then(response => {
+      if (!response.ok) throw new Error("Erro ao enviar os dados.");
+      return response.text();
+    })
+    .then(res => {
+      console.log("Retorno do servidor:", res);
       document.getElementById("mensagem").classList.remove("hidden");
       document.getElementById("form-postagem").reset();
       document.getElementById("editor").innerHTML = "";
       setTimeout(() => {
         window.location.href = "painel.html";
       }, 1500);
-    } else {
-      alert("Erro ao salvar a postagem.");
-    }
-  })
-  .catch(() => alert("Erro ao enviar os dados."));
+    })
+    .catch(err => {
+      console.error(err);
+      alert("Erro ao salvar a postagem. Verifique se o arquivo PHP está correto e acessível.");
+    });
 }
 
-document.getElementById("form-postagem").addEventListener("submit", function(e) {
-  e.preventDefault();
-  publicar();
-});
-</script>
+    
+  </script>
 
 </body>
 </html>
