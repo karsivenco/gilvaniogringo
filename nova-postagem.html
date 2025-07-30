@@ -2,168 +2,45 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
-  <title>Intranet do Gringo</title>
+  <title>Painel do Gringo</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     body {
       font-family: 'Inter', sans-serif;
     }
-    .toolbar button, .toolbar select {
-      font-size: 16px;
-      padding: 8px 12px;
-      background-color: #f8fafc;
-      border: 1px solid #cbd5e1;
-      border-radius: 0.375rem;
-      cursor: pointer;
-      transition: background-color 0.2s;
+    .card {
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
-    .toolbar button:hover, .toolbar select:hover {
-      background-color: #e2e8f0;
-    }
-    .toolbar button.active {
-      background-color: #005075;
-      color: white;
-    }
-    #editor {
-      min-height: 500px;
-      font-size: 16px;
-      line-height: 1.6;
-      padding: 1rem;
-      border: 1px solid #ccc;
-      border-radius: 0.5rem;
-      background: #fff;
-      overflow-y: auto;
-    }
-    #emojiPanel {
-      display: none;
-      max-height: 200px;
-      overflow-y: auto;
-      background: #fff;
-      border: 1px solid #ccc;
-      padding: 10px;
-      position: absolute;
-      z-index: 10;
-      border-radius: 0.5rem;
-    }
-    #emojiPanel span {
-      cursor: pointer;
-      font-size: 18px;
-      padding: 3px;
-      display: inline-block;
-    }
-    #fontSelector {
-      font-size: 14px;
-      padding: 6px;
-      border: 1px solid #ccc;
-      border-radius: 0.375rem;
-      background: #fff;
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
     }
   </style>
 </head>
-<body class="bg-gray-100 min-h-screen text-base">
-
-  <header class="bg-[#004766] shadow-lg">
-    <div class="max-w-7xl mx-auto px-4 py-6 flex items-center justify-between">
-      <div class="flex items-center gap-4">
+<body class="bg-gray-100 text-gray-800 min-h-screen">
+  <header class="bg-[#004766] shadow-md">
+    <div class="max-w-7xl mx-auto px-6 py-5 flex justify-between items-center">
+      <div class="flex items-center gap-3">
         <img src="logo.png" alt="Logo" class="h-10">
-        <h1 class="text-xl font-bold text-gray-100">Intranet do Gringo</h1>
+        <h1 class="text-2xl font-semibold text-gray-100">Painel do Gringo</h1>
       </div>
       <button onclick="logout()" class="text-gray-200 hover:underline">Sair</button>
     </div>
   </header>
 
-  <main class="max-w-5xl mx-auto mt-8 bg-white p-6 rounded shadow">
-    <h2 class="text-xl font-semibold text-[#005075] mb-6">Nova Postagem</h2>
-    <form id="form-postagem">
-      <label class="block text-sm font-medium text-gray-700 mb-1">Título da Matéria</label>
-      <input type="text" id="titulo" class="w-full border rounded px-4 py-2 mb-4" required>
+  <main class="max-w-5xl mx-auto px-6 py-10">
+    <div class="flex items-center justify-between mb-8">
+      <h2 class="text-xl font-semibold text-[#005075]">Postagens Criadas</h2>
+      <a href="nova-postagem.html" class="bg-[#005075] text-white px-5 py-2 rounded hover:bg-[#003f5c]">+ Nova Postagem</a>
+    </div>
 
-      <label class="block text-sm font-medium text-gray-700 mb-1">Texto</label>
-      <div class="toolbar flex flex-wrap gap-2 mb-2 bg-gray-50 p-2 border rounded">
-        <button type="button" onclick="execCmd('bold')">B</button>
-        <button type="button" onclick="execCmd('italic')">I</button>
-        <button type="button" onclick="execCmd('underline')">U̲</button>
-        <button type="button" onclick="execCmd('insertUnorderedList')">• Lista</button>
-        <button type="button" onclick="execCmd('insertOrderedList')">1. Lista</button>
-        <select id="fontSelector" onchange="changeFont(this.value)">
-          <option value="">Fonte padrão</option>
-          <option value="Arial">Arial</option>
-          <option value="Courier New">Courier</option>
-          <option value="Georgia">Geórgia</option>
-          <option value="Helvetica">Helvetica</option>
-          <option value="Times New Roman">Times</option>
-          <option value="Trebuchet MS">Trebuchet</option>
-          <option value="Verdana">Verdana</option>
-        </select>
-        <button type="button" onclick="toggleEmojiPanel()">😊 Emojis</button>
-        <button type="button" onclick="createLink()">🔗 Link</button>
-        <input type="file" id="imagemUpload" accept="image/*" onchange="uploadImagem(this)" class="hidden">
-        <button type="button" onclick="document.getElementById('imagemUpload').click()">🖼️ Imagem</button>
-      </div>
-      <div id="emojiPanel"></div>
-      <div id="editor" contenteditable="true" class="mb-4"></div>
-
-      <label class="block text-sm font-medium text-gray-700 mb-1">Link relacionado (opcional)</label>
-      <input type="text" id="link" class="w-full border rounded px-4 py-2 mb-4">
-
-      <div class="flex gap-4">
-        <button type="submit" class="bg-[#005075] text-white px-6 py-2 rounded hover:bg-[#003f5c]">Publicar</button>
-        <button type="button" onclick="salvarRascunho()" class="bg-gray-500 text-white px-6 py-2 rounded hover:bg-gray-600">Salvar como Rascunho</button>
-        <a href="painel.html" class="text-[#005075] font-semibold hover:underline self-center">&larr; Voltar ao Painel</a>
-      </div>
-    </form>
-    <p id="mensagem" class="mt-4 text-green-600 hidden">Postagem salva com sucesso!</p>
+    <div id="lista-postagens" class="grid grid-cols-1 gap-6">
+      <!-- Os cards das postagens serão carregados aqui -->
+    </div>
   </main>
 
   <script>
-    const emojis = "😀😃😄😁😆😅🤣😂🙂🙃😉😊😇🥰😍🤩😘😗☺️😚😙😋😛😜🤪😝🤑🤗🤭🤫🤔🤐😐😑😶😏😒🙄😬😌😔😪🤤😴😷🤒🤕🤢🤮🤧🥵🥶🥴😵🤯🤠🥳😎🤓🧐😕🙁☹️😮😯😲😳🥺😦😧😨😰😥😢😭😱😖😣😞😓😩😫😤😡😠🤬😈👿💀☠️💩🤡👹👺👻👽👾🤖";
-
-    function toggleEmojiPanel() {
-      const panel = document.getElementById("emojiPanel");
-      if (panel.style.display === "block") {
-        panel.style.display = "none";
-        return;
-      }
-      panel.innerHTML = emojis.split('').map(e => `<span onclick="insertEmoji('${e}')">${e}</span>`).join('');
-      panel.style.display = "block";
-    }
-
-    function execCmd(command) {
-      document.execCommand(command, false, null);
-    }
-
-    function changeFont(font) {
-      if (font) document.execCommand('fontName', false, font);
-    }
-
-    function createLink() {
-      const url = prompt("Digite a URL:");
-      if (url) document.execCommand("createLink", false, url);
-    }
-
-    function insertEmoji(emoji) {
-      document.execCommand('insertText', false, emoji);
-      document.getElementById("emojiPanel").style.display = "none";
-    }
-
-    function uploadImagem(input) {
-      const file = input.files[0];
-      if (!file) return;
-      const formData = new FormData();
-      formData.append("imagem", file);
-
-      fetch("upload-imagem.php", {
-        method: "POST",
-        body: formData
-      })
-        .then(res => res.text())
-        .then(url => {
-          document.execCommand("insertImage", false, url);
-        })
-        .catch(() => alert("Erro ao enviar imagem."));
-    }
-
     if (localStorage.getItem("logado") !== "sim") {
       window.location.href = "intranet.html";
     }
@@ -172,45 +49,28 @@
       window.location.href = "intranet.html";
     }
 
-    document.getElementById("form-postagem").addEventListener("submit", async function (e) {
-      e.preventDefault();
-      await salvarPostagem("salvar.php");
-    });
-
-    async function salvarRascunho() {
-      await salvarPostagem("salvar-rascunho.php");
-    }
-
-    async function salvarPostagem(url) {
-      const titulo = document.getElementById("titulo").value;
-      const link = document.getElementById("link").value;
-      const texto = document.getElementById("editor").innerHTML;
-      const now = new Date();
-      const dataPublicacao = `${now.getDate().toString().padStart(2, '0')}/${(now.getMonth()+1).toString().padStart(2, '0')}/${now.getFullYear()} ${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
-
-      const formData = new FormData();
-      formData.append("titulo", titulo);
-      formData.append("data", dataPublicacao);
-      formData.append("link", link);
-      formData.append("texto", texto);
-
-      const res = await fetch(url, {
-        method: "POST",
-        body: formData
+    fetch("postagens.json")
+      .then(res => res.json())
+      .then(postagens => {
+        const lista = document.getElementById("lista-postagens");
+        if (postagens.length === 0) {
+          lista.innerHTML = '<p class="text-gray-600">Nenhuma postagem encontrada.</p>';
+          return;
+        }
+        lista.innerHTML = postagens.map(p => `
+          <div class="card bg-white p-6 rounded shadow border border-gray-200">
+            <h3 class="text-lg font-semibold text-[#004766]">${p.titulo}</h3>
+            <p class="text-sm text-gray-500 mb-2">Publicado em: ${p.data}</p>
+            <p class="text-gray-700 line-clamp-3">${p.texto.replace(/<[^>]+>/g, '').slice(0, 150)}...</p>
+            <div class="mt-4">
+              <a href="${p.link || '#'}" class="text-sm text-blue-600 hover:underline">Ver mais</a>
+            </div>
+          </div>
+        `).join('');
+      })
+      .catch(() => {
+        document.getElementById("lista-postagens").innerHTML = '<p class="text-red-600">Erro ao carregar postagens.</p>';
       });
-
-      if (res.ok) {
-        document.getElementById("mensagem").classList.remove("hidden");
-        document.getElementById("form-postagem").reset();
-        document.getElementById("editor").innerHTML = "";
-        setTimeout(() => {
-          window.location.href = "painel.html";
-        }, 1500);
-      } else {
-        alert("Erro ao salvar a postagem.");
-      }
-    }
   </script>
-
 </body>
 </html>
