@@ -4,30 +4,23 @@
   <meta charset="UTF-8">
   <title>Nova Postagem - Intranet do Gringo</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
     body {
       font-family: 'Inter', sans-serif;
     }
-    .toolbar button {
-      font-size: 16px;
-      padding: 8px;
-      background-color: #004766;
-      color: #f0f0f0;
-      border: none;
+    .toolbar button, .toolbar select {
+      font-size: 14px;
+      padding: 8px 10px;
+      background-color: #e5f0f7;
+      border: 1px solid #ccc;
       border-radius: 0.375rem;
       cursor: pointer;
       transition: background-color 0.2s;
+      color: #333;
     }
     .toolbar button:hover {
-      background-color: #00394f;
-    }
-    .toolbar select {
-      font-size: 14px;
-      padding: 6px;
-      border: 1px solid #ccc;
-      border-radius: 0.375rem;
-      background: #fff;
+      background-color: #d3e3ef;
     }
     #editor {
       min-height: 500px;
@@ -52,57 +45,54 @@
     }
     #emojiPanel span {
       cursor: pointer;
-      font-size: 18px;
-      padding: 3px;
+      font-size: 20px;
+      padding: 4px;
       display: inline-block;
     }
   </style>
 </head>
-<body class="bg-gray-100 min-h-screen text-base">
+<body class="bg-[#005075] min-h-screen text-gray-200">
 
-  <header class="bg-[#004766] shadow-md">
-    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-      <div class="flex items-center gap-4">
-        <img src="img/logop.png" alt="Logo" class="h-10">
-        <h1 class="text-2xl font-bold text-white">Intranet do Gringo</h1>
-      </div>
-      <button onclick="logout()" class="text-gray-200 hover:underline">Sair</button>
+  <header class="bg-[#003f5c] py-6 shadow">
+    <div class="text-center">
+      <img src="img/logo.png" alt="Logo" class="mx-auto h-12 mb-2">
+      <h1 class="text-2xl font-bold text-white">Intranet do Gringo</h1>
     </div>
   </header>
 
-  <main class="max-w-5xl mx-auto mt-10 bg-white p-6 rounded shadow">
-    <h2 class="text-2xl font-semibold text-[#005075] mb-6">Nova Postagem</h2>
+  <main class="max-w-5xl mx-auto mt-8 bg-white p-6 rounded shadow text-gray-800">
+    <h2 class="text-xl font-semibold text-[#005075] mb-6">Nova Postagem</h2>
     <form id="form-postagem">
-      <label class="block text-sm font-medium text-gray-700 mb-1">Título da Matéria</label>
+      <label class="block text-sm font-medium mb-1">Título da Matéria</label>
       <input type="text" id="titulo" class="w-full border rounded px-4 py-2 mb-4" required>
 
-      <label class="block text-sm font-medium text-gray-700 mb-1">Texto</label>
-      <div class="toolbar flex flex-wrap gap-2 mb-2 relative">
-        <button type="button" onclick="execCmd('bold')">Negrito</button>
-        <button type="button" onclick="execCmd('italic')">Itálico</button>
-        <button type="button" onclick="execCmd('underline')">Sublinhado</button>
-        <button type="button" onclick="execCmd('insertUnorderedList')">Lista</button>
-        <button type="button" onclick="execCmd('insertOrderedList')">Numerada</button>
+      <label class="block text-sm font-medium mb-1">Link relacionado (opcional)</label>
+      <input type="text" id="link" class="w-full border rounded px-4 py-2 mb-4">
+
+      <label class="block text-sm font-medium mb-1">Texto</label>
+      <div class="toolbar flex flex-wrap gap-2 mb-3">
+        <button type="button" onclick="execCmd('bold')"><b>Negrito</b></button>
+        <button type="button" onclick="execCmd('italic')"><i>Itálico</i></button>
+        <button type="button" onclick="execCmd('underline')"><u>Sublinhado</u></button>
+        <button type="button" onclick="execCmd('insertUnorderedList')">Lista •</button>
+        <button type="button" onclick="execCmd('insertOrderedList')">Lista 1.</button>
+        <button type="button" onclick="createLink()">Link 🔗</button>
         <select id="fontSelector" onchange="changeFont(this.value)">
           <option value="">Fonte padrão</option>
           <option value="Arial">Arial</option>
           <option value="Courier New">Courier</option>
-          <option value="Georgia">Geórgia</option>
+          <option value="Georgia">Georgia</option>
           <option value="Helvetica">Helvetica</option>
           <option value="Times New Roman">Times</option>
           <option value="Trebuchet MS">Trebuchet</option>
           <option value="Verdana">Verdana</option>
         </select>
-        <button type="button" onclick="createLink()">Link</button>
         <input type="file" id="imagemUpload" accept="image/*" onchange="uploadImagem(this)" class="hidden">
-        <button type="button" onclick="document.getElementById('imagemUpload').click()">Imagem</button>
-        <button type="button" onclick="toggleEmojiPanel()">Emojis</button>
+        <button type="button" onclick="document.getElementById('imagemUpload').click()">Imagem 🖼️</button>
+        <button type="button" onclick="toggleEmojiPanel()">Emojis 😊</button>
       </div>
       <div id="emojiPanel"></div>
       <div id="editor" contenteditable="true" class="mb-4"></div>
-
-      <label class="block text-sm font-medium text-gray-700 mb-1">Link relacionado (opcional)</label>
-      <input type="text" id="link" class="w-full border rounded px-4 py-2 mb-4">
 
       <div class="flex gap-4">
         <button type="submit" class="bg-[#005075] text-white px-6 py-2 rounded hover:bg-[#003f5c]">Publicar</button>
@@ -114,16 +104,12 @@
   </main>
 
   <script>
-    const emojis = "😀😃😄😁😆😅🤣😂🙂🙃😉😊😇🥰😍🤩😘😗☺️😚😙😋😛😜🤪😝🤑🤗🤭🤫🤔🤐😐😑😶😏😒🙄😬😌😔😪🤤😴😷🤒🤕🤢🤮🤧🥵🥶🥴😵🤯🤠🥳😎🤓🧐😕🙁☹️😮😯😲😳🥺😦😧😨😰😥😢😭😱😖😣😞😓😩😫😤😡😠🤬😈👿💀☠️💩🤡👹👺👻👽👾🤖";
+    const emojis = "😀 😃 😄 😁 😆 😅 🤣 😂 🙂 🙃 😉 😊 😇 🥰 😍 🤩 😘 😗 ☺️ 😚 😙 😋 😛 😜 🤪 😝 🤑 🤗 🤭 🤫 🤔 🤐 😐 😑 😶 😏 😒 🙄 😬 😌 😔 😪 🤤 😴 😷 🤒 🤕 🤢 🤮 🤧 🥵 🥶 🥴 😵 🤯 🤠 🥳 😎 🤓 🧐 😕 🙁 ☹️ 😮 😯 😲 😳 🥺 😦 😧 😨 😰 😥 😢 😭 😱 😖 😣 😞 😓 😩 😫 😤 😡 😠 🤬 😈 👿 💀 ☠️ 💩 🤡 👹 👺 👻 👽 👾 🤖";
 
     function toggleEmojiPanel() {
       const panel = document.getElementById("emojiPanel");
-      if (panel.style.display === "block") {
-        panel.style.display = "none";
-        return;
-      }
-      panel.innerHTML = emojis.split('').map(e => `<span onclick="insertEmoji('${e}')">${e}</span>`).join('');
-      panel.style.display = "block";
+      panel.innerHTML = emojis.split(' ').map(e => `<span onclick="insertEmoji('${e}')">${e}</span>`).join('');
+      panel.style.display = panel.style.display === "block" ? "none" : "block";
     }
 
     function execCmd(command) {
@@ -149,25 +135,15 @@
       if (!file) return;
       const formData = new FormData();
       formData.append("imagem", file);
-
       fetch("upload-imagem.php", {
         method: "POST",
         body: formData
       })
-        .then(res => res.text())
-        .then(url => {
-          document.execCommand("insertImage", false, url);
-        })
-        .catch(() => alert("Erro ao enviar imagem."));
-    }
-
-    if (localStorage.getItem("logado") !== "sim") {
-      window.location.href = "intranet.html";
-    }
-
-    function logout() {
-      localStorage.removeItem("logado");
-      window.location.href = "intranet.html";
+      .then(res => res.text())
+      .then(url => {
+        document.execCommand("insertImage", false, url);
+      })
+      .catch(() => alert("Erro ao enviar imagem."));
     }
 
     document.getElementById("form-postagem").addEventListener("submit", async function (e) {
@@ -181,9 +157,9 @@
 
     async function salvarPostagem(url) {
       const titulo = document.getElementById("titulo").value;
-      const data = new Date().toLocaleString("pt-BR");
       const link = document.getElementById("link").value;
       const texto = document.getElementById("editor").innerHTML;
+      const data = new Date().toISOString();
 
       const formData = new FormData();
       formData.append("titulo", titulo);
