@@ -34,11 +34,10 @@
       const senha = document.getElementById("senha").value;
 
       if (usuarios[user] === senha) {
-        // Login bem-sucedido
+        localStorage.setItem("logado", "sim");
         window.location.href = "painel.html";
         return false;
       } else {
-        // Erro
         document.getElementById("erro").classList.remove("hidden");
         return false;
       }
