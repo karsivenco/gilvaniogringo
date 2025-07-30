@@ -1,9 +1,3 @@
-[
-  {
-    "titulo": "Minha Primeira Postagem",
-    "link": "https://exemplo.com",
-    "texto": "<p>Conteúdo com <b>formatação</b> e imagens</p>",
-    "data": "2025-07-30T14:23:00.000Z",
-    "data_formatada": "30/07/2025 11:23"
-  }
-]
+$postagens = json_decode(file_get_contents("dados/postagens.json"), true);
+$postagens[] = $novaPostagem;
+file_put_contents("dados/postagens.json", json_encode($postagens, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
