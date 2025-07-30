@@ -298,33 +298,59 @@
         <!-- Divisor visual -->
 <div class="h-16 bg-gradient-to-r from-[#005075]/10 to-transparent"></div>
         
-   <!-- Últimas Notícias start -->
-<section class="py-12 md:py-20" id="Ultimas-noticias">
+ <!-- Últimas Notícias start -->
+<section class="py-12 md:py-20 bg-[#F3F7F9]" id="Ultimas-noticias">
   <div class="container mx-auto px-4">
     <div class="mx-auto max-w-3xl text-center wow animate__animated animate__fadeInUp">
       <h2 class="mb-4 text-3xl md:text-4xl font-bold text-[#005075]">Últimas Notícias</h2>
-      <p class="text-lg text-gray-600 mb-2">
+      <p class="text-lg text-gray-600 mb-6">
         Aqui você fica sabendo em primeira mão as notícias e novidades sobre o trabalho do vereador Gilvani.
       </p>
-    
-      <a href="https://gilvaniogringo.com/ultimas-noticias" class="text-[#005075] text-lg font-semibold inline-block hover:underline">
+
+      <a href="https://gilvaniogringo.com/ultimas-noticias2.html" class="text-[#005075] text-lg font-semibold inline-block hover:underline">
         SAIBA MAIS NOTÍCIAS AQUI
       </a>
     </div>
 
-    <!-- IFRAME das Notícias -->
-    <div class="mt-12">
-      <iframe 
-        src="/ultimas-noticias2.html" 
-        class="w-full h-[1300px] border-none rounded-xl shadow-md"
-        loading="lazy"
-        scrolling="no">
-      </iframe>
-    </div>
+    <!-- Container dos posts do blog -->
+    <div id="blog-posts-home" class="my-10 flex justify-center flex-wrap gap-6 px-4"></div>
   </div>
 </section>
-<!-- Últimas Notícias end -->
 
+<!-- Script para carregar os 6 primeiros posts -->
+<script>
+  async function carregarNoticiasHome() {
+    const url = "https://api.rss2json.com/v1/api.json?rss_url=https://gilvaniogringo.blogspot.com/feeds/posts/default?alt=rss&_cache=false";
+
+    try {
+      const res = await fetch(url);
+      const data = await res.json();
+
+      const postsContainer = document.getElementById("blog-posts-home");
+      postsContainer.innerHTML = "";
+
+      data.items.slice(0, 6).forEach(post => {
+        const postCard = `
+          <div class="w-full max-w-md p-5 text-center bg-white shadow-none">
+            <h3 class="text-xl font-semibold text-[#005075] mb-2">${post.title}</h3>
+            <p class="text-gray-600 text-sm mb-2">${new Date(post.pubDate).toLocaleDateString()}</p>
+            <p class="text-gray-700 mb-4">${post.description.replace(/<[^>]+>/g, '').slice(0, 120)}...</p>
+            <a href="${post.link}" class="text-[#005075] font-medium hover:underline">Leia mais</a>
+          </div>
+        `;
+        postsContainer.innerHTML += postCard;
+      });
+
+    } catch (error) {
+      document.getElementById("blog-posts-home").innerHTML = `
+        <p class="text-red-600 text-center">Erro ao carregar notícias. Tente novamente mais tarde.</p>
+      `;
+    }
+  }
+
+  carregarNoticiasHome();
+</script>
+<!-- Últimas Notícias end -->
 
         <!-- Divisor visual -->
 <div class="h-16 bg-gradient-to-r from-[#005075]/10 to-transparent"></div>
