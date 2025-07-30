@@ -50,3 +50,8 @@ if (file_put_contents($arquivo, json_encode($posts, JSON_PRETTY_PRINT | JSON_UNE
     http_response_code(500);
     echo "Erro ao salvar a postagem.";
 }
+fetch("salvar.php", {
+  method: "POST",
+  body: formData
+})
+
