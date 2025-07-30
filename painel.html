@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Painel - Intranet Gringo</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+
+  <!-- Header -->
+  <header class="bg-[#005075] text-white px-6 py-4 flex justify-between items-center">
+    <h1 class="text-2xl font-bold">Painel do Gringo</h1>
+    <p class="text-sm">Acesso interno</p>
+  </header>
+
+  <main class="max-w-6xl mx-auto p-6">
+    <!-- Nova postagem -->
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-xl font-bold text-[#005075]">Postagens</h2>
+      <a href="nova-postagem.html" class="bg-[#005075] text-white px-4 py-2 rounded hover:bg-[#003f5c]">+ Nova Postagem</a>
+    </div>
+
+    <!-- Lista simulada de postagens -->
+    <div class="bg-white rounded shadow p-4">
+      <ul class="divide-y divide-gray-200">
+        <li class="py-3">
+          <p class="font-semibold text-[#005075]">Vereador Gilvani “o Gringo” propõe Projeto de Lei para garantir transparência...</p>
+          <span class="text-sm text-gray-500">29/07/2025</span>
+        </li>
+        <li class="py-3">
+          <p class="font-semibold text-[#005075]">Vereador Gilvani quer liberar faixas exclusivas para motoristas de aplicativo...</p>
+          <span class="text-sm text-gray-500">29/07/2025</span>
+        </li>
+        <li class="py-3">
+          <p class="font-semibold text-[#005075]">Uma urgência que pode virar solução para o Rio Grande do Sul</p>
+          <span class="text-sm text-gray-500">24/07/2025</span>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Redes Sociais -->
+    <div class="mt-10">
+      <h3 class="text-lg font-bold text-[#005075] mb-4">Redes Sociais do Gringo</h3>
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm">
+        <a href="https://www.instagram.com/gilvaniogringo/" target="_blank" class="bg-white p-4 rounded shadow hover:shadow-md">
+          <i class="fab fa-instagram text-pink-500 mr-2"></i> @gilvaniogringo
+        </a>
+        <a href="https://www.facebook.com/gilvanigringors" target="_blank" class="bg-white p-4 rounded shadow hover:shadow-md">
+          <i class="fab fa-facebook text-blue-600 mr-2"></i> facebook.com/gilvanigringors
+        </a>
+        <a href="https://x.com/gilvanigringo" target="_blank" class="bg-white p-4 rounded shadow hover:shadow-md">
+          <i class="fab fa-x-twitter text-black mr-2"></i> @gilvanigringo
+        </a>
+        <a href="https://www.tiktok.com/@gilvaniogringo" target="_blank" class="bg-white p-4 rounded shadow hover:shadow-md">
+          <i class="fab fa-tiktok text-black mr-2"></i> @gilvaniogringo
+        </a>
+        <a href="https://www.kwai.com/@gilvaniogringo" target="_blank" class="bg-white p-4 rounded shadow hover:shadow-md">
+          <i class="fas fa-video text-yellow-500 mr-2"></i> Kwai: @gilvaniogringo
+        </a>
+      </div>
+    </div>
+  </main>
+
+</body>
+</html>
