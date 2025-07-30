@@ -39,6 +39,23 @@
       background: #fff;
       overflow-y: auto;
     }
+    #emojiPanel {
+      display: none;
+      max-height: 200px;
+      overflow-y: auto;
+      background: #fff;
+      border: 1px solid #ccc;
+      padding: 10px;
+      position: absolute;
+      z-index: 10;
+      border-radius: 0.5rem;
+    }
+    #emojiPanel span {
+      cursor: pointer;
+      font-size: 18px;
+      padding: 3px;
+      display: inline-block;
+    }
   </style>
 </head>
 <body class="bg-gray-100 min-h-screen text-base">
@@ -79,7 +96,9 @@
         <button type="button" onclick="createLink()">Link</button>
         <input type="file" id="imagemUpload" accept="image/*" onchange="uploadImagem(this)" class="hidden">
         <button type="button" onclick="document.getElementById('imagemUpload').click()">Imagem</button>
+        <button type="button" onclick="toggleEmojiPanel()">Emojis</button>
       </div>
+      <div id="emojiPanel"></div>
       <div id="editor" contenteditable="true" class="mb-4"></div>
 
       <label class="block text-sm font-medium text-gray-700 mb-1">Link relacionado (opcional)</label>
@@ -95,6 +114,18 @@
   </main>
 
   <script>
+    const emojis = "😀😃😄😁😆😅🤣😂🙂🙃😉😊😇🥰😍🤩😘😗☺️😚😙😋😛😜🤪😝🤑🤗🤭🤫🤔🤐😐😑😶😏😒🙄😬😌😔😪🤤😴😷🤒🤕🤢🤮🤧🥵🥶🥴😵🤯🤠🥳😎🤓🧐😕🙁☹️😮😯😲😳🥺😦😧😨😰😥😢😭😱😖😣😞😓😩😫😤😡😠🤬😈👿💀☠️💩🤡👹👺👻👽👾🤖";
+
+    function toggleEmojiPanel() {
+      const panel = document.getElementById("emojiPanel");
+      if (panel.style.display === "block") {
+        panel.style.display = "none";
+        return;
+      }
+      panel.innerHTML = emojis.split('').map(e => `<span onclick="insertEmoji('${e}')">${e}</span>`).join('');
+      panel.style.display = "block";
+    }
+
     function execCmd(command) {
       document.execCommand(command, false, null);
     }
@@ -106,6 +137,11 @@
     function createLink() {
       const url = prompt("Digite a URL:");
       if (url) document.execCommand("createLink", false, url);
+    }
+
+    function insertEmoji(emoji) {
+      document.execCommand('insertText', false, emoji);
+      document.getElementById("emojiPanel").style.display = "none";
     }
 
     function uploadImagem(input) {
