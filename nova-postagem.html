@@ -5,6 +5,7 @@
   <title>Intranet do Gringo</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
+    // Proteção por login
     if (localStorage.getItem("logado") !== "sim") {
       window.location.href = "intranet.html";
     }
@@ -16,15 +17,18 @@
 </head>
 <body class="bg-gray-100 min-h-screen">
 
+  <!-- Cabeçalho -->
   <header class="bg-[#005075] text-white px-6 py-4 flex justify-between items-center">
     <h1 class="text-2xl font-bold">Nova Postagem</h1>
     <button onclick="logout()" class="text-white hover:underline">Sair</button>
   </header>
 
+  <!-- Retorno ao painel -->
   <div class="flex justify-between items-center bg-[#f9f9f9] px-4 py-3 border-b">
     <a href="painel.html" class="text-[#005075] font-semibold hover:underline">&larr; Retornar ao Painel</a>
   </div>
 
+  <!-- Formulário de postagem -->
   <main class="max-w-4xl mx-auto p-6 bg-white mt-8 rounded shadow">
     <form id="form-postagem">
       <label class="block text-sm font-medium text-gray-700 mb-1">Título da Matéria</label>
@@ -33,8 +37,11 @@
       <label class="block text-sm font-medium text-gray-700 mb-1">Data</label>
       <input type="date" id="data" class="w-full border rounded px-4 py-2 mb-4" required>
 
-      <label class="block text-sm font-medium text-gray-700 mb-1">Texto</label>
+      <label class="block text-sm font-medium text-gray-700 mb-1">Texto completo da matéria</label>
       <textarea id="texto" rows="10" class="w-full border rounded px-4 py-2 mb-4" required></textarea>
+
+      <label class="block text-sm font-medium text-gray-700 mb-1">Resumo (será exibido na página principal)</label>
+      <textarea id="resumo" rows="4" class="w-full border rounded px-4 py-2 mb-4" required></textarea>
 
       <label class="block text-sm font-medium text-gray-700 mb-1">Link relacionado (opcional)</label>
       <input type="text" id="link" class="w-full border rounded px-4 py-2 mb-4">
@@ -46,6 +53,7 @@
     <p id="mensagem" class="mt-4 text-green-600 hidden">Postagem salva com sucesso!</p>
   </main>
 
+  <!-- JavaScript para envio -->
   <script>
     document.getElementById("form-postagem").addEventListener("submit", async function (e) {
       e.preventDefault();
@@ -54,6 +62,7 @@
         titulo: document.getElementById("titulo").value,
         data: document.getElementById("data").value,
         texto: document.getElementById("texto").value,
+        resumo: document.getElementById("resumo").value,
         link: document.getElementById("link").value
       };
 
