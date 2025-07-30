@@ -4,31 +4,24 @@
   <meta charset="UTF-8">
   <title>Intranet do Gringo</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    // Proteção por login
-    if (localStorage.getItem("logado") !== "sim") {
-      window.location.href = "intranet.html";
-    }
-    function logout() {
-      localStorage.removeItem("logado");
-      window.location.href = "intranet.html";
-    }
-  </script>
+  <script src="https://cdn.jsdelivr.net/npm/@editorjs/editorjs@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@editorjs/header@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@editorjs/list@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@editorjs/paragraph@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@editorjs/underline@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@editorjs/link@latest"></script>
 </head>
 <body class="bg-gray-100 min-h-screen">
 
-  <!-- Cabeçalho -->
   <header class="bg-[#005075] text-white px-6 py-4 flex justify-between items-center">
     <h1 class="text-2xl font-bold">Nova Postagem</h1>
     <button onclick="logout()" class="text-white hover:underline">Sair</button>
   </header>
 
-  <!-- Retorno ao painel -->
   <div class="flex justify-between items-center bg-[#f9f9f9] px-4 py-3 border-b">
     <a href="painel.html" class="text-[#005075] font-semibold hover:underline">&larr; Retornar ao Painel</a>
   </div>
 
-  <!-- Formulário de postagem -->
   <main class="max-w-4xl mx-auto p-6 bg-white mt-8 rounded shadow">
     <form id="form-postagem">
       <label class="block text-sm font-medium text-gray-700 mb-1">Título da Matéria</label>
@@ -37,14 +30,14 @@
       <label class="block text-sm font-medium text-gray-700 mb-1">Data</label>
       <input type="date" id="data" class="w-full border rounded px-4 py-2 mb-4" required>
 
-      <label class="block text-sm font-medium text-gray-700 mb-1">Texto completo da matéria</label>
-      <textarea id="texto" rows="10" class="w-full border rounded px-4 py-2 mb-4" required></textarea>
-
-      <label class="block text-sm font-medium text-gray-700 mb-1">Resumo (será exibido na página principal)</label>
-      <textarea id="resumo" rows="4" class="w-full border rounded px-4 py-2 mb-4" required></textarea>
+      <label class="block text-sm font-medium text-gray-700 mb-1">Texto</label>
+      <div id="editor" class="bg-white border rounded px-4 py-2 mb-4"></div>
 
       <label class="block text-sm font-medium text-gray-700 mb-1">Link relacionado (opcional)</label>
       <input type="text" id="link" class="w-full border rounded px-4 py-2 mb-4">
+
+      <label class="block text-sm font-medium text-gray-700 mb-1">Imagem (opcional)</label>
+      <input type="file" id="imagem" accept="image/*" class="w-full border rounded px-4 py-2 mb-4">
 
       <button type="submit" class="bg-[#005075] text-white px-6 py-2 rounded hover:bg-[#003f5c]">
         Publicar
@@ -53,32 +46,62 @@
     <p id="mensagem" class="mt-4 text-green-600 hidden">Postagem salva com sucesso!</p>
   </main>
 
-  <!-- JavaScript para envio -->
   <script>
+    if (localStorage.getItem("logado") !== "sim") {
+      window.location.href = "intranet.html";
+    }
+    function logout() {
+      localStorage.removeItem("logado");
+      window.location.href = "intranet.html";
+    }
+
+    const editor = new EditorJS({
+      holder: 'editor',
+      tools: {
+        header: Header,
+        list: List,
+        paragraph: Paragraph,
+        underline: Underline,
+        link: LinkTool
+      }
+    });
+
     document.getElementById("form-postagem").addEventListener("submit", async function (e) {
       e.preventDefault();
 
-      const post = {
-        titulo: document.getElementById("titulo").value,
-        data: document.getElementById("data").value,
-        texto: document.getElementById("texto").value,
-        resumo: document.getElementById("resumo").value,
-        link: document.getElementById("link").value
-      };
+      const titulo = document.getElementById("titulo").value;
+      const data = document.getElementById("data").value;
+      const link = document.getElementById("link").value;
+      const imagem = document.getElementById("imagem").files[0];
+
+      const editorData = await editor.save();
+
+      const formData = new FormData();
+      formData.append("titulo", titulo);
+      formData.append("data", data);
+      formData.append("link", link);
+      formData.append("texto", JSON.stringify(editorData));
+      if (imagem) {
+        formData.append("imagem", imagem);
+      }
 
       const res = await fetch("salvar.php", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(post)
+        body: formData
       });
 
       if (res.ok) {
         document.getElementById("mensagem").classList.remove("hidden");
         document.getElementById("form-postagem").reset();
+        editor.clear();
+        setTimeout(() => {
+          window.location.href = "painel.html";
+        }, 1500);
       } else {
         alert("Erro ao salvar a postagem.");
       }
     });
   </script>
+
 </body>
 </html>
