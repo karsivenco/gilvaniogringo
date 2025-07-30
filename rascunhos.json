@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-br" class="scroll-smooth">
+<head>
+  <meta charset="utf-8">
+  <title>Intranet do Gringo</title>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta name="description" content="Rascunhos de postagens da Intranet do Gringo.">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-800">
+  <header class="bg-[#004989] text-white py-6 shadow">
+    <div class="container mx-auto px-4 text-center">
+      <h1 class="text-3xl font-bold">Rascunhos</h1>
+      <p class="text-white mt-2">Visualize os rascunhos de postagens salvos para edição futura.</p>
+    </div>
+  </header>
+
+  <main class="py-12">
+    <div class="container mx-auto px-4">
+      <div id="blog-drafts" class="flex flex-wrap justify-center gap-6">
+        <?php
+          $jsonPath = __DIR__ . '/rascunhos.json';
+          if (file_exists($jsonPath)) {
+            $rascunhos = json_decode(file_get_contents($jsonPath), true);
+            foreach (array_reverse($rascunhos) as $post) {
+              echo '<div class="w-full max-w-md border rounded-xl shadow-lg p-5 hover:shadow-xl transition text-center bg-white">';
+              echo '<h3 class="text-xl font-semibold text-[#005075] mb-2">' . htmlspecialchars($post['titulo']) . '</h3>';
+              echo '<p class="text-gray-600 text-sm mb-2">' . htmlspecialchars($post['data']) . '</p>';
+              echo '<p class="text-gray-700 mb-4">' . htmlspecialchars(mb_strimwidth($post['resumo'], 0, 120, '...')) . '</p>';
+              if (!empty($post['link'])) {
+                echo '<a href="' . htmlspecialchars($post['link']) . '" target="_blank" class="text-[#005075] font-medium hover:underline">Ver mais</a>';
+              }
+              echo '</div>';
+            }
+          } else {
+            echo '<p class="text-red-600">Nenhum rascunho disponível.</p>';
+          }
+        ?>
+      </div>
+    </div>
+    <div class="mt-10 text-center">
+      <a href="/painel.html" class="inline-block bg-[#005075] text-white font-semibold px-6 py-3 rounded-full shadow-md hover:bg-[#003f5c] transition duration-300">
+        VOLTAR PARA O PAINEL
+      </a>
+    </div>
+  </main>
+
+  <footer class="bg-[#004989] text-white py-6 mt-12">
+    <div class="container mx-auto px-4 text-center text-sm">
+      <p>&copy; Gringo.rs - Todos os direitos reservados.</p>
+    </div>
+  </footer>
+</body>
+</html>
