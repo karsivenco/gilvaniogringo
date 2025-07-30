@@ -4,18 +4,22 @@
   <meta charset="UTF-8">
   <title>Intranet do Gringo</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- TinyMCE -->
-  <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
-  <script>
-    tinymce.init({
-      selector: '#editor',
-      height: 500,
-      menubar: true,
-      plugins: 'advlist autolink lists link image charmap preview anchor searchreplace visualblocks code fullscreen insertdatetime media table code help wordcount emoticons',
-      toolbar: 'undo redo | formatselect | bold italic underline forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image emoticons | removeformat | code fullscreen',
-      content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:16px }'
-    });
-  </script>
+  <style>
+    #editor {
+      min-height: 300px;
+      padding: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 0.5rem;
+      background: #fff;
+      overflow-y: auto;
+    }
+    .toolbar button {
+      @apply px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 text-sm;
+    }
+    .toolbar button.active {
+      @apply bg-[#005075] text-white;
+    }
+  </style>
 </head>
 <body class="bg-gray-100 min-h-screen text-base">
 
@@ -37,13 +41,20 @@
       <input type="date" id="data" class="w-full border rounded px-4 py-2 mb-4" required>
 
       <label class="block text-sm font-medium text-gray-700 mb-1">Texto</label>
-      <textarea id="editor" name="editor" class="w-full mb-4"></textarea>
+      <div class="toolbar flex gap-2 mb-2">
+        <button type="button" onclick="execCmd('bold')">B</button>
+        <button type="button" onclick="execCmd('italic')"><i>I</i></button>
+        <button type="button" onclick="execCmd('underline')"><u>U</u></button>
+        <button type="button" onclick="execCmd('insertUnorderedList')">• Lista</button>
+        <button type="button" onclick="execCmd('insertOrderedList')">1. Lista</button>
+        <button type="button" onclick="insertImage()">🖼️ Imagem</button>
+        <button type="button" onclick="insertEmoji('😊')">😊</button>
+        <button type="button" onclick="execCmd('createLink')">🔗 Link</button>
+      </div>
+      <div id="editor" contenteditable="true" class="mb-4"></div>
 
       <label class="block text-sm font-medium text-gray-700 mb-1">Link relacionado (opcional)</label>
       <input type="text" id="link" class="w-full border rounded px-4 py-2 mb-4">
-
-      <label class="block text-sm font-medium text-gray-700 mb-1">Imagem de Capa (opcional)</label>
-      <input type="file" id="imagem" accept="image/*" class="w-full border rounded px-4 py-2 mb-4">
 
       <div class="flex gap-4">
         <button type="submit" class="bg-[#005075] text-white px-6 py-2 rounded hover:bg-[#003f5c]">
@@ -61,10 +72,24 @@
     if (localStorage.getItem("logado") !== "sim") {
       window.location.href = "intranet.html";
     }
-
     function logout() {
       localStorage.removeItem("logado");
       window.location.href = "intranet.html";
+    }
+
+    function execCmd(command) {
+      document.execCommand(command, false, null);
+    }
+
+    function insertEmoji(emoji) {
+      document.execCommand('insertText', false, emoji);
+    }
+
+    function insertImage() {
+      const url = prompt("Insira o URL da imagem:");
+      if (url) {
+        document.execCommand("insertImage", false, url);
+      }
     }
 
     document.getElementById("form-postagem").addEventListener("submit", async function (e) {
@@ -80,17 +105,13 @@
       const titulo = document.getElementById("titulo").value;
       const data = document.getElementById("data").value;
       const link = document.getElementById("link").value;
-      const imagem = document.getElementById("imagem").files[0];
-      const textoHTML = tinymce.get("editor").getContent();
+      const texto = document.getElementById("editor").innerHTML;
 
       const formData = new FormData();
       formData.append("titulo", titulo);
       formData.append("data", data);
       formData.append("link", link);
-      formData.append("texto", textoHTML);
-      if (imagem) {
-        formData.append("imagem", imagem);
-      }
+      formData.append("texto", texto);
 
       const res = await fetch(url, {
         method: "POST",
@@ -100,7 +121,7 @@
       if (res.ok) {
         document.getElementById("mensagem").classList.remove("hidden");
         document.getElementById("form-postagem").reset();
-        tinymce.get("editor").setContent("");
+        document.getElementById("editor").innerHTML = "";
         setTimeout(() => {
           window.location.href = "painel.html";
         }, 1500);
