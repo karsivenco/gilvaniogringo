@@ -255,49 +255,71 @@
 </section>
 <!-- Últimas Notícias end -->
 
-<!-- Script para carregar posts do Blogspot via RSS -->
-<script>
-  async function carregarNoticias() {
-    const url = "https://api.rss2json.com/v1/api.json?rss_url=https://gilvaniogringo.blogspot.com/feeds/posts/default?alt=rss&_cache=false";
+<!-- Últimas Notícias start -->
+<section class="py-12 md:py-20" id="Ultimas-noticias">
+  <div class="container mx-auto px-4">
+    <div class="mx-auto max-w-3xl text-center wow animate__animated animate__fadeInUp">
+      <h2 class="mb-4 text-3xl md:text-4xl font-bold text-[#005075]">Últimas Notícias</h2>
+      <p class="text-lg text-gray-600">
+        Aqui você fica sabendo em primeira mão as notícias e novidades sobre o trabalho do vereador Gilvani.
+      </p>
+    </div>
 
-    try {
-      const res = await fetch(url);
-      const data = await res.json();
+    <div class="mt-12 wow animate__animated animate__fadeInUp" data-wow-delay="0.2s">
+      <!-- ⚠️ ESSA DIV PRECISA EXISTIR EXATAMENTE ASSIM -->
+      <div id="blog-posts" class="flex flex-wrap justify-center gap-6">
+	      <?php
+// salvar.php - recebe dados via POST (JSON) e salva em postagens.json e atualiza ultimas-noticias.html
 
-      const postsContainer = document.getElementById("blog-posts");
-      postsContainer.className = "flex flex-wrap justify-center gap-6";
-      postsContainer.innerHTML = "";
+header('Content-Type: application/json');
 
-      data.items.slice(0, 10).forEach(post => {
-        const postCard = `
-          <div class="w-full max-w-md border rounded-xl shadow-lg p-5 hover:shadow-xl transition text-center bg-white">
-            <h3 class="text-xl font-semibold text-[#005075] mb-2">${post.title}</h3>
-            <p class="text-gray-600 text-sm mb-2">${new Date(post.pubDate).toLocaleDateString()}</p>
-            <p class="text-gray-700 mb-4">${post.description.replace(/<[^>]+>/g, '').slice(0, 120)}...</p>
-            <a href="${post.link}" target="_blank" class="text-[#005075] font-medium hover:underline">Leia mais</a>
-          </div>
-        `;
-        postsContainer.innerHTML += postCard;
-      });
+$arquivo = 'postagens.json';
+$paginaNoticias = 'ultimas-noticias.html';
 
-    } catch (error) {
-      document.getElementById("blog-posts").innerHTML = `
-        <p class="text-red-600 text-center">Erro ao carregar notícias. Tente novamente mais tarde.</p>
-      `;
-    }
-  }
+$input = json_decode(file_get_contents('php://input'), true);
+if (!$input || !isset($input['titulo']) || !isset($input['data']) || !isset($input['texto'])) {
+    http_response_code(400);
+    echo json_encode(['erro' => 'Dados incompletos.']);
+    exit;
+}
 
-  carregarNoticias();
-</script>
-        <div class="mt-10 text-center">
-  <a href="/index.html" class="inline-block bg-[#005075] text-white font-semibold px-6 py-3 rounded-full shadow-md hover:bg-[#003f5c] transition duration-300">
-    VOLTAR PARA A PÁGINA PRINCIPAL
-  </a>
-            <br>
-            <br>
-            
-</div>
-        <!-- Últimas Notícias end -->
+$input['data_formatada'] = date('d/m/Y', strtotime($input['data']));
+
+$postagens = file_exists($arquivo) ? json_decode(file_get_contents($arquivo), true) : [];
+array_unshift($postagens, $input);
+file_put_contents($arquivo, json_encode($postagens, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+
+// Geração do HTML para ultimas-noticias.html
+$html = file_get_contents($paginaNoticias);
+
+$novaLista = "";
+foreach ($postagens as $post) {
+    $novaLista .= "<div class=\"w-full max-w-md border rounded-xl shadow-lg p-5 hover:shadow-xl transition text-center bg-white\">\n";
+    $novaLista .= "  <h3 class=\"text-xl font-semibold text-[#005075] mb-2\">" . htmlspecialchars($post['titulo']) . "</h3>\n";
+    $novaLista .= "  <p class=\"text-gray-600 text-sm mb-2\">" . $post['data_formatada'] . "</p>\n";
+    $novaLista .= "  <p class=\"text-gray-700 mb-4\">" . nl2br(htmlspecialchars(substr($post['texto'], 0, 120))) . "...</p>\n";
+    $novaLista .= "</div>\n";
+}
+
+// Substitui o conteúdo entre <div id="blog-posts">...</div> na página
+$html = preg_replace(
+    '/<div id="blog-posts" class="[^"]*">.*?<\/div>/s',
+    '<div id="blog-posts" class="flex flex-wrap justify-center gap-6">' . $novaLista . '</div>',
+    $html
+);
+
+file_put_contents($paginaNoticias, $html);
+
+http_response_code(200);
+echo json_encode(['status' => 'sucesso']);
+exit;
+
+        <!-- O salvar.php irá substituir TODO o conteúdo dessa div -->
+      </div>
+    </div>
+  </div>
+</section>
+<!-- Últimas Notícias end -->
     
 <!-- Estilo para o wrapper com sombra -->
 <style>
