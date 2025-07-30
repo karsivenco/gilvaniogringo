@@ -86,5 +86,14 @@
       window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
     });
   </script>
+  // Salva título e data no LocalStorage
+const postagens = JSON.parse(localStorage.getItem("postagens")) || [];
+postagens.unshift({
+  titulo: titulo,
+  data: data,
+  slug: slug
+});
+localStorage.setItem("postagens", JSON.stringify(postagens));
+
 </body>
 </html>
