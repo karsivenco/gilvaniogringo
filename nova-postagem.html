@@ -98,8 +98,7 @@
         <button type="button" onclick="execCmd('bold')">Negrito</button><span class="separator">|</span>
         <button type="button" onclick="execCmd('italic')">Itálico</button><span class="separator">|</span>
         <button type="button" onclick="execCmd('underline')">Sublinhado</button><span class="separator">|</span>
-        <button type="button" onclick="execCmd('insertUnorderedList')">Lista •</button><span class="separator">|</span>
-        <button type="button" onclick="execCmd('insertOrderedList')">Lista 1.</button><span class="separator">|</span>
+        <button type="button" onclick="execCmd('formatBlock', 'p')">Parágrafo</button><span class="separator">|</span>
         <button type="button" onclick="customLinkPrompt()">Link</button><span class="separator">|</span>
         <select id="fontSelector" onchange="changeFont(this.value)">
           <option value="">Fonte padrão</option>
@@ -139,8 +138,8 @@ function customLinkPrompt() {
   document.execCommand('insertHTML', false, linkHTML);
 }
 
-function execCmd(cmd) {
-  document.execCommand(cmd, false, null);
+function execCmd(cmd, value = null) {
+  document.execCommand(cmd, false, value);
 }
 
 function changeFont(font) {
@@ -167,50 +166,55 @@ function uploadImagem(input) {
   fetch("upload-imagem.php", { method: "POST", body: formData })
     .then(res => res.text())
     .then(url => {
-      document.execCommand("insertImage", false, url);
+      document.execCommand("insertHTML", false, `<img src='${url}' alt='Imagem'>`);
     })
     .catch(() => alert("Erro ao enviar imagem."));
 }
 
-document.getElementById("form-postagem").addEventListener("submit", async function (e) {
-  e.preventDefault();
-  await salvarPostagem("salvar.php");
-});
-
-async function salvarRascunho() {
-  await salvarPostagem("salvar-rascunho.php");
+function salvarRascunho() {
+  salvarPostagem("salvar-rascunho.php");
 }
 
-async function salvarPostagem(url) {
+function salvarPostagem(url) {
   const titulo = document.getElementById("titulo").value;
   const link = document.getElementById("link").value;
   const texto = document.getElementById("editor").innerHTML;
-  const data = new Date().toISOString();
+  const agora = new Date();
+  const data = agora.toISOString();
+  const data_formatada = `${agora.toLocaleDateString()} ${agora.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`;
 
   const payload = {
     titulo,
-    data,
     link,
-    texto
+    texto,
+    data,
+    data_formatada
   };
 
-  const res = await fetch(url, {
+  fetch(url, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload)
-  });
-
-  if (res.ok) {
-    document.getElementById("mensagem").classList.remove("hidden");
-    document.getElementById("form-postagem").reset();
-    document.getElementById("editor").innerHTML = "";
-    setTimeout(() => {
-      window.location.href = "painel.html";
-    }, 1500);
-  } else {
-    alert("Erro ao salvar a postagem.");
-  }
+  })
+  .then(res => {
+    if (res.ok) {
+      document.getElementById("mensagem").classList.remove("hidden");
+      document.getElementById("form-postagem").reset();
+      document.getElementById("editor").innerHTML = "";
+      setTimeout(() => {
+        window.location.href = "painel.html";
+      }, 1500);
+    } else {
+      alert("Erro ao salvar a postagem.");
+    }
+  })
+  .catch(() => alert("Erro ao enviar os dados."));
 }
+
+document.getElementById("form-postagem").addEventListener("submit", function(e) {
+  e.preventDefault();
+  salvarPostagem("salvar.php");
+});
 </script>
 
 </body>
