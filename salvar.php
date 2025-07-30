@@ -1,65 +1,52 @@
 <?php
-header('Content-Type: application/json');
+// salvar.php
 
-$arquivo = 'postagens.json';
-$paginaNoticias = 'ultimas-noticias.html';
-
-// Receber dados via POST
-$titulo = $_POST['titulo'] ?? '';
-$link = $_POST['link'] ?? '';
-$texto = $_POST['texto'] ?? '';
-$data = $_POST['data'] ?? '';
-$data_formatada = $_POST['data_formatada'] ?? '';
-
-if (!$titulo || !$texto || !$data || !$data_formatada) {
+// Verifica se os dados necessários foram enviados
+if (
+    !isset($_POST['titulo']) ||
+    !isset($_POST['texto']) ||
+    empty(trim($_POST['titulo'])) ||
+    empty(trim($_POST['texto']))
+) {
     http_response_code(400);
-    echo json_encode(['erro' => 'Dados incompletos.']);
+    echo "Título e texto são obrigatórios.";
     exit;
 }
 
-$postagens = file_exists($arquivo) ? json_decode(file_get_contents($arquivo), true) : [];
-array_unshift($postagens, [
+$titulo = strip_tags($_POST['titulo']);
+$link = isset($_POST['link']) ? strip_tags($_POST['link']) : '';
+$texto = $_POST['texto']; // Mantemos HTML do conteúdo
+$data_iso = $_POST['data'] ?? date('c');
+$data_formatada = $_POST['data_formatada'] ?? date('d/m/Y H:i');
+
+// Estrutura do novo post
+$post = [
     'titulo' => $titulo,
     'link' => $link,
     'texto' => $texto,
-    'data' => $data,
-    'data_formatada' => $data_formatada,
-    'tipo' => 'publicado'
-]);
+    'data' => $data_iso,
+    'data_formatada' => $data_formatada
+];
 
-if (!file_put_contents($arquivo, json_encode($postagens, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE))) {
+// Caminho do arquivo JSON
+$arquivo = __DIR__ . '/postagens.json';
+
+// Se o arquivo não existir, cria um vazio
+if (!file_exists($arquivo)) {
+    file_put_contents($arquivo, '[]');
+}
+
+// Lê os posts existentes
+$posts = json_decode(file_get_contents($arquivo), true);
+if (!is_array($posts)) $posts = [];
+
+// Adiciona o novo post no início da lista
+array_unshift($posts, $post);
+
+// Salva o novo conteúdo no JSON
+if (file_put_contents($arquivo, json_encode($posts, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE))) {
+    echo "Postagem salva com sucesso!";
+} else {
     http_response_code(500);
-    echo json_encode(['erro' => 'Erro ao salvar a postagem.']);
-    exit;
+    echo "Erro ao salvar a postagem.";
 }
-
-// Atualizar ultimas-noticias.html
-$html = file_get_contents($paginaNoticias);
-if (!$html) {
-    http_response_code(500);
-    echo json_encode(['erro' => 'Erro ao carregar a página de notícias.']);
-    exit;
-}
-
-$novaLista = "";
-foreach ($postagens as $p) {
-    $novaLista .= "<div class=\"w-full max-w-md border rounded-xl shadow-lg p-5 hover:shadow-xl transition text-center bg-white\">\n";
-    $novaLista .= "<h3 class=\"text-xl font-semibold text-[#005075] mb-2\">" . htmlspecialchars($p['titulo']) . "</h3>\n";
-    $novaLista .= "<p class=\"text-gray-600 text-sm mb-2\">" . htmlspecialchars($p['data_formatada']) . "</p>\n";
-    $novaLista .= "<p class=\"text-gray-700 mb-4\">" . nl2br(htmlspecialchars(strip_tags(substr($p['texto'], 0, 150)))) . "...</p>\n";
-    $novaLista .= "</div>\n";
-}
-
-$html = preg_replace(
-    '/<div id="blog-posts"[^>]*>.*?<\/div>/s',
-    '<div id="blog-posts" class="flex flex-wrap justify-center gap-6">' . $novaLista . '</div>',
-    $html
-);
-
-if (!file_put_contents($paginaNoticias, $html)) {
-    http_response_code(500);
-    echo json_encode(['erro' => 'Erro ao atualizar a página de notícias.']);
-    exit;
-}
-
-echo json_encode(['status' => 'ok']);
