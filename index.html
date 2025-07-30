@@ -317,42 +317,9 @@
  <!-- Container dos posts -->
 <div id="blog-posts" class="my-10 flex justify-center flex-wrap gap-6"></div>
 
-<!-- Script para carregar posts do Blogspot via RSS -->
-<script>
-  async function carregarNoticias() {
-    const url = "https://api.rss2json.com/v1/api.json?rss_url=https://gilvaniogringo.blogspot.com/feeds/posts/default?alt=rss&_cache=false";
+<!-- Últimas Notícias (carregadas via iframe) -->
+<iframe src="/ultimas-noticias.html" class="w-full h-[1100px] border-none" loading="lazy"></iframe>
 
-    try {
-      const res = await fetch(url);
-      const data = await res.json();
-
-      const postsContainer = document.getElementById("blog-posts");
-      postsContainer.className = "flex flex-wrap justify-center gap-6";
-      postsContainer.innerHTML = "";
-
-      data.items.slice(0, 10).forEach(post => {
-        const postCard = `
-          <div class="w-full max-w-md border rounded-xl shadow-lg p-5 hover:shadow-xl transition text-center bg-white">
-            <h3 class="text-xl font-semibold text-[#005075] mb-2">${post.title}</h3>
-            <p class="text-gray-600 text-sm mb-2">${new Date(post.pubDate).toLocaleDateString()}</p>
-            <p class="text-gray-700 mb-4">${post.description.replace(/<[^>]+>/g, '').slice(0, 120)}...</p>
-            <a href="${post.link}" target="_blank" class="text-[#005075] font-medium hover:underline">Leia mais</a>
-          </div>
-        `;
-        postsContainer.innerHTML += postCard;
-      });
-
-    } catch (error) {
-      document.getElementById("blog-posts").innerHTML = `
-        <p class="text-red-600 text-center">Erro ao carregar notícias. Tente novamente mais tarde.</p>
-      `;
-    }
-  }
-
-  carregarNoticias();
-</script>
-  </div>
-</section>
         <!-- Divisor visual -->
 <div class="h-16 bg-gradient-to-r from-[#005075]/10 to-transparent"></div>
         
