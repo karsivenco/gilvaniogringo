@@ -95,10 +95,10 @@
 
       <label class="block text-sm font-medium mb-1">Texto</label>
       <div class="toolbar">
-        <button type="button" onclick="execCmd('bold')">Negrito</button><span class="separator">|</span>
-        <button type="button" onclick="execCmd('italic')">Itálico</button><span class="separator">|</span>
-        <button type="button" onclick="execCmd('underline')">Sublinhado</button><span class="separator">|</span>
-        <button type="button" onclick="execCmd('formatBlock', 'p')">Parágrafo</button><span class="separator">|</span>
+        <button type="button" onclick="formatText('bold')">Negrito</button><span class="separator">|</span>
+        <button type="button" onclick="formatText('italic')">Itálico</button><span class="separator">|</span>
+        <button type="button" onclick="formatText('underline')">Sublinhado</button><span class="separator">|</span>
+        <button type="button" onclick="insertParagraph()">Parágrafo</button><span class="separator">|</span>
         <button type="button" onclick="customLinkPrompt()">Link</button><span class="separator">|</span>
         <select id="fontSelector" onchange="changeFont(this.value)">
           <option value="">Fonte padrão</option>
@@ -129,17 +129,49 @@
   </main>
 
 <script>
+function getEditorSelection() {
+  const editor = document.getElementById("editor");
+  editor.focus();
+  return window.getSelection();
+}
+
+function insertHTMLAtCursor(html) {
+  const sel = getEditorSelection();
+  if (!sel.rangeCount) return;
+
+  const range = sel.getRangeAt(0);
+  const el = document.createElement("div");
+  el.innerHTML = html;
+  const frag = document.createDocumentFragment();
+  let node, lastNode;
+  while ((node = el.firstChild)) {
+    lastNode = frag.appendChild(node);
+  }
+  range.deleteContents();
+  range.insertNode(frag);
+  if (lastNode) {
+    range.setStartAfter(lastNode);
+    range.collapse(true);
+    sel.removeAllRanges();
+    sel.addRange(range);
+  }
+}
+
+function formatText(command) {
+  document.getElementById("editor").focus();
+  document.execCommand(command, false, null);
+}
+
+function insertParagraph() {
+  insertHTMLAtCursor("<p>• Novo parágrafo</p>");
+}
+
 function customLinkPrompt() {
   const url = prompt("Digite a URL (comece com https://):");
   if (!url) return;
   const texto = prompt("Digite o texto que será exibido no link:");
   if (!texto) return;
-  const linkHTML = `<a href='${url}' target='_blank' rel='noopener noreferrer'>${texto}</a>`;
-  document.execCommand('insertHTML', false, linkHTML);
-}
-
-function execCmd(cmd, value = null) {
-  document.execCommand(cmd, false, value);
+  insertHTMLAtCursor(`<a href="${url}" target="_blank" rel="noopener noreferrer">${texto}</a>`);
 }
 
 function changeFont(font) {
@@ -147,7 +179,7 @@ function changeFont(font) {
 }
 
 function insertEmoji(emoji) {
-  document.execCommand("insertText", false, emoji);
+  insertHTMLAtCursor(emoji);
   document.getElementById("emojiPanel").style.display = "none";
 }
 
@@ -161,12 +193,13 @@ function toggleEmojiPanel() {
 function uploadImagem(input) {
   const file = input.files[0];
   if (!file) return;
+
   const formData = new FormData();
   formData.append("imagem", file);
   fetch("upload-imagem.php", { method: "POST", body: formData })
     .then(res => res.text())
     .then(url => {
-      document.execCommand("insertHTML", false, `<img src='${url}' alt='Imagem'>`);
+      insertHTMLAtCursor(`<img src="${url}" alt="Imagem" style="max-width:100%;">`);
     })
     .catch(() => alert("Erro ao enviar imagem."));
 }
@@ -216,7 +249,5 @@ document.getElementById("form-postagem").addEventListener("submit", function(e) 
   salvarPostagem("salvar.php");
 });
 </script>
-
 </body>
 </html>
- 
