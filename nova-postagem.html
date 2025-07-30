@@ -205,10 +205,10 @@ function uploadImagem(input) {
 }
 
 function salvarRascunho() {
-  salvarPostagem("salvar-rascunho.php");
+  publicar("salvar-rascunho.php");
 }
 
-function salvarPostagem(url) {
+function publicar(url = "salvar.php") {
   const titulo = document.getElementById("titulo").value;
   const link = document.getElementById("link").value;
   const texto = document.getElementById("editor").innerHTML;
@@ -216,18 +216,16 @@ function salvarPostagem(url) {
   const data = agora.toISOString();
   const data_formatada = `${agora.toLocaleDateString()} ${agora.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`;
 
-  const payload = {
-    titulo,
-    link,
-    texto,
-    data,
-    data_formatada
-  };
+  const formData = new FormData();
+  formData.append("titulo", titulo);
+  formData.append("link", link);
+  formData.append("texto", texto);
+  formData.append("data", data);
+  formData.append("data_formatada", data_formatada);
 
   fetch(url, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload)
+    body: formData
   })
   .then(res => {
     if (res.ok) {
@@ -246,8 +244,9 @@ function salvarPostagem(url) {
 
 document.getElementById("form-postagem").addEventListener("submit", function(e) {
   e.preventDefault();
-  salvarPostagem("salvar.php");
+  publicar();
 });
 </script>
+
 </body>
 </html>
