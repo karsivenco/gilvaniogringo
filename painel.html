@@ -20,23 +20,34 @@
       <a href="nova-postagem.html" class="bg-[#005075] text-white px-4 py-2 rounded hover:bg-[#003f5c]">+ Nova Postagem</a>
     </div>
 
-    <!-- Lista simulada de postagens -->
-    <div class="bg-white rounded shadow p-4">
-      <ul class="divide-y divide-gray-200">
-        <li class="py-3">
-          <p class="font-semibold text-[#005075]">Vereador Gilvani “o Gringo” propõe Projeto de Lei para garantir transparência...</p>
-          <span class="text-sm text-gray-500">29/07/2025</span>
-        </li>
-        <li class="py-3">
-          <p class="font-semibold text-[#005075]">Vereador Gilvani quer liberar faixas exclusivas para motoristas de aplicativo...</p>
-          <span class="text-sm text-gray-500">29/07/2025</span>
-        </li>
-        <li class="py-3">
-          <p class="font-semibold text-[#005075]">Uma urgência que pode virar solução para o Rio Grande do Sul</p>
-          <span class="text-sm text-gray-500">24/07/2025</span>
-        </li>
-      </ul>
-    </div>
+   <!-- Lista real de postagens -->
+<div class="bg-white rounded shadow p-4" id="lista-postagens">
+  <ul class="divide-y divide-gray-200" id="postagens-lista">
+    <!-- As postagens criadas aparecerão aqui -->
+  </ul>
+</div>
+
+<script>
+  const postagensSalvas = JSON.parse(localStorage.getItem("postagens")) || [];
+  const lista = document.getElementById("postagens-lista");
+
+  if (postagensSalvas.length === 0) {
+    lista.innerHTML = '<li class="py-3 text-gray-500">Nenhuma postagem cadastrada ainda.</li>';
+  } else {
+    postagensSalvas.forEach(post => {
+      const li = document.createElement("li");
+      li.className = "py-3";
+      li.innerHTML = `
+        <p class="font-semibold text-[#005075]">${post.titulo}</p>
+        <span class="text-sm text-gray-500">${post.data}</span>
+        <br>
+        <a href="/${post.slug}" class="text-sm text-blue-600 underline">Ver página</a>
+      `;
+      lista.appendChild(li);
+    });
+  }
+</script>
+
 
     <!-- Redes Sociais -->
     <div class="mt-10">
