@@ -266,7 +266,7 @@
         postsContainer.className = "flex flex-wrap justify-center gap-6";
         postsContainer.innerHTML = "";
 
-        data.items.slice(0, 6).forEach(post => {
+        data.items.slice(0, 100).forEach(post => {
           const postCard = `
             <div class="w-full max-w-md border rounded-xl shadow-lg p-5 hover:shadow-xl transition text-center bg-white">
               <h3 class="text-xl font-semibold text-[#005075] mb-2">${post.title}</h3>
@@ -293,6 +293,8 @@
       </a>
     </div>
   </main>
+	<br>
+	<br>
     
 <!-- Estilo para o wrapper com sombra -->
 <style>
