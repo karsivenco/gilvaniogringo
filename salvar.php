@@ -1,64 +1,51 @@
-<?php
-header('Content-Type: application/json');
-
-$arquivo = 'postagens.json';
-$paginaNoticias = 'ultimas-noticias.html';
-
-// Receber dados via POST (FormData)
-$titulo = $_POST['titulo'] ?? '';
-$data = $_POST['data'] ?? '';
-$link = $_POST['link'] ?? '';
-$texto = $_POST['texto'] ?? '';
-
-if (empty($titulo) || empty($data) || empty($texto)) {
-    http_response_code(400);
-    echo json_encode(['erro' => 'Dados incompletos.']);
-    exit;
+function salvarRascunho() {
+  publicar("salvar-rascunho.php");
 }
 
-$post = [
-    'titulo' => $titulo,
-    'data' => $data,
-    'link' => $link,
-    'texto' => $texto,
-    'data_formatada' => date('d/m/Y', strtotime(substr($data, 0, 10))) // considera que o início da string é uma data válida
-];
+function publicar(url = "salvar.php") {
+  const titulo = document.getElementById("titulo").value.trim();
+  const link = document.getElementById("link").value.trim();
+  const texto = document.getElementById("editor").innerHTML.trim();
+  const agora = new Date();
 
-// Carrega postagens antigas
-$postagens = file_exists($arquivo) ? json_decode(file_get_contents($arquivo), true) : [];
-array_unshift($postagens, $post);
+  const dataISO = agora.toISOString();
+  const data_formatada = `${agora.toLocaleDateString()} ${agora.toLocaleTimeString([], {
+    hour: '2-digit',
+    minute: '2-digit'
+  })}`;
 
-// Salva no JSON
-if (!file_put_contents($arquivo, json_encode($postagens, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE))) {
-    http_response_code(500);
-    echo json_encode(['erro' => 'Erro ao salvar no arquivo JSON.']);
-    exit;
+  // Validação mínima obrigatória
+  if (!titulo || !texto || texto === "<br>" || texto === "") {
+    alert("Por favor, preencha o título e escreva algo no texto.");
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append("titulo", titulo);
+  formData.append("link", link);
+  formData.append("texto", texto);
+  formData.append("data", dataISO);
+  formData.append("data_formatada", data_formatada);
+
+  fetch(url, {
+    method: "POST",
+    body: formData
+  })
+    .then(response => {
+      if (!response.ok) throw new Error("Erro ao enviar os dados.");
+      return response.text();
+    })
+    .then(res => {
+      console.log("Retorno do servidor:", res);
+      document.getElementById("mensagem").classList.remove("hidden");
+      document.getElementById("form-postagem").reset();
+      document.getElementById("editor").innerHTML = "";
+      setTimeout(() => {
+        window.location.href = "painel.html";
+      }, 1500);
+    })
+    .catch(err => {
+      console.error(err);
+      alert("Erro ao salvar a postagem. Verifique se o arquivo PHP está correto e acessível.");
+    });
 }
-
-// Atualiza ultimas-noticias.html
-$novaLista = "";
-foreach ($postagens as $p) {
-    $novaLista .= "<div class=\"w-full max-w-md border rounded-xl shadow-lg p-5 hover:shadow-xl transition text-center bg-white\">\n";
-    $novaLista .= "  <h3 class=\"text-xl font-semibold text-[#005075] mb-2\">" . htmlspecialchars($p['titulo']) . "</h3>\n";
-    $novaLista .= "  <p class=\"text-gray-600 text-sm mb-2\">" . $p['data_formatada'] . "</p>\n";
-    $novaLista .= "  <p class=\"text-gray-700 mb-4\">" . mb_substr(strip_tags($p['texto']), 0, 120) . "...</p>\n";
-    $novaLista .= "</div>\n";
-}
-
-// Substitui conteúdo da <div id="blog-posts"> em ultimas-noticias.html
-$html = file_get_contents($paginaNoticias);
-$html = preg_replace_callback(
-    '/<div id="blog-posts"[^>]*>.*?<\/div>/s',
-    fn($matches) => '<div id="blog-posts" class="flex flex-wrap justify-center gap-6">' . $novaLista . '</div>',
-    $html
-);
-
-// Salva HTML atualizado
-if (!file_put_contents($paginaNoticias, $html)) {
-    http_response_code(500);
-    echo json_encode(['erro' => 'Erro ao salvar a página HTML.']);
-    exit;
-}
-
-echo json_encode(['status' => 'sucesso']);
-exit;
