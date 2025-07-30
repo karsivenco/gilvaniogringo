@@ -4,13 +4,22 @@
   <meta charset="UTF-8">
   <title>Painel - Intranet Gringo</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    if (localStorage.getItem("logado") !== "sim") {
+      window.location.href = "intranet.html";
+    }
+    function logout() {
+      localStorage.removeItem("logado");
+      window.location.href = "intranet.html";
+    }
+  </script>
 </head>
 <body class="bg-gray-100 min-h-screen">
 
   <!-- Header -->
   <header class="bg-[#005075] text-white px-6 py-4 flex justify-between items-center">
     <h1 class="text-2xl font-bold">Painel do Gringo</h1>
-    <p class="text-sm">Acesso interno</p>
+    <button onclick="logout()" class="text-white hover:underline">Sair</button>
   </header>
 
   <main class="max-w-6xl mx-auto p-6">
@@ -20,34 +29,12 @@
       <a href="nova-postagem.html" class="bg-[#005075] text-white px-4 py-2 rounded hover:bg-[#003f5c]">+ Nova Postagem</a>
     </div>
 
-   <!-- Lista real de postagens -->
-<div class="bg-white rounded shadow p-4" id="lista-postagens">
-  <ul class="divide-y divide-gray-200" id="postagens-lista">
-    <!-- As postagens criadas aparecerão aqui -->
-  </ul>
-</div>
-
-<script>
-  const postagensSalvas = JSON.parse(localStorage.getItem("postagens")) || [];
-  const lista = document.getElementById("postagens-lista");
-
-  if (postagensSalvas.length === 0) {
-    lista.innerHTML = '<li class="py-3 text-gray-500">Nenhuma postagem cadastrada ainda.</li>';
-  } else {
-    postagensSalvas.forEach(post => {
-      const li = document.createElement("li");
-      li.className = "py-3";
-      li.innerHTML = `
-        <p class="font-semibold text-[#005075]">${post.titulo}</p>
-        <span class="text-sm text-gray-500">${post.data}</span>
-        <br>
-        <a href="/${post.slug}" class="text-sm text-blue-600 underline">Ver página</a>
-      `;
-      lista.appendChild(li);
-    });
-  }
-</script>
-
+    <!-- Lista real de postagens -->
+    <div class="bg-white rounded shadow p-4" id="lista-postagens">
+      <ul class="divide-y divide-gray-200" id="postagens-lista">
+        <!-- Carregado via JavaScript -->
+      </ul>
+    </div>
 
     <!-- Redes Sociais -->
     <div class="mt-10">
@@ -72,5 +59,32 @@
     </div>
   </main>
 
+  <script>
+    // Carregar postagens salvas em JSON
+    fetch('postagens.json')
+      .then(res => res.json())
+      .then(data => {
+        const lista = document.getElementById("postagens-lista");
+        if (data.length === 0) {
+          lista.innerHTML = '<li class="py-3 text-gray-500">Nenhuma postagem cadastrada ainda.</li>';
+        } else {
+          data.forEach(post => {
+            const li = document.createElement("li");
+            li.className = "py-3";
+            li.innerHTML = `
+              <p class="font-semibold text-[#005075]">${post.titulo}</p>
+              <span class="text-sm text-gray-500">${new Date(post.data).toLocaleDateString()}</span>
+              <br>
+              ${post.link ? `<a href="${post.link}" class="text-sm text-blue-600 underline">Ver link</a>` : ''}
+            `;
+            lista.appendChild(li);
+          });
+        }
+      })
+      .catch(err => {
+        document.getElementById("postagens-lista").innerHTML = '<li class="py-3 text-red-600">Erro ao carregar postagens.</li>';
+      });
+  </script>
+  <script src="https://kit.fontawesome.com/a2e0c4c5fd.js" crossorigin="anonymous"></script>
 </body>
 </html>
