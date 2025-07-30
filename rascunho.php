@@ -1,43 +1,52 @@
 <?php
-header('Content-Type: application/json');
+// salvar-rascunho.php
 
-$arquivo = 'rascunhos.json'; // salva diretamente na raiz do projeto
-
-// Verifica se os dados obrigatórios foram enviados
+// Verifica se os dados necessários foram enviados
 if (
-    isset($_POST['titulo']) &&
-    isset($_POST['link']) &&
-    isset($_POST['texto']) &&
-    isset($_POST['data']) &&
-    isset($_POST['data_formatada'])
+    !isset($_POST['titulo']) ||
+    !isset($_POST['texto']) ||
+    empty(trim($_POST['titulo'])) ||
+    empty(trim($_POST['texto']))
 ) {
-    $rascunho = [
-        'titulo' => $_POST['titulo'],
-        'link' => $_POST['link'],
-        'texto' => $_POST['texto'],
-        'data' => $_POST['data'],
-        'data_formatada' => $_POST['data_formatada'],
-        'tipo' => 'rascunho'
-    ];
-
-    // Lê rascunhos anteriores (se existir)
-    $rascunhos = file_exists($arquivo) ? json_decode(file_get_contents($arquivo), true) : [];
-
-    // Adiciona o novo rascunho no início
-    array_unshift($rascunhos, $rascunho);
-
-    // Salva novamente o arquivo
-    if (file_put_contents($arquivo, json_encode($rascunhos, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE))) {
-        echo json_encode(['status' => 'ok']);
-        exit;
-    } else {
-        http_response_code(500);
-        echo json_encode(['erro' => 'Erro ao salvar no arquivo JSON.']);
-        exit;
-    }
-} else {
     http_response_code(400);
-    echo json_encode(['erro' => 'Dados incompletos.']);
+    echo "Título e texto são obrigatórios.";
     exit;
 }
-?>
+
+$titulo = strip_tags($_POST['titulo']);
+$link = isset($_POST['link']) ? strip_tags($_POST['link']) : '';
+$texto = $_POST['texto']; // Mantém o HTML do editor
+$data_iso = $_POST['data'] ?? date('c');
+$data_formatada = $_POST['data_formatada'] ?? date('d/m/Y H:i');
+
+// Estrutura do novo rascunho
+$rascunho = [
+    'titulo' => $titulo,
+    'link' => $link,
+    'texto' => $texto,
+    'data' => $data_iso,
+    'data_formatada' => $data_formatada
+];
+
+// Caminho do arquivo JSON
+$arquivo = __DIR__ . '/rascunhos.json';
+
+// Se o arquivo ainda não existir, cria um vazio
+if (!file_exists($arquivo)) {
+    file_put_contents($arquivo, '[]');
+}
+
+// Lê os rascunhos existentes
+$rascunhos = json_decode(file_get_contents($arquivo), true);
+if (!is_array($rascunhos)) $rascunhos = [];
+
+// Adiciona o novo rascunho no início da lista
+array_unshift($rascunhos, $rascunho);
+
+// Salva o novo conteúdo no JSON
+if (file_put_contents($arquivo, json_encode($rascunhos, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE))) {
+    echo "Rascunho salvo com sucesso!";
+} else {
+    http_response_code(500);
+    echo "Erro ao salvar o rascunho.";
+}
