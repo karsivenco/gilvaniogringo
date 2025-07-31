@@ -1,10 +1,1 @@
- (cd "$(git rev-parse --show-toplevel)" && git apply --3way <<'EOF' 
-diff --git a//dev/null b/dados/rascunhos.json
-index 0000000000000000000000000000000000000000..fe51488c7066f6687ef680d6bfaa4f7768ef205c 100644
---- a//dev/null
-+++ b/dados/rascunhos.json
-@@ -0,0 +1 @@
-+[]
- 
-EOF
-)
+[]
