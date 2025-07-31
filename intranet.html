@@ -28,6 +28,7 @@
     .logo-container {
       display: flex;
       flex-direction: column;
+
       align-items: center;
       margin-bottom: 1.5rem;
     }
@@ -53,39 +54,17 @@
 
     <h2 class="text-xl font-bold text-center mb-6 text-[#005075]">Intranet do Gringo</h2>
 
-    <form onsubmit="return login()">
+    <form action="login.php" method="post">
       <label class="block mb-2 text-sm font-medium text-gray-700">Usuário:</label>
-      <input type="text" id="usuario" class="w-full p-2 border rounded mb-4" required>
+      <input type="text" name="usuario" class="w-full p-2 border rounded mb-4" required>
 
       <label class="block mb-2 text-sm font-medium text-gray-700">Senha:</label>
-      <input type="password" id="senha" class="w-full p-2 border rounded mb-4" required>
+      <input type="password" name="senha" class="w-full p-2 border rounded mb-4" required>
 
       <button type="submit" class="w-full bg-[#005075] text-white py-2 rounded hover:bg-[#003f5c]">Entrar</button>
     </form>
 
-    <p id="erro" class="text-red-600 mt-4 text-sm text-center hidden">Usuário ou senha incorretos.</p>
+    <p id="erro" class="text-red-600 mt-4 text-sm text-center" style="display:<?php echo isset($_GET['erro']) ? 'block' : 'none'; ?>">Usuário ou senha incorretos.</p>
   </div>
-
-  <script>
-    function login() {
-      const usuarios = {
-        "graziele.albuquerque": "Gringo1975",
-        "gabriel.amaral": "Gringo1975"
-      };
-
-      const user = document.getElementById("usuario").value.trim();
-      const senha = document.getElementById("senha").value;
-
-      if (usuarios[user] === senha) {
-        localStorage.setItem("logado", "sim");
-        window.location.href = "painel.html";
-        return false;
-      } else {
-        document.getElementById("erro").classList.remove("hidden");
-        return false;
-      }
-    }
-  </script>
-
 </body>
 </html>
