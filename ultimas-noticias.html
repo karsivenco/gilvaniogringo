@@ -238,122 +238,58 @@
   </section>
   <!-- Carousel End -->
 </main>
+<!-- Últimas Notícias start -->
+<section class="py-12 md:py-20 bg-[#F3F7F9]" id="Ultimas-noticias">
+  <div class="container mx-auto px-4">
+    <div class="mx-auto max-w-3xl text-center wow animate__animated animate__fadeInUp">
+      <h2 class="mb-4 text-3xl md:text-4xl font-bold text-[#005075]">Últimas Notícias</h2>
+      <p class="text-lg text-gray-600 mb-6">
+        Aqui você fica sabendo em primeira mão as notícias e novidades sobre o trabalho do vereador Gilvani.
+      </p>
 
-  <!-- Script para carregar posts do Blogspot via RSS -->
-  <script>
-    async function carregarNoticias() {
-      const url = "https://api.rss2json.com/v1/api.json?rss_url=https://gilvaniogringo.blogspot.com/feeds/posts/default?alt=rss&_cache=false";
+      <a href="https://gilvaniogringo.com/ultimas-noticias.html" class="text-[#005075] text-lg font-semibold inline-block hover:underline">
+        SAIBA MAIS NOTÍCIAS AQUI
+      </a>
+    </div>
 
-      try {
-        const res = await fetch(url);
-        const data = await res.json();
+    <!-- Container dos posts do blog -->
+    <div id="blog-posts-home" class="my-10 flex justify-center flex-wrap gap-6 px-4"></div>
+  </div>
+</section>
+<!-- Script para carregar os 6 primeiros posts -->
+<script>
+  async function carregarNoticiasHome() {
+    const url = "https://api.rss2json.com/v1/api.json?rss_url=https://gilvaniogringo.blogspot.com/feeds/posts/default?alt=rss&_cache=false";
 
-        const postsContainer = document.getElementById("blog-posts");
-        postsContainer.className = "flex flex-wrap justify-center gap-6";
-        postsContainer.innerHTML = "";
+    try {
+      const res = await fetch(url);
+      const data = await res.json();
 
-        data.items.slice(0, 6).forEach(post => {
-          const postCard = `
-            <div class="w-full max-w-md border rounded-xl shadow-lg p-5 hover:shadow-xl transition text-center bg-white">
-              <h3 class="text-xl font-semibold text-[#005075] mb-2">${post.title}</h3>
-              <p class="text-gray-600 text-sm mb-2">${new Date(post.pubDate).toLocaleDateString()}</p>
-              <p class="text-gray-700 mb-4">${post.description.replace(/<[^>]+>/g, '').slice(0, 120)}...</p>
-              <a href="${post.link}" class="text-[#005075] font-medium hover:underline">Leia mais</a>
-            </div>
-          `;
-          postsContainer.innerHTML += postCard;
-        });
+      const postsContainer = document.getElementById("blog-posts-home");
+      postsContainer.innerHTML = "";
 
-      } catch (error) {
-        document.getElementById("blog-posts").innerHTML = `
-          <p class="text-red-600 text-center">Erro ao carregar notícias. Tente novamente mais tarde.</p>
+      data.items.slice(0, 6).forEach(post => {
+        const postCard = `
+          <div class="w-full max-w-md p-5 text-center bg-white shadow-none">
+            <h3 class="text-xl font-semibold text-[#005075] mb-2">${post.title}</h3>
+            <p class="text-gray-600 text-sm mb-2">${new Date(post.pubDate).toLocaleDateString()}</p>
+            <p class="text-gray-700 mb-4">${post.description.replace(/<[^>]+>/g, '').slice(0, 120)}...</p>
+            <a href="${post.link}" class="text-[#005075] font-medium hover:underline">Leia mais</a>
+          </div>
         `;
-      }
+        postsContainer.innerHTML += postCard;
+      });
+
+    } catch (error) {
+      document.getElementById("blog-posts-home").innerHTML = `
+        <p class="text-red-600 text-center">Erro ao carregar notícias. Tente novamente mais tarde.</p>
+      `;
     }
+  }
 
-    carregarNoticias();
-  </script>
-<!-- Divisor visual -->
-<div class="h-16 bg-gradient-to-r from-[#005075]/10 to-transparent"></div>
-        
-        <!-- Conheça o Gringo Start -->
-        <section class="py-12 md:py-20" id="Conheca-o-Gringo">
-            <div class="container mx-auto px-4">
-                <div class="mx-auto max-w-3xl text-center pb-10 wow animate__animated animate__fadeInUp">
-                    <h2 class="mb-4 text-3xl md:text-4xl font-bold text-[#005075]">Conheça o Gringo</h2>
-                    <p class="text-lg text-gray-600">Com uma história de luta e dedicação, Gringo atua em emergências ambientais, ajuda na recuperação de bairros e desenvolve projetos inovadores para fazer a diferença na sua comunidade!</p>
-                </div>
-                <div class="flex flex-wrap items-center -mx-4">
-                     <div class="w-full lg:w-5/12 px-4 mb-8 lg:mb-0 wow animate__animated animate__fadeInLeft">
-                        <div class="space-y-4">
-                            <a class="accordion-link flex w-full rounded-lg p-4 text-left text-lg font-medium transition-all duration-300 active" data-target="#collapseOne">Apoio em situações de emergência</a>
-                            <a class="accordion-link flex w-full rounded-lg p-4 text-left text-lg font-medium transition-all duration-300" data-target="#collapseTwo">Projetos para melhorar o saneamento básico</a>
-                            <a class="accordion-link flex w-full rounded-lg p-4 text-left text-lg font-medium transition-all duration-300" data-target="#collapseThree">TEMOVEPOA</a>
-                            <a class="accordion-link flex w-full rounded-lg p-4 text-left text-lg font-medium transition-all duration-300" data-target="#collapseFour">A saúde pede socorro</a>
-                        </div>
-                    </div>
-                    <div class="w-full lg:w-7/12 px-4 mt-8 lg:mt-0 wow animate__animated animate__fadeInRight">
-                        <div class="tab-content relative">
-                            <div id="collapseOne" class="tab-pane active">
-                                <div class="flex flex-wrap items-center -mx-2">
-                                    <div class="w-full md:w-7/12 px-2 mb-4 md:mb-0">
-                                        <img src="img/_ATF6132.jpg" class="w-full rounded-lg shadow-lg aspect-square object-cover" alt="Gringo em apoio a emergências" onerror="this.onerror=null;this.src='https://placehold.co/600x400/cccccc/ffffff?text=Imagem+Indisponível';">
-                                    </div>
-                                    <div class="w-full md:w-5/12 px-2">
-                                        <div class="bg-white p-6 rounded-lg shadow-xl">
-                                            <p class="mb-4 text-gray-700">Com uma trajetória marcada por ações diretas, atuei em muitos bairros em momentos críticos, ajudando famílias afetadas por enchentes e crises ambientais.</p>
-                                            <a class="inline-block rounded-full bg-[#004989] py-2 px-5 font-medium text-white shadow-md transition-transform hover:scale-105" href="https://www.instagram.com/reel/DKDIkdjRLxl/?igsh=cDNtcmZ5emc2cGhn" target="_blank">Saiba Mais</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div id="collapseTwo" class="tab-pane hidden">
-                                 <div class="flex flex-wrap items-center -mx-2">
-                                    <div class="w-full md:w-7/12 px-2 mb-4 md:mb-0">
-                                        <img src="img/_FSA8055.jpg" class="w-full rounded-lg shadow-lg aspect-square object-cover" alt="Gringo em projeto de saneamento" onerror="this.onerror=null;this.src='https://placehold.co/600x400/cccccc/ffffff?text=Imagem+Indisponível';">
-                                    </div>
-                                    <div class="w-full md:w-5/12 px-2">
-                                        <div class="bg-white p-6 rounded-lg shadow-xl">
-                                            <p class="mb-4 text-gray-700">Luto por soluções eficientes e duradouras para o saneamento básico, garantindo mais qualidade de vida e segurança para todas as famílias.</p>
-                                            <a class="inline-block rounded-full bg-[#004989] py-2 px-5 font-medium text-white shadow-md transition-transform hover:scale-105" href="https://www.instagram.com/reel/DKspWvpg93X/?igsh=MWhybTRjZG53aTJ3Mw==" target="_blank">Saiba Mais</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div id="collapseThree" class="tab-pane hidden">
-                                <div class="flex flex-wrap items-center -mx-2">
-                                    <div class="w-full md:w-7/12 px-2 mb-4 md:mb-0">
-                                        <img src="img/_JCM4249.jpg" class="w-full rounded-lg shadow-lg aspect-square object-cover" alt="Gringo em projeto de segurança contra enchentes" onerror="this.onerror=null;this.src='https://placehold.co/600x400/cccccc/ffffff?text=Imagem+Indisponível';">
-                                    </div>
-                                    <div class="w-full md:w-5/12 px-2">
-                                        <div class="bg-white p-6 rounded-lg shadow-xl">
-                                            <p class="mb-4 text-gray-700">O trabalhador precisa de uma melhoria de serviço, e isso começa com o meu apoio ao motorista.</p>
-                                            <a class="inline-block rounded-full bg-[#004989] py-2 px-5 font-medium text-white shadow-md transition-transform hover:scale-105" href="https://www.instagram.com/reel/DKcSVQZAaxJ/?igsh=MTJuejVnbDV6c3p3bQ==" target="_blank">Saiba Mais</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div id="collapseFour" class="tab-pane hidden">
-                                <div class="flex flex-wrap items-center -mx-2">
-                                    <div class="w-full md:w-7/12 px-2 mb-4 md:mb-0">
-                                        <img src="img/_JCM7134.jpg" class="w-full rounded-lg shadow-lg aspect-square object-cover" alt="Gringo em comunicação com a população" onerror="this.onerror=null;this.src='https://placehold.co/600x400/cccccc/ffffff?text=Imagem+Indisponível';">
-                                    </div>
-                                    <div class="w-full md:w-5/12 px-2">
-                                        <div class="bg-white p-6 rounded-lg shadow-xl">
-                                            <p class="mb-4 text-gray-700">Estou ao lado de quem mais precisa de saúde e a minha luta é pela solução, uma dor que Porto Alegre encara a cada dia.</p>
-                                            <a class="inline-block rounded-full bg-[#004989] py-2 px-5 font-medium text-white shadow-md transition-transform hover:scale-105" href="https://www.instagram.com/reel/DKKglPAA-cn/?igsh=MXdxNG02eDZkMHd0Nw==" target="_blank">Saiba Mais</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <!-- Conheça o Gringo End -->
-    </main>
-
+  carregarNoticiasHome();
+</script>
+<!-- Últimas Notícias end -->
       <!-- Footer Start -->
     <footer class="bg-gradient-to-r from-[#004989] to-[#3e6f98] py-12 text-white" >
         <div class="container mx-auto px-4">
