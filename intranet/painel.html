@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Intranet do Gringo</title>
+  <!-- Tailwind para o layout -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Ícones Font Awesome -->
+  <script src="https://kit.fontawesome.com/a2e0c4c5fd.js" crossorigin="anonymous"></script>
+  <script>
+    // No carregamento verificamos se a sessão está autenticada consultando check_session.php
+    fetch('check_session.php')
+      .then(res => res.json())
+      .then(data => {
+        if (!data.authenticated) {
+          window.location.href = 'intranet.html';
+        }
+      })
+      .catch(() => {
+        // Em caso de falha na requisição, redireciona para a tela de login
+        window.location.href = 'intranet.html';
+      });
+
+    // Função de logout: chama logout.php para destruir a sessão e redireciona
+    function logout() {
+      fetch('logout.php')
+        .then(() => {
+          window.location.href = 'intranet.html';
+        });
+    }
+  </script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+  <!-- Cabeçalho com a logo e botão de saída -->
+  <header class="bg-[#005075] text-white px-6 py-4 flex justify-between items-center">
+    <div class="flex items-center gap-3">
+      <img src="img/logo.png" alt="Logo do Gringo" class="h-10">
+      <h1 class="text-2xl font-bold">Painel do Gringo</h1>
+    </div>
+    <button onclick="logout()" class="text-white hover:underline">Sair</button>
+  </header>
+
+  <main class="max-w-6xl mx-auto p-6">
+    <!-- Botão para nova postagem -->
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-xl font-bold text-[#005075]">Postagens</h2>
+      <a href="nova-postagem.html" class="bg-[#005075] text-white px-4 py-2 rounded hover:bg-[#003f5c]">+ Nova Postagem</a>
+    </div>
+
+    <!-- Lista de postagens carregada via JavaScript -->
+    <div class="bg-white rounded shadow p-4" id="lista-postagens">
+      <ul class="divide-y divide-gray-200" id="postagens-lista">
+        <!-- As postagens aparecerão aqui -->
+      </ul>
+    </div>
+
+    <!-- Link para a página pública -->
+    <div class="mt-8 text-right">
+      <a href="ultimas-noticias.html" target="_blank" class="text-[#005075] underline text-sm">Ver página pública: Últimas Notícias</a>
+    </div>
+
+    <!-- Redes sociais -->
+    <div class="mt-10">
+      <h3 class="text-lg font-bold text-[#005075] mb-4">Redes Sociais do Gringo</h3>
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm">
+        <a href="https://www.instagram.com/gilvaniogringo/" target="_blank" class="bg-white p-4 rounded shadow hover:shadow-md">
+          <i class="fab fa-instagram text-pink-500 mr-2"></i> @gilvaniogringo
+        </a>
+        <a href="https://www.facebook.com/gilvanigringors" target="_blank" class="bg-white p-4 rounded shadow hover:shadow-md">
+          <i class="fab fa-facebook text-blue-600 mr-2"></i> facebook.com/gilvanigringors
+        </a>
+        <a href="https://x.com/gilvanigringo" target="_blank" class="bg-white p-4 rounded shadow hover:shadow-md">
+          <i class="fab fa-x-twitter text-black mr-2"></i> @gilvanigringo
+        </a>
+        <a href="https://www.tiktok.com/@gilvaniogringo" target="_blank" class="bg-white p-4 rounded shadow hover:shadow-md">
+          <i class="fab fa-tiktok text-black mr-2"></i> @gilvaniogringo
+        </a>
+        <a href="https://www.kwai.com/@gilvaniogringo" target="_blank" class="bg-white p-4 rounded shadow hover:shadow-md">
+          <i class="fas fa-video text-yellow-500 mr-2"></i> Kwai: @gilvaniogringo
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // Carrega as postagens salvas de dados/postagens.json e preenche a lista
+    fetch('dados/postagens.json')
+      .then(res => res.json())
+      .then(data => {
+        const lista = document.getElementById('postagens-lista');
+        if (!Array.isArray(data) || data.length === 0) {
+          lista.innerHTML = '<li class="py-3 text-gray-500">Nenhuma postagem cadastrada ainda.</li>';
+        } else {
+          data.forEach(post => {
+            const li = document.createElement('li');
+            li.className = 'py-3';
+            li.innerHTML = `
+              <p class="font-semibold text-[#005075]">${post.titulo}</p>
+              <span class="text-sm text-gray-500">${new Date(post.data).toLocaleString('pt-BR')}</span><br>
+              ${post.link ? `<a href="${post.link}" class="text-sm text-blue-600 underline" target="_blank">Ver link</a>` : ''}
+            `;
+            lista.appendChild(li);
+          });
+        }
+      })
+      .catch(() => {
+        document.getElementById('postagens-lista').innerHTML = '<li class="py-3 text-red-600">Erro ao carregar postagens.</li>';
+      });
+  </script>
+</body>
+</html>
