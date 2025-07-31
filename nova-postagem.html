@@ -6,11 +6,13 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="styles/editor.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <script>
-    if (localStorage.getItem("logado") !== "sim") {
-      window.location.href = "intranet.html";
+  <?php
+    session_start();
+    if (!isset($_SESSION['usuario'])) {
+      header('Location: intranet.html');
+      exit;
     }
-  </script>
+  ?>
 </head>
 <body class="bg-gray-100 text-gray-800 min-h-screen font-inter">
   <header class="bg-[#004766] shadow-md">
@@ -21,7 +23,7 @@
       </div>
       <div class="flex gap-4">
         <a href="painel.html" class="text-gray-200 hover:underline">Voltar</a>
-        <button onclick="logout()" class="text-white hover:underline">Sair</button>
+        <a href="logout.php" class="text-white hover:underline">Sair</a>
       </div>
     </div>
   </header>
@@ -51,11 +53,5 @@
 
   <script src="scripts/editor.js"></script>
   <script src="scripts/publicar.js"></script>
-  <script>
-    function logout() {
-      localStorage.removeItem("logado");
-      window.location.href = "intranet.html";
-    }
-  </script>
 </body>
 </html>

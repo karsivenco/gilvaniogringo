@@ -28,8 +28,15 @@ $post = [
     'data_formatada' => $data_formatada
 ];
 
+session_start();
+if (!isset($_SESSION['usuario'])) {
+    http_response_code(403);
+    echo 'Acesso negado';
+    exit;
+}
+
 // Caminho do arquivo JSON
-$arquivo = __DIR__ . '/dados/postagens.json';
+$arquivo = __DIR__ . '/dados/posts.json';
 
 // Se o arquivo não existir, cria um vazio
 if (!file_exists($arquivo)) {

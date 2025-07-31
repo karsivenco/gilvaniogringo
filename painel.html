@@ -4,15 +4,13 @@
   <meta charset="UTF-8">
   <title>Intranet do Gringo</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    if (localStorage.getItem("logado") !== "sim") {
-      window.location.href = "intranet.html";
+  <?php
+    session_start();
+    if (!isset($_SESSION['usuario'])) {
+      header('Location: intranet.html');
+      exit;
     }
-    function logout() {
-      localStorage.removeItem("logado");
-      window.location.href = "intranet.html";
-    }
-  </script>
+  ?>
   <script src="https://kit.fontawesome.com/a2e0c4c5fd.js" crossorigin="anonymous"></script>
 </head>
 <body class="bg-gray-100 min-h-screen">
@@ -23,7 +21,7 @@
       <img src="img/logo.png" alt="Logo do Gringo" class="h-10">
       <h1 class="text-2xl font-bold">Painel do Gringo</h1>
     </div>
-    <button onclick="logout()" class="text-white hover:underline">Sair</button>
+    <a href="logout.php" class="text-white hover:underline">Sair</a>
   </header>
 
   <main class="max-w-6xl mx-auto p-6">
@@ -70,7 +68,7 @@
 
   <script>
     // Carregar postagens salvas em JSON
-    fetch('dados/postagens.json')
+    fetch('dados/posts.json')
       .then(res => res.json())
       .then(data => {
         const lista = document.getElementById("postagens-lista");
@@ -84,7 +82,7 @@
               <p class="font-semibold text-[#005075]">${post.titulo}</p>
               <span class="text-sm text-gray-500">${new Date(post.data).toLocaleString('pt-BR')}</span>
               <br>
-              ${post.link ? `<a href="${post.link}" class="text-sm text-blue-600 underline" target="_blank">Ver link</a>` : ''}
+              <a href="ultimas-noticias.html" class="text-sm text-blue-600 underline" target="_blank">Ver no site</a>
             `;
             lista.appendChild(li);
           });

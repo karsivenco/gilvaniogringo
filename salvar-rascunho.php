@@ -28,6 +28,13 @@ $rascunho = [
     'data_formatada' => $data_formatada
 ];
 
+session_start();
+if (!isset($_SESSION['usuario'])) {
+    http_response_code(403);
+    echo 'Acesso negado';
+    exit;
+}
+
 // Caminho do arquivo JSON
 $arquivo = __DIR__ . '/dados/rascunhos.json';
 

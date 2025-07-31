@@ -1,7 +1,7 @@
 // scripts/listar-noticias.js
 
 function carregarNoticias() {
-  fetch('dados/postagens.json')
+  fetch('dados/posts.json')
     .then(res => res.json())
     .then(posts => {
       const container = document.getElementById('blog-posts');
