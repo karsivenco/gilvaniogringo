@@ -44,7 +44,8 @@
     <iframe src="assistente.html" class="mt-12 w-full h-[600px] rounded shadow-md border" title="GringoGPT - Revisão e Sugestão de Texto"></iframe>
   </main>
 
-  <script src="scripts/editor.js">function getEditorSelection() {
+ <script>
+function getEditorSelection() {
   const editor = document.getElementById("editor");
   editor.focus();
   return window.getSelection();
@@ -111,72 +112,59 @@ function uploadImagem(input) {
 
   const formData = new FormData();
   formData.append("imagem", file);
-  fetch("upload-imagem.php", {
-    method: "POST",
-    body: formData
-  })
+  fetch("upload-imagem.php", { method: "POST", body: formData })
     .then(res => res.text())
     .then(url => {
       insertHTMLAtCursor(`<img src="${url}" alt="Imagem" style="max-width:100%;">`);
     })
     .catch(() => alert("Erro ao enviar imagem."));
-}</script>
-  <script src="scripts/publicar.js">function salvarRascunho() {
-  publicar("salvar-rascunho.php");
 }
 
-function publicar(url = "salvar.php") {
-  const titulo = document.getElementById("titulo").value.trim();
-  const link = document.getElementById("link").value.trim();
-  const texto = document.getElementById("editor").innerHTML.trim();
+function salvarRascunho() {
+  salvarPostagem("salvar-rascunho.php");
+}
+
+function salvarPostagem(url) {
+  const titulo = document.getElementById("titulo").value;
+  const link = document.getElementById("link").value;
+  const texto = document.getElementById("editor").innerHTML;
   const agora = new Date();
+  const data = agora.toISOString();
+  const data_formatada = `${agora.toLocaleDateString()} ${agora.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`;
 
-  const dataISO = agora.toISOString();
-  const data_formatada = `${agora.toLocaleDateString()} ${agora.toLocaleTimeString([], {
-    hour: '2-digit',
-    minute: '2-digit'
-  })}`;
-
-  // Validação
-  if (!titulo || !texto || texto === "<br>" || texto === "") {
-    alert("Por favor, preencha o título e escreva algo no texto.");
-    return;
-  }
-
-  const formData = new FormData();
-  formData.append("titulo", titulo);
-  formData.append("link", link);
-  formData.append("texto", texto);
-  formData.append("data", dataISO);
-  formData.append("data_formatada", data_formatada);
+  const payload = {
+    titulo,
+    link,
+    texto,
+    data,
+    data_formatada
+  };
 
   fetch(url, {
     method: "POST",
-    body: formData
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload)
   })
-    .then(response => {
-      if (!response.ok) throw new Error("Erro ao enviar os dados.");
-      return response.text();
-    })
-    .then(res => {
-      console.log("Retorno do servidor:", res);
+  .then(res => {
+    if (res.ok) {
       document.getElementById("mensagem").classList.remove("hidden");
       document.getElementById("form-postagem").reset();
       document.getElementById("editor").innerHTML = "";
       setTimeout(() => {
         window.location.href = "painel.html";
       }, 1500);
-    })
-    .catch(err => {
-      console.error(err);
-      alert("Erro ao salvar a postagem. Verifique se o arquivo PHP está correto e acessível.");
-    });
-}</script>
-  <script>
-    function logout() {
-      localStorage.removeItem("logado");
-      window.location.href = "intranet.html";
+    } else {
+      alert("Erro ao salvar a postagem.");
     }
-  </script>
+  })
+  .catch(() => alert("Erro ao enviar os dados."));
+}
+
+document.getElementById("form-postagem").addEventListener("submit", function(e) {
+  e.preventDefault();
+  salvarPostagem("salvar.php");
+});
+</script>
+
 </body>
 </html>
