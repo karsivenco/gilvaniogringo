@@ -236,10 +236,11 @@
 
     </div>
   </section>
-</main>
   <!-- Carousel End -->
+</main>
 
-   <script>
+  <!-- Script para carregar posts do Blogspot via RSS -->
+  <script>
     async function carregarNoticias() {
       const url = "https://api.rss2json.com/v1/api.json?rss_url=https://gilvaniogringo.blogspot.com/feeds/posts/default?alt=rss&_cache=false";
 
@@ -272,9 +273,86 @@
 
     carregarNoticias();
   </script>
-	<!-- Divisor visual -->
+<!-- Divisor visual -->
 <div class="h-16 bg-gradient-to-r from-[#005075]/10 to-transparent"></div>
-      
+        
+        <!-- Conheça o Gringo Start -->
+        <section class="py-12 md:py-20" id="Conheca-o-Gringo">
+            <div class="container mx-auto px-4">
+                <div class="mx-auto max-w-3xl text-center pb-10 wow animate__animated animate__fadeInUp">
+                    <h2 class="mb-4 text-3xl md:text-4xl font-bold text-[#005075]">Conheça o Gringo</h2>
+                    <p class="text-lg text-gray-600">Com uma história de luta e dedicação, Gringo atua em emergências ambientais, ajuda na recuperação de bairros e desenvolve projetos inovadores para fazer a diferença na sua comunidade!</p>
+                </div>
+                <div class="flex flex-wrap items-center -mx-4">
+                     <div class="w-full lg:w-5/12 px-4 mb-8 lg:mb-0 wow animate__animated animate__fadeInLeft">
+                        <div class="space-y-4">
+                            <a class="accordion-link flex w-full rounded-lg p-4 text-left text-lg font-medium transition-all duration-300 active" data-target="#collapseOne">Apoio em situações de emergência</a>
+                            <a class="accordion-link flex w-full rounded-lg p-4 text-left text-lg font-medium transition-all duration-300" data-target="#collapseTwo">Projetos para melhorar o saneamento básico</a>
+                            <a class="accordion-link flex w-full rounded-lg p-4 text-left text-lg font-medium transition-all duration-300" data-target="#collapseThree">TEMOVEPOA</a>
+                            <a class="accordion-link flex w-full rounded-lg p-4 text-left text-lg font-medium transition-all duration-300" data-target="#collapseFour">A saúde pede socorro</a>
+                        </div>
+                    </div>
+                    <div class="w-full lg:w-7/12 px-4 mt-8 lg:mt-0 wow animate__animated animate__fadeInRight">
+                        <div class="tab-content relative">
+                            <div id="collapseOne" class="tab-pane active">
+                                <div class="flex flex-wrap items-center -mx-2">
+                                    <div class="w-full md:w-7/12 px-2 mb-4 md:mb-0">
+                                        <img src="img/_ATF6132.jpg" class="w-full rounded-lg shadow-lg aspect-square object-cover" alt="Gringo em apoio a emergências" onerror="this.onerror=null;this.src='https://placehold.co/600x400/cccccc/ffffff?text=Imagem+Indisponível';">
+                                    </div>
+                                    <div class="w-full md:w-5/12 px-2">
+                                        <div class="bg-white p-6 rounded-lg shadow-xl">
+                                            <p class="mb-4 text-gray-700">Com uma trajetória marcada por ações diretas, atuei em muitos bairros em momentos críticos, ajudando famílias afetadas por enchentes e crises ambientais.</p>
+                                            <a class="inline-block rounded-full bg-[#004989] py-2 px-5 font-medium text-white shadow-md transition-transform hover:scale-105" href="https://www.instagram.com/reel/DKDIkdjRLxl/?igsh=cDNtcmZ5emc2cGhn" target="_blank">Saiba Mais</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="collapseTwo" class="tab-pane hidden">
+                                 <div class="flex flex-wrap items-center -mx-2">
+                                    <div class="w-full md:w-7/12 px-2 mb-4 md:mb-0">
+                                        <img src="img/_FSA8055.jpg" class="w-full rounded-lg shadow-lg aspect-square object-cover" alt="Gringo em projeto de saneamento" onerror="this.onerror=null;this.src='https://placehold.co/600x400/cccccc/ffffff?text=Imagem+Indisponível';">
+                                    </div>
+                                    <div class="w-full md:w-5/12 px-2">
+                                        <div class="bg-white p-6 rounded-lg shadow-xl">
+                                            <p class="mb-4 text-gray-700">Luto por soluções eficientes e duradouras para o saneamento básico, garantindo mais qualidade de vida e segurança para todas as famílias.</p>
+                                            <a class="inline-block rounded-full bg-[#004989] py-2 px-5 font-medium text-white shadow-md transition-transform hover:scale-105" href="https://www.instagram.com/reel/DKspWvpg93X/?igsh=MWhybTRjZG53aTJ3Mw==" target="_blank">Saiba Mais</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="collapseThree" class="tab-pane hidden">
+                                <div class="flex flex-wrap items-center -mx-2">
+                                    <div class="w-full md:w-7/12 px-2 mb-4 md:mb-0">
+                                        <img src="img/_JCM4249.jpg" class="w-full rounded-lg shadow-lg aspect-square object-cover" alt="Gringo em projeto de segurança contra enchentes" onerror="this.onerror=null;this.src='https://placehold.co/600x400/cccccc/ffffff?text=Imagem+Indisponível';">
+                                    </div>
+                                    <div class="w-full md:w-5/12 px-2">
+                                        <div class="bg-white p-6 rounded-lg shadow-xl">
+                                            <p class="mb-4 text-gray-700">O trabalhador precisa de uma melhoria de serviço, e isso começa com o meu apoio ao motorista.</p>
+                                            <a class="inline-block rounded-full bg-[#004989] py-2 px-5 font-medium text-white shadow-md transition-transform hover:scale-105" href="https://www.instagram.com/reel/DKcSVQZAaxJ/?igsh=MTJuejVnbDV6c3p3bQ==" target="_blank">Saiba Mais</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="collapseFour" class="tab-pane hidden">
+                                <div class="flex flex-wrap items-center -mx-2">
+                                    <div class="w-full md:w-7/12 px-2 mb-4 md:mb-0">
+                                        <img src="img/_JCM7134.jpg" class="w-full rounded-lg shadow-lg aspect-square object-cover" alt="Gringo em comunicação com a população" onerror="this.onerror=null;this.src='https://placehold.co/600x400/cccccc/ffffff?text=Imagem+Indisponível';">
+                                    </div>
+                                    <div class="w-full md:w-5/12 px-2">
+                                        <div class="bg-white p-6 rounded-lg shadow-xl">
+                                            <p class="mb-4 text-gray-700">Estou ao lado de quem mais precisa de saúde e a minha luta é pela solução, uma dor que Porto Alegre encara a cada dia.</p>
+                                            <a class="inline-block rounded-full bg-[#004989] py-2 px-5 font-medium text-white shadow-md transition-transform hover:scale-105" href="https://www.instagram.com/reel/DKKglPAA-cn/?igsh=MXdxNG02eDZkMHd0Nw==" target="_blank">Saiba Mais</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Conheça o Gringo End -->
+    </main>
 
       <!-- Footer Start -->
     <footer class="bg-gradient-to-r from-[#004989] to-[#3e6f98] py-12 text-white" >
