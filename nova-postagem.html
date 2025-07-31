@@ -43,43 +43,13 @@
 
     <iframe src="assistente.html" class="mt-12 w-full h-[600px] rounded shadow-md border" title="GringoGPT - Revisão e Sugestão de Texto"></iframe>
   </main>
-
- <script>
-function getEditorSelection() {
-  const editor = document.getElementById("editor");
-  editor.focus();
-  return window.getSelection();
-}
-
-function insertHTMLAtCursor(html) {
-  const sel = getEditorSelection();
-  if (!sel.rangeCount) return;
-
-  const range = sel.getRangeAt(0);
-  const el = document.createElement("div");
-  el.innerHTML = html;
-  const frag = document.createDocumentFragment();
-  let node, lastNode;
-  while ((node = el.firstChild)) {
-    lastNode = frag.appendChild(node);
-  }
-  range.deleteContents();
-  range.insertNode(frag);
-  if (lastNode) {
-    range.setStartAfter(lastNode);
-    range.collapse(true);
-    sel.removeAllRanges();
-    sel.addRange(range);
-  }
-}
-
+<script>
 function formatText(command) {
-  document.getElementById("editor").focus();
   document.execCommand(command, false, null);
 }
 
 function insertParagraph() {
-  insertHTMLAtCursor("<p>• Novo parágrafo</p>");
+  document.execCommand('insertHTML', false, '<p>• Novo parágrafo</p>');
 }
 
 function customLinkPrompt() {
@@ -87,7 +57,8 @@ function customLinkPrompt() {
   if (!url) return;
   const texto = prompt("Digite o texto que será exibido no link:");
   if (!texto) return;
-  insertHTMLAtCursor(`<a href="${url}" target="_blank" rel="noopener noreferrer">${texto}</a>`);
+  const linkHTML = `<a href="${url}" target="_blank" rel="noopener noreferrer">${texto}</a>`;
+  document.execCommand('insertHTML', false, linkHTML);
 }
 
 function changeFont(font) {
@@ -95,7 +66,7 @@ function changeFont(font) {
 }
 
 function insertEmoji(emoji) {
-  insertHTMLAtCursor(emoji);
+  document.execCommand("insertText", false, emoji);
   document.getElementById("emojiPanel").style.display = "none";
 }
 
@@ -109,60 +80,73 @@ function toggleEmojiPanel() {
 function uploadImagem(input) {
   const file = input.files[0];
   if (!file) return;
-
   const formData = new FormData();
   formData.append("imagem", file);
   fetch("upload-imagem.php", { method: "POST", body: formData })
     .then(res => res.text())
     .then(url => {
-      insertHTMLAtCursor(`<img src="${url}" alt="Imagem" style="max-width:100%;">`);
+      if (url.startsWith("http") || url.includes("/img/")) {
+        document.execCommand("insertHTML", false, `<img src="${url}" alt="Imagem">`);
+      } else {
+        alert("Erro ao enviar imagem: resposta inválida.");
+      }
     })
-    .catch(() => alert("Erro ao enviar imagem."));
+    .catch(err => {
+      console.error(err);
+      alert("Erro ao enviar imagem.");
+    });
 }
 
 function salvarRascunho() {
-  salvarPostagem("salvar-rascunho.php");
+  publicar("salvar-rascunho.php");
 }
 
-function salvarPostagem(url) {
-  const titulo = document.getElementById("titulo").value;
-  const link = document.getElementById("link").value;
-  const texto = document.getElementById("editor").innerHTML;
+function publicar(url = "salvar.php") {
+  const titulo = document.getElementById("titulo").value.trim();
+  const link = document.getElementById("link").value.trim();
+  const texto = document.getElementById("editor").innerHTML.trim();
   const agora = new Date();
   const data = agora.toISOString();
-  const data_formatada = `${agora.toLocaleDateString()} ${agora.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`;
+  const data_formatada = `${agora.toLocaleDateString()} ${agora.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
 
-  const payload = {
-    titulo,
-    link,
-    texto,
-    data,
-    data_formatada
-  };
+  if (!titulo || !texto || texto === "<br>") {
+    alert("Preencha ao menos o título e o conteúdo da postagem.");
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append("titulo", titulo);
+  formData.append("link", link);
+  formData.append("texto", texto);
+  formData.append("data", data);
+  formData.append("data_formatada", data_formatada);
 
   fetch(url, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload)
+    body: formData
   })
   .then(res => {
-    if (res.ok) {
-      document.getElementById("mensagem").classList.remove("hidden");
-      document.getElementById("form-postagem").reset();
-      document.getElementById("editor").innerHTML = "";
-      setTimeout(() => {
-        window.location.href = "painel.html";
-      }, 1500);
-    } else {
-      alert("Erro ao salvar a postagem.");
-    }
+    if (!res.ok) throw new Error(`Erro HTTP: ${res.status}`);
+    return res.text();
   })
-  .catch(() => alert("Erro ao enviar os dados."));
+  .then(resposta => {
+    console.log("Resposta do servidor:", resposta);
+    document.getElementById("mensagem").classList.remove("hidden");
+    document.getElementById("form-postagem").reset();
+    document.getElementById("editor").innerHTML = "";
+    setTimeout(() => {
+      window.location.href = "painel.html";
+    }, 1500);
+  })
+  .catch(err => {
+    console.error("Erro ao salvar:", err);
+    alert("Erro ao salvar a postagem. Verifique se o servidor está acessível ou revise os dados.");
+  });
 }
 
 document.getElementById("form-postagem").addEventListener("submit", function(e) {
   e.preventDefault();
-  salvarPostagem("salvar.php");
+  publicar();
 });
 </script>
 
