@@ -8,6 +8,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body class="bg-gray-100 text-gray-800 min-h-screen font-inter">
+
+  <!-- Header com logo -->
   <header class="bg-[#004766] shadow-md">
     <div class="max-w-7xl mx-auto px-6 py-5 flex justify-between items-center">
       <div class="flex items-center gap-3">
@@ -21,6 +23,7 @@
     </div>
   </header>
 
+  <!-- Formulário de postagem -->
   <main class="max-w-5xl mx-auto px-6 py-10">
     <form id="form-postagem">
       <label class="block text-sm font-medium mb-1">Título da Matéria</label>
@@ -30,10 +33,35 @@
       <input type="text" id="link" class="w-full border rounded px-4 py-2 mb-4">
 
       <label class="block text-sm font-medium mb-1">Texto</label>
-      <div class="toolbar" id="toolbar"></div>
-      <div id="emojiPanel"></div>
+
+      <!-- Toolbar -->
+      <div class="mb-2 space-x-2 text-sm bg-white p-2 rounded border" id="toolbar">
+        <button type="button" onclick="formatText('bold')" class="px-2 py-1 border rounded">Negrito</button>
+        <button type="button" onclick="formatText('italic')" class="px-2 py-1 border rounded">Itálico</button>
+        <button type="button" onclick="formatText('underline')" class="px-2 py-1 border rounded">Sublinhado</button>
+        <button type="button" onclick="insertParagraph()" class="px-2 py-1 border rounded">Parágrafo</button>
+        <button type="button" onclick="customLinkPrompt()" class="px-2 py-1 border rounded">Link</button>
+        <select onchange="changeFont(this.value)" class="border rounded px-1 py-1">
+          <option value="">Fonte padrão</option>
+          <option value="Arial">Arial</option>
+          <option value="Georgia">Georgia</option>
+          <option value="Courier New">Courier New</option>
+          <option value="Times New Roman">Times</option>
+        </select>
+        <button type="button" onclick="toggleEmojiPanel()" class="px-2 py-1 border rounded">😀 Emojis</button>
+        <label class="cursor-pointer px-2 py-1 border rounded bg-gray-200">
+          📷 Imagem
+          <input type="file" onchange="uploadImagem(this)" class="hidden">
+        </label>
+      </div>
+
+      <!-- Painel de Emojis -->
+      <div id="emojiPanel" class="bg-white border rounded p-2 mb-2 hidden max-h-32 overflow-y-auto"></div>
+
+      <!-- Editor -->
       <div id="editor" contenteditable="true" class="mb-4 bg-white border rounded p-4 min-h-[300px]"></div>
 
+      <!-- Botões -->
       <div class="flex gap-4">
         <button type="submit" class="bg-[#005075] text-white px-6 py-2 rounded hover:bg-[#003f5c]">Publicar</button>
         <button type="button" onclick="salvarRascunho()" class="bg-gray-500 text-white px-6 py-2 rounded hover:bg-gray-600">Salvar como Rascunho</button>
@@ -41,8 +69,20 @@
       <p id="mensagem" class="mt-4 text-green-600 hidden">Postagem salva com sucesso!</p>
     </form>
 
+    <!-- Assistente -->
     <iframe src="assistente.html" class="mt-12 w-full h-[600px] rounded shadow-md border" title="GringoGPT - Revisão e Sugestão de Texto"></iframe>
   </main>
+
+  <!-- Scripts -->
+  <script src="scripts/editor.js"></script>
+  <script src="scripts/publicar.js"></script>
+  <script>
+    function logout() {
+      localStorage.removeItem("logado");
+      window.location.href = "intranet.html";
+    }
+  </script>
+
 <script>
 function formatText(command) {
   document.execCommand(command, false, null);
@@ -73,7 +113,7 @@ function insertEmoji(emoji) {
 function toggleEmojiPanel() {
   const panel = document.getElementById("emojiPanel");
   const emojis = "😀 😃 😄 😁 😆 😅 🤣 😂 🙂 🙃 😉 😊 😇 🥰 😍 🤩 😘 😗 ☺️ 😚 😙 😋 😛 😜 🤪 😝 🤑 🤗 🤭 🤫 🤔 🤐 😐 😑 😶 😏 😒 🙄 😬 😌 😔 😪 🤤 😴 😷 🤒 🤕 🤢 🤮 🤧 🥵 🥶 🥴 😵 🤯 🤠 🥳 😎 🤓 🧐 😕 🙁 ☹️ 😮 😯 😲 😳 🥺 😦 😧 😨 😰 😥 😢 😭 😱 😖 😣 😞 😓 😩 😫 😤 😡 😠 🤬 😈 👿 💀 ☠️ 💩 🤡 👹 👺 👻 👽 👾 🤖";
-  panel.innerHTML = emojis.split(" ").map(e => `<span onclick="insertEmoji('${e}')">${e}</span>`).join("");
+  panel.innerHTML = emojis.split(" ").map(e => `<span onclick="insertEmoji('${e}')" style="cursor:pointer; margin:2px;">${e}</span>`).join("");
   panel.style.display = panel.style.display === "block" ? "none" : "block";
 }
 
@@ -86,7 +126,7 @@ function uploadImagem(input) {
     .then(res => res.text())
     .then(url => {
       if (url.startsWith("http") || url.includes("/img/")) {
-        document.execCommand("insertHTML", false, `<img src="${url}" alt="Imagem">`);
+        document.execCommand("insertHTML", false, `<img src="${url}" alt="Imagem" style="max-width:100%;">`);
       } else {
         alert("Erro ao enviar imagem: resposta inválida.");
       }
