@@ -29,7 +29,7 @@ $post = [
 ];
 
 // Caminho do arquivo JSON
-$arquivo = __DIR__ . '/postagens.json';
+$arquivo = __DIR__ . '/dados/postagens.json';
 
 // Se o arquivo não existir, cria um vazio
 if (!file_exists($arquivo)) {

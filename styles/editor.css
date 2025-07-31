@@ -1,0 +1,23 @@
+.toolbar button {
+  background: #e5e7eb;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  border: 1px solid #cbd5e1;
+  font-size: 0.875rem;
+  margin-right: 0.25rem;
+}
+.toolbar button:hover {
+  background: #d1d5db;
+}
+#emojiPanel span {
+  cursor: pointer;
+  padding: 0 2px;
+  font-size: 20px;
+}
+#emojiPanel {
+  display: none;
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  padding: 4px;
+  margin-bottom: 8px;
+}

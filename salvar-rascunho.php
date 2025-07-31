@@ -29,7 +29,7 @@ $rascunho = [
 ];
 
 // Caminho do arquivo JSON
-$arquivo = __DIR__ . '/rascunhos.json';
+$arquivo = __DIR__ . '/dados/rascunhos.json';
 
 // Se o arquivo ainda não existir, cria um vazio
 if (!file_exists($arquivo)) {

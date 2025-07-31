@@ -67,7 +67,7 @@ function uploadImagem(input) {
 
   const formData = new FormData();
   formData.append("imagem", file);
-  fetch("upload-imagem.php", {
+  fetch("upload-image.php", {
     method: "POST",
     body: formData
   })
@@ -77,3 +77,30 @@ function uploadImagem(input) {
     })
     .catch(() => alert("Erro ao enviar imagem."));
 }
+
+function initToolbar() {
+  const toolbar = document.getElementById("toolbar");
+  if (!toolbar) return;
+  toolbar.innerHTML = `
+    <button type="button" data-cmd="bold"><b>B</b></button>
+    <button type="button" data-cmd="insertUnorderedList">• Lista</button>
+    <button type="button" id="emojiBtn">😊</button>
+    <label class="cursor-pointer">
+      📷 <input type="file" id="imgInput" class="hidden" accept="image/*">
+    </label>
+    <button type="button" onclick="customLinkPrompt()">Link</button>
+    <button type="button" onclick="insertParagraph()">Parágrafo</button>
+  `;
+
+  toolbar.addEventListener("click", e => {
+    const cmd = e.target.dataset.cmd;
+    if (cmd) formatText(cmd);
+  });
+  document.getElementById("emojiBtn").addEventListener("click", toggleEmojiPanel);
+  document.getElementById("imgInput").addEventListener("change", function() {
+    uploadImagem(this);
+  });
+}
+
+document.addEventListener("DOMContentLoaded", initToolbar);
+

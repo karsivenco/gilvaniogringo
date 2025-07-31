@@ -36,7 +36,7 @@
   </main>
 
   <script>
-    fetch("postagens.json")
+    fetch("dados/postagens.json")
       .then(res => res.json())
       .then(postagens => {
         const lista = document.getElementById("lista-postagens");
