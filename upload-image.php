@@ -1,7 +1,10 @@
 <?php
-// upload-imagem.php
+// upload-image.php
 
-// Verifica se foi enviado um arquivo
+// Este script recebe um arquivo enviado pelo editor de postagens e grava
+// dentro da pasta 'img'. O caminho resultante é retornado em texto plano
+// para que o front-end possa inserir a imagem na postagem.
+
 if (isset($_FILES['imagem']) && $_FILES['imagem']['error'] === UPLOAD_ERR_OK) {
     $nomeTmp = $_FILES['imagem']['tmp_name'];
     $nomeOriginal = $_FILES['imagem']['name'];
@@ -20,13 +23,13 @@ if (isset($_FILES['imagem']) && $_FILES['imagem']['error'] === UPLOAD_ERR_OK) {
 
     // Move o arquivo para a pasta 'img'
     if (move_uploaded_file($nomeTmp, $caminhoFinal)) {
-        // Retorna o caminho para uso no HTML
+        // Retorna o caminho relativo para uso no HTML
         echo $caminhoFinal;
     } else {
         http_response_code(500);
-        echo "Erro ao mover o arquivo.";
+        echo 'Erro ao mover o arquivo.';
     }
 } else {
     http_response_code(400);
-    echo "Nenhum arquivo enviado ou erro no envio.";
+    echo 'Nenhum arquivo enviado ou erro no envio.';
 }

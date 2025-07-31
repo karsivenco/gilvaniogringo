@@ -1,4 +1,6 @@
-// scripts/listar-noticias.js
+// listar-noticias.js
+// Este script lê o arquivo JSON de postagens gerado pela intranet
+// e preenche a área de notícias públicas com cards resumidos.
 
 function carregarNoticias() {
   fetch('dados/postagens.json')
@@ -10,6 +12,7 @@ function carregarNoticias() {
         container.innerHTML = '<p class="text-gray-600 text-center">Nenhuma notícia encontrada.</p>';
         return;
       }
+      // Gera cards para cada postagem, mostrando título, data e resumo
       container.innerHTML = posts.map(post => {
         const data = new Date(post.data).toLocaleDateString('pt-BR');
         const resumo = post.texto.replace(/<[^>]+>/g, '').slice(0, 120);

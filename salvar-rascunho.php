@@ -1,7 +1,17 @@
 <?php
 // salvar-rascunho.php
 
+session_start();
+
+// Apenas usuários logados podem salvar rascunhos
+if (!isset($_SESSION['usuario'])) {
+    http_response_code(403);
+    echo 'Acesso negado';
+    exit;
+}
+
 // Verifica se os dados necessários foram enviados
+if (
     !isset($_POST['titulo']) ||
     !isset($_POST['texto']) ||
     empty(trim($_POST['titulo'])) ||
@@ -27,15 +37,14 @@ $rascunho = [
     'data_formatada' => $data_formatada
 ];
 
-session_start();
-if (!isset($_SESSION['usuario'])) {
-    http_response_code(403);
-    echo 'Acesso negado';
-    exit;
+// Garante que a pasta 'dados' exista
+$dir = __DIR__ . '/dados';
+if (!is_dir($dir)) {
+    mkdir($dir, 0755, true);
 }
 
 // Caminho do arquivo JSON
-$arquivo = __DIR__ . '/dados/rascunhos.json';
+$arquivo = $dir . '/rascunhos.json';
 
 // Se o arquivo ainda não existir, cria um vazio
 if (!file_exists($arquivo)) {

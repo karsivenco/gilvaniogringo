@@ -1,6 +1,15 @@
 <?php
 // salvar.php
 
+session_start();
+
+// Garante que apenas usuários logados possam salvar postagens
+if (!isset($_SESSION['usuario'])) {
+    http_response_code(403);
+    echo 'Acesso negado';
+    exit;
+}
+
 // Verifica se os dados necessários foram enviados
 if (
     !isset($_POST['titulo']) ||
@@ -15,7 +24,7 @@ if (
 
 $titulo = strip_tags($_POST['titulo']);
 $link = isset($_POST['link']) ? strip_tags($_POST['link']) : '';
-$texto = $_POST['texto']; // Mantemos HTML do conteúdo
+$texto = $_POST['texto']; // Mantemos o HTML do conteúdo
 $data_iso = $_POST['data'] ?? date('c');
 $data_formatada = $_POST['data_formatada'] ?? date('d/m/Y H:i');
 
@@ -28,8 +37,14 @@ $post = [
     'data_formatada' => $data_formatada
 ];
 
+// Garante que a pasta 'dados' exista
+$dir = __DIR__ . '/dados';
+if (!is_dir($dir)) {
+    mkdir($dir, 0755, true);
+}
+
 // Caminho do arquivo JSON
-$arquivo = __DIR__ . '/postagens.json';
+$arquivo = $dir . '/postagens.json';
 
 // Se o arquivo não existir, cria um vazio
 if (!file_exists($arquivo)) {
