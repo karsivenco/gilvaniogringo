@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Login - Intranet</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Gradiente de fundo */
+    body {
+      background: linear-gradient(to right, #dbeafe, #eff6ff);
+    }
+    /* Texto animado */
+    .water-text {
+      font-weight: bold;
+      font-size: 1.125rem;
+      color: #005075;
+      animation: wave 2.5s infinite linear;
+      display: inline-block;
+    }
+    @keyframes wave {
+      0% { transform: translateY(0); }
+      25% { transform: translateY(-2px); }
+      50% { transform: translateY(2px); }
+      75% { transform: translateY(-1px); }
+      100% { transform: translateY(0); }
+    }
+    .logo-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+    .logo-img {
+      height: 80px;
+      animation: float 3s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+  </style>
+</head>
+<body class="flex items-center justify-center min-h-screen">
+  <div class="bg-white p-8 rounded-xl shadow-lg w-full max-w-sm">
+    <div class="logo-container">
+      <!-- Atualize o caminho da logo conforme necessário. Aqui usamos a pasta img local -->
+      <img src="img/logo.png" alt="Logo" class="logo-img mb-2">
+      <span class="water-text">@gilvaniogringo</span>
+    </div>
+    <h2 class="text-xl font-bold text-center mb-6 text-[#005075]">Intranet do Gringo</h2>
+    <form method="post" action="login.php">
+      <label class="block mb-2 text-sm font-medium text-gray-700">Usuário:</label>
+      <input type="text" id="usuario" name="usuario" class="w-full p-2 border rounded mb-4" required>
+      <label class="block mb-2 text-sm font-medium text-gray-700">Senha:</label>
+      <input type="password" id="senha" name="senha" class="w-full p-2 border rounded mb-4" required>
+      <button type="submit" class="w-full bg-[#005075] text-white py-2 rounded hover:bg-[#003f5c]">Entrar</button>
+    </form>
+    <p id="erro" class="text-red-600 mt-4 text-sm text-center hidden">Usuário ou senha incorretos.</p>
+  </div>
+  <script>
+    // Exibe erro se houver o parâmetro ?erro na URL
+    window.addEventListener('DOMContentLoaded', () => {
+      const params = new URLSearchParams(window.location.search);
+      if (params.has('erro')) {
+        document.getElementById('erro').classList.remove('hidden');
+      }
+    });
+  </script>
+</body>
+</html>
