@@ -6,7 +6,9 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
-<body class="bg-gray-100 text-gray-800 font-inter min-h-screen">
+<body class="bg-gray-100 text-gray-800 font-inter min-h-screen flex flex-col">
+
+  <!-- Header -->
   <header class="bg-[#004766] shadow-md">
     <div class="max-w-7xl mx-auto px-6 py-5 flex justify-between items-center">
       <div class="flex items-center gap-3">
@@ -20,13 +22,29 @@
     </div>
   </header>
 
-  <main class="max-w-5xl mx-auto px-6 py-10">
+  <!-- Conteúdo -->
+  <main class="flex-1 max-w-5xl mx-auto px-6 py-10">
     <h2 class="text-2xl font-bold text-[#005075] mb-6">Postagens Recentes</h2>
     <div id="postagens" class="space-y-6">
       <!-- Cards gerados dinamicamente aqui -->
     </div>
   </main>
 
+  <!-- Rodapé com links do Gringo -->
+  <footer class="bg-[#004766] py-6 mt-8">
+    <div class="max-w-7xl mx-auto px-6 text-center text-white">
+      <p class="mb-2">Acesse também as redes do Gringo:</p>
+      <div class="flex justify-center space-x-4 text-white text-lg">
+        <a href="https://gilvaniogringo.com" target="_blank" class="hover:underline">Site Oficial</a>
+        <a href="https://www.instagram.com/gilvaniogringo" target="_blank" class="hover:underline">Instagram</a>
+        <a href="https://www.facebook.com/gilvanigringors" target="_blank" class="hover:underline">Facebook</a>
+        <a href="https://www.tiktok.com/@gilvaniogringo" target="_blank" class="hover:underline">TikTok</a>
+        <a href="https://www.youtube.com/@GilvanioGringo" target="_blank" class="hover:underline">YouTube</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Script -->
   <script>
     async function carregarPostagens() {
       try {
@@ -42,7 +60,7 @@
           return;
         }
 
-        postagens.forEach((post, index) => {
+        postagens.forEach((post) => {
           const card = document.createElement('div');
           card.className = 'bg-white rounded shadow p-6';
 
@@ -62,7 +80,6 @@
     }
 
     function logout() {
-      // Lógica futura de logout (se necessário)
       alert("Você saiu da intranet.");
       window.location.href = "intranet.html";
     }
