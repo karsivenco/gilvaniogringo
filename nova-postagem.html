@@ -55,7 +55,6 @@
     <iframe src="assistente.html" class="mt-12 w-full h-[600px] rounded shadow-md border" title="GringoGPT - Revisão e Sugestão de Texto"></iframe>
   </main>
 
-
 <script>
 function formatText(command) {
   document.execCommand(command, false, null);
@@ -146,7 +145,8 @@ function publicar(url = "salvar.php") {
     document.getElementById("form-postagem").reset();
     document.getElementById("editor").innerHTML = "";
     setTimeout(() => {
-      window.location.href = "painel.html";
+      window.open("ultimas-noticias3.html", "_blank"); // nova aba com a notícia
+      window.location.href = "painel.html"; // redireciona painel
     }, 1500);
   })
   .catch(err => {
