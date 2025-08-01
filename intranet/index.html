@@ -8,6 +8,7 @@
     body {
       background: linear-gradient(to right, #dbeafe, #eff6ff);
     }
+
     .water-text {
       font-weight: bold;
       font-size: 1.125rem;
@@ -15,6 +16,7 @@
       animation: wave 2.5s infinite linear;
       display: inline-block;
     }
+
     @keyframes wave {
       0% { transform: translateY(0); }
       25% { transform: translateY(-2px); }
@@ -22,16 +24,19 @@
       75% { transform: translateY(-1px); }
       100% { transform: translateY(0); }
     }
+
     .logo-container {
       display: flex;
       flex-direction: column;
       align-items: center;
       margin-bottom: 1.5rem;
     }
+
     .logo-img {
       height: 80px;
       animation: float 3s ease-in-out infinite;
     }
+
     @keyframes float {
       0%, 100% { transform: translateY(0); }
       50% { transform: translateY(-5px); }
@@ -39,47 +44,48 @@
   </style>
 </head>
 <body class="flex items-center justify-center min-h-screen">
+
   <div class="bg-white p-8 rounded-xl shadow-lg w-full max-w-sm">
     <div class="logo-container">
-      <img src="img/logo.png" alt="Logo" class="logo-img mb-2">
+      <img src="img/logop.png" alt="Logo Gringo" class="logo-img mb-2">
       <span class="water-text">@gilvaniogringo</span>
     </div>
+
     <h2 class="text-xl font-bold text-center mb-6 text-[#005075]">Intranet do Gringo</h2>
-    
-    <form id="loginForm">
+
+    <form onsubmit="return login()">
       <label class="block mb-2 text-sm font-medium text-gray-700">Usuário:</label>
-      <input type="text" id="usuario" name="usuario" class="w-full p-2 border rounded mb-4" required>
+      <input type="text" id="usuario" class="w-full p-2 border rounded mb-4" required>
 
       <label class="block mb-2 text-sm font-medium text-gray-700">Senha:</label>
-      <input type="password" id="senha" name="senha" class="w-full p-2 border rounded mb-2" required>
+      <input type="password" id="senha" class="w-full p-2 border rounded mb-4" required>
 
       <button type="submit" class="w-full bg-[#005075] text-white py-2 rounded hover:bg-[#003f5c]">Entrar</button>
     </form>
 
     <p id="erro" class="text-red-600 mt-4 text-sm text-center hidden">Usuário ou senha incorretos.</p>
-
-    <div class="mt-4 text-center">
-      <a href="esqueci-senha.html" class="text-sm text-blue-600 hover:underline">Esqueci minha senha</a>
-    </div>
   </div>
 
   <script>
-    document.getElementById('loginForm').addEventListener('submit', function(event) {
-      event.preventDefault();
+    function login() {
+      const usuarios = {
+        "graziele.albuquerque": "Gringo1975",
+        "gabriel.amaral": "Gringo1975"
+      };
 
-      const usuario = document.getElementById('usuario').value.trim().toLowerCase();
-      const senha = document.getElementById('senha').value;
+      const user = document.getElementById("usuario").value.trim();
+      const senha = document.getElementById("senha").value;
 
-      const usuariosValidos = ['graziele.albuquerque', 'gabriel.amaral'];
-      const senhaValida = 'Gringo1975';
-
-      if (usuariosValidos.includes(usuario) && senha === senhaValida) {
-        console.log('Login autorizado, redirecionando...');
-        window.location.href = 'https://gilvaniogringo.com/intranet/painel.html'; // Certifique-se que painel.html está na mesma pasta
+      if (usuarios[user] === senha) {
+        localStorage.setItem("logado", "sim");
+        window.location.href = "painel.html";
+        return false;
       } else {
-        document.getElementById('erro').classList.remove('hidden');
+        document.getElementById("erro").classList.remove("hidden");
+        return false;
       }
-    });
+    }
   </script>
+
 </body>
 </html>
