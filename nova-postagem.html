@@ -56,7 +56,7 @@
   </main>
 
 
-  <script>
+<script>
 function formatText(command) {
   document.execCommand(command, false, null);
 }
@@ -74,23 +74,20 @@ function customLinkPrompt() {
   document.execCommand('insertHTML', false, linkHTML);
 }
 
-function changeFont(font) {
-  if (font) document.execCommand("fontName", false, font);
+function toggleEmojiPanel() {
+  const panel = document.getElementById("emojiPanel");
+  const emojis = "😀 😃 😄 😁 😆 😅 🤣 😂 🙂 🙃 😉 😊 😇 🥰 😍 🤩 😘 😗 ☺️ 😚 😙 😋 😛 😜 🤪 😝 🤑 🤗 🤭 🤫 🤔 🤐 😐 😑 😶 😏 😒 🙄 😬 😌 😔 😪 🤤 😴 😷 🤒 🤕 🤢 🤮 🤧 🥵 🥶 🥴 😵 🤯 🤠 🥳 😎 🤓 🧐 😕 🙁 ☹️ 😮 😯 😲 😳 🥺 😦 😧 😨 😰 😥 😢 😭 😱 😖 😣 😞 😓 😩 😫 😤 😡 😠 🤬 😈 👿 💀 ☠️ 💩 🤡 👹 👺 👻 👽 👾 🤖";
+  panel.innerHTML = emojis.split(" ").map(e => `<span onclick="insertEmoji('${e}')" style="cursor:pointer; font-size:20px; margin:2px;">${e}</span>`).join("");
+  panel.style.display = panel.style.display === "block" ? "none" : "block";
 }
 
 function insertEmoji(emoji) {
+  const editor = document.getElementById("editor");
+  editor.focus();
   document.execCommand("insertText", false, emoji);
   document.getElementById("emojiPanel").style.display = "none";
 }
 
-function toggleEmojiPanel() {
-  const panel = document.getElementById("emojiPanel");
-  const emojis = "😀 😃 😄 😁 😆 😅 🤣 😂 🙂 🙃 😉 😊 😇 🥰 😍 🤩 😘 😗 ☺️ 😚 😙 😋 😛 😜 🤪 😝 🤑 🤗 🤭 🤫 🤔 🤐 😐 😑 😶 😏 😒 🙄 😬 😌 😔 😪 🤤 😴 😷 🤒 🤕 🤢 🤮 🤧 🥵 🥶 🥴 😵 🤯 🤠 🥳 😎 🤓 🧐 😕 🙁 ☹️ 😮 😯 😲 😳 🥺 😦 😧 😨 😰 😥 😢 😭 😱 😖 😣 😞 😓 😩 😫 😤 😡 😠 🤬 😈 👿 💀 ☠️ 💩 🤡 👹 👺 👻 👽 👾 🤖";
-  panel.innerHTML = emojis.split(" ").map(e => `<span onclick="insertEmoji('${e}')" style="cursor:pointer; margin:2px;">${e}</span>`).join("");
-  panel.style.display = panel.style.display === "block" ? "none" : "block";
-}
-</script>
-  <script>
 function uploadImagem(input) {
   const file = input.files[0];
   if (!file) return;
