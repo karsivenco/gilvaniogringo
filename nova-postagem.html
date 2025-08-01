@@ -55,7 +55,8 @@
     <iframe src="assistente.html" class="mt-12 w-full h-[600px] rounded shadow-md border" title="GringoGPT - Revisão e Sugestão de Texto"></iframe>
   </main>
 
-<script>
+
+  <script>
 function formatText(command) {
   document.execCommand(command, false, null);
 }
@@ -73,6 +74,10 @@ function customLinkPrompt() {
   document.execCommand('insertHTML', false, linkHTML);
 }
 
+function changeFont(font) {
+  if (font) document.execCommand("fontName", false, font);
+}
+
 function insertEmoji(emoji) {
   document.execCommand("insertText", false, emoji);
   document.getElementById("emojiPanel").style.display = "none";
@@ -84,7 +89,8 @@ function toggleEmojiPanel() {
   panel.innerHTML = emojis.split(" ").map(e => `<span onclick="insertEmoji('${e}')" style="cursor:pointer; margin:2px;">${e}</span>`).join("");
   panel.style.display = panel.style.display === "block" ? "none" : "block";
 }
-
+</script>
+  <script>
 function uploadImagem(input) {
   const file = input.files[0];
   if (!file) return;
