@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
-  <title>Login - Intranet</title>
+  <title>Login - Intranet do Gringo</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     body {
@@ -45,14 +45,19 @@
       <span class="water-text">@gilvaniogringo</span>
     </div>
     <h2 class="text-xl font-bold text-center mb-6 text-[#005075]">Intranet do Gringo</h2>
+    
     <form id="loginForm">
       <label class="block mb-2 text-sm font-medium text-gray-700">Usuário:</label>
       <input type="text" id="usuario" name="usuario" class="w-full p-2 border rounded mb-4" required>
+
       <label class="block mb-2 text-sm font-medium text-gray-700">Senha:</label>
       <input type="password" id="senha" name="senha" class="w-full p-2 border rounded mb-2" required>
+
       <button type="submit" class="w-full bg-[#005075] text-white py-2 rounded hover:bg-[#003f5c]">Entrar</button>
     </form>
+
     <p id="erro" class="text-red-600 mt-4 text-sm text-center hidden">Usuário ou senha incorretos.</p>
+
     <div class="mt-4 text-center">
       <a href="esqueci-senha.html" class="text-sm text-blue-600 hover:underline">Esqueci minha senha</a>
     </div>
@@ -69,7 +74,8 @@
       const senhaValida = 'Gringo1975';
 
       if (usuariosValidos.includes(usuario) && senha === senhaValida) {
-        window.location.href = 'painel.html'; // Certifique-se de que painel.html está no mesmo diretório
+        console.log('Login autorizado, redirecionando...');
+        window.location.href = 'painel.html'; // Certifique-se que painel.html está na mesma pasta
       } else {
         document.getElementById('erro').classList.remove('hidden');
       }
