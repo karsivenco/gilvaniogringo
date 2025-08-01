@@ -96,10 +96,10 @@ function uploadImagem(input) {
     .then(res => res.text())
     .then(url => {
       if (url.startsWith("http") || url.includes("/img/")) {
-        document.execCommand("insertHTML", false, `<img src="${url}" alt="Imagem" style="max-width:100%;">`);
+      document.execCommand("insertHTML", false, `<img src="${url}" alt="Imagem" style="max-width:100%;">`);
       } else {
-        alert("Erro ao enviar imagem: resposta inválida.");
-      }
+      alert("Erro ao enviar imagem: resposta inválida.");
+    }
     })
     .catch(err => {
       console.error(err);
