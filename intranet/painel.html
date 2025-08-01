@@ -2,64 +2,41 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
-  <title>Painel – Intranet do Gringo</title>
-  <!-- Tailwind para o layout -->
+  <title>Intranet do Gringo</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Ícones Font Awesome -->
-  <script src="https://kit.fontawesome.com/a2e0c4c5fd.js" crossorigin="anonymous"></script>
   <script>
-    // Verifica se o usuário está autenticado ao carregar a página
-    fetch('check_session.php')
-      .then(res => res.json())
-      .then(data => {
-        if (!data.authenticated) {
-          window.location.href = 'index.html';
-        }
-      })
-      .catch(() => {
-        window.location.href = 'index.html';
-      });
-
-    // Faz o logout destruindo a sessão e redirecionando para o login
+    if (localStorage.getItem("logado") !== "sim") {
+      window.location.href = "intranet.html";
+    }
     function logout() {
-      fetch('logout.php')
-        .then(() => {
-          window.location.href = 'index.html';
-        });
+      localStorage.removeItem("logado");
+      window.location.href = "intranet.html";
     }
   </script>
 </head>
 <body class="bg-gray-100 min-h-screen">
-  <!-- Cabeçalho com logo e botão de saída -->
+
+  <!-- Header -->
   <header class="bg-[#005075] text-white px-6 py-4 flex justify-between items-center">
-    <div class="flex items-center gap-3">
-      <!-- O logotipo pode ser substituído por sua imagem real dentro da pasta img -->
-      <img src="img/logo.png" alt="Logo do Gringo" class="h-10">
-      <h1 class="text-2xl font-bold">Painel do Gringo</h1>
-    </div>
+    <h1 class="text-2xl font-bold">Painel do Gringo</h1>
     <button onclick="logout()" class="text-white hover:underline">Sair</button>
   </header>
 
   <main class="max-w-6xl mx-auto p-6">
-    <!-- Botão para criar nova postagem -->
+    <!-- Nova postagem -->
     <div class="flex justify-between items-center mb-6">
       <h2 class="text-xl font-bold text-[#005075]">Postagens</h2>
       <a href="nova-postagem.html" class="bg-[#005075] text-white px-4 py-2 rounded hover:bg-[#003f5c]">+ Nova Postagem</a>
     </div>
 
-    <!-- Lista de postagens -->
+    <!-- Lista real de postagens -->
     <div class="bg-white rounded shadow p-4" id="lista-postagens">
       <ul class="divide-y divide-gray-200" id="postagens-lista">
-        <!-- As postagens serão inseridas aqui via JavaScript -->
+        <!-- Conteúdo injetado via JavaScript -->
       </ul>
     </div>
 
-    <!-- Link para a página pública de notícias -->
-    <div class="mt-8 text-right">
-      <a href="../ultimas-noticias.html" target="_blank" class="text-[#005075] underline text-sm">Ver página pública: Últimas Notícias</a>
-    </div>
-
-    <!-- Redes sociais -->
+    <!-- Redes Sociais -->
     <div class="mt-10">
       <h3 class="text-lg font-bold text-[#005075] mb-4">Redes Sociais do Gringo</h3>
       <div class="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm">
@@ -82,30 +59,40 @@
     </div>
   </main>
 
+  <!-- Script para carregar postagens -->
   <script>
-    // Carrega as postagens existentes de dados/postagens.json
-    fetch('dados/postagens.json')
+    fetch("dados/postagens.json")
       .then(res => res.json())
       .then(data => {
-        const lista = document.getElementById('postagens-lista');
-        if (!Array.isArray(data) || data.length === 0) {
+        const lista = document.getElementById("postagens-lista");
+        if (!data || data.length === 0) {
           lista.innerHTML = '<li class="py-3 text-gray-500">Nenhuma postagem cadastrada ainda.</li>';
           return;
         }
-        data.forEach(post => {
-          const li = document.createElement('li');
-          li.className = 'py-3';
+
+        // Ordena por data (mais recente primeiro)
+        data.reverse().forEach(post => {
+          const li = document.createElement("li");
+          li.className = "py-4";
+
+          const textoLimpo = post.texto.replace(/<[^>]+>/g, '').slice(0, 120) + '...';
+
           li.innerHTML = `
-            <p class="font-semibold text-[#005075]">${post.titulo}</p>
-            <span class="text-sm text-gray-500">${new Date(post.data).toLocaleString('pt-BR')}</span><br>
-            ${post.link ? `<a href="${post.link}" class="text-sm text-blue-600 underline" target="_blank">Ver link</a>` : ''}
+            <h4 class="text-lg font-semibold text-[#004766]">${post.titulo}</h4>
+            <p class="text-sm text-gray-500">${post.data_formatada}</p>
+            ${post.link ? `<p><a href="${post.link}" target="_blank" class="text-blue-600 underline text-sm">🔗 Ver link relacionado</a></p>` : ''}
+            <p class="mt-2 text-gray-700 text-sm">${textoLimpo}</p>
           `;
           lista.appendChild(li);
         });
       })
-      .catch(() => {
-        document.getElementById('postagens-lista').innerHTML = '<li class="py-3 text-red-600">Erro ao carregar postagens.</li>';
+      .catch(err => {
+        document.getElementById("postagens-lista").innerHTML = '<li class="py-3 text-red-600">Erro ao carregar postagens.</li>';
+        console.error("Erro ao carregar JSON:", err);
       });
   </script>
+
+  <!-- Font Awesome para ícones -->
+  <script src="https://kit.fontawesome.com/a2e0c4c5fd.js" crossorigin="anonymous"></script>
 </body>
 </html>
