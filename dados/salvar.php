@@ -1,46 +1,51 @@
 <?php
-// Caminho para o arquivo de postagens
+header("Content-Type: application/json");
+
+// Caminho do arquivo onde as postagens serão salvas
 $arquivo = 'dados/postagens.json';
 
-// Garante que o diretório existe
+// Garante que o diretório exista
 if (!file_exists('dados')) {
     mkdir('dados', 0777, true);
 }
 
-// Coleta os dados enviados via POST
+// Coleta os dados do POST
 $titulo = $_POST['titulo'] ?? '';
 $link = $_POST['link'] ?? '';
 $texto = $_POST['texto'] ?? '';
 $data = $_POST['data'] ?? '';
 $data_formatada = $_POST['data_formatada'] ?? '';
 
-// Verifica campos obrigatórios
+// Verificação básica
 if (empty($titulo) || empty($texto)) {
     http_response_code(400);
-    echo "Título e conteúdo são obrigatórios.";
+    echo json_encode(["erro" => "Título e conteúdo são obrigatórios."]);
     exit;
 }
 
-// Cria o novo item
+// Monta a nova postagem
 $nova_postagem = [
-    'titulo' => $titulo,
-    'link' => $link,
-    'texto' => $texto,
-    'data' => $data,
-    'data_formatada' => $data_formatada
+    "titulo" => $titulo,
+    "link" => $link,
+    "texto" => $texto,
+    "data" => $data,
+    "data_formatada" => $data_formatada
 ];
 
-// Lê o conteúdo atual
-$lista = [];
+// Lê o conteúdo atual do arquivo
+$postagens = [];
 if (file_exists($arquivo)) {
-    $json = file_get_contents($arquivo);
-    $lista = json_decode($json, true) ?? [];
+    $conteudo = file_get_contents($arquivo);
+    $postagens = json_decode($conteudo, true);
+    if (!is_array($postagens)) {
+        $postagens = [];
+    }
 }
 
-// Adiciona no topo
-array_unshift($lista, $nova_postagem);
+// Adiciona nova postagem no topo
+array_unshift($postagens, $nova_postagem);
 
-// Salva novamente
-file_put_contents($arquivo, json_encode($lista, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+// Salva o JSON novamente
+file_put_contents($arquivo, json_encode($postagens, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
 
-echo "Postagem salva com sucesso.";
+echo json_encode(["sucesso" => "Postagem salva com sucesso."]);
