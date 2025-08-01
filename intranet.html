@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Login - Intranet do Gringo</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background: linear-gradient(to right, #dbeafe, #eff6ff);
+    }
+
+    .water-text {
+      font-weight: bold;
+      font-size: 1.25rem;
+      color: #005075;
+      animation: wave 2.5s infinite linear;
+      display: inline-block;
+    }
+
+    @keyframes wave {
+      0% { transform: translateY(0); }
+      25% { transform: translateY(-2px); }
+      50% { transform: translateY(2px); }
+      75% { transform: translateY(-1px); }
+      100% { transform: translateY(0); }
+    }
+  </style>
+</head>
+<body class="flex items-center justify-center h-screen">
+
+  <div class="bg-white p-8 rounded shadow-md w-full max-w-sm text-center">
+    <img src="img/logop.png" alt="@gilvaniogringo" class="mx-auto h-24 mb-4 rounded-full shadow">
+    <p class="water-text mb-6">@gilvaniogringo</p>
+
+    <form onsubmit="return login()">
+      <label class="block mb-2 text-sm font-medium text-gray-700 text-left">Usuário:</label>
+      <input type="text" id="usuario" class="w-full p-2 border rounded mb-4" required>
+
+      <label class="block mb-2 text-sm font-medium text-gray-700 text-left">Senha:</label>
+      <input type="password" id="senha" class="w-full p-2 border rounded mb-4" required>
+
+      <button type="submit" class="w-full bg-[#005075] text-white py-2 rounded hover:bg-[#003f5c]">Entrar</button>
+    </form>
+
+    <p id="erro" class="text-red-600 mt-4 text-sm hidden">Usuário ou senha incorretos.</p>
+  </div>
+
+  <script>
+    function login() {
+      const usuarios = {
+        "graziele.albuquerque": "Gringo1975",
+        "gabriel.amaral": "Gringo1975"
+      };
+
+      const user = document.getElementById("usuario").value.trim();
+      const senha = document.getElementById("senha").value;
+
+      if (usuarios[user] === senha) {
+        localStorage.setItem("logado", "sim");
+        window.location.href = "painel.html";
+        return false;
+      } else {
+        document.getElementById("erro").classList.remove("hidden");
+        return false;
+      }
+    }
+  </script>
+
+</body>
+</html>
