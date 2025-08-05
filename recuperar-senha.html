@@ -46,7 +46,6 @@
     document.getElementById("recuperarForm").addEventListener("submit", function(e) {
       e.preventDefault();
       const usuario = document.getElementById("usuario").value.trim();
-
       fetch("recuperar-senha.php", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
