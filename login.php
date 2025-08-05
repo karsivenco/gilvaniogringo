@@ -21,7 +21,14 @@ if (isset($usuarios[$usuario]) && $usuarios[$usuario]['senha'] === $senha) {
   $_SESSION['usuario'] = $usuario;
   $_SESSION['nome'] = $usuarios[$usuario]['nome'];
   $_SESSION['email'] = $usuarios[$usuario]['email'];
-  header("Location: painel.html");
+
+  // Armazenar também no sessionStorage com JS
+  echo "<script>
+    sessionStorage.setItem('usuario', '" . addslashes($usuario) . "');
+    sessionStorage.setItem('nome', '" . addslashes($usuarios[$usuario]['nome']) . "');
+    sessionStorage.setItem('email', '" . addslashes($usuarios[$usuario]['email']) . "');
+    window.location.href = 'painel.html';
+  </script>";
   exit;
 } else {
   $_SESSION['erro'] = "Usuário ou senha incorretos.";
