@@ -32,7 +32,7 @@
       <a href="/index.html" class="hover:underline">@gilvaniogringo</a>
     </p>
 
-    <form method="POST" action="recuperar-senha.php" novalidate>
+    <form method="POST" action="recuperar-senha.php">
       <h2 class="text-lg font-bold mb-4 text-[#005075]">Recuperar Senha</h2>
 
       <label for="usuario" class="block mb-2 text-sm font-medium text-gray-700 text-left">
@@ -55,4 +55,20 @@
         Enviar senha por e-mail
       </button>
 
-      <p cla
+      <p class="text-sm mt-4 text-right">
+        <a href="intranet.html" class="text-pink-600 hover:underline">Voltar ao login</a>
+      </p>
+    </form>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('status') === 'ok') {
+      alert('✅ Senha enviada com sucesso para seu e-mail!');
+    }
+    if (params.get('status') === 'erro') {
+      alert('❌ Erro ao enviar o e-mail. Verifique o usuário.');
+    }
+  </script>
+</body>
+</html>
