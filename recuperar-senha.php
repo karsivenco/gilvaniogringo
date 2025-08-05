@@ -1,8 +1,9 @@
 <?php
+session_start();
+
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-// Ajuste o caminho conforme sua estrutura de pastas
 require 'PHPMailer/src/Exception.php';
 require 'PHPMailer/src/PHPMailer.php';
 require 'PHPMailer/src/SMTP.php';
@@ -32,7 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $mail->Host = 'smtp.gmail.com';
             $mail->SMTPAuth = true;
             $mail->Username = 'gilvaniagenda@gmail.com';       // SEU E-MAIL
-            $mail->Password = 'SUA_SENHA_DE_APLICATIVO';        // SENHA DE APLICATIVO GERADA NO GMAIL
+            $mail->Password = 'SUA_SENHA_DE_APLICATIVO';        // SENHA DE APLICATIVO
             $mail->SMTPSecure = 'tls';
             $mail->Port = 587;
 
@@ -52,16 +53,21 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
             $mail->send();
 
-            echo "<script>alert('Senha enviada para o e-mail cadastrado!'); window.location.href='intranet.html';</script>";
+            $_SESSION['msg_sucesso'] = "Senha enviada com sucesso para o e-mail cadastrado!";
+            header("Location: recuperar-senha.html");
+            exit;
 
         } catch (Exception $e) {
-            echo "<script>alert('Erro ao enviar o e-mail. Detalhes: {$mail->ErrorInfo}'); window.history.back();</script>";
+            $_SESSION['msg_erro'] = "Erro ao enviar o e-mail: {$mail->ErrorInfo}";
+            header("Location: recuperar-senha.html");
+            exit;
         }
     } else {
-        echo "<script>alert('Usuário não encontrado.'); window.history.back();</script>";
+        $_SESSION['msg_erro'] = "Usuário não encontrado.";
+        header("Location: recuperar-senha.html");
+        exit;
     }
 } else {
-    // Se acessar diretamente sem POST
     header("Location: recuperar-senha.html");
     exit;
 }
