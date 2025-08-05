@@ -7,42 +7,50 @@ if (!isset($_SESSION['usuario'])) {
     exit;
 }
 
-// Pega dados do formulário
+// Dados enviados via POST
 $usuario = trim($_POST['usuario'] ?? '');
 $nome = trim($_POST['nome'] ?? '');
 $email = trim($_POST['email'] ?? '');
 
-// Validação básica
+// Validação simples
 if ($usuario === '' || $nome === '' || $email === '') {
-    // Redirecionar com erro (pode melhorar depois)
     header("Location: perfil.php?erro=1");
     exit;
 }
 
-// Monta array de dados para salvar
-$dadosPerfil = [
+// Caminho do banco de dados
+$arquivo = __DIR__ . '/dados/perfis.json';
+
+// Verifica se arquivo existe; senão cria array vazio
+if (file_exists($arquivo)) {
+    $json = file_get_contents($arquivo);
+    $perfis = json_decode($json, true);
+    if (!is_array($perfis)) {
+        $perfis = [];
+    }
+} else {
+    $perfis = [];
+}
+
+// Atualiza ou cria o perfil
+$perfis[$usuario] = [
     'usuario' => $usuario,
     'nome' => $nome,
-    'email' => $email,
+    'email' => $email
 ];
 
-// Caminho do arquivo JSON para o usuário (ex: dados/usuario.json)
-$caminhoArquivo = __DIR__ . "/dados/{$usuario}.json";
-
-// Salva os dados em JSON no arquivo
-$json = json_encode($dadosPerfil, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
-
-if (file_put_contents($caminhoArquivo, $json) === false) {
-    // Erro ao salvar
+// Salva no arquivo JSON
+$jsonNovo = json_encode($perfis, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+if (file_put_contents($arquivo, $jsonNovo) === false) {
     header("Location: perfil.php?erro=2");
     exit;
 }
 
-// Atualiza variáveis de sessão
+// Atualiza sessão
 $_SESSION['usuario'] = $usuario;
 $_SESSION['nome'] = $nome;
 $_SESSION['email'] = $email;
 
-// Redireciona de volta para perfil.php com sucesso
+// Redireciona com sucesso
 header("Location: perfil.php?sucesso=1");
 exit;
