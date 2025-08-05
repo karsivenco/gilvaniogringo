@@ -102,43 +102,43 @@
         a {
             text-decoration: none !important;
         }
+/* Imagens do Carrossel */
+.carousel-background {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
 
-        /* Imagens do Carrossel */
-        .carousel-background {
-            background-size: cover;
-            background-position: center;
-        }
-        
-        /* Imagens para Mobile */
-        .carousel-background-1 {
-            background-image: url('img/carrossel-1.png');
-        }
-        .carousel-background-2 {
-            background-image: url('img/carrossel-2.png');
-        }
-         .carousel-background-3 {
-                background-image: url('img/violenciamulher.png');
-        }
-         .carousel-background-4 {
-                background-image: url('img/carrossel-4.png');
-	}
+/* Imagens Mobile (vertical) */
+.carousel-background-1 {
+  background-image: url('img/carrossel-1.png');
+}
+.carousel-background-2 {
+  background-image: url('img/carrossel-2.png');
+}
+.carousel-background-3 {
+  background-image: url('img/violenciamulher.png');
+}
+.carousel-background-4 {
+  background-image: url('img/carrossel-4.png');
+}
 
-        /* Imagens para Desktop - Media Query */
-        @media (min-width: 768px) {
-            .carousel-background-1 {
-                background-image: url('img/carousel-1.jpg');
-            }
-            .carousel-background-2 {
-                background-image: url('img/carousel-2.jpg');
-            }
-            .carousel-background-3 {
-                background-image: url('img/violenciamulher.png');
-            }
-	.carousel-background-4 {
-                background-image: url('img/carrossel-4.jpg');
-            }
-        }
-    </style>
+/* Imagens Desktop (horizontal) */
+@media (min-width: 768px) {
+  .carousel-background-1 {
+    background-image: url('img/carrossel-1.jpg');
+  }
+  .carousel-background-2 {
+    background-image: url('img/carrossel-2.jpg');
+  }
+  .carousel-background-3 {
+    background-image: url('img/violenciamulher.png'); /* mesma imagem para ambos */
+  }
+  .carousel-background-4 {
+    background-image: url('img/carrossel-4.jpg');
+  }
+}
+
 </head>
 
 <body class="bg-gray-50 text-gray-800">
@@ -682,6 +682,7 @@
 </body>
 
 </html>
+
 
 
 
