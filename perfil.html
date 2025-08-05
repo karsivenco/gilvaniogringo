@@ -7,7 +7,7 @@ if (!isset($_SESSION['usuario'])) {
   exit;
 }
 
-// Dados da sessão
+// Dados do usuário logado
 $usuario = $_SESSION['usuario'];
 $nome = $_SESSION['nome'];
 $email = $_SESSION['email'];
@@ -17,7 +17,7 @@ $email = $_SESSION['email'];
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
-  <title>Perfil - Intranet do Gringo</title>
+  <title>Intranet do Gringo</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
@@ -25,15 +25,18 @@ $email = $_SESSION['email'];
 
 <header class="bg-[#004766] shadow-md">
   <div class="max-w-7xl mx-auto px-6 py-5 flex justify-between items-center relative">
+    <!-- Logo e Título -->
     <div class="flex items-center gap-3">
       <img src="img/logo.png" alt="Logo" class="h-10">
       <h1 class="text-2xl font-semibold text-white">Intranet do Gringo</h1>
     </div>
 
+    <!-- Menu de Ações -->
     <div class="flex items-center gap-4 text-sm text-white relative">
+      <a href="painel.html" class="hover:underline px-2">Voltar</a>
       <a href="nova-postagem.html" class="hover:underline px-2">+ Nova Postagem</a>
 
-      <!-- Menu Admin -->
+      <!-- Dropdown Admin -->
       <div class="relative">
         <button onclick="toggleDropdown()" class="hover:underline px-2 focus:outline-none">
           Admin ▼
@@ -47,6 +50,7 @@ $email = $_SESSION['email'];
         </div>
       </div>
 
+      <!-- Sair -->
       <button onclick="logout()" class="hover:underline px-2">Sair</button>
     </div>
   </div>
