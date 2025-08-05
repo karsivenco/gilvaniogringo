@@ -1,10 +1,16 @@
 <?php
 session_start();
+
+// Verifica se o usuário está logado
 if (!isset($_SESSION['usuario'])) {
   header("Location: intranet.html");
   exit;
 }
-$usuarioLogado = $_SESSION['usuario'];
+
+// Dados da sessão
+$usuario = $_SESSION['usuario'];
+$nome = $_SESSION['nome'];
+$email = $_SESSION['email'];
 ?>
 
 <!DOCTYPE html>
@@ -15,78 +21,68 @@ $usuarioLogado = $_SESSION['usuario'];
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
-<body class="bg-gray-100 text-gray-800 min-h-screen font-inter">
+<body class="bg-gray-100 text-gray-800 font-inter min-h-screen flex flex-col">
 
-  <!-- Cabeçalho -->
-  <header class="bg-[#004766] shadow-md">
-    <div class="max-w-7xl mx-auto px-6 py-5 flex justify-between items-center">
-      <div class="flex items-center gap-3">
-        <img src="img/logo.png" alt="Logo" class="h-10">
-        <h1 class="text-2xl font-semibold text-white">Intranet do Gringo</h1>
-      </div>
-      <div class="flex items-center gap-4 text-sm text-white relative">
-        <a href="nova-postagem.html" class="hover:underline">+ Nova Postagem</a>
-        <div class="relative">
-          <button onclick="toggleDropdown()" class="hover:underline px-2 focus:outline-none">
-            Admin ▼
-          </button>
-          <div id="dropdownMenu" class="hidden absolute right-0 mt-2 w-52 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
-            <div class="py-1 text-gray-800 text-sm">
-              <a href="perfil.php" class="block px-4 py-2 hover:bg-gray-100">👤 Perfil</a>
-              <a href="recuperar-senha.html" class="block px-4 py-2 hover:bg-gray-100">🔒 Alterar Senha</a>
-              <a href="https://wa.me/5551981221708" target="_blank" class="block px-4 py-2 hover:bg-gray-100">📱 WhatsApp</a>
-            </div>
+<header class="bg-[#004766] shadow-md">
+  <div class="max-w-7xl mx-auto px-6 py-5 flex justify-between items-center relative">
+    <div class="flex items-center gap-3">
+      <img src="img/logo.png" alt="Logo" class="h-10">
+      <h1 class="text-2xl font-semibold text-white">Intranet do Gringo</h1>
+    </div>
+
+    <div class="flex items-center gap-4 text-sm text-white relative">
+      <a href="nova-postagem.html" class="hover:underline px-2">+ Nova Postagem</a>
+
+      <!-- Menu Admin -->
+      <div class="relative">
+        <button onclick="toggleDropdown()" class="hover:underline px-2 focus:outline-none">
+          Admin ▼
+        </button>
+        <div id="dropdownMenu" class="hidden absolute right-0 mt-2 w-52 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
+          <div class="py-1 text-gray-800 text-sm">
+            <a href="perfil.php" class="block px-4 py-2 hover:bg-gray-100">👤 Perfil</a>
+            <a href="recuperar-senha.html" class="block px-4 py-2 hover:bg-gray-100">🔒 Alterar Senha</a>
+            <a href="https://wa.me/5551981221708" target="_blank" class="block px-4 py-2 hover:bg-gray-100">📱 WhatsApp</a>
           </div>
         </div>
-        <a href="painel.html" class="hover:underline px-2">Sair</a>
       </div>
+
+      <button onclick="logout()" class="hover:underline px-2">Sair</button>
     </div>
-  </header>
+  </div>
+</header>
 
-  <!-- Conteúdo principal -->
-  <main class="max-w-3xl mx-auto px-6 py-10">
-    <h2 class="text-2xl font-semibold text-[#004766] mb-6">👤 Meu Perfil</h2>
+<main class="max-w-3xl mx-auto mt-10 p-6 bg-white rounded shadow">
+  <h2 class="text-2xl font-semibold mb-6 text-[#004766]">👤 Meu Perfil</h2>
 
-    <form id="formPerfil" class="bg-white p-6 rounded shadow space-y-6">
-      <div>
-        <label for="usuario" class="block text-sm font-medium text-gray-700">Nome de usuário</label>
-        <input type="text" id="usuario" name="usuario" class="w-full border border-gray-300 rounded px-4 py-2 mt-1 bg-gray-100 cursor-not-allowed" value="<?= htmlspecialchars($usuarioLogado) ?>" readonly>
-      </div>
+  <div class="grid gap-4">
+    <div>
+      <label class="block text-sm font-medium text-gray-700">Usuário</label>
+      <input type="text" value="<?= htmlspecialchars($usuario) ?>" readonly class="w-full border px-4 py-2 rounded bg-gray-100">
+    </div>
 
-      <div>
-        <label for="nome" class="block text-sm font-medium text-gray-700">Nome completo</label>
-        <input type="text" id="nome" name="nome" class="w-full border border-gray-300 rounded px-4 py-2 mt-1" placeholder="Ex: Seu Nome">
-      </div>
+    <div>
+      <label class="block text-sm font-medium text-gray-700">Nome completo</label>
+      <input type="text" value="<?= htmlspecialchars($nome) ?>" readonly class="w-full border px-4 py-2 rounded bg-gray-100">
+    </div>
 
-      <div>
-        <label for="email" class="block text-sm font-medium text-gray-700">E-mail</label>
-        <input type="email" id="email" name="email" class="w-full border border-gray-300 rounded px-4 py-2 mt-1" placeholder="Ex: seu@email.com">
-      </div>
+    <div>
+      <label class="block text-sm font-medium text-gray-700">E-mail</label>
+      <input type="email" value="<?= htmlspecialchars($email) ?>" readonly class="w-full border px-4 py-2 rounded bg-gray-100">
+    </div>
+  </div>
+</main>
 
-      <div class="flex justify-between items-center">
-        <button type="submit" class="bg-[#005075] text-white px-6 py-2 rounded hover:bg-[#003f5c] transition">
-          Salvar Alterações
-        </button>
-        <p id="mensagem" class="text-green-600 text-sm hidden">Alterações salvas com sucesso!</p>
-      </div>
-    </form>
-  </main>
+<script>
+function toggleDropdown() {
+  const menu = document.getElementById("dropdownMenu");
+  menu.classList.toggle("hidden");
+}
 
-  <script>
-    function toggleDropdown() {
-      const menu = document.getElementById("dropdownMenu");
-      menu.classList.toggle("hidden");
-    }
-
-    document.getElementById("formPerfil").addEventListener("submit", function(e) {
-      e.preventDefault();
-      document.getElementById("mensagem").classList.remove("hidden");
-      setTimeout(() => {
-        document.getElementById("mensagem").classList.add("hidden");
-      }, 3000);
-    });
-  </script>
+function logout() {
+  window.location.href = "logout.php";
+}
+</script>
 
 </body>
 </html>
-
