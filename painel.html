@@ -107,5 +107,27 @@
 
     carregarPostagens();
   </script>
+     <script>
+  function toggleDropdown() {
+    const menu = document.getElementById("dropdownMenu");
+    menu.classList.toggle("hidden");
+  }
+
+  // Fecha o dropdown ao clicar fora dele
+  document.addEventListener("click", function (e) {
+    const menu = document.getElementById("dropdownMenu");
+    const button = e.target.closest("button");
+    const isAdmin = button && button.textContent.includes("Admin");
+    if (!e.target.closest("#dropdownMenu") && !isAdmin) {
+      menu.classList.add("hidden");
+    }
+  });
+
+  function logout() {
+    localStorage.removeItem("logado");
+    window.location.href = "intranet.html";
+  }
+</script>
+
 </body>
 </html>
