@@ -1,0 +1,92 @@
+<?php
+session_start();
+
+if (!isset($_SESSION['usuario'])) {
+  header("Location: intranet.html");
+  exit;
+}
+
+$usuarioLogado = $_SESSION['usuario'];
+$usuarios = json_decode(file_get_contents("usuarios.json"), true);
+$dadosUsuario = null;
+
+foreach ($usuarios as $user) {
+  if ($user['usuario'] === $usuarioLogado) {
+    $dadosUsuario = $user;
+    break;
+  }
+}
+
+if (!$dadosUsuario) {
+  die("Usuário não encontrado.");
+}
+?>
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Perfil do Usuário - Intranet do Gringo</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-gray-100 text-gray-800 font-inter min-h-screen flex flex-col">
+
+  <header class="bg-[#004766] shadow-md">
+    <div class="max-w-7xl mx-auto px-6 py-5 flex justify-between items-center">
+      <div class="flex items-center gap-3">
+        <img src="img/logo.png" alt="Logo" class="h-10">
+        <h1 class="text-2xl font-semibold text-white">Intranet do Gringo</h1>
+      </div>
+      <div class="flex items-center gap-4 text-sm text-white">
+        <a href="painel.html" class="hover:underline">← Voltar</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-3xl mx-auto px-6 py-10">
+    <h2 class="text-2xl font-semibold mb-6 text-[#004766]">👤 Meu Perfil</h2>
+
+    <form id="formPerfil" class="bg-white rounded shadow p-6 space-y-6">
+      <div>
+        <label for="usuario" class="block text-sm font-medium text-gray-700">Nome de usuário</label>
+        <input type="text" id="usuario" name="usuario" value="<?= htmlspecialchars($dadosUsuario['usuario']) ?>" readonly
+               class="w-full border border-gray-300 rounded px-4 py-2 mt-1 bg-gray-100 cursor-not-allowed" />
+      </div>
+
+      <div>
+        <label for="nome" class="block text-sm font-medium text-gray-700">Nome completo</label>
+        <input type="text" id="nome" name="nome" value="<?= htmlspecialchars($dadosUsuario['nome']) ?>"
+               class="w-full border border-gray-300 rounded px-4 py-2 mt-1" />
+      </div>
+
+      <div>
+        <label for="email" class="block text-sm font-medium text-gray-700">E-mail</label>
+        <input type="email" id="email" name="email" value="<?= htmlspecialchars($dadosUsuario['email']) ?>"
+               class="w-full border border-gray-300 rounded px-4 py-2 mt-1" />
+      </div>
+
+      <div class="flex justify-between items-center">
+        <button type="submit"
+                class="bg-[#005075] text-white px-6 py-2 rounded hover:bg-[#003f5c] transition">
+          Salvar Alterações
+        </button>
+        <p id="mensagem" class="text-green-600 text-sm hidden">Alterações salvas com sucesso!</p>
+      </div>
+    </form>
+  </main>
+
+  <script>
+    document.getElementById('formPerfil').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      // Aqui você pode integrar com um salvar-perfil.php
+      document.getElementById("mensagem").classList.remove("hidden");
+      setTimeout(() => {
+        document.getElementById("mensagem").classList.add("hidden");
+      }, 3000);
+    });
+  </script>
+
+</body>
+</html>
