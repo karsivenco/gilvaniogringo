@@ -60,22 +60,28 @@ $email = $_SESSION['email'];
   <main class="max-w-3xl mx-auto mt-10 p-6 bg-white rounded shadow">
     <h2 class="text-2xl font-semibold mb-6 text-[#004766]">👤 Meu Perfil</h2>
 
-    <div class="grid gap-4">
+    <form action="salvar-perfil.php" method="post" class="grid gap-4">
       <div>
-        <label class="text-sm font-medium text-gray-700">Usuário</label>
-        <input type="text" value="<?= htmlspecialchars($usuario) ?>" readonly class="w-full border px-4 py-2 rounded bg-gray-100">
+        <label for="usuario" class="text-sm font-medium text-gray-700">Usuário</label>
+        <input type="text" id="usuario" name="usuario" value="<?= htmlspecialchars($usuario) ?>" class="w-full border px-4 py-2 rounded bg-white" required>
       </div>
 
       <div>
-        <label class="text-sm font-medium text-gray-700">Nome completo</label>
-        <input type="text" value="<?= htmlspecialchars($nome) ?>" readonly class="w-full border px-4 py-2 rounded bg-gray-100">
+        <label for="nome" class="text-sm font-medium text-gray-700">Nome completo</label>
+        <input type="text" id="nome" name="nome" value="<?= htmlspecialchars($nome) ?>" class="w-full border px-4 py-2 rounded bg-white" required>
       </div>
 
       <div>
-        <label class="text-sm font-medium text-gray-700">E-mail</label>
-        <input type="email" value="<?= htmlspecialchars($email) ?>" readonly class="w-full border px-4 py-2 rounded bg-gray-100">
+        <label for="email" class="text-sm font-medium text-gray-700">E-mail</label>
+        <input type="email" id="email" name="email" value="<?= htmlspecialchars($email) ?>" class="w-full border px-4 py-2 rounded bg-white" required>
       </div>
-    </div>
+
+      <div class="pt-4">
+        <button type="submit" class="bg-[#004766] text-white px-6 py-2 rounded hover:bg-[#00334a] transition">
+          Concluído
+        </button>
+      </div>
+    </form>
   </main>
 
   <!-- Scripts -->
