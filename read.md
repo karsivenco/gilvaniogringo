@@ -7,13 +7,23 @@ Sistema simples de intranet com login, recuperação de senha por e-mail e paine
 ## 📁 Estrutura de Diretórios
 
 /intranet/
+
+<br>
 ├── intranet.html
+<br>
 ├── recuperar-senha.html
+
+<br>
 ├── recuperar-senha.php
+
+<br>
 ├── painel.html
+
+<br>
 ├── img/
 │   └── logop.png
 └── PHPMailer/
+<br>
     ├── src/
         ├── PHPMailer.php
         ├── SMTP.php
