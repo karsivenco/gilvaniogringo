@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Recuperar Senha - Intranet do Gringo</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     body {
       background: linear-gradient(to right, #dbeafe, #eff6ff);
     }
-
     .water-text {
       font-weight: bold;
       font-size: 1.25rem;
@@ -16,35 +15,72 @@
       animation: wave 2.5s infinite linear;
       display: inline-block;
     }
-
     @keyframes wave {
-      0% { transform: translateY(0); }
-      25% { transform: translateY(-2px); }
-      50% { transform: translateY(2px); }
-      75% { transform: translateY(-1px); }
-      100% { transform: translateY(0); }
+      0% {
+        transform: translateY(0);
+      }
+      25% {
+        transform: translateY(-2px);
+      }
+      50% {
+        transform: translateY(2px);
+      }
+      75% {
+        transform: translateY(-1px);
+      }
+      100% {
+        transform: translateY(0);
+      }
     }
   </style>
 </head>
 <body class="flex items-center justify-center h-screen">
+  <div
+    class="bg-white p-8 rounded shadow-md w-full max-w-sm text-center"
+    role="main"
+  >
+    <img
+      src="img/logop.png"
+      alt="@gilvaniogringo"
+      class="mx-auto mb-2"
+      width="120"
+      height="auto"
+    />
+    <p class="water-text mb-6">
+      <a href="/index.html" class="hover:underline">@gilvaniogringo</a>
+    </p>
 
-  <div class="bg-white p-8 rounded shadow-md w-full max-w-sm text-center">
-    <img src="img/logop.png" alt="@gilvaniogringo" class="mx-auto mb-2">
-    <p class="water-text mb-6"><a href="/index.html">@gilvaniogringo</a></p>
-
-    <form method="POST" action="recuperar-senha.php">
+    <form method="POST" action="recuperar-senha.php" novalidate>
       <h2 class="text-lg font-bold mb-4 text-[#005075]">Recuperar Senha</h2>
 
-      <label class="block mb-2 text-sm font-medium text-gray-700 text-left">Nome de usuário:</label>
-      <input type="text" name="usuario" class="w-full p-2 border rounded mb-4" required placeholder="Ex: graziele.albuquerque">
+      <label
+        for="usuario"
+        class="block mb-2 text-sm font-medium text-gray-700 text-left"
+        >Nome de usuário:</label
+      >
+      <input
+        type="text"
+        id="usuario"
+        name="usuario"
+        class="w-full p-2 border rounded mb-4"
+        required
+        placeholder="Ex: seu.login"
+        autocomplete="username"
+      />
 
-      <button type="submit" class="w-full bg-[#005075] text-white py-2 rounded hover:bg-[#003f5c]">Enviar senha por e-mail</button>
+      <button
+        type="submit"
+        class="w-full bg-[#005075] text-white py-2 rounded hover:bg-[#003f5c]"
+      >
+        Enviar senha por e-mail
+      </button>
 
       <p class="text-sm mt-4 text-right">
-        <a href="intranet.html" class="text-pink-600 hover:underline">Voltar ao login</a>
+        <a href="intranet.html" class="text-pink-600 hover:underline"
+          >Voltar ao login</a
+        >
       </p>
     </form>
   </div>
-
 </body>
 </html>
