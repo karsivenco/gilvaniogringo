@@ -118,7 +118,10 @@
         }
          .carousel-background-3 {
                 background-image: url('img/violenciamulher.png');
-            }
+        }
+         .carousel-background-4 {
+                background-image: url('img/carrossel-4.png');
+	}
 
         /* Imagens para Desktop - Media Query */
         @media (min-width: 768px) {
@@ -130,6 +133,9 @@
             }
             .carousel-background-3 {
                 background-image: url('img/violenciamulher.png');
+            }
+	.carousel-background-4 {
+                background-image: url('img/carrossel-4.jpg');
             }
         }
     </style>
@@ -232,6 +238,49 @@
           </div>
         </div>
       </div>
+
+<!-- Slide 4 -->
+<div class="header-carousel-item relative h-[85vh] carousel-background carousel-background-4">
+  <!-- Imagem de fundo (fallback para navegadores sem CSS de fundo) -->
+  <img src="/img/carrossel-4.jpg" 
+       class="absolute inset-0 w-full h-full object-cover object-center" 
+       alt="Bate Papo com o Gringo" />
+
+  <!-- Sobreposição com conteúdo -->
+  <div class="absolute inset-0 bg-black/30 flex flex-col items-center justify-center space-y-6 px-4 text-center">
+    <div class="animate__animated animate__fadeIn">
+      <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold uppercase text-white leading-tight">
+        BATE-PAPO COM O GRINGO
+      </h1>
+    </div>
+
+    <!-- Botão -->
+    <a href="https://gilvaniogringo.com/bate-papo.html"
+       class="inline-block rounded-full bg-[#DB2356] py-3 px-8 font-bold text-white shadow-lg transition-transform hover:scale-105">
+      Assista agora
+    </a>
+
+    <!-- Redes sociais -->
+    <div class="flex space-x-4">
+      <a href="https://www.facebook.com/gilvanigringors" target="_blank"
+         class="flex h-10 w-10 items-center justify-center rounded-full bg-white/80 text-[#DB2356] hover:bg-white transition-all">
+        <i class="fab fa-facebook-f"></i>
+      </a>
+      <a href="https://www.tiktok.com/@gilvaniogringo" target="_blank"
+         class="flex h-10 w-10 items-center justify-center rounded-full bg-white/80 text-[#DB2356] hover:bg-white transition-all">
+        <i class="fab fa-tiktok"></i>
+      </a>
+      <a href="https://www.instagram.com/gilvaniogringo/" target="_blank"
+         class="flex h-10 w-10 items-center justify-center rounded-full bg-white/80 text-[#DB2356] hover:bg-white transition-all">
+        <i class="fab fa-instagram"></i>
+      </a>
+      <a href="https://www.youtube.com/@GilvanioGringo" target="_blank"
+         class="flex h-10 w-10 items-center justify-center rounded-full bg-white/80 text-[#DB2356] hover:bg-white transition-all">
+        <i class="fab fa-youtube"></i>
+      </a>
+    </div>
+  </div>
+</div>
 
     </div>
   </section>
@@ -651,6 +700,7 @@
 </body>
 
 </html>
+
 
 
 
