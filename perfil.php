@@ -62,17 +62,17 @@ $email = $_SESSION['email'];
 
     <div class="grid gap-4">
       <div>
-        <label class="block text-sm font-medium text-gray-700">Usuário</label>
+        <label class="text-sm font-medium text-gray-700">Usuário</label>
         <input type="text" value="<?= htmlspecialchars($usuario) ?>" readonly class="w-full border px-4 py-2 rounded bg-gray-100">
       </div>
 
       <div>
-        <label class="block text-sm font-medium text-gray-700">Nome completo</label>
+        <label class="text-sm font-medium text-gray-700">Nome completo</label>
         <input type="text" value="<?= htmlspecialchars($nome) ?>" readonly class="w-full border px-4 py-2 rounded bg-gray-100">
       </div>
 
       <div>
-        <label class="block text-sm font-medium text-gray-700">E-mail</label>
+        <label class="text-sm font-medium text-gray-700">E-mail</label>
         <input type="email" value="<?= htmlspecialchars($email) ?>" readonly class="w-full border px-4 py-2 rounded bg-gray-100">
       </div>
     </div>
