@@ -1,73 +1,56 @@
 <?php
-session_start();
+header("Content-Type: application/json");
 
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
+$data = json_decode(file_get_contents("php://input"), true);
+$usuario = $data['usuario'] ?? '';
 
-require 'PHPMailer/src/Exception.php';
-require 'PHPMailer/src/PHPMailer.php';
-require 'PHPMailer/src/SMTP.php';
+$usuarios = [
+  "graziele.albuquerque" => "albuquerquegraziele916@gmail.com",
+  "gabriel.amaral" => "ggabi722@gmail.com"
+];
 
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $usuarios = [
-        "graziele.albuquerque" => [
-            "email" => "albuquerquegraziele916@gmail.com",
-            "senha" => "Gringo1975"
-        ],
-        "gabriel.amaral" => [
-            "email" => "ggabi722@gmail.com",
-            "senha" => "Gringo1975"
-        ]
-    ];
+// Verifica se o usuário existe
+if (!isset($usuarios[$usuario])) {
+  echo json_encode(["mensagem" => "Usuário não encontrado."]);
+  exit;
+}
 
-    $usuario = trim($_POST["usuario"]);
+$destinatario = $usuarios[$usuario];
+$senha = "Gringo1975";
 
-    if (isset($usuarios[$usuario])) {
-        $destinatario = $usuarios[$usuario]["email"];
-        $senha = $usuarios[$usuario]["senha"];
+// Envio com SendGrid (ou use PHPMailer)
+// Aqui com SendGrid:
+$apikey = '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';
+$de = "gilvaniagenda@gmail.com";
 
-        $mail = new PHPMailer(true);
-        try {
-            // Configurações SMTP Gmail
-            $mail->isSMTP();
-            $mail->Host = 'smtp.gmail.com';
-            $mail->SMTPAuth = true;
-            $mail->Username = 'gilvaniagenda@gmail.com';       // SEU E-MAIL
-            $mail->Password = 'SUA_SENHA_DE_APLICATIVO';        // SENHA DE APLICATIVO
-            $mail->SMTPSecure = 'tls';
-            $mail->Port = 587;
+$mensagem = [
+  "personalizations" => [[
+    "to" => [["email" => $destinatario]],
+    "subject" => "Recuperação de senha - Intranet do Gringo"
+  ]],
+  "from" => ["email" => $de, "name" => "Intranet do Gringo"],
+  "content" => [[
+    "type" => "text/plain",
+    "value" => "Olá, {$usuario}. Sua senha de acesso é: {$senha}"
+  ]]
+];
 
-            // Remetente e destinatário
-            $mail->setFrom('gilvaniagenda@gmail.com', 'Intranet do Gringo');
-            $mail->addAddress($destinatario);
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_URL, "https://api.sendgrid.com/v3/mail/send");
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+curl_setopt($ch, CURLOPT_POST, 1);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($mensagem));
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+  "Authorization: Bearer $apikey",
+  "Content-Type: application/json"
+]);
 
-            // Conteúdo do e-mail
-            $mail->isHTML(true);
-            $mail->Subject = 'Recuperação de Senha - Intranet do Gringo';
-            $mail->Body = "
-                <p>Olá <b>$usuario</b>,</p>
-                <p>Conforme solicitado, aqui está sua senha atual para acesso à Intranet do Gringo:</p>
-                <p><b>Senha: $senha</b></p>
-                <p>Recomenda-se alterá-la após o login.</p>
-            ";
+$response = curl_exec($ch);
+$httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+curl_close($ch);
 
-            $mail->send();
-
-            $_SESSION['msg_sucesso'] = "Senha enviada com sucesso para o e-mail cadastrado!";
-            header("Location: recuperar-senha.html");
-            exit;
-
-        } catch (Exception $e) {
-            $_SESSION['msg_erro'] = "Erro ao enviar o e-mail: {$mail->ErrorInfo}";
-            header("Location: recuperar-senha.html");
-            exit;
-        }
-    } else {
-        $_SESSION['msg_erro'] = "Usuário não encontrado.";
-        header("Location: recuperar-senha.html");
-        exit;
-    }
+if ($httpcode >= 200 && $httpcode < 300) {
+  echo json_encode(["mensagem" => "Senha enviada para o e-mail cadastrado."]);
 } else {
-    header("Location: recuperar-senha.html");
-    exit;
+  echo json_encode(["mensagem" => "Erro ao enviar e-mail. Código: $httpcode"]);
 }
