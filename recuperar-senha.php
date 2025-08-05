@@ -20,7 +20,7 @@ $senha = "Gringo1975";
 
 // Envio com SendGrid (ou use PHPMailer)
 // Aqui com SendGrid:
-$apikey = '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';
+$apikey = 'S80YUfnJTxm4YzAK6TWywA';
 $de = "gilvaniagenda@gmail.com";
 
 $mensagem = [
