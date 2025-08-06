@@ -83,9 +83,14 @@ $perfil = $perfis[$usuarioLogado];
   </main>
 
   <script>
-    function logout() {
-      window.location.href = "logout.php";
-    }
-  </script>
+  function toggleDropdown() {
+    const menu = document.getElementById("dropdownMenu");
+    menu.classList.toggle("hidden");
+  }
+
+  function logout() {
+    window.location.href = "logout.php"; // Redireciona ao logout
+  }
+</script>
 </body>
 </html>
