@@ -5,56 +5,107 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Intranet do Gringo - Painel</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- FontAwesome CDN completo para ícones -->
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    integrity="sha512-pO/ZQ+SYBjR2Otv6hzGLAjq6uvl2nZOlU0U+E9Pi2DPlHL6A+LO1W+W6ZDYUMG4iIm0MzjJqTG4z+8XWbhqwDQ=="
     crossorigin="anonymous"
-    referrerpolicy="no-referrer"
   />
+  <style>
+    /* Animação simples para cards */
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 10px 20px rgb(0 0 0 / 0.12);
+      transition: all 0.3s ease;
+    }
+  </style>
 </head>
-<body class="bg-gray-100">
+<body class="bg-gray-100 min-h-screen flex flex-col">
 
-  <!-- Barra superior -->
+  <!-- Header -->
   <header class="flex justify-between items-center bg-[#09679c] text-white p-4 shadow-md">
     <div class="flex items-center gap-3">
       <img src="img/logo.png" alt="Logo Gringo" class="h-10 w-auto" />
       <h1 class="text-xl font-bold">Painel do Gringo</h1>
     </div>
-    <div class="flex items-center gap-3">
+    <nav class="flex items-center gap-3">
       <a href="whatsapp.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition">WhatsApp</a>
       <a href="perfil.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition">Perfil</a>
-      <a href="intranet.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition">Sair</a>
-      
-    </div>
+      <span id="linkGerenteContainer"></span>
+      <button
+        id="btnLogout"
+        class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition"
+        title="Sair"
+      >
+        Sair
+      </button>
+    </nav>
   </header>
 
-  <!-- Conteúdo principal -->
-  <main class="p-6">
-    <h2 class="text-2xl font-bold mb-4">Bem-vindo à Intranet</h2>
-    <p class="mb-4">Aqui você pode gerenciar postagens, acessar o WhatsApp e visualizar informações internas.</p>
+  <!-- Main -->
+  <main class="flex-grow p-6 max-w-7xl mx-auto">
+    <h2 class="text-2xl font-bold mb-6">Bem-vindo à Intranet</h2>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-      <!-- Card nova postagem -->
-      <a href="nova-postagem.html" class="bg-white shadow rounded-lg p-6 hover:shadow-lg transition">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <a href="nova-postagem.html" class="card bg-white shadow rounded-lg p-6 hover:shadow-lg transition transform cursor-pointer">
         <h3 class="text-lg font-bold mb-2">+ Nova Postagem</h3>
         <p>Crie e publique novas notícias no site oficial.</p>
       </a>
 
-      <!-- Card últimas notícias -->
-      <a href="ultimas-noticias.html" class="bg-white shadow rounded-lg p-6 hover:shadow-lg transition">
+      <a href="ultimas-noticias.html" class="card bg-white shadow rounded-lg p-6 hover:shadow-lg transition transform cursor-pointer">
         <h3 class="text-lg font-bold mb-2">Últimas Notícias</h3>
         <p>Veja todas as notícias publicadas no site.</p>
       </a>
 
-      <!-- Card WhatsApp -->
-      <a href="whatsapp.html" class="bg-[#e0f2fe] border border-[#09679c] shadow rounded-lg p-6 hover:shadow-lg transition">
+      <a href="whatsapp.html" class="card bg-[#e0f2fe] border border-[#09679c] shadow rounded-lg p-6 hover:shadow-lg transition transform cursor-pointer">
         <h3 class="text-lg font-bold mb-2 text-[#09679c]">Atendimento WhatsApp</h3>
         <p>Inicie as conversas no WhatsApp.</p>
       </a>
     </div>
   </main>
+
+  <!-- Modal Gerente -->
+  <div
+    id="modalGerente"
+    class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50"
+  >
+    <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-sm">
+      <h3 class="text-xl font-bold mb-4 text-[#09679c]">Login Gerente</h3>
+      <form id="formLoginGerente" class="flex flex-col gap-4">
+        <input
+          type="text"
+          id="inputUsuario"
+          placeholder="Usuário"
+          class="border p-2 rounded"
+          required
+          autocomplete="username"
+        />
+        <input
+          type="password"
+          id="inputSenha"
+          placeholder="Senha"
+          class="border p-2 rounded"
+          required
+          autocomplete="current-password"
+        />
+        <div class="flex justify-end gap-3">
+          <button
+            type="button"
+            onclick="fecharModalGerente()"
+            class="px-4 py-2 rounded border border-gray-300 hover:bg-gray-100"
+          >
+            Cancelar
+          </button>
+          <button
+            type="submit"
+            class="bg-[#09679c] text-white px-4 py-2 rounded hover:bg-[#074d6b]"
+          >
+            Entrar
+          </button>
+        </div>
+        <p id="msgErro" class="text-red-600 text-sm mt-2 hidden"></p>
+      </form>
+    </div>
+  </div>
 
   <!-- Rodapé -->
   <footer class="bg-[#005075] text-white p-4 flex justify-center space-x-8">
@@ -75,6 +126,67 @@
     </a>
   </footer>
 
+<script>
+  const USUARIO_GERENTE = "gilvaniogringo";
+  const SENHA_GERENTE = "Gringo10000";
+
+  const usuarioLogado = localStorage.getItem("usuarioLogado");
+
+  const linkGerenteContainer = document.getElementById("linkGerenteContainer");
+  const btnLogout = document.getElementById("btnLogout");
+  const modalGerente = document.getElementById("modalGerente");
+  const formLoginGerente = document.getElementById("formLoginGerente");
+  const msgErro = document.getElementById("msgErro");
+
+  // Função para abrir modal gerente
+  function abrirModalGerente() {
+    msgErro.classList.add("hidden");
+    formLoginGerente.reset();
+    modalGerente.classList.remove("hidden");
+  }
+
+  // Fecha modal gerente
+  function fecharModalGerente() {
+    modalGerente.classList.add("hidden");
+  }
+
+  // Logout
+  btnLogout.addEventListener("click", () => {
+    localStorage.removeItem("usuarioLogado");
+    window.location.href = "intranet.html";
+  });
+
+  // Mostra link gerente somente se usuarioLogado for gerente
+  function verificarAcessoGerente() {
+    if (usuarioLogado === USUARIO_GERENTE) {
+      // Exibe link que abre modal de login para gerente
+      linkGerenteContainer.innerHTML = `
+        <a href="#" id="linkGerente" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition">Gerente</a>
+      `;
+      document.getElementById("linkGerente").addEventListener("click", (e) => {
+        e.preventDefault();
+        abrirModalGerente();
+      });
+    }
+  }
+
+  // Valida login gerente (usuário fixo)
+  formLoginGerente.addEventListener("submit", e => {
+    e.preventDefault();
+    const usuario = document.getElementById("inputUsuario").value.trim();
+    const senha = document.getElementById("inputSenha").value.trim();
+
+    if(usuario === USUARIO_GERENTE && senha === SENHA_GERENTE) {
+      fecharModalGerente();
+      window.location.href = "gerente.html";
+    } else {
+      msgErro.textContent = "Usuário ou senha inválidos.";
+      msgErro.classList.remove("hidden");
+    }
+  });
+
+  verificarAcessoGerente();
+</script>
 
 </body>
 </html>
