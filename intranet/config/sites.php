@@ -4,10 +4,10 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Sites pessoais (ccuffs-sites)
+    | Sites pessoais (gilvaniogringo)
     |--------------------------------------------------------------------------
     |
-    | Para saber mais: https://cc.uffs.edu.br/sites
+    | Para saber mais: https://gilvaniogringo.com
     |
     */
 
