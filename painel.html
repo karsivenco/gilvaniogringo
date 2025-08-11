@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <title>Painel - Intranet do Gringo</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background: linear-gradient(to right, #dbeafe, #eff6ff);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+  <header class="bg-[#005075] text-white p-4 flex justify-between items-center">
+    <h1 class="text-xl font-bold">Painel de Postagens</h1>
+    <button id="btn-logout" class="bg-[#DB2356] hover:bg-[#FF7DA4] px-4 py-2 rounded">Sair</button>
+  </header>
+
+  <main class="flex-grow container mx-auto p-6">
+    <p class="mb-4 text-lg" id="welcome-msg"></p>
+
+    <button id="btn-nova-postagem" class="mb-6 bg-[#005075] hover:bg-[#003f5c] text-white px-5 py-2 rounded">
+      + Nova Postagem
+    </button>
+
+    <section id="postagens-lista" class="space-y-4">
+      <p class="text-gray-600 italic">Nenhuma postagem disponível.</p>
+    </section>
+  </main>
+
+  <script>
+    // Verifica se o usuário está logado
+    if(localStorage.getItem('logado') !== 'sim') {
+      window.location.href = 'index.html';
+    }
+
+    // Pega usuário salvo para boas-vindas
+    const usuarioSalvo = localStorage.getItem('usuarioLogado');
+    const welcomeMsg = document.getElementById('welcome-msg');
+    welcomeMsg.textContent = usuarioSalvo ? `Bem-vindo, ${usuarioSalvo}` : 'Bem-vindo!';
+
+    // Logout
+    document.getElementById('btn-logout').addEventListener('click', () => {
+      localStorage.removeItem('logado');
+      localStorage.removeItem('usuarioLogado');
+      window.location.href = 'index.html';
+    });
+
+    // Botão nova postagem (alerta simples)
+    document.getElementById('btn-nova-postagem').addEventListener('click', () => {
+      alert('Função para criar nova postagem será implementada.');
+    });
+  </script>
+
+</body>
+</html>
