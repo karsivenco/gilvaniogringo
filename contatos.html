@@ -12,7 +12,7 @@
 </head>
 <body class="bg-gray-100 min-h-screen flex flex-col">
 
-  <!-- Barra superior -->
+  <!-- Header -->
   <header class="flex justify-between items-center bg-[#09679c] text-white p-4 shadow-md">
     <div class="flex items-center gap-3">
       <img src="img/logo.png" alt="Logo Gringo" class="h-10 w-auto" />
@@ -28,6 +28,9 @@
       <a href="cadastro.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition" title="Cadastro de Pessoas">
         <i class="fas fa-user-plus"></i> Cadastro
       </a>
+       <a href="contatos.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition" title="Contatos">
+        <i class="fas fa-address-book"></i> Contatos
+      </a>
       <button
         onclick="logout()"
         class="bg-[#053646] px-3 py-2 rounded hover:bg-[#032d39] transition"
@@ -35,67 +38,68 @@
       >
         <i class="fas fa-sign-out-alt"></i> Sair
       </button>
-    </nav>
+    </div>
   </header>
 
   <!-- Conteúdo principal -->
-  <main class="flex-grow p-6">
+  <main class="flex-grow p-6 max-w-3xl mx-auto">
     <h2 class="text-2xl font-bold mb-4 text-[#005075]">Lista de Contatos</h2>
-    <div class="bg-white shadow rounded-lg p-6 max-w-3xl mx-auto">
+    <div class="bg-white shadow rounded-lg p-6">
 
       <ul id="listaContatos" class="divide-y divide-gray-200">
-        <li class="py-4 text-center text-gray-500 italic">Carregando contatos...</li>
+        <!-- Contatos aparecerão aqui -->
       </ul>
 
     </div>
   </main>
 
   <script>
-    const listaContatosEl = document.getElementById("listaContatos");
-
-    // Função para buscar contatos da API backend
-    async function buscarContatos() {
-      try {
-        const response = await fetch("http://localhost:3000/api/contatos"); // ajuste a URL do backend
-        if (!response.ok) throw new Error("Erro ao buscar contatos");
-
-        const contatos = await response.json();
-
-        if (contatos.length === 0) {
-          listaContatosEl.innerHTML = '<li class="py-4 text-gray-500 italic">Nenhum contato encontrado.</li>';
-          return;
-        }
-
-        listaContatosEl.innerHTML = "";
-
-        contatos.forEach(contato => {
-          const li = document.createElement("li");
-          li.className = "py-4 flex justify-between items-center";
-
-          li.innerHTML = `
-            <div>
-              <p class="font-semibold text-[#09679c]">${contato.name || contato.number}</p>
-              <p class="text-gray-600">${formatarTelefone(contato.number)}</p>
-            </div>
-            <button class="text-[#09679c] hover:text-[#074d6b]" title="Abrir conversa no WhatsApp">
-              <i class="fab fa-whatsapp fa-lg"></i>
-            </button>
-          `;
-
-          // Ao clicar no botão, abre o WhatsApp Web direto para esse contato
-          li.querySelector("button").addEventListener("click", () => {
-            // Abrir WhatsApp Web conversa (formato de link padrão)
-            const numeroLimpo = contato.number.replace(/\D/g, "");
-            const url = `https://web.whatsapp.com/send?phone=${numeroLimpo}`;
-            window.open(url, "_blank");
-          });
-
-          listaContatosEl.appendChild(li);
-        });
-      } catch (error) {
-        listaContatosEl.innerHTML = `<li class="py-4 text-red-600 italic">Erro ao carregar contatos: ${error.message}</li>`;
-      }
+    // Função de logout
+    function logout() {
+      localStorage.removeItem("usuarioLogado");
+      window.location.href = "intranet.html";
     }
 
-    // Função simples para formatar telefone BR: +55 (xx) xxxx-xxxx
-    function form
+    // Função para renderizar contatos na lista
+    function renderizarContatos() {
+      const listaContatosEl = document.getElementById("listaContatos");
+      let contatos = JSON.parse(localStorage.getItem("contatos")) || [];
+
+      listaContatosEl.innerHTML = "";
+
+      if (contatos.length === 0) {
+        listaContatosEl.innerHTML = '<li class="py-4 text-gray-500 italic">Nenhum contato encontrado.</li>';
+        return;
+      }
+
+      contatos.forEach(contato => {
+        const li = document.createElement("li");
+        li.className = "py-4 flex justify-between items-center";
+
+        // Cria botão para abrir conversa no WhatsApp Web, já com o número
+        li.innerHTML = `
+          <div>
+            <p class="font-semibold text-[#09679c]">${contato.nome}</p>
+            <p class="text-gray-600">${contato.numero}</p>
+          </div>
+          <a 
+            href="https://web.whatsapp.com/send?phone=${contato.numero.replace(/\D/g,'')}" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            class="text-[#09679c] hover:text-[#074d6b]"
+            title="Abrir conversa no WhatsApp Web"
+          >
+            <i class="fab fa-whatsapp fa-lg"></i>
+          </a>
+        `;
+
+        listaContatosEl.appendChild(li);
+      });
+    }
+
+    // Renderiza contatos quando a página carrega
+    renderizarContatos();
+  </script>
+
+</body>
+</html>
