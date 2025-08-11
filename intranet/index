@@ -1,73 +1,74 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8" />
-  <title>Intranet do Gringo</title>
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-  <meta name="description" content="Intranet do vereador Gilvani 'O Gringo'" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+  <meta charset="UTF-8">
+  <title>Login - Intranet do Gringo</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background: linear-gradient(to right, #dbeafe, #eff6ff);
+    }
 
-  <!-- Theme Simple Dark do Docsify -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsify-themeable@0/dist/css/theme-simple-dark.css" />
-  
-  <!-- FontAwesome -->
-  <link rel="stylesheet" href="https://unpkg.com/@fortawesome/fontawesome-free/css/all.css" />
+    .water-text {
+      font-weight: bold;
+      font-size: 1.25rem;
+      color: #005075;
+      animation: wave 2.5s infinite linear;
+      display: inline-block;
+    }
 
-  <!-- Seu CSS personalizado -->
-  <link rel="stylesheet" href="./_media/style.css" />
+    @keyframes wave {
+      0% { transform: translateY(0); }
+      25% { transform: translateY(-2px); }
+      50% { transform: translateY(2px); }
+      75% { transform: translateY(-1px); }
+      100% { transform: translateY(0); }
+    }
+  </style>
 </head>
-<body>
-  <div id="app"></div>
+<body class="flex items-center justify-center h-screen">
+
+  <div class="bg-white p-8 rounded shadow-md w-full max-w-sm text-center">
+    <img src="img/logop.png" alt="@gilvaniogringo" class="mx-auto mb-2">
+    <p class="water-text mb-6"><a href="/index.html">@gilvaniogringo</a></p>
+
+    <form onsubmit="return login()">
+      <label class="block mb-2 text-sm font-medium text-gray-700 text-left">Usuário:</label>
+      <input type="text" id="usuario" class="w-full p-2 border rounded mb-4" required>
+
+      <label class="block mb-2 text-sm font-medium text-gray-700 text-left">Senha:</label>
+      <input type="password" id="senha" class="w-full p-2 border rounded mb-4" required>
+
+      <button type="submit" class="w-full bg-[#005075] text-white py-2 rounded hover:bg-[#003f5c]">Entrar</button>
+
+      <p class="text-sm mt-2 text-right">
+        <a href="recuperar-senha.html" class="text-pink-600 hover:underline">Esqueci minha senha</a>
+      </p>
+    </form>
+
+    <p id="erro" class="text-red-600 mt-4 text-sm hidden">Usuário ou senha incorretos.</p>
+  </div>
 
   <script>
-    window.$docsify = {
-      name: 'Intranet do Gringo',
-      repo: 'gilvaniogringo/intranet',
-      coverpage: true,
+    function login() {
+      const usuarios = {
+        "graziele.albuquerque": "Gringo1975",
+        "gabriel.amaral": "Gringo1975"
+      };
 
-      search: {
-        placeholder: 'Pesquisar...',
-        noData: 'Nenhum resultado encontrado',
-        depth: 2,
-        maxAge: 86400000,
-        namespace: 'gringo-intranet',
-      },
+      const user = document.getElementById("usuario").value.trim();
+      const senha = document.getElementById("senha").value;
 
-      themeable: {
-        readyTransition: true,
-        responsiveTables: true
-      },
-
-      tabs: {
-        persist: true,
-        sync: true,
-        theme: 'material',
-        tabComments: true,
-        tabHeadings: true
-      },
-
-      pagination: {
-        previousText: 'Anterior',
-        nextText: 'Próximo',
-        crossChapter: true,
-        crossChapterText: true
+      if (usuarios[user] === senha) {
+        localStorage.setItem("logado", "sim");
+        localStorage.setItem("usuarioLogado", user); // grava usuário logado
+        window.location.href = "painel.html";
+        return false;
+      } else {
+        document.getElementById("erro").classList.remove("hidden");
+        return false;
       }
-    };
+    }
   </script>
-
-  <!-- Docsify core -->
-  <script src="https://unpkg.com/docsify/lib/docsify.min.js"></script>
-  <script src="https://unpkg.com/docsify/lib/plugins/search.min.js"></script>
-
-  <!-- Plugins -->
-  <script src="https://unpkg.com/docsify-pagination/dist/docsify-pagination.min.js"></script>
-  <script src="https://unpkg.com/docsify-fontawesome/dist/docsify-fontawesome.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/docsify/lib/plugins/emoji.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/docsify-copy-code"></script>
-  <script src="https://cdn.jsdelivr.net/npm/docsify-tabs@1"></script>
-  <script src="https://cdn.jsdelivr.net/npm/docsify-themeable@0"></script>
-
-  <!-- Iconify (ícones extras) -->
-  <script src="https://code.iconify.design/1/1.0.0-rc7/iconify.min.js"></script>
 </body>
 </html>
