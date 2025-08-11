@@ -1,35 +1,29 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" >
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Dashboard - Intranet do Gringo</title>
+  <title>Dashboard Geral - Gerente | Intranet do Gringo</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
   />
+  <!-- Chart.js para gráfico semanal -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-<body class="bg-gray-100 flex flex-col min-h-screen">
+<body class="bg-gray-100 min-h-screen flex flex-col">
 
   <!-- Header -->
   <header class="flex justify-between items-center bg-[#09679c] text-white p-4 shadow-md">
     <div class="flex items-center gap-3">
       <img src="img/logo.png" alt="Logo Gringo" class="h-10 w-auto" />
-      <h1 class="text-xl font-bold">Dashboard - Gestor</h1>
+      <h1 class="text-xl font-bold">Dashboard Geral do Gerente</h1>
     </div>
-    <div class="flex items-center gap-3">
-      <a href="painel.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition" title="Painel">
-        <i class="fas fa-home"></i> Inicio
-      </a>
-      <a href="whatsapp.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition" title="WhatsApp">
-        <i class="fab fa-whatsapp"></i> WhatsApp
-      </a>
-      <a href="cadastro.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition" title="Cadastro">
-        <i class="fas fa-user-plus"></i> Cadastro
-      </a>
-      <a href="contatos.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition" title="Contatos">
-        <i class="fas fa-address-book"></i> Contatos
+    <nav class="flex items-center gap-3">
+      <a href="painel.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition">
+        <i class="fas fa-home"></i> Painel
       </a>
       <button
         onclick="logout()"
@@ -38,294 +32,40 @@
       >
         <i class="fas fa-sign-out-alt"></i> Sair
       </button>
-    </div>
+    </nav>
   </header>
 
-  <!-- Main content -->
-  <main class="flex-grow p-6 flex gap-6 max-w-7xl mx-auto">
+  <!-- Main Content -->
+  <main class="p-6 flex-grow max-w-7xl mx-auto">
 
-    <!-- Lista de contatos -->
-    <aside class="w-80 bg-white rounded-lg shadow p-4 max-h-[70vh] overflow-y-auto flex flex-col">
-      <h2 class="text-lg font-semibold mb-4 text-[#005075]">Contatos Cadastrados</h2>
-      <ul id="listaContatos" class="space-y-2 flex-grow overflow-y-auto">
-        <!-- Contatos carregados aqui -->
-      </ul>
-      <button
-        id="btnExcluirContato"
-        disabled
-        class="mt-4 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition"
-      >
-        Excluir Contato Selecionado
-      </button>
-    </aside>
+    <!-- Métricas principais em cards -->
+    <section class="mb-8">
+      <h2 class="text-2xl font-bold text-[#09679c] mb-4">Resumo Geral das Conversas</h2>
 
-    <!-- Chat + métricas -->
-    <section class="flex-grow bg-white rounded-lg shadow p-6 flex flex-col">
-      <h2 class="text-lg font-semibold mb-4 text-[#005075]">Chat e Métricas</h2>
-
-      <div
-        id="chatArea"
-        class="flex-grow border border-gray-300 rounded p-4 overflow-auto bg-gray-50 mb-4"
-      >
-        <p class="text-gray-500 italic">Selecione um contato para iniciar a conversa.</p>
-      </div>
-
-      <div class="flex gap-2 mb-6">
-        <input
-          id="inputMensagem"
-          type="text"
-          placeholder="Digite sua mensagem..."
-          class="flex-grow border p-2 rounded"
-          disabled
-        />
-        <button
-          id="btnEnviarMensagem"
-          onclick="enviarMensagem()"
-          class="bg-[#09679c] text-white px-4 py-2 rounded hover:bg-[#074d6b] transition disabled:opacity-50"
-          disabled
-        >
-          Enviar
-        </button>
-        <button
-          id="btnAbrirWhatsApp"
-          onclick="abrirWhatsApp()"
-          class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition disabled:opacity-50"
-          disabled
-          title="Abrir conversa no WhatsApp Web"
-        >
-          <i class="fab fa-whatsapp"></i>
-        </button>
-      </div>
-
-      <!-- Métricas resumidas -->
-      <div id="metrictasResumo" class="text-sm text-gray-700">
-        <h3 class="font-semibold mb-2">Métricas do Contato Selecionado</h3>
-        <p><strong>Total de Mensagens:</strong> <span id="totalMensagens">0</span></p>
-        <p><strong>Conversas com 3+ mensagens:</strong> <span id="conversasCompletas">0</span></p>
-        <p><strong>Conversas com 1 mensagem:</strong> <span id="conversasIniciadas">0</span></p>
-        <p><strong>Tempo desde última mensagem:</strong> <span id="tempoUltimaMsg">-</span></p>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-white p-6 rounded shadow text-center">
+          <h3 class="text-lg font-semibold mb-2">Conversas Completas (≥ 3 mensagens)</h3>
+          <p id="conversasCompletas" class="text-4xl font-bold text-[#005075]">0</p>
+        </div>
+        <div class="bg-white p-6 rounded shadow text-center">
+          <h3 class="text-lg font-semibold mb-2">Chamadas (1 mensagem)</h3>
+          <p id="chamadas" class="text-4xl font-bold text-[#005075]">0</p>
+        </div>
+        <div class="bg-white p-6 rounded shadow text-center">
+          <h3 class="text-lg font-semibold mb-2">Tempo Médio Sem Conversação</h3>
+          <p id="tempoMedioSemConversa" class="text-4xl font-bold text-[#005075]">00:00:00</p>
+        </div>
       </div>
     </section>
 
-  </main>
+    <!-- Gráfico semanal -->
+    <section class="bg-white p-6 rounded shadow mb-8">
+      <h2 class="text-2xl font-bold text-[#09679c] mb-4">Mensagens por Dia da Semana (Últimas 4 semanas)</h2>
+      <canvas id="graficoSemanal" class="w-full max-w-5xl" height="150"></canvas>
+    </section>
 
-<script>
-  // Logout
-  function logout() {
-    localStorage.removeItem("usuarioLogado");
-    window.location.href = "intranet.html";
-  }
-
-  // Pega contatos do localStorage (array de objetos)
-  let contatos = JSON.parse(localStorage.getItem("contatos")) || [];
-
-  const listaContatosEl = document.getElementById("listaContatos");
-  const chatArea = document.getElementById("chatArea");
-  const inputMensagem = document.getElementById("inputMensagem");
-  const btnEnviarMensagem = document.getElementById("btnEnviarMensagem");
-  const btnAbrirWhatsApp = document.getElementById("btnAbrirWhatsApp");
-  const btnExcluirContato = document.getElementById("btnExcluirContato");
-
-  let contatoSelecionadoIndex = null;
-
-  // Renderiza lista de contatos
-  function renderizarLista() {
-    listaContatosEl.innerHTML = "";
-    if (contatos.length === 0) {
-      listaContatosEl.innerHTML =
-        '<li class="text-gray-500 italic">Nenhum contato cadastrado.</li>';
-      disableChat();
-      return;
-    }
-
-    contatos.forEach((contato, index) => {
-      const li = document.createElement("li");
-      li.className = "cursor-pointer p-2 rounded hover:bg-[#e0f2fe] transition flex justify-between items-center";
-      li.textContent = `${contato.nome} - ${contato.numero}`;
-      if (index === contatoSelecionadoIndex) li.classList.add("bg-[#bae6fd]");
-      li.onclick = () => selecionarContato(index);
-      listaContatosEl.appendChild(li);
-    });
-  }
-
-  // Desabilita a área de chat e botões
-  function disableChat() {
-    contatoSelecionadoIndex = null;
-    chatArea.innerHTML = '<p class="text-gray-500 italic">Selecione um contato para iniciar a conversa.</p>';
-    inputMensagem.disabled = true;
-    btnEnviarMensagem.disabled = true;
-    btnAbrirWhatsApp.disabled = true;
-    btnExcluirContato.disabled = true;
-  }
-
-  // Seleciona contato
-  function selecionarContato(index) {
-    contatoSelecionadoIndex = index;
-    renderizarLista();
-    carregarChat();
-    inputMensagem.disabled = false;
-    btnEnviarMensagem.disabled = false;
-    btnAbrirWhatsApp.disabled = false;
-    btnExcluirContato.disabled = false;
-    inputMensagem.focus();
-    atualizarMetricas();
-  }
-
-  // Carrega chat do contato selecionado
-  function carregarChat() {
-    chatArea.innerHTML = "";
-    const contato = contatos[contatoSelecionadoIndex];
-    if (!contato) return;
-
-    const mensagens = contato.mensagens || [];
-
-    if (mensagens.length === 0) {
-      chatArea.innerHTML = '<p class="text-gray-500 italic">Nenhuma mensagem trocada ainda.</p>';
-      return;
-    }
-
-    mensagens.forEach((msg) => {
-      const p = document.createElement("p");
-      p.className = msg.de === "eu" ? "text-right bg-[#d1fae5] p-2 rounded my-1" : "text-left bg-[#f3f4f6] p-2 rounded my-1";
-      p.textContent = msg.de === "eu" ? `Você: ${msg.texto}` : `${contato.nome}: ${msg.texto}`;
-      chatArea.appendChild(p);
-    });
-
-    chatArea.scrollTop = chatArea.scrollHeight;
-  }
-
-  // Envia mensagem
-  function enviarMensagem() {
-    const texto = inputMensagem.value.trim();
-    if (!texto || contatoSelecionadoIndex === null) return;
-
-    if (!contatos[contatoSelecionadoIndex].mensagens) {
-      contatos[contatoSelecionadoIndex].mensagens = [];
-    }
-
-    contatos[contatoSelecionadoIndex].mensagens.push({ de: "eu", texto, timestamp: Date.now() });
-    localStorage.setItem("contatos", JSON.stringify(contatos));
-
-    inputMensagem.value = "";
-    carregarChat();
-    atualizarMetricas();
-  }
-
-  // Abre WhatsApp Web com o número do contato selecionado
-  function abrirWhatsApp() {
-    if (contatoSelecionadoIndex === null) {
-      alert("Selecione um contato primeiro.");
-      return;
-    }
-    const contato = contatos[contatoSelecionadoIndex];
-    if (!contato || !contato.numero) {
-      alert("Número do contato inválido.");
-      return;
-    }
-    const numLimpo = contato.numero.replace(/\D/g, "");
-    const url = `https://wa.me/${numLimpo}`;
-    window.open(url, "_blank");
-  }
-
-  // Excluir contato selecionado
-  btnExcluirContato.onclick = function () {
-    if (contatoSelecionadoIndex === null) return;
-
-    if (!confirm(`Excluir contato "${contatos[contatoSelecionadoIndex].nome}"? Essa ação não pode ser desfeita.`)) return;
-
-    contatos.splice(contatoSelecionadoIndex, 1);
-    localStorage.setItem("contatos", JSON.stringify(contatos));
-    contatoSelecionadoIndex = null;
-    renderizarLista();
-    disableChat();
-  };
-
-  // Atualiza métricas de conversa
-  function atualizarMetricas() {
-    if (contatoSelecionadoIndex === null) return;
-
-    const contato = contatos[contatoSelecionadoIndex];
-    const mensagens = contato.mensagens || [];
-
-    // Total mensagens
-    const totalMensagens = mensagens.length;
-
-    // Conversas com 3+ mensagens (contabilizar agrupando mensagens sequenciais separadas por +10 minutos)
-    const conversasCompletas = contarConversas(mensagens, 3);
-
-    // Conversas com 1 mensagem
-    const conversasIniciadas = contarConversas(mensagens, 1);
-
-    // Tempo desde última mensagem (formata em horas/minutos)
-    let tempoUltimaMsg = "-";
-    if (mensagens.length > 0) {
-      const ultimaTimestamp = mensagens[mensagens.length -1].timestamp;
-      const diffMs = Date.now() - ultimaTimestamp;
-      tempoUltimaMsg = formatarDuracao(diffMs);
-    }
-
-    document.getElementById("totalMensagens").textContent = totalMensagens;
-    document.getElementById("conversasCompletas").textContent = conversasCompletas;
-    document.getElementById("conversasIniciadas").textContent = conversasIniciadas;
-    document.getElementById("tempoUltimaMsg").textContent = tempoUltimaMsg;
-  }
-
-  // Contabiliza conversas baseadas no número mínimo de mensagens, agrupando mensagens que estão separadas por menos de 10 minutos
-  function contarConversas(mensagens, minMsg = 1) {
-    if (mensagens.length === 0) return 0;
-
-    // Filtra disparos curtos (ex: "oi", "bom dia" etc)
-    const disparos = ["oi", "bom dia", "boa tarde", "boa noite"];
-    // Mensagens limpas (texto minúsculo, sem pontuação extra)
-    const msgsFiltradas = mensagens.filter(m => {
-      const txt = m.texto.toLowerCase().trim();
-      return !disparos.includes(txt);
-    });
-
-    if (msgsFiltradas.length === 0) return 0;
-
-    // Agrupamento por intervalo de tempo < 10 minutos (600000 ms)
-    let conversasCount = 0;
-    let countMensagensNaConversa = 0;
-    let ultimaTimestamp = 0;
-
-    for (let i = 0; i < msgsFiltradas.length; i++) {
-      const msg = msgsFiltradas[i];
-      if (i === 0) {
-        countMensagensNaConversa = 1;
-        ultimaTimestamp = msg.timestamp;
-        continue;
-      }
-      if ((msg.timestamp - ultimaTimestamp) < 600000) { // menor que 10 minutos
-        countMensagensNaConversa++;
-      } else {
-        // Nova conversa
-        if (countMensagensNaConversa >= minMsg) conversasCount++;
-        countMensagensNaConversa = 1;
-      }
-      ultimaTimestamp = msg.timestamp;
-    }
-    // Última conversa
-    if (countMensagensNaConversa >= minMsg) conversasCount++;
-
-    return conversasCount;
-  }
-
-  // Formata duração em ms para string legível
-  function formatarDuracao(ms) {
-    const segundos = Math.floor(ms / 1000);
-    const minutos = Math.floor(segundos / 60);
-    const horas = Math.floor(minutos / 60);
-
-    if (horas > 0) return `${horas}h ${minutos % 60}m atrás`;
-    if (minutos > 0) return `${minutos}m atrás`;
-    return "Agora pouco";
-  }
-
-  // Inicializa
-  disableChat();
-  renderizarLista();
-</script>
-</body>
-</html>
-
+    <!-- Cronômetro geral -->
+    <section class="bg-white p-6 rounded shadow max-w-xs mx-auto">
+      <h2 class="text-2xl font-bold text-[#09679c] mb-4 text-center">Cronômetro de Conversação</h2>
+      <div class="flex justify-center gap-4">
+        <button id="b
