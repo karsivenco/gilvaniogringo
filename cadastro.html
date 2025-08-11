@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cadastro - Intranet do Gringo</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+  />
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col">
+
+  <!-- Header -->
+  <header class="flex justify-between items-center bg-[#09679c] text-white p-4 shadow-md">
+    <div class="flex items-center gap-3">
+      <img src="img/logo.png" alt="Logo Gringo" class="h-10 w-auto" />
+      <h1 class="text-xl font-bold">Contatos</h1>
+    </div>
+    <div class="flex items-center gap-3">
+      <a href="painel.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition" title="Painel">
+        <i class="fas fa-home"></i> Inicio
+      </a>
+      <a href="dashboard.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition" title="Dashboard">
+        <i class="fas fa-tachometer-alt"></i> Dashboard
+      </a>
+      <a href="cadastro.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition" title="Cadastro de Pessoas">
+        <i class="fas fa-user-plus"></i> Cadastro
+      </a>
+      <button
+        onclick="logout()"
+        class="bg-[#053646] px-3 py-2 rounded hover:bg-[#032d39] transition"
+        title="Sair"
+      >
+        <i class="fas fa-sign-out-alt"></i> Sair
+      </button>
+    </div>
+  </header>
+
+  <!-- Conteúdo principal -->
+  <main class="flex-grow p-6 max-w-lg mx-auto">
+    <h2 class="text-2xl font-bold mb-4 text-[#005075]">Cadastrar Novo Contato</h2>
+    <form id="formCadastro" class="bg-white p-6 rounded shadow space-y-4">
+      <div>
+        <label for="nome" class="block mb-1 font-semibold text-gray-700">Nome</label>
+        <input
+          type="text"
+          id="nome"
+          name="nome"
+          class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#09679c]"
+          placeholder="Nome completo"
+          required
+        />
+      </div>
+      <div>
+        <label for="numero" class="block mb-1 font-semibold text-gray-700">Número (com DDI + DDD)</label>
+        <input
+          type="tel"
+          id="numero"
+          name="numero"
+          class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#09679c]"
+          placeholder="+5511999998888"
+          pattern="^\+?\d{10,15}$"
+          required
+        />
+      </div>
+      <button
+        type="submit"
+        class="w-full bg-[#09679c] text-white font-semibold py-2 rounded hover:bg-[#074d6b] transition"
+      >
+        Cadastrar
+      </button>
+    </form>
+    <p id="msgStatus" class="mt-4 text-center text-sm font-semibold"></p>
+  </main>
+
+  <script>
+    // Função de logout
+    function logout() {
+      localStorage.removeItem("usuarioLogado");
+      window.location.href = "intranet.html";
+    }
+
+    // Função para salvar contatos no localStorage
+    function salvarContato(contato) {
+      let contatos = JSON.parse(localStorage.getItem("contatos")) || [];
+      contatos.push(contato);
+      localStorage.setItem("contatos", JSON.stringify(contatos));
+    }
+
+    // Evento submit do formulário
+    document.getElementById("formCadastro").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const nome = e.target.nome.value.trim();
+      const numero = e.target.numero.value.trim();
+      const msgStatus = document.getElementById("msgStatus");
+
+      if (!nome || !numero) {
+        msgStatus.textContent = "Por favor, preencha todos os campos.";
+        msgStatus.className = "mt-4 text-center text-sm font-semibold text-red-600";
+        return;
+      }
+
+      // Salva contato no localStorage
+      salvarContato({ nome, numero });
+
+      msgStatus.textContent = "Contato cadastrado com sucesso!";
+      msgStatus.className = "mt-4 text-center text-sm font-semibold text-green-600";
+
+      e.target.reset();
+    });
+  </script>
+
+</body>
+</html>
