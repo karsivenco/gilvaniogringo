@@ -1,263 +1,56 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <title>Painel - Intranet do Gringo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Intranet do Gringo - Painel</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://unpkg.com/@fortawesome/fontawesome-free/css/all.css" />
-  <!-- Socket.IO cliente -->
-  <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"
-          integrity="sha384-MEyJHfrK+UIGqY62MTf1N0LjW3GJx6p8a7pf7eN62/3x6gn2B9GZ7jpY4u71PtUL"
-          crossorigin="anonymous"></script>
-  <style>
-    body {
-      background: linear-gradient(to right, #dbeafe, #eff6ff);
-    }
-    /* Modal Chat styles */
-    #chat-modal {
-      display: none;
-      position: fixed;
-      bottom: 70px;
-      right: 20px;
-      width: 320px;
-      max-height: 400px;
-      background: white;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgb(0 0 0 / 0.2);
-      flex-direction: column;
-      overflow: hidden;
-      z-index: 1000;
-      border: 1px solid #005075;
-    }
-    #chat-header {
-      background-color: #005075;
-      color: white;
-      padding: 10px;
-      font-weight: bold;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      cursor: grab;
-    }
-    #chat-messages {
-      flex-grow: 1;
-      padding: 10px;
-      overflow-y: auto;
-      height: 260px;
-      font-size: 0.9rem;
-    }
-    #chat-input {
-      border-top: 1px solid #ddd;
-      display: flex;
-      padding: 10px;
-    }
-    #chat-input textarea {
-      resize: none;
-      flex-grow: 1;
-      border-radius: 4px;
-      border: 1px solid #ccc;
-      padding: 6px;
-      font-size: 0.9rem;
-      height: 40px;
-    }
-    #chat-input button {
-      background-color: #25D366;
-      color: white;
-      border: none;
-      margin-left: 6px;
-      padding: 8px 12px;
-      border-radius: 4px;
-      cursor: pointer;
-      font-weight: bold;
-      transition: background-color 0.2s ease;
-    }
-    #chat-input button:hover {
-      background-color: #1ebe57;
-    }
-    /* Mensagens */
-    .message {
-      margin-bottom: 10px;
-      max-width: 80%;
-      padding: 8px 12px;
-      border-radius: 16px;
-      clear: both;
-      word-wrap: break-word;
-    }
-    .message.user {
-      background-color: #005075;
-      color: white;
-      float: right;
-      border-bottom-right-radius: 0;
-    }
-    .message.bot {
-      background-color: #e5e5ea;
-      color: black;
-      float: left;
-      border-bottom-left-radius: 0;
-    }
-  </style>
 </head>
-<body class="min-h-screen flex flex-col">
+<body class="bg-gray-100 flex flex-col min-h-screen">
 
-  <!-- Topo: menu com WhatsApp, chat interno, perfil e logout -->
-  <header class="bg-[#005075] text-white p-4 flex justify-between items-center">
-    <div class="flex items-center space-x-6">
-      <h1 class="text-xl font-bold">Painel de Postagens</h1>
-
-      <a href="https://wa.me/5599999999999" target="_blank" rel="noopener" class="flex items-center hover:text-[#FF7DA4] transition" title="WhatsApp externo">
-        <i class="fab fa-whatsapp fa-lg mr-2"></i> WhatsApp
-      </a>
-
-      <button id="btn-chat-whatsapp" title="Abrir chat interno" class="flex items-center hover:text-[#FF7DA4] transition bg-[#25D366] px-3 py-1 rounded text-white">
-        <i class="fab fa-whatsapp fa-lg mr-2"></i> Chat Interno
+  <!-- Menu Superior -->
+  <header class="bg-red-600 text-white p-4 flex justify-between items-center shadow-md">
+    <h1 class="text-xl font-bold">Painel Administrativo</h1>
+    <div class="flex items-center space-x-4">
+      <!-- Botão WhatsApp -->
+      <button onclick="abrirWhatsApp()" class="bg-green-500 hover:bg-green-600 px-3 py-1 rounded-lg text-sm font-semibold">
+        📱 WhatsApp
       </button>
-
-      <a href="perfil.html" class="flex items-center hover:text-[#FF7DA4] transition" title="Meu Perfil">
-        <i class="fas fa-user-circle fa-lg mr-2"></i> Meu Perfil
-      </a>
+      <!-- Perfil -->
+      <div class="flex items-center space-x-2">
+        <img src="https://via.placeholder.com/35" alt="Perfil" class="rounded-full border border-white">
+        <span class="text-sm font-medium">Colaborador</span>
+      </div>
     </div>
-
-    <button id="btn-logout" class="bg-[#DB2356] hover:bg-[#FF7DA4] px-4 py-2 rounded">Sair</button>
   </header>
 
-  <main class="flex-grow container mx-auto p-6">
-    <p class="mb-4 text-lg" id="welcome-msg"></p>
-
-    <button id="btn-nova-postagem" class="mb-6 bg-[#005075] hover:bg-[#003f5c] text-white px-5 py-2 rounded">
-      + Nova Postagem
-    </button>
-
-    <section id="postagens-lista" class="space-y-4">
-      <p class="text-gray-600 italic">Nenhuma postagem disponível.</p>
-    </section>
+  <!-- Conteúdo -->
+  <main class="flex-grow p-4">
+    <div id="conteudo-principal" class="bg-white rounded-lg shadow-lg p-4 h-[70vh] overflow-hidden">
+      <p class="text-gray-600 text-center mt-10">Selecione uma opção no menu acima.</p>
+    </div>
   </main>
 
   <!-- Rodapé com redes sociais -->
-  <footer class="bg-[#005075] text-white p-4 flex justify-center space-x-8">
-    <a href="https://www.instagram.com/gilvaniogringo" target="_blank" rel="noopener" class="hover:text-[#FF7DA4] transition" aria-label="Instagram">
-      <i class="fab fa-instagram fa-lg"></i>
-    </a>
-    <a href="https://www.facebook.com/gilvaniogringo" target="_blank" rel="noopener" class="hover:text-[#FF7DA4] transition" aria-label="Facebook">
-      <i class="fab fa-facebook-f fa-lg"></i>
-    </a>
-    <a href="https://twitter.com/gilvaniogringo" target="_blank" rel="noopener" class="hover:text-[#FF7DA4] transition" aria-label="X Twitter">
-      <i class="fab fa-twitter fa-lg"></i>
-    </a>
-    <a href="https://www.tiktok.com/@gilvaniogringo" target="_blank" rel="noopener" class="hover:text-[#FF7DA4] transition" aria-label="TikTok">
-      <i class="fab fa-tiktok fa-lg"></i>
-    </a>
-    <a href="https://www.kwai.com/gilvaniogringo" target="_blank" rel="noopener" class="hover:text-[#FF7DA4] transition" aria-label="Kwai">
-      <i class="fas fa-video fa-lg"></i>
-    </a>
+  <footer class="bg-gray-800 text-white py-3">
+    <div class="flex justify-center space-x-6">
+      <a href="https://instagram.com" target="_blank" class="hover:text-pink-400">📸 Instagram</a>
+      <a href="https://facebook.com" target="_blank" class="hover:text-blue-400">📘 Facebook</a>
+      <a href="https://twitter.com" target="_blank" class="hover:text-blue-300">🐦 X</a>
+      <a href="https://tiktok.com" target="_blank" class="hover:text-gray-300">🎵 TikTok</a>
+      <a href="https://www.kwai.com" target="_blank" class="hover:text-yellow-300">📹 Kwai</a>
+    </div>
   </footer>
 
-  <!-- Modal Chat WhatsApp -->
-  <div id="chat-modal" class="flex flex-col">
-    <div id="chat-header">
-      <span>Chat WhatsApp - Gringo</span>
-      <button id="btn-close-chat" class="text-white font-bold">&times;</button>
-    </div>
-    <div id="chat-messages"></div>
-    <form id="chat-form" autocomplete="off" class="flex" style="padding:10px; border-top:1px solid #ddd;">
-      <textarea id="chat-input-text" placeholder="Digite sua mensagem..." rows="1" required></textarea>
-      <button type="submit" aria-label="Enviar mensagem">Enviar</button>
-    </form>
-  </div>
-
+  <!-- Script -->
   <script>
-    // Verifica login
-    if(localStorage.getItem('logado') !== 'sim') {
-      window.location.href = 'index.html';
+    function abrirWhatsApp() {
+      document.getElementById('conteudo-principal').innerHTML = `
+        <iframe src="http://SEU_DOMINIO_OU_IP:3000" 
+          class="w-full h-full rounded-lg border border-gray-300"></iframe>
+      `;
     }
-
-    // Boas-vindas
-    const usuarioSalvo = localStorage.getItem('usuarioLogado');
-    document.getElementById('welcome-msg').textContent = usuarioSalvo ? `Bem-vindo, ${usuarioSalvo}` : 'Bem-vindo!';
-
-    // Logout
-    document.getElementById('btn-logout').addEventListener('click', () => {
-      localStorage.removeItem('logado');
-      localStorage.removeItem('usuarioLogado');
-      window.location.href = 'index.html';
-    });
-
-    // Nova postagem (alerta placeholder)
-    document.getElementById('btn-nova-postagem').addEventListener('click', () => {
-      alert('Função para criar nova postagem será implementada.');
-    });
-
-    // Abrir/fechar modal chat
-    const btnChat = document.getElementById('btn-chat-whatsapp');
-    const chatModal = document.getElementById('chat-modal');
-    const btnCloseChat = document.getElementById('btn-close-chat');
-
-    btnChat.addEventListener('click', () => {
-      chatModal.style.display = 'flex';
-      scrollChatToBottom();
-      chatInputText.focus();
-    });
-
-    btnCloseChat.addEventListener('click', () => {
-      chatModal.style.display = 'none';
-    });
-
-    // Socket.io cliente
-    const socket = io('http://localhost:3000'); // <=== Alterar para URL do seu backend Node.js
-
-    const chatMessages = document.getElementById('chat-messages');
-    const chatForm = document.getElementById('chat-form');
-    const chatInputText = document.getElementById('chat-input-text');
-
-    // Função para adicionar mensagem no chat
-    function addMessage(text, sender = 'bot') {
-      const div = document.createElement('div');
-      div.classList.add('message');
-      div.classList.add(sender);
-      div.textContent = text;
-      chatMessages.appendChild(div);
-      scrollChatToBottom();
-    }
-
-    // Scroll chat para baixo
-    function scrollChatToBottom() {
-      chatMessages.scrollTop = chatMessages.scrollHeight;
-    }
-
-    // Enviar mensagem via socket
-    chatForm.addEventListener('submit', e => {
-      e.preventDefault();
-      const msg = chatInputText.value.trim();
-      if (!msg) return;
-
-      addMessage(msg, 'user');
-
-      // Número do Gringo - altere para o real (com DDD + número)
-      const gringoNumber = '5599999999999';
-
-      socket.emit('sendMessage', { number: gringoNumber, message: msg });
-
-      chatInputText.value = '';
-      chatInputText.focus();
-    });
-
-    // Escutar resposta do servidor
-    socket.on('messageStatus', data => {
-      if(data.success) {
-        addMessage('Mensagem enviada com sucesso!', 'bot');
-      } else {
-        addMessage('Erro ao enviar mensagem: ' + data.error, 'bot');
-      }
-    });
-
-    // Conexão do socket
-    socket.on('connect', () => {
-      addMessage('Conectado ao servidor WhatsApp.', 'bot');
-    });
-
-    socket.on('disconnect', () => {
-      addMessage('Desconectado do servidor WhatsApp.', 'bot');
-    });
-
   </script>
+
 </body>
 </html>
