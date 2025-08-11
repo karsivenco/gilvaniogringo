@@ -11,5 +11,5 @@ return [
     |
     */
 
-    'api_status_url' => env('SITES_API_STATUS_URL', 'https://cc.uffs.edu.br/sites/api/status/%d.json'),
+    'api_status_url' => env('SITES_API_STATUS_URL', 'https://gilvaniogringo.com/sites/api/status/%d.json'),
 ];
