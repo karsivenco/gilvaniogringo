@@ -19,13 +19,13 @@
       <h1 class="text-xl font-bold">Contatos</h1>
     </div>
     <div class="flex items-center gap-3">
-      <a href="whatsapp.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition" title="Voltar ao Início">
-        <i class="fab fa-whatsapp"></i> Voltar
+      <a href="whatsapp.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition" title="Início">
+        <i class="fab fa-whatsapp"></i> Início
       </a>
       <a href="dashboard.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition" title="Dashboard">
         <i class="fas fa-tachometer-alt"></i> Dashboard
       </a>
-      <a href="cadastro.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition" title="Cadastro">
+      <a href="cadastro.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition" title="Cadastro de Pessoas">
         <i class="fas fa-user-plus"></i> Cadastro
       </a>
       <button
@@ -39,95 +39,100 @@
   </header>
 
   <!-- Conteúdo principal -->
-  <main class="flex-grow p-6 max-w-4xl mx-auto">
-    <h2 class="text-2xl font-bold mb-6 text-[#005075]">Lista de Contatos</h2>
+  <main class="flex-grow p-6 max-w-3xl mx-auto">
+    <h2 class="text-2xl font-bold mb-4 text-[#005075]">Lista de Contatos</h2>
+    <div class="bg-white shadow rounded-lg p-6">
 
-    <div id="listaContatos" class="bg-white rounded shadow divide-y divide-gray-200">
-      <!-- contatos serão renderizados aqui -->
+      <ul id="listaContatos" class="divide-y divide-gray-200">
+        <!-- Contatos aparecerão aqui -->
+      </ul>
+
     </div>
-
-    <p id="msgStatus" class="mt-4 text-center text-sm font-semibold"></p>
   </main>
 
   <script>
+    // Pega usuário logado do localStorage, sem redirecionar
+    function getUsuarioLogado() {
+      const user = localStorage.getItem("usuarioLogado");
+      console.log("Usuário logado:", user); // debug
+      return user || null;
+    }
+
+    // Função logout
     function logout() {
       localStorage.removeItem("usuarioLogado");
       window.location.href = "intranet.html";
     }
 
-    // Pega o usuário logado
-    function getUsuarioLogado() {
-      const user = localStorage.getItem("usuarioLogado");
-      if (!user) {
-        alert("Usuário não logado. Você será redirecionado para a intranet.");
-        window.location.href = "intranet.html";
-        return null;
-      }
-      return user;
-    }
-
-    // Pega contatos do usuário logado
+    // Busca contatos do usuário logado
     function getContatos() {
       const usuario = getUsuarioLogado();
       if (!usuario) return [];
-      return JSON.parse(localStorage.getItem(`contatos_${usuario}`)) || [];
+      const todosContatos = JSON.parse(localStorage.getItem("contatos")) || {};
+      return todosContatos[usuario] || [];
     }
 
-    // Salva contatos do usuário
-    function setContatos(contatos) {
+    // Salva contatos para usuário logado
+    function salvarContatos(contatos) {
       const usuario = getUsuarioLogado();
       if (!usuario) return;
-      localStorage.setItem(`contatos_${usuario}`, JSON.stringify(contatos));
+      let todosContatos = JSON.parse(localStorage.getItem("contatos")) || {};
+      todosContatos[usuario] = contatos;
+      localStorage.setItem("contatos", JSON.stringify(todosContatos));
     }
 
-    // Exclui contato pelo id
-    function excluirContato(id) {
-      if (!confirm("Deseja realmente excluir este contato?")) return;
-      let contatos = getContatos();
-      contatos = contatos.filter(c => c.id !== id);
-      setContatos(contatos);
-      renderizarContatos();
-      document.getElementById("msgStatus").textContent = "Contato excluído com sucesso.";
-      document.getElementById("msgStatus").className = "mt-4 text-center text-sm font-semibold text-green-600";
-    }
-
-    // Renderiza lista
+    // Renderiza a lista de contatos na tela
     function renderizarContatos() {
-      const lista = document.getElementById("listaContatos");
       const contatos = getContatos();
+      const listaEl = document.getElementById("listaContatos");
+      listaEl.innerHTML = "";
 
-      if (contatos.length === 0) {
-        lista.innerHTML = `<p class="p-6 text-center text-gray-500 italic">Nenhum contato cadastrado.</p>`;
+      if (!contatos.length) {
+        listaEl.innerHTML = '<li class="py-4 text-gray-500 italic text-center">Nenhum contato encontrado.</li>';
         return;
       }
 
-      lista.innerHTML = contatos.map(contato => {
-        const telefoneDisplay = contato.telefone ? `<p><strong>Telefone:</strong> ${contato.telefone}</p>` : "";
-        const enderecoDisplay = contato.endereco ? `<p><strong>Endereço:</strong> ${contato.endereco}</p>` : "";
+      contatos.forEach((contato, i) => {
+        const li = document.createElement("li");
+        li.className = "py-4 flex justify-between items-center";
 
-        return `
-          <div class="p-4 hover:bg-gray-50 flex justify-between items-start">
-            <div>
-              <p class="font-semibold text-[#09679c] text-lg">${contato.nome}</p>
-              ${telefoneDisplay}
-              ${enderecoDisplay}
-              <p><strong>Origem:</strong> ${contato.origem.charAt(0).toUpperCase() + contato.origem.slice(1)}</p>
-            </div>
+        li.innerHTML = `
+          <div>
+            <p class="font-semibold text-[#09679c]">${contato.nome}</p>
+            <p class="text-gray-600">${contato.numero}</p>
+            <p class="text-gray-600 italic">${contato.endereco ? contato.endereco : "<span class='text-red-500'>Sem endereço</span>"}</p>
+            <p class="text-sm text-gray-500">Origem: <span class="capitalize">${contato.origem}</span></p>
+          </div>
+          <div class="flex items-center gap-3">
             <button
-              onclick="excluirContato('${contato.id}')"
               class="text-red-600 hover:text-red-800"
               title="Excluir contato"
+              onclick="excluirContato(${i})"
             >
               <i class="fas fa-trash fa-lg"></i>
             </button>
+            <a href="https://wa.me/${contato.numero.replace(/\D/g,'')}" target="_blank" class="text-[#25d366] hover:text-[#128c43]" title="Abrir WhatsApp">
+              <i class="fab fa-whatsapp fa-lg"></i>
+            </a>
           </div>
         `;
-      }).join("");
+
+        listaEl.appendChild(li);
+      });
     }
 
-    // Inicializa
-    renderizarContatos();
+    // Excluir contato pelo índice e salvar
+    function excluirContato(indice) {
+      if (!confirm("Tem certeza que deseja excluir este contato?")) return;
+      let contatos = getContatos();
+      contatos.splice(indice, 1);
+      salvarContatos(contatos);
+      renderizarContatos();
+    }
 
+    // Inicializa lista na carga da página
+    renderizarContatos();
   </script>
+
 </body>
 </html>
