@@ -19,7 +19,7 @@
       <h1 class="text-xl font-bold">Contatos</h1>
     </div>
     <div class="flex items-center gap-3">
-      <a href="painel.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition" title="Painel">
+      <a href="painel.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition" title="Inicio">
         <i class="fas fa-home"></i> Inicio
       </a>
       <a href="whatsapp.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition" title="Retorno">
@@ -28,7 +28,7 @@
       <a href="dashboard.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition" title="Dashboard">
         <i class="fas fa-tachometer-alt"></i> Dashboard
       </a>
-      <a href="cadastro.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition" title="Cadastro">
+      <a href="cadastro.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition" title="Cadastro de Pessoas">
         <i class="fas fa-user-plus"></i> Cadastro
       </a>
       <button
@@ -41,79 +41,75 @@
     </div>
   </header>
 
-  <!-- Conteúdo principal -->
   <main class="flex-grow p-6 max-w-4xl mx-auto">
     <h2 class="text-2xl font-bold mb-4 text-[#005075]">Lista de Contatos</h2>
+
+    <div id="msgSucesso" class="mb-4 text-center text-green-600 font-semibold"></div>
+
     <div class="bg-white shadow rounded-lg p-6">
       <ul id="listaContatos" class="divide-y divide-gray-200">
-        <!-- Contatos aparecerão aqui -->
+        <!-- contatos aqui -->
       </ul>
-      <p id="msgVazio" class="text-center text-gray-500 italic mt-4 hidden">Nenhum contato encontrado.</p>
     </div>
   </main>
 
   <script>
-    // Função logout simples
+    // Função de logout
     function logout() {
       localStorage.removeItem("usuarioLogado");
       window.location.href = "intranet.html";
     }
 
-    // Função para obter contatos do localStorage
-    function obterContatos() {
+    // Pega contatos do localStorage
+    function pegarContatos() {
       return JSON.parse(localStorage.getItem("contatos")) || [];
     }
 
-    // Função para salvar contatos no localStorage
+    // Salvar contatos (após exclusão)
     function salvarContatos(contatos) {
       localStorage.setItem("contatos", JSON.stringify(contatos));
     }
 
-    // Função para excluir contato pelo índice
+    // Excluir contato por índice
     function excluirContato(index) {
-      const contatos = obterContatos();
-      contatos.splice(index, 1);
-      salvarContatos(contatos);
-      renderizarContatos();
+      if (confirm("Deseja realmente excluir este contato?")) {
+        let contatos = pegarContatos();
+        contatos.splice(index, 1);
+        salvarContatos(contatos);
+        renderizarContatos();
+      }
     }
 
-    // Renderiza lista de contatos
+    // Renderiza a lista
     function renderizarContatos() {
       const listaEl = document.getElementById("listaContatos");
-      const msgVazio = document.getElementById("msgVazio");
-      const contatos = obterContatos();
+      const contatos = pegarContatos();
 
       listaEl.innerHTML = "";
 
       if (contatos.length === 0) {
-        msgVazio.classList.remove("hidden");
+        listaEl.innerHTML = '<li class="py-4 text-gray-500 italic">Nenhum contato encontrado.</li>';
         return;
-      } else {
-        msgVazio.classList.add("hidden");
       }
 
-      contatos.forEach((contato, index) => {
+      contatos.forEach((contato, idx) => {
         const li = document.createElement("li");
         li.className = "py-4 flex flex-col md:flex-row md:justify-between md:items-center";
 
         li.innerHTML = `
-          <div>
-            <p class="font-semibold text-[#09679c]">${contato.nome}</p>
-            <p><strong>Telefone:</strong> ${contato.numero}</p>
-            ${contato.endereco ? `<p><strong>Endereço:</strong> ${contato.endereco}</p>` : ""}
-            <p><strong>Origem:</strong> ${contato.origem}</p>
+          <div class="mb-2 md:mb-0">
+            <p><strong class="text-[#09679c]">${contato.nome}</strong></p>
+            <p>Telefone: ${contato.numero}</p>
+            ${contato.endereco ? `<p>Endereço: ${contato.endereco}</p>` : ""}
+            <p>Origem: <em>${contato.origem}</em></p>
           </div>
-          <div class="mt-2 md:mt-0 flex items-center gap-3">
-            <a href="https://wa.me/${contato.numero.replace(/\D/g, '')}" target="_blank" rel="noopener noreferrer" class="text-green-600 hover:text-green-800" title="Abrir WhatsApp">
-              <i class="fab fa-whatsapp fa-lg"></i>
-            </a>
+          <div class="flex gap-3">
             <button
-              onclick="if(confirm('Deseja realmente excluir este contato?')) excluirContato(${index})"
-              class="text-red-600 hover:text-red-800"
+              onclick="excluirContato(${idx})"
+              class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 transition"
               title="Excluir contato"
-              aria-label="Excluir contato"
             >
-              <i class="fas fa-trash fa-lg"></i>
+              <i class="fas fa-trash"></i> Excluir
             </button>
           </div>
         `;
@@ -122,8 +118,18 @@
       });
     }
 
-    // Executa renderização ao carregar página
-    renderizarContatos();
+    // Mostrar mensagem sucesso vindo do cadastro
+    window.addEventListener("DOMContentLoaded", () => {
+      const msgSucesso = sessionStorage.getItem("msgSucessoCadastro");
+      if (msgSucesso) {
+        const msgEl = document.getElementById("msgSucesso");
+        msgEl.textContent = msgSucesso;
+        sessionStorage.removeItem("msgSucessoCadastro");
+      }
+
+      renderizarContatos();
+    });
   </script>
+
 </body>
 </html>
