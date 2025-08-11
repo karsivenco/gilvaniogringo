@@ -50,6 +50,12 @@
       <ul id="listaPessoas" class="space-y-2">
         <!-- Pessoas aparecem aqui -->
       </ul>
+      <button
+        onclick="openCadastroModal()"
+        class="mt-4 bg-[#09679c] text-white py-2 rounded hover:bg-[#074d6b] transition"
+      >
+        + Nova Pessoa
+      </button>
     </aside>
 
     <!-- Área principal do chat -->
@@ -101,13 +107,38 @@
           />
         </div>
         <div class="mb-4">
-          <label for="telefone" class="block mb-1 font-semibold">Telefone *</label>
+          <label for="numero" class="block mb-1 font-semibold">Telefone *</label>
           <input
             type="tel"
-            id="telefone"
-            placeholder="(00) 00000-0000"
+            id="numero"
+            placeholder="+5511999998888"
             class="w-full border p-2 rounded"
             required
+          />
+        </div>
+        <div class="mb-4">
+          <label for="origem" class="block mb-1 font-semibold">Origem *</label>
+          <select id="origem" class="w-full border p-2 rounded" required>
+            <option value="">Selecione a origem</option>
+            <option value="instagram">Instagram</option>
+            <option value="whatsapp">WhatsApp</option>
+            <option value="facebook">Facebook</option>
+            <option value="tiktok">TikTok</option>
+            <option value="kwai">Kwai</option>
+            <option value="youtube">YouTube</option>
+            <option value="abaixo assinado">Abaixo Assinado</option>
+            <option value="cartão de visita">Cartão de Visita</option>
+            <option value="gabinete">Gabinete</option>
+            <option value="direto gringo">Direto Gringo</option>
+          </select>
+        </div>
+        <div class="mb-4">
+          <label for="endereco" class="block mb-1 font-semibold">Endereço (opcional)</label>
+          <input
+            type="text"
+            id="endereco"
+            class="w-full border p-2 rounded"
+            placeholder="Rua, número, bairro"
           />
         </div>
         <div class="flex justify-end gap-3">
@@ -130,7 +161,13 @@
   </div>
 
   <script>
-    // Controle do modal
+    // Função logout (mesmo de sempre)
+    function logout() {
+      localStorage.removeItem("usuarioLogado");
+      window.location.href = "intranet.html";
+    }
+
+    // Controla modal
     function openCadastroModal() {
       document.getElementById("modalCadastro").classList.remove("hidden");
     }
@@ -139,9 +176,13 @@
       document.getElementById("formCadastro").reset();
     }
 
-    // Armazenar lista de pessoas no localStorage
-    let pessoas = JSON.parse(localStorage.getItem("pessoas")) || [];
+    // Pega contatos do localStorage na chave "contatos"
+    let contatos = JSON.parse(localStorage.getItem("contatos")) || [];
 
+    // Pega mensagens do localStorage
+    let mensagens = JSON.parse(localStorage.getItem("mensagens")) || {};
+
+    // Referências aos elementos
     const listaPessoasEl = document.getElementById("listaPessoas");
     const chatArea = document.getElementById("chatArea");
     const inputMessage = document.getElementById("inputMessage");
@@ -149,29 +190,26 @@
 
     let pessoaSelecionadaIndex = null;
 
-    // Renderiza lista de pessoas na sidebar
     function renderizarLista() {
       listaPessoasEl.innerHTML = "";
-      if (pessoas.length === 0) {
+      if (contatos.length === 0) {
         listaPessoasEl.innerHTML =
-          '<li class="text-gray-500 italic">Nenhuma pessoa cadastrada.</li>';
+          '<li class="text-gray-500 italic">Nenhum contato cadastrado.</li>';
         return;
       }
-
-      pessoas.forEach((pessoa, index) => {
+      contatos.forEach((contato, i) => {
         const li = document.createElement("li");
         li.className =
           "cursor-pointer p-2 rounded hover:bg-[#e0f2fe] transition flex justify-between items-center";
-        li.textContent = `${pessoa.nome} (${pessoa.telefone})`;
-        if (index === pessoaSelecionadaIndex) {
+        li.textContent = `${contato.nome} (${contato.numero})`;
+        if (i === pessoaSelecionadaIndex) {
           li.classList.add("bg-[#bae6fd]");
         }
-        li.onclick = () => selecionarPessoa(index);
+        li.onclick = () => selecionarPessoa(i);
         listaPessoasEl.appendChild(li);
       });
     }
 
-    // Seleciona pessoa para conversar
     function selecionarPessoa(index) {
       pessoaSelecionadaIndex = index;
       renderizarLista();
@@ -181,71 +219,72 @@
       inputMessage.focus();
     }
 
-    // Carregar chat da pessoa selecionada (aqui só exemplo com histórico local)
     function carregarChat() {
       chatArea.innerHTML = "";
-      const pessoa = pessoas[pessoaSelecionadaIndex];
-      if (!pessoa) return;
+      if (pessoaSelecionadaIndex === null) return;
+      const contato = contatos[pessoaSelecionadaIndex];
+      if (!contato) return;
 
-      const mensagens = pessoa.mensagens || [];
-      if (mensagens.length === 0) {
+      const msgs = mensagens[contato.numero] || [];
+
+      if (msgs.length === 0) {
         chatArea.innerHTML =
           '<p class="text-gray-500 italic">Nenhuma mensagem trocada ainda.</p>';
         return;
       }
 
-      mensagens.forEach((msg) => {
+      msgs.forEach((msg) => {
         const p = document.createElement("p");
         p.className = msg.de === "eu" ? "text-right" : "text-left";
-        p.textContent = msg.de === "eu" ? `Você: ${msg.texto}` : `${pessoa.nome}: ${msg.texto}`;
+        p.textContent = msg.de === "eu" ? `Você: ${msg.texto}` : `${contato.nome}: ${msg.texto}`;
         chatArea.appendChild(p);
       });
       chatArea.scrollTop = chatArea.scrollHeight;
     }
 
-    // Enviar mensagem no chat (salva localmente)
     function enviarMensagem() {
       const texto = inputMessage.value.trim();
       if (!texto || pessoaSelecionadaIndex === null) return;
 
-      // Atualiza mensagens
-      if (!pessoas[pessoaSelecionadaIndex].mensagens) {
-        pessoas[pessoaSelecionadaIndex].mensagens = [];
-      }
-      pessoas[pessoaSelecionadaIndex].mensagens.push({ de: "eu", texto });
-      localStorage.setItem("pessoas", JSON.stringify(pessoas));
+      const contato = contatos[pessoaSelecionadaIndex];
+      if (!mensagens[contato.numero]) mensagens[contato.numero] = [];
+      mensagens[contato.numero].push({ de: "eu", texto, timestamp: Date.now() });
+      localStorage.setItem("mensagens", JSON.stringify(mensagens));
 
       inputMessage.value = "";
       carregarChat();
 
-      // Aqui você pode adicionar integração com backend para enviar mensagem ao WhatsApp backend
+      // Aqui você pode adicionar integração com backend para envio real
     }
 
-    // Evento submit do formulário cadastro
-    document.getElementById("formCadastro").addEventListener("submit", function (e) {
+    // Evento submit do form cadastro
+    document.getElementById("formCadastro").addEventListener("submit", function(e) {
       e.preventDefault();
-
       const nome = document.getElementById("nome").value.trim();
-      const telefone = document.getElementById("telefone").value.trim();
+      const numero = document.getElementById("numero").value.trim();
+      const origem = document.getElementById("origem").value;
+      const endereco = document.getElementById("endereco").value.trim();
 
-      if (!nome || !telefone) {
-        alert("Por favor, preencha os campos obrigatórios.");
+      if (!nome || !numero || !origem) {
+        alert("Preencha nome, telefone e origem.");
         return;
       }
 
-      pessoas.push({ nome, telefone, mensagens: [] });
-      localStorage.setItem("pessoas", JSON.stringify(pessoas));
+      // Verifica duplicidade pelo número
+      if (contatos.some(c => c.numero === numero)) {
+        alert("Contato com esse telefone já cadastrado.");
+        return;
+      }
+
+      contatos.push({ nome, numero, origem, endereco });
+      localStorage.setItem("contatos", JSON.stringify(contatos));
+
       fecharCadastroModal();
       renderizarLista();
+      alert("Contato salvo com sucesso!");
     });
 
-    // Logout simples
-    function logout() {
-      localStorage.removeItem("usuarioLogado");
-      window.location.href = "intranet.html";
-    }
-
-    // Inicia renderização da lista na carga da página
+    // Inicializa
     renderizarLista();
   </script>
 </body>
