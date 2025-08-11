@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" >
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -19,6 +19,13 @@
       <h1 class="text-xl font-bold">WhatsApp - Atendimento</h1>
     </div>
     <div class="flex items-center gap-3">
+      <button
+        onclick="openCadastroModal()"
+        class="bg-[#074d6b] border border-white px-3 py-2 rounded hover:bg-[#053646] transition"
+        title="Cadastrar nova pessoa"
+      >
+        <i class="fas fa-user-plus"></i> Cadastrar Pessoa
+      </button>
       <a href="painel.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition">Voltar</a>
       <button
         onclick="logout()"
@@ -30,68 +37,211 @@
   </header>
 
   <!-- Main Content -->
-  <main class="flex-grow p-6">
-    <div class="bg-white rounded-lg shadow p-6 h-[70vh] overflow-auto">
-      <h2 class="text-lg font-semibold mb-4">Conexão com WhatsApp Backend</h2>
-      <p class="mb-4">Aqui será exibida a interface de chat integrada ao backend WhatsApp.</p>
+  <main class="flex-grow p-6 flex gap-6">
+    
+    <!-- Lista de Pessoas cadastradas -->
+    <aside class="w-80 bg-white rounded-lg shadow p-4 flex flex-col max-h-[70vh] overflow-y-auto">
+      <h2 class="text-lg font-semibold mb-4 text-[#005075]">Pessoas Cadastradas</h2>
+      <ul id="listaPessoas" class="space-y-2">
+        <!-- Pessoas aparecem aqui -->
+      </ul>
+    </aside>
 
-      <!-- Exemplo: área para logs, mensagens, controles -->
-      <div id="chat-area" class="h-[50vh] border border-gray-300 rounded p-4 overflow-y-auto bg-gray-50">
-        <p class="text-gray-500 italic">Conectando...</p>
+    <!-- Área principal do chat -->
+    <section class="flex-grow bg-white rounded-lg shadow p-6 flex flex-col">
+      <h2 class="text-lg font-semibold mb-4">Chat com a Pessoa</h2>
+      <div
+        id="chatArea"
+        class="flex-grow border border-gray-300 rounded p-4 overflow-auto bg-gray-50 mb-4"
+      >
+        <p class="text-gray-500 italic">Selecione uma pessoa para começar a conversar.</p>
       </div>
 
-      <!-- Controles -->
-      <div class="mt-4">
+      <div class="flex gap-2">
         <input
+          id="inputMessage"
           type="text"
-          id="messageInput"
           placeholder="Digite sua mensagem..."
-          class="w-full p-2 border rounded"
+          class="flex-grow border p-2 rounded"
+          disabled
         />
         <button
-          id="sendBtn"
-          class="mt-2 bg-[#09679c] text-white px-4 py-2 rounded hover:bg-[#074d6b] transition"
-          onclick="sendMessage()"
+          id="btnEnviar"
+          onclick="enviarMensagem()"
+          class="bg-[#09679c] text-white px-4 py-2 rounded hover:bg-[#074d6b] transition disabled:opacity-50"
+          disabled
         >
           Enviar
         </button>
       </div>
-    </div>
+    </section>
+
   </main>
 
-  <!-- Footer -->
-  <footer class="bg-[#005075] text-white text-center p-4 mt-auto">
-    <p>Intranet do Gringo &copy; 2025</p>
-  </footer>
+  <!-- Modal de Cadastro -->
+  <div
+    id="modalCadastro"
+    class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden"
+  >
+    <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
+      <h3 class="text-xl font-bold mb-4 text-[#09679c]">Cadastrar Nova Pessoa</h3>
+      <form id="formCadastro">
+        <div class="mb-4">
+          <label for="nome" class="block mb-1 font-semibold">Nome *</label>
+          <input
+            type="text"
+            id="nome"
+            class="w-full border p-2 rounded"
+            required
+          />
+        </div>
+        <div class="mb-4">
+          <label for="telefone" class="block mb-1 font-semibold">Telefone *</label>
+          <input
+            type="tel"
+            id="telefone"
+            placeholder="(00) 00000-0000"
+            class="w-full border p-2 rounded"
+            required
+          />
+        </div>
+        <div class="flex justify-end gap-3">
+          <button
+            type="button"
+            onclick="fecharCadastroModal()"
+            class="px-4 py-2 rounded border border-gray-300 hover:bg-gray-100"
+          >
+            Cancelar
+          </button>
+          <button
+            type="submit"
+            class="bg-[#09679c] text-white px-4 py-2 rounded hover:bg-[#074d6b]"
+          >
+            Salvar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
 
   <script>
-    // Exemplo simples para logout
+    // Controle do modal
+    function openCadastroModal() {
+      document.getElementById("modalCadastro").classList.remove("hidden");
+    }
+    function fecharCadastroModal() {
+      document.getElementById("modalCadastro").classList.add("hidden");
+      document.getElementById("formCadastro").reset();
+    }
+
+    // Armazenar lista de pessoas no localStorage
+    let pessoas = JSON.parse(localStorage.getItem("pessoas")) || [];
+
+    const listaPessoasEl = document.getElementById("listaPessoas");
+    const chatArea = document.getElementById("chatArea");
+    const inputMessage = document.getElementById("inputMessage");
+    const btnEnviar = document.getElementById("btnEnviar");
+
+    let pessoaSelecionadaIndex = null;
+
+    // Renderiza lista de pessoas na sidebar
+    function renderizarLista() {
+      listaPessoasEl.innerHTML = "";
+      if (pessoas.length === 0) {
+        listaPessoasEl.innerHTML =
+          '<li class="text-gray-500 italic">Nenhuma pessoa cadastrada.</li>';
+        return;
+      }
+
+      pessoas.forEach((pessoa, index) => {
+        const li = document.createElement("li");
+        li.className =
+          "cursor-pointer p-2 rounded hover:bg-[#e0f2fe] transition flex justify-between items-center";
+        li.textContent = `${pessoa.nome} (${pessoa.telefone})`;
+        if (index === pessoaSelecionadaIndex) {
+          li.classList.add("bg-[#bae6fd]");
+        }
+        li.onclick = () => selecionarPessoa(index);
+        listaPessoasEl.appendChild(li);
+      });
+    }
+
+    // Seleciona pessoa para conversar
+    function selecionarPessoa(index) {
+      pessoaSelecionadaIndex = index;
+      renderizarLista();
+      carregarChat();
+      inputMessage.disabled = false;
+      btnEnviar.disabled = false;
+      inputMessage.focus();
+    }
+
+    // Carregar chat da pessoa selecionada (aqui só exemplo com histórico local)
+    function carregarChat() {
+      chatArea.innerHTML = "";
+      const pessoa = pessoas[pessoaSelecionadaIndex];
+      if (!pessoa) return;
+
+      const mensagens = pessoa.mensagens || [];
+      if (mensagens.length === 0) {
+        chatArea.innerHTML =
+          '<p class="text-gray-500 italic">Nenhuma mensagem trocada ainda.</p>';
+        return;
+      }
+
+      mensagens.forEach((msg) => {
+        const p = document.createElement("p");
+        p.className = msg.de === "eu" ? "text-right" : "text-left";
+        p.textContent = msg.de === "eu" ? `Você: ${msg.texto}` : `${pessoa.nome}: ${msg.texto}`;
+        chatArea.appendChild(p);
+      });
+      chatArea.scrollTop = chatArea.scrollHeight;
+    }
+
+    // Enviar mensagem no chat (salva localmente)
+    function enviarMensagem() {
+      const texto = inputMessage.value.trim();
+      if (!texto || pessoaSelecionadaIndex === null) return;
+
+      // Atualiza mensagens
+      if (!pessoas[pessoaSelecionadaIndex].mensagens) {
+        pessoas[pessoaSelecionadaIndex].mensagens = [];
+      }
+      pessoas[pessoaSelecionadaIndex].mensagens.push({ de: "eu", texto });
+      localStorage.setItem("pessoas", JSON.stringify(pessoas));
+
+      inputMessage.value = "";
+      carregarChat();
+
+      // Aqui você pode adicionar integração com backend para enviar mensagem ao WhatsApp backend
+    }
+
+    // Evento submit do formulário cadastro
+    document.getElementById("formCadastro").addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const nome = document.getElementById("nome").value.trim();
+      const telefone = document.getElementById("telefone").value.trim();
+
+      if (!nome || !telefone) {
+        alert("Por favor, preencha os campos obrigatórios.");
+        return;
+      }
+
+      pessoas.push({ nome, telefone, mensagens: [] });
+      localStorage.setItem("pessoas", JSON.stringify(pessoas));
+      fecharCadastroModal();
+      renderizarLista();
+    });
+
+    // Logout simples
     function logout() {
       localStorage.removeItem("usuarioLogado");
       window.location.href = "intranet.html";
     }
 
-    // Exemplo simples enviar mensagem
-    function sendMessage() {
-      const input = document.getElementById("messageInput");
-      const chatArea = document.getElementById("chat-area");
-      const message = input.value.trim();
-      if (!message) return;
-
-      // Exibir mensagem no chat (exemplo local)
-      const p = document.createElement("p");
-      p.textContent = "Você: " + message;
-      p.className = "mb-1";
-      chatArea.appendChild(p);
-      chatArea.scrollTop = chatArea.scrollHeight;
-
-      input.value = "";
-
-      // TODO: Aqui você vai conectar com o backend via websocket ou API REST
-      // Exemplo:
-      // fetch("/api/send", { method: "POST", body: JSON.stringify({ message }) })
-      //   .then(...)
-    }
+    // Inicia renderização da lista na carga da página
+    renderizarLista();
   </script>
 </body>
 </html>
