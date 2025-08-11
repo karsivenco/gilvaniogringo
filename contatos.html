@@ -9,12 +9,6 @@
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
   />
-  <script>
-    // Verifica se o usuário está logado, senão redireciona
-    if (!localStorage.getItem("usuarioLogado")) {
-      window.location.href = "intranet.html";
-    }
-  </script>
 </head>
 <body class="bg-gray-100 min-h-screen flex flex-col">
 
@@ -44,57 +38,58 @@
     <div class="bg-white shadow rounded-lg p-6 max-w-3xl mx-auto">
 
       <ul id="listaContatos" class="divide-y divide-gray-200">
-        <!-- Contatos aparecerão aqui -->
+        <li class="py-4 text-center text-gray-500 italic">Carregando contatos...</li>
       </ul>
 
     </div>
   </main>
 
   <script>
-    // Exemplo de contatos simulados - adapte para dados reais
-    const contatos = [
-      { nome: "João Silva", telefone: "(51) 99999-0000" },
-      { nome: "Maria Souza", telefone: "(51) 98888-1111" },
-      { nome: "Carlos Pereira", telefone: "(51) 97777-2222" },
-    ];
-
     const listaContatosEl = document.getElementById("listaContatos");
 
-    function renderizarContatos() {
-      listaContatosEl.innerHTML = "";
+    // Função para buscar contatos da API backend
+    async function buscarContatos() {
+      try {
+        const response = await fetch("http://localhost:3000/api/contatos"); // ajuste a URL do backend
+        if (!response.ok) throw new Error("Erro ao buscar contatos");
 
-      if (contatos.length === 0) {
-        listaContatosEl.innerHTML = '<li class="py-4 text-gray-500 italic">Nenhum contato encontrado.</li>';
-        return;
+        const contatos = await response.json();
+
+        if (contatos.length === 0) {
+          listaContatosEl.innerHTML = '<li class="py-4 text-gray-500 italic">Nenhum contato encontrado.</li>';
+          return;
+        }
+
+        listaContatosEl.innerHTML = "";
+
+        contatos.forEach(contato => {
+          const li = document.createElement("li");
+          li.className = "py-4 flex justify-between items-center";
+
+          li.innerHTML = `
+            <div>
+              <p class="font-semibold text-[#09679c]">${contato.name || contato.number}</p>
+              <p class="text-gray-600">${formatarTelefone(contato.number)}</p>
+            </div>
+            <button class="text-[#09679c] hover:text-[#074d6b]" title="Abrir conversa no WhatsApp">
+              <i class="fab fa-whatsapp fa-lg"></i>
+            </button>
+          `;
+
+          // Ao clicar no botão, abre o WhatsApp Web direto para esse contato
+          li.querySelector("button").addEventListener("click", () => {
+            // Abrir WhatsApp Web conversa (formato de link padrão)
+            const numeroLimpo = contato.number.replace(/\D/g, "");
+            const url = `https://web.whatsapp.com/send?phone=${numeroLimpo}`;
+            window.open(url, "_blank");
+          });
+
+          listaContatosEl.appendChild(li);
+        });
+      } catch (error) {
+        listaContatosEl.innerHTML = `<li class="py-4 text-red-600 italic">Erro ao carregar contatos: ${error.message}</li>`;
       }
-
-      contatos.forEach(contato => {
-        const li = document.createElement("li");
-        li.className = "py-4 flex justify-between items-center";
-
-        li.innerHTML = `
-          <div>
-            <p class="font-semibold text-[#09679c]">${contato.nome}</p>
-            <p class="text-gray-600">${contato.telefone}</p>
-          </div>
-          <button class="text-[#09679c] hover:text-[#074d6b]" title="Iniciar conversa">
-            <i class="fab fa-whatsapp fa-lg"></i>
-          </button>
-        `;
-
-        listaContatosEl.appendChild(li);
-      });
     }
 
-    // Função de logout
-    function logout() {
-      localStorage.removeItem("usuarioLogado");
-      window.location.href = "intranet.html";
-    }
-
-    // Inicializa lista ao carregar página
-    renderizarContatos();
-  </script>
-
-</body>
-</html>
+    // Função simples para formatar telefone BR: +55 (xx) xxxx-xxxx
+    function form
