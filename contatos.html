@@ -3,12 +3,27 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Contatos - Intranet do Gringo</title>
+  <title>Cadastro - Intranet do Gringo</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
   />
+  <style>
+    .origem-option {
+      cursor: pointer;
+      padding: 0.5rem 1rem;
+      border: 1px solid #09679c;
+      border-radius: 0.375rem;
+      color: #09679c;
+      user-select: none;
+      transition: background-color 0.3s, color 0.3s;
+    }
+    .origem-option.selected {
+      background-color: #09679c;
+      color: white;
+    }
+  </style>
 </head>
 <body class="bg-gray-100 min-h-screen flex flex-col">
 
@@ -19,14 +34,17 @@
       <h1 class="text-xl font-bold">Contatos</h1>
     </div>
     <div class="flex items-center gap-3">
-      <a href="whatsapp.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition" title="Início">
-        <i class="fab fa-whatsapp"></i> Início
+      <a href="whatsapp.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition" title="Painel">
+        <i class="fas fa-whatsapp"></i> Inicio
       </a>
       <a href="dashboard.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition" title="Dashboard">
         <i class="fas fa-tachometer-alt"></i> Dashboard
       </a>
       <a href="cadastro.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition" title="Cadastro de Pessoas">
         <i class="fas fa-user-plus"></i> Cadastro
+      </a>
+       <a href="contatos.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition" title="Contatos">
+        <i class="fas fa-address-book"></i> Contatos
       </a>
       <button
         onclick="logout()"
@@ -39,99 +57,150 @@
   </header>
 
   <!-- Conteúdo principal -->
-  <main class="flex-grow p-6 max-w-3xl mx-auto">
-    <h2 class="text-2xl font-bold mb-4 text-[#005075]">Lista de Contatos</h2>
-    <div class="bg-white shadow rounded-lg p-6">
+  <main class="flex-grow p-6 max-w-lg mx-auto">
+    <h2 class="text-2xl font-bold mb-4 text-[#005075]">Cadastrar Novo Contato</h2>
+    <form id="formCadastro" class="bg-white p-6 rounded shadow space-y-4">
+      <div>
+        <label for="nome" class="block mb-1 font-semibold text-gray-700">Nome <span class="text-red-600">*</span></label>
+        <input
+          type="text"
+          id="nome"
+          name="nome"
+          class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#09679c]"
+          placeholder="Nome completo"
+          required
+        />
+      </div>
+      <div>
+        <label for="numero" class="block mb-1 font-semibold text-gray-700">Número (com DDI + DDD) <span class="text-red-600">*</span></label>
+        <input
+          type="tel"
+          id="numero"
+          name="numero"
+          class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#09679c]"
+          placeholder="+5511999998888"
+          pattern="^\+?\d{10,15}$"
+          required
+        />
+      </div>
+      <div>
+        <label for="endereco" class="block mb-1 font-semibold text-gray-700">Endereço (opcional)</label>
+        <input
+          type="text"
+          id="endereco"
+          name="endereco"
+          class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#09679c]"
+          placeholder="Rua, número, bairro..."
+        />
+      </div>
 
-      <ul id="listaContatos" class="divide-y divide-gray-200">
-        <!-- Contatos aparecerão aqui -->
-      </ul>
+      <div>
+        <p class="block mb-1 font-semibold text-gray-700">Origem do Contato <span class="text-red-600">*</span></p>
+        <div id="origemOptions" class="grid grid-cols-2 gap-2 max-w-md">
+          <!-- Opções -->
+          <div class="origem-option" data-origem="instagram">Instagram</div>
+          <div class="origem-option" data-origem="whatsapp">WhatsApp</div>
+          <div class="origem-option" data-origem="facebook">Facebook</div>
+          <div class="origem-option" data-origem="tiktok">TikTok</div>
+          <div class="origem-option" data-origem="kwai">Kwai</div>
+          <div class="origem-option" data-origem="youtube">YouTube</div>
+          <div class="origem-option" data-origem="abaixo assinado">Abaixo Assinado</div>
+          <div class="origem-option" data-origem="cartão de visita">Cartão de Visita</div>
+          <div class="origem-option" data-origem="gabinete">Gabinete</div>
+          <div class="origem-option" data-origem="direto gringo">Direto Gringo</div>
+        </div>
+        <p id="msgOrigem" class="text-red-600 text-sm mt-1 hidden">Selecione a origem do contato.</p>
+      </div>
 
-    </div>
+      <button
+        type="submit"
+        class="w-full bg-[#09679c] text-white font-semibold py-2 rounded hover:bg-[#074d6b] transition"
+      >
+        Cadastrar
+      </button>
+    </form>
+    <p id="msgStatus" class="mt-4 text-center text-sm font-semibold"></p>
   </main>
 
   <script>
-    // Pega usuário logado do localStorage, sem redirecionar
-    function getUsuarioLogado() {
-      const user = localStorage.getItem("usuarioLogado");
-      console.log("Usuário logado:", user); // debug
-      return user || null;
-    }
-
-    // Função logout
     function logout() {
       localStorage.removeItem("usuarioLogado");
       window.location.href = "intranet.html";
     }
 
-    // Busca contatos do usuário logado
-    function getContatos() {
-      const usuario = getUsuarioLogado();
-      if (!usuario) return [];
-      const todosContatos = JSON.parse(localStorage.getItem("contatos")) || {};
-      return todosContatos[usuario] || [];
-    }
+    // Origem seleção
+    const origemOptions = document.querySelectorAll(".origem-option");
+    let origemSelecionada = null;
 
-    // Salva contatos para usuário logado
-    function salvarContatos(contatos) {
-      const usuario = getUsuarioLogado();
-      if (!usuario) return;
-      let todosContatos = JSON.parse(localStorage.getItem("contatos")) || {};
-      todosContatos[usuario] = contatos;
-      localStorage.setItem("contatos", JSON.stringify(todosContatos));
-    }
+    origemOptions.forEach(option => {
+      option.addEventListener("click", () => {
+        // Remove seleção anterior
+        origemOptions.forEach(opt => opt.classList.remove("selected"));
+        // Seleciona a clicada
+        option.classList.add("selected");
+        origemSelecionada = option.getAttribute("data-origem");
+        document.getElementById("msgOrigem").classList.add("hidden");
+      });
+    });
 
-    // Renderiza a lista de contatos na tela
-    function renderizarContatos() {
-      const contatos = getContatos();
-      const listaEl = document.getElementById("listaContatos");
-      listaEl.innerHTML = "";
-
-      if (!contatos.length) {
-        listaEl.innerHTML = '<li class="py-4 text-gray-500 italic text-center">Nenhum contato encontrado.</li>';
+    // Salvar contato na base do usuário logado
+    function salvarContato(contato) {
+      const usuario = localStorage.getItem("usuarioLogado");
+      if (!usuario) {
+        alert("Usuário não logado!");
+        window.location.href = "intranet.html";
         return;
       }
 
-      contatos.forEach((contato, i) => {
-        const li = document.createElement("li");
-        li.className = "py-4 flex justify-between items-center";
+      let todosContatos = JSON.parse(localStorage.getItem("contatos")) || {};
+      if (!todosContatos[usuario]) {
+        todosContatos[usuario] = [];
+      }
 
-        li.innerHTML = `
-          <div>
-            <p class="font-semibold text-[#09679c]">${contato.nome}</p>
-            <p class="text-gray-600">${contato.numero}</p>
-            <p class="text-gray-600 italic">${contato.endereco ? contato.endereco : "<span class='text-red-500'>Sem endereço</span>"}</p>
-            <p class="text-sm text-gray-500">Origem: <span class="capitalize">${contato.origem}</span></p>
-          </div>
-          <div class="flex items-center gap-3">
-            <button
-              class="text-red-600 hover:text-red-800"
-              title="Excluir contato"
-              onclick="excluirContato(${i})"
-            >
-              <i class="fas fa-trash fa-lg"></i>
-            </button>
-            <a href="https://wa.me/${contato.numero.replace(/\D/g,'')}" target="_blank" class="text-[#25d366] hover:text-[#128c43]" title="Abrir WhatsApp">
-              <i class="fab fa-whatsapp fa-lg"></i>
-            </a>
-          </div>
-        `;
-
-        listaEl.appendChild(li);
-      });
+      todosContatos[usuario].push(contato);
+      localStorage.setItem("contatos", JSON.stringify(todosContatos));
     }
 
-    // Excluir contato pelo índice e salvar
-    function excluirContato(indice) {
-      if (!confirm("Tem certeza que deseja excluir este contato?")) return;
-      let contatos = getContatos();
-      contatos.splice(indice, 1);
-      salvarContatos(contatos);
-      renderizarContatos();
-    }
+    // Evento submit formulário
+    document.getElementById("formCadastro").addEventListener("submit", function(e) {
+      e.preventDefault();
 
-    // Inicializa lista na carga da página
-    renderizarContatos();
+      const nome = e.target.nome.value.trim();
+      const numero = e.target.numero.value.trim();
+      const endereco = e.target.endereco.value.trim();
+
+      const msgStatus = document.getElementById("msgStatus");
+
+      if (!nome || !numero) {
+        msgStatus.textContent = "Por favor, preencha os campos obrigatórios.";
+        msgStatus.className = "mt-4 text-center text-sm font-semibold text-red-600";
+        return;
+      }
+
+      if (!origemSelecionada) {
+        document.getElementById("msgOrigem").classList.remove("hidden");
+        return;
+      }
+
+      // Cria contato com mensagens vazio inicialmente
+      const contato = {
+        nome,
+        numero,
+        endereco: endereco || null,
+        origem: origemSelecionada,
+        mensagens: []
+      };
+
+      salvarContato(contato);
+
+      msgStatus.textContent = "Contato cadastrado com sucesso!";
+      msgStatus.className = "mt-4 text-center text-sm font-semibold text-green-600";
+
+      e.target.reset();
+      // Reset origem selecionada visualmente
+      origemOptions.forEach(opt => opt.classList.remove("selected"));
+      origemSelecionada = null;
+    });
   </script>
 
 </body>
