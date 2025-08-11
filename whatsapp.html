@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Atendimento WhatsApp - Intranet do Gringo</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+  />
+</head>
+<body class="bg-gray-100 flex flex-col min-h-screen">
+
+  <!-- Header -->
+  <header class="flex justify-between items-center bg-[#09679c] text-white p-4 shadow-md">
+    <div class="flex items-center gap-3">
+      <img src="img/logo.png" alt="Logo Gringo" class="h-10 w-auto" />
+      <h1 class="text-xl font-bold">WhatsApp - Atendimento</h1>
+    </div>
+    <div class="flex items-center gap-3">
+      <a href="painel.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition">Voltar</a>
+      <button
+        onclick="logout()"
+        class="bg-[#074d6b] px-3 py-2 rounded hover:bg-[#053646] transition"
+      >
+        Sair
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="flex-grow p-6">
+    <div class="bg-white rounded-lg shadow p-6 h-[70vh] overflow-auto">
+      <h2 class="text-lg font-semibold mb-4">Conexão com WhatsApp Backend</h2>
+      <p class="mb-4">Aqui será exibida a interface de chat integrada ao backend WhatsApp.</p>
+
+      <!-- Exemplo: área para logs, mensagens, controles -->
+      <div id="chat-area" class="h-[50vh] border border-gray-300 rounded p-4 overflow-y-auto bg-gray-50">
+        <p class="text-gray-500 italic">Conectando...</p>
+      </div>
+
+      <!-- Controles -->
+      <div class="mt-4">
+        <input
+          type="text"
+          id="messageInput"
+          placeholder="Digite sua mensagem..."
+          class="w-full p-2 border rounded"
+        />
+        <button
+          id="sendBtn"
+          class="mt-2 bg-[#09679c] text-white px-4 py-2 rounded hover:bg-[#074d6b] transition"
+          onclick="sendMessage()"
+        >
+          Enviar
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-[#005075] text-white text-center p-4 mt-auto">
+    <p>Intranet do Gringo &copy; 2025</p>
+  </footer>
+
+  <script>
+    // Exemplo simples para logout
+    function logout() {
+      localStorage.removeItem("usuarioLogado");
+      window.location.href = "intranet.html";
+    }
+
+    // Exemplo simples enviar mensagem
+    function sendMessage() {
+      const input = document.getElementById("messageInput");
+      const chatArea = document.getElementById("chat-area");
+      const message = input.value.trim();
+      if (!message) return;
+
+      // Exibir mensagem no chat (exemplo local)
+      const p = document.createElement("p");
+      p.textContent = "Você: " + message;
+      p.className = "mb-1";
+      chatArea.appendChild(p);
+      chatArea.scrollTop = chatArea.scrollHeight;
+
+      input.value = "";
+
+      // TODO: Aqui você vai conectar com o backend via websocket ou API REST
+      // Exemplo:
+      // fetch("/api/send", { method: "POST", body: JSON.stringify({ message }) })
+      //   .then(...)
+    }
+  </script>
+</body>
+</html>
