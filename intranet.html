@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Login - Intranet do Gringo</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     body {
       background: linear-gradient(to right, #dbeafe, #eff6ff);
     }
-
     .water-text {
       font-weight: bold;
       font-size: 1.25rem;
@@ -16,7 +15,6 @@
       animation: wave 2.5s infinite linear;
       display: inline-block;
     }
-
     @keyframes wave {
       0% { transform: translateY(0); }
       25% { transform: translateY(-2px); }
@@ -29,15 +27,15 @@
 <body class="flex items-center justify-center h-screen">
 
   <div class="bg-white p-8 rounded shadow-md w-full max-w-sm text-center">
-    <img src="img/logop.png" alt="@gilvaniogringo" class="mx-auto mb-2">
+    <img src="img/logop.png" alt="@gilvaniogringo" class="mx-auto mb-2" />
     <p class="water-text mb-6"><a href="/index.html">@gilvaniogringo</a></p>
 
     <form onsubmit="return login()">
       <label class="block mb-2 text-sm font-medium text-gray-700 text-left">Usuário:</label>
-      <input type="text" id="usuario" class="w-full p-2 border rounded mb-4" required>
+      <input type="text" id="usuario" class="w-full p-2 border rounded mb-4" required />
 
       <label class="block mb-2 text-sm font-medium text-gray-700 text-left">Senha:</label>
-      <input type="password" id="senha" class="w-full p-2 border rounded mb-4" required>
+      <input type="password" id="senha" class="w-full p-2 border rounded mb-4" required />
 
       <button type="submit" class="w-full bg-[#005075] text-white py-2 rounded hover:bg-[#003f5c]">Entrar</button>
 
@@ -51,23 +49,28 @@
 
   <script>
     function login() {
+      // Usuários válidos e suas senhas
       const usuarios = {
         "graziele.albuquerque": "Gringo1975",
-        "gabriel.amaral": "Gringo1975"
+        "gabriel.amaral": "Gringo1975",
+        "gilvaniogringo": "Gringo10000" // novo usuário gerente
       };
 
       const user = document.getElementById("usuario").value.trim();
       const senha = document.getElementById("senha").value;
 
       if (usuarios[user] === senha) {
-        localStorage.setItem("logado", "sim");
+        // Salva usuário logado para verificar permissões depois
+        localStorage.setItem("usuarioLogado", user);
+        // Redireciona para painel
         window.location.href = "painel.html";
-        return false;
+        return false; // impede reload
       } else {
         document.getElementById("erro").classList.remove("hidden");
         return false;
       }
     }
   </script>
+
 </body>
 </html>
