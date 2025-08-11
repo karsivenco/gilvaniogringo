@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <title>Painel - Intranet do Gringo</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://unpkg.com/@fortawesome/fontawesome-free/css/all.css" />
   <style>
     body {
       background: linear-gradient(to right, #dbeafe, #eff6ff);
@@ -12,8 +13,17 @@
 </head>
 <body class="min-h-screen flex flex-col">
 
+  <!-- Topo: menu com WhatsApp e perfil -->
   <header class="bg-[#005075] text-white p-4 flex justify-between items-center">
-    <h1 class="text-xl font-bold">Painel de Postagens</h1>
+    <div class="flex items-center space-x-6">
+      <h1 class="text-xl font-bold">Painel de Postagens</h1>
+      <a href="https://wa.me/5599999999999" target="_blank" rel="noopener" class="flex items-center hover:text-[#FF7DA4] transition">
+        <i class="fab fa-whatsapp fa-lg mr-2"></i> WhatsApp
+      </a>
+      <a href="perfil.html" class="flex items-center hover:text-[#FF7DA4] transition">
+        <i class="fas fa-user-circle fa-lg mr-2"></i> Meu Perfil
+      </a>
+    </div>
     <button id="btn-logout" class="bg-[#DB2356] hover:bg-[#FF7DA4] px-4 py-2 rounded">Sair</button>
   </header>
 
@@ -29,25 +39,40 @@
     </section>
   </main>
 
+  <!-- Rodapé com redes sociais -->
+  <footer class="bg-[#005075] text-white p-4 flex justify-center space-x-8">
+    <a href="https://www.instagram.com/gilvaniogringo" target="_blank" rel="noopener" class="hover:text-[#FF7DA4] transition" aria-label="Instagram">
+      <i class="fab fa-instagram fa-lg"></i>
+    </a>
+    <a href="https://www.facebook.com/gilvaniogringo" target="_blank" rel="noopener" class="hover:text-[#FF7DA4] transition" aria-label="Facebook">
+      <i class="fab fa-facebook-f fa-lg"></i>
+    </a>
+    <a href="https://twitter.com/gilvaniogringo" target="_blank" rel="noopener" class="hover:text-[#FF7DA4] transition" aria-label="X Twitter">
+      <i class="fab fa-twitter fa-lg"></i>
+    </a>
+    <a href="https://www.tiktok.com/@gilvaniogringo" target="_blank" rel="noopener" class="hover:text-[#FF7DA4] transition" aria-label="TikTok">
+      <i class="fab fa-tiktok fa-lg"></i>
+    </a>
+    <a href="https://www.kwai.com/gilvaniogringo" target="_blank" rel="noopener" class="hover:text-[#FF7DA4] transition" aria-label="Kwai">
+      <i class="fas fa-video fa-lg"></i>
+    </a>
+  </footer>
+
   <script>
-    // Verifica se o usuário está logado
     if(localStorage.getItem('logado') !== 'sim') {
       window.location.href = 'index.html';
     }
 
-    // Pega usuário salvo para boas-vindas
     const usuarioSalvo = localStorage.getItem('usuarioLogado');
     const welcomeMsg = document.getElementById('welcome-msg');
     welcomeMsg.textContent = usuarioSalvo ? `Bem-vindo, ${usuarioSalvo}` : 'Bem-vindo!';
 
-    // Logout
     document.getElementById('btn-logout').addEventListener('click', () => {
       localStorage.removeItem('logado');
       localStorage.removeItem('usuarioLogado');
       window.location.href = 'index.html';
     });
 
-    // Botão nova postagem (alerta simples)
     document.getElementById('btn-nova-postagem').addEventListener('click', () => {
       alert('Função para criar nova postagem será implementada.');
     });
