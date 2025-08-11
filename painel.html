@@ -2,55 +2,73 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Intranet do Gringo - Painel</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 flex flex-col min-h-screen">
+<body class="bg-gray-100">
 
-  <!-- Menu Superior -->
-  <header class="bg-red-600 text-white p-4 flex justify-between items-center shadow-md">
-    <h1 class="text-xl font-bold">Painel Administrativo</h1>
-    <div class="flex items-center space-x-4">
-      <!-- Botão WhatsApp -->
-      <button onclick="abrirWhatsApp()" class="bg-green-500 hover:bg-green-600 px-3 py-1 rounded-lg text-sm font-semibold">
-        📱 WhatsApp
-      </button>
-      <!-- Perfil -->
-      <div class="flex items-center space-x-2">
-        <img src="https://via.placeholder.com/35" alt="Perfil" class="rounded-full border border-white">
-        <span class="text-sm font-medium">Colaborador</span>
-      </div>
+  <!-- Barra superior -->
+  <header class="flex justify-between items-center bg-[#09679c] text-white p-4 shadow-md">
+    <h1 class="text-xl font-bold">Painel do Gringo</h1>
+    <div class="flex items-center gap-3">
+      <a href="whatsapp.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition">WhatsApp</a>
+      <a href="perfil.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition">Perfil</a>
+      <button onclick="logout()" class="bg-[#074d6b] px-3 py-2 rounded hover:bg-[#053646] transition">Sair</button>
     </div>
   </header>
 
-  <!-- Conteúdo -->
-  <main class="flex-grow p-4">
-    <div id="conteudo-principal" class="bg-white rounded-lg shadow-lg p-4 h-[70vh] overflow-hidden">
-      <p class="text-gray-600 text-center mt-10">Selecione uma opção no menu acima.</p>
+  <!-- Conteúdo principal -->
+  <main class="p-6">
+    <h2 class="text-2xl font-bold mb-4">Bem-vindo à Intranet</h2>
+    <p class="mb-4">Aqui você pode gerenciar postagens, acessar o WhatsApp e visualizar informações internas.</p>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <!-- Card nova postagem -->
+      <a href="nova-postagem.html" class="bg-white shadow rounded-lg p-6 hover:shadow-lg transition">
+        <h3 class="text-lg font-bold mb-2">+ Nova Postagem</h3>
+        <p>Crie e publique novas notícias no site oficial.</p>
+      </a>
+
+      <!-- Card últimas notícias -->
+      <a href="ultimas-noticias.html" class="bg-white shadow rounded-lg p-6 hover:shadow-lg transition">
+        <h3 class="text-lg font-bold mb-2">Últimas Notícias</h3>
+        <p>Veja todas as notícias publicadas no site.</p>
+      </a>
+
+      <!-- Card WhatsApp -->
+      <a href="whatsapp.html" class="bg-[#e0f2fe] border border-[#09679c] shadow rounded-lg p-6 hover:shadow-lg transition">
+        <h3 class="text-lg font-bold mb-2 text-[#09679c]">Atendimento WhatsApp</h3>
+        <p>Gerencie conversas e interações pelo WhatsApp Backend.</p>
+      </a>
     </div>
   </main>
 
-  <!-- Rodapé com redes sociais -->
-  <footer class="bg-gray-800 text-white py-3">
-    <div class="flex justify-center space-x-6">
-      <a href="https://instagram.com" target="_blank" class="hover:text-pink-400">📸 Instagram</a>
-      <a href="https://facebook.com" target="_blank" class="hover:text-blue-400">📘 Facebook</a>
-      <a href="https://twitter.com" target="_blank" class="hover:text-blue-300">🐦 X</a>
-      <a href="https://tiktok.com" target="_blank" class="hover:text-gray-300">🎵 TikTok</a>
-      <a href="https://www.kwai.com" target="_blank" class="hover:text-yellow-300">📹 Kwai</a>
+  <!-- Rodapé -->
+  <footer class="bg-[#09679c] text-white text-center p-4 mt-8">
+    <p class="mb-2">Siga o Gringo nas redes sociais:</p>
+    <div class="flex justify-center gap-6">
+      <a href="https://instagram.com" target="_blank" class="hover:text-pink-400">Instagram</a>
+      <a href="https://facebook.com" target="_blank" class="hover:text-blue-600">Facebook</a>
+      <a href="https://x.com" target="_blank" class="hover:text-sky-400">X</a>
+      <a href="https://tiktok.com" target="_blank" class="hover:text-gray-300">TikTok</a>
+      <a href="https://kwai.com" target="_blank" class="hover:text-yellow-300">Kwai</a>
     </div>
   </footer>
 
-  <!-- Script -->
   <script>
-    function abrirWhatsApp() {
-      document.getElementById('conteudo-principal').innerHTML = `
-        <iframe src="http://SEU_DOMINIO_OU_IP:3000" 
-          class="w-full h-full rounded-lg border border-gray-300"></iframe>
-      `;
+    // Verifica se está logado
+    if (!localStorage.getItem("usuarioLogado")) {
+      window.location.href = "/intranet.html";
+    }
+
+    // Função para sair
+    function logout() {
+      localStorage.removeItem("usuarioLogado");
+      window.location.href = "/intranet.html";
     }
   </script>
 
 </body>
 </html>
+
