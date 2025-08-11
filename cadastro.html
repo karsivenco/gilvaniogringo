@@ -19,8 +19,11 @@
       <h1 class="text-xl font-bold">Contatos</h1>
     </div>
     <div class="flex items-center gap-3">
-      <a href="whatsapp.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition" title="Painel">
-        <i class="fab fa-whatsapp"></i> Inicio
+      <a href="painel.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition" title="Painel">
+        <i class="fas fa-home"></i> Inicio
+      </a>
+           <a href="whatsapp.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition" title="Painel">
+        <i class="fas fa-whatsapp"></i> Inicio
       </a>
       <a href="dashboard.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition" title="Dashboard">
         <i class="fas fa-tachometer-alt"></i> Dashboard
@@ -28,7 +31,7 @@
       <a href="cadastro.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition" title="Cadastro de Pessoas">
         <i class="fas fa-user-plus"></i> Cadastro
       </a>
-      <a href="contatos.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition" title="Contatos">
+       <a href="contatos.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition" title="Contatos">
         <i class="fas fa-address-book"></i> Contatos
       </a>
       <button
@@ -44,9 +47,9 @@
   <!-- Conteúdo principal -->
   <main class="flex-grow p-6 max-w-lg mx-auto">
     <h2 class="text-2xl font-bold mb-4 text-[#005075]">Cadastrar Novo Contato</h2>
-    <form id="formCadastro" class="bg-white p-6 rounded shadow space-y-4" novalidate>
+    <form id="formCadastro" class="bg-white p-6 rounded shadow space-y-4">
       <div>
-        <label for="nome" class="block mb-1 font-semibold text-gray-700">Nome <span class="text-red-600">*</span></label>
+        <label for="nome" class="block mb-1 font-semibold text-gray-700">Nome</label>
         <input
           type="text"
           id="nome"
@@ -57,7 +60,7 @@
         />
       </div>
       <div>
-        <label for="numero" class="block mb-1 font-semibold text-gray-700">Número (com DDI + DDD) <span class="text-red-600">*</span></label>
+        <label for="numero" class="block mb-1 font-semibold text-gray-700">Número (com DDI + DDD)</label>
         <input
           type="tel"
           id="numero"
@@ -69,24 +72,24 @@
         />
       </div>
       <div>
-        <label for="endereco" class="block mb-1 font-semibold text-gray-700">Endereço</label>
+        <label for="endereco" class="block mb-1 font-semibold text-gray-700">Endereço (opcional)</label>
         <input
           type="text"
           id="endereco"
           name="endereco"
           class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#09679c]"
-          placeholder="Endereço (opcional)"
+          placeholder="Rua, número, bairro, cidade"
         />
       </div>
       <div>
-        <label for="origem" class="block mb-1 font-semibold text-gray-700">Origem do Contato <span class="text-red-600">*</span></label>
+        <label for="origem" class="block mb-1 font-semibold text-gray-700">Origem do contato</label>
         <select
           id="origem"
           name="origem"
           class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#09679c]"
           required
         >
-          <option value="" disabled selected>Selecione a origem</option>
+          <option value="">Selecione a origem</option>
           <option value="Instagram">Instagram</option>
           <option value="WhatsApp">WhatsApp</option>
           <option value="Facebook">Facebook</option>
@@ -115,13 +118,14 @@
       window.location.href = "intranet.html";
     }
 
+    // Salva contato no localStorage
     function salvarContato(contato) {
       let contatos = JSON.parse(localStorage.getItem("contatos")) || [];
       contatos.push(contato);
       localStorage.setItem("contatos", JSON.stringify(contatos));
     }
 
-    document.getElementById("formCadastro").addEventListener("submit", function (e) {
+    document.getElementById("formCadastro").addEventListener("submit", function(e) {
       e.preventDefault();
 
       const nome = e.target.nome.value.trim();
@@ -132,3 +136,25 @@
       const msgStatus = document.getElementById("msgStatus");
 
       if (!nome || !numero || !origem) {
+        msgStatus.textContent = "Por favor, preencha os campos obrigatórios: nome, número e origem.";
+        msgStatus.className = "mt-4 text-center text-sm font-semibold text-red-600";
+        return;
+      }
+
+      // Salva contato
+      salvarContato({ nome, numero, endereco, origem });
+
+      // Mensagem de sucesso antes do redirecionamento
+      msgStatus.textContent = "Contato cadastrado com sucesso! Redirecionando...";
+      msgStatus.className = "mt-4 text-center text-sm font-semibold text-green-600";
+
+      // Aguarda 1.5s e redireciona para contatos.html
+      setTimeout(() => {
+        // Passar flag para contatos mostrar mensagem de sucesso
+        sessionStorage.setItem("msgSucessoCadastro", "Contato cadastrado com sucesso!");
+        window.location.href = "contatos.html";
+      }, 1500);
+    });
+  </script>
+</body>
+</html>
