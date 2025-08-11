@@ -14,7 +14,12 @@
     <div class="flex items-center gap-3">
       <a href="whatsapp.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition">WhatsApp</a>
       <a href="perfil.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition">Perfil</a>
-      <button onclick="logout()" class="bg-[#074d6b] px-3 py-2 rounded hover:bg-[#053646] transition">Sair</button>
+      <button
+  onclick="window.location.href='intranet.html'"
+  class="bg-[#074d6b] px-3 py-2 rounded hover:bg-[#053646] transition"
+>
+  Sair
+</button>
     </div>
   </header>
 
@@ -63,19 +68,7 @@
     </a>
   </footer>
 
-  <script>
-    // Verifica se está logado
-    if (!localStorage.getItem("usuarioLogado")) {
-      window.location.href = "/intranet.html";
-    }
-
-    // Função para sair
-    function logout() {
-      localStorage.removeItem("usuarioLogado");
-      window.location.href = "/intranet.html";
-    }
-  </script>
-
+ 
 </body>
 </html>
 
