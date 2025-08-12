@@ -158,9 +158,7 @@
 
   </main>
 
-  <script type="module">
-    import { gerarHtmlPostCompleto } from './post.js';
-
+  <script>
     const usuariosAutorizados = [
       "gabriel.amaral",
       "graziele.albuquerque",
@@ -180,13 +178,12 @@
         <a href="nova-postagem.html" class="bg-[#053646] border border-white px-3 py-2 rounded hover:bg-[#032d39] transition flex items-center gap-1" title="Nova Postagem">
           <i class="fas fa-plus"></i> Nova Postagem
         </a>
+        <a href="publicacoes.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="Últimas Publicações">
+          <i class="fas fa-newspaper"></i> Últimas Publicações
+        </a>
         <a href="rascunhos.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="Rascunhos">
           <i class="fas fa-file-alt"></i> Rascunhos
         </a>
-        ${usuariosAutorizados.includes(usuarioLogado) ? `
-        <a href="publicacoes.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="Últimas Publicações">
-          <i class="fas fa-newspaper"></i> Últimas Publicações
-        </a>` : ""}
         <a href="perfil.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="Perfil">
           <i class="fas fa-user"></i> Perfil
         </a>
@@ -195,7 +192,6 @@
         </button>
       `;
     }
-    montarMenu();
 
     function logout() {
       localStorage.removeItem("usuarioLogado");
@@ -264,9 +260,15 @@
       const id = params.get("id");
       if (!id) return;
 
-      // Procurar rascunho por id
       let rascunhos = JSON.parse(localStorage.getItem("rascunhos")) || [];
-      const postagem = rascunhos.find(p => String(p.id) === id);
+      let publicacoes = JSON.parse(localStorage.getItem("publicacoes")) || [];
+
+      // Procurar rascunho ou publicação com o id
+      let postagem = rascunhos.find(p => String(p.id) === id);
+
+      if (!postagem) {
+        postagem = publicacoes.find(p => String(p.id) === id);
+      }
 
       if (!postagem) return;
 
@@ -274,7 +276,7 @@
       document.getElementById("editor").innerHTML = postagem.conteudo;
       document.getElementById("status").value = postagem.status || "rascunho";
 
-      // Ao enviar edição, deve atualizar o rascunho existente e não criar novo
+      // Ao enviar edição, deve atualizar o item existente (rascunho ou publicação)
       document.getElementById("formPostagem").dataset.editandoId = id;
     }
 
@@ -299,17 +301,6 @@
         return false;
       }
 
-      // Função auxiliar para slug
-      function gerarSlug(texto) {
-        return texto.toLowerCase()
-          .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
-          .replace(/\s+/g, '-')
-          .replace(/[^\w\-]+/g, '')
-          .replace(/\-\-+/g, '-')
-          .replace(/^-+/, '')
-          .replace(/-+$/, '');
-      }
-
       let rascunhos = JSON.parse(localStorage.getItem("rascunhos")) || [];
       let publicacoes = JSON.parse(localStorage.getItem("publicacoes")) || [];
 
@@ -317,85 +308,104 @@
       const editandoId = form.dataset.editandoId;
 
       if (editandoId) {
+        // Atualizar postagem existente
         if (status === "rascunho") {
-          const index = rascunhos.findIndex(p => String(p.id) === editandoId);
-          if (index !== -1) {
-            rascunhos[index].titulo = titulo;
-            rascunhos[index].conteudo = conteudo;
-            rascunhos[index].data = new Date().toISOString();
-            rascunhos[index].status = status;
-            localStorage.setItem("rascunhos", JSON.stringify(rascunhos));
-            alert("Rascunho atualizado com sucesso!");
-            return false;
+          // Atualizar ou inserir rascunho
+          let idxRascunho = rascunhos.findIndex(p => String(p.id) === editandoId);
+          if (idxRascunho !== -1) {
+            rascunhos[idxRascunho] = {
+              id: editandoId,
+              titulo,
+              conteudo,
+              data: new Date().toISOString(),
+              autor: usuarioLogado,
+              status: "rascunho"
+            };
+          } else {
+            // Se não estava nos rascunhos, adicionar
+            rascunhos.push({
+              id: editandoId,
+              titulo,
+              conteudo,
+              data: new Date().toISOString(),
+              autor: usuarioLogado,
+              status: "rascunho"
+            });
           }
+          // Se estava publicado, remover da publicações
+          publicacoes = publicacoes.filter(p => String(p.id) !== editandoId);
+
         } else if (status === "enviar") {
+          // Publicar: remover dos rascunhos se existir
           rascunhos = rascunhos.filter(p => String(p.id) !== editandoId);
-          localStorage.setItem("rascunhos", JSON.stringify(rascunhos));
 
-          const postParaPublicar = {
-            id: Number(editandoId),
-            titulo,
-            conteudo,
-            autor: usuarioLogado,
-            data: new Date().toISOString(),
-            status
-          };
-
-          publicacoes.push(postParaPublicar);
-          localStorage.setItem("publicacoes", JSON.stringify(publicacoes));
-
-          const htmlCompleto = gerarHtmlPostCompleto(postParaPublicar);
-          const nomeArquivo = gerarSlug(titulo) + '.html';
-          baixarArquivo(nomeArquivo, htmlCompleto);
-
-          alert("Postagem enviada com sucesso!");
-          return false;
+          // Atualizar ou adicionar em publicações
+          let idxPub = publicacoes.findIndex(p => String(p.id) === editandoId);
+          if (idxPub !== -1) {
+            publicacoes[idxPub] = {
+              id: editandoId,
+              titulo,
+              conteudo,
+              data: new Date().toISOString(),
+              autor: usuarioLogado,
+              status: "publicado"
+            };
+          } else {
+            publicacoes.push({
+              id: editandoId,
+              titulo,
+              conteudo,
+              data: new Date().toISOString(),
+              autor: usuarioLogado,
+              status: "publicado"
+            });
+          }
         }
       } else {
-        const novaPostagem = {
-          id: Date.now(),
-          titulo,
-          conteudo,
-          autor: usuarioLogado,
-          data: new Date().toISOString(),
-          status
-        };
+        // Nova postagem
+        const novoId = Date.now().toString();
 
         if (status === "rascunho") {
-          rascunhos.push(novaPostagem);
-          localStorage.setItem("rascunhos", JSON.stringify(rascunhos));
-          alert("Rascunho salvo com sucesso!");
-          return false;
+          rascunhos.push({
+            id: novoId,
+            titulo,
+            conteudo,
+            data: new Date().toISOString(),
+            autor: usuarioLogado,
+            status: "rascunho"
+          });
         } else if (status === "enviar") {
-          publicacoes.push(novaPostagem);
-          localStorage.setItem("publicacoes", JSON.stringify(publicacoes));
-
-          const htmlCompleto = gerarHtmlPostCompleto(novaPostagem);
-          const nomeArquivo = gerarSlug(titulo) + '.html';
-          baixarArquivo(nomeArquivo, htmlCompleto);
-
-          alert("Postagem enviada com sucesso!");
-          return false;
+          publicacoes.push({
+            id: novoId,
+            titulo,
+            conteudo,
+            data: new Date().toISOString(),
+            autor: usuarioLogado,
+            status: "publicado"
+          });
         }
       }
 
+      // Salvar localStorage
+      localStorage.setItem("rascunhos", JSON.stringify(rascunhos));
+      localStorage.setItem("publicacoes", JSON.stringify(publicacoes));
+
+      alert(status === "rascunho" ? "Rascunho salvo com sucesso!" : "Postagem publicada com sucesso!");
+
+      // Limpar formulário e redirecionar para páginas correspondentes
+      if (status === "rascunho") {
+        window.location.href = "rascunhos.html";
+      } else {
+        // Redirecionar para publicações após publicar
+        window.location.href = "publicacoes.html";
+      }
       return false;
     }
 
-    function baixarArquivo(nomeArquivo, conteudo) {
-      const blob = new Blob([conteudo], { type: 'text/html;charset=utf-8' });
-      const link = document.createElement('a');
-      link.href = URL.createObjectURL(blob);
-      link.download = nomeArquivo;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(link.href);
-    }
-
+    // Função para carregar edição se id na URL
     window.onload = () => {
-      if (!usuarioLogado) {
-        alert("Usuário não logado.");
+      if (!usuarioLogado || !usuariosAutorizados.includes(usuarioLogado)) {
+        alert("Você não tem permissão para acessar esta página.");
         window.location.href = "intranet.html";
         return;
       }
