@@ -9,108 +9,90 @@
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
   />
+  <!-- Importa arquivo externo de usuários e senhas -->
+  <script src="senhas.js" defer></script>
 </head>
-<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-6">
 
-  <main class="bg-white p-8 rounded shadow-md w-full max-w-md">
-    <h1 class="text-3xl font-bold text-[#09679c] mb-6 text-center">Login - Intranet do Gringo</h1>
+  <main class="bg-white rounded shadow-md p-8 w-full max-w-sm">
+    <h1 class="text-2xl font-bold mb-6 text-[#09679c] flex items-center gap-2">
+      <i class="fas fa-lock"></i> Login Intranet do Gringo
+    </h1>
 
-    <form id="loginForm" class="space-y-6">
+    <form id="loginForm" class="space-y-4">
       <div>
         <label for="username" class="block mb-1 font-semibold text-gray-700">Usuário</label>
         <input
           type="text"
           id="username"
           name="username"
+          placeholder="Digite seu usuário"
           class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#09679c]"
-          placeholder="Seu usuário"
           required
           autocomplete="username"
+          autofocus
         />
       </div>
-
       <div>
         <label for="password" class="block mb-1 font-semibold text-gray-700">Senha</label>
         <input
           type="password"
           id="password"
           name="password"
+          placeholder="Digite sua senha"
           class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#09679c]"
-          placeholder="Sua senha"
           required
           autocomplete="current-password"
         />
       </div>
 
+      <p id="msgErro" class="text-red-600 font-semibold text-center mt-2 hidden"></p>
+
       <button
         type="submit"
-        class="w-full bg-[#09679c] text-white font-semibold py-2 rounded hover:bg-[#074d6b] transition"
+        class="w-full bg-[#09679c] text-white font-bold py-2 rounded hover:bg-[#074d6b] transition"
       >
         Entrar
       </button>
-
-      <p id="msgErro" class="text-red-600 font-semibold text-center mt-4 hidden"></p>
     </form>
   </main>
 
   <script>
-    // Usuários e senhas cadastrados (em ambiente real, isso deveria ser backend seguro)
-    const usuarios = {
-      "grazielle.albuquerque": "Gringo1975",
-      "gabriel.amaral": "Gringo1975",
-      "karina.maia": "Gringo@20",
-      "gilvaniogringo": "Gringo10000",
-      "anne.mattos": "Gringo1975",
-      "tati.garcia": "Gringo1975",
-      "cristiano.santos": "Gringo1975",
-      "vitor.mello": "Gringo1975",
-    };
+    document.addEventListener('DOMContentLoaded', () => {
+      const form = document.getElementById("loginForm");
+      const msgErro = document.getElementById("msgErro");
 
-    const perfis = {
-      "karina.maia": "Desenvolvedora Social Mídia",
-      "cristiano.santos": "Mídias Sociais",
-      "anne.mattos": "Comunicação",
-      "tati.garcia": "Comunicação",
-      "gabriel.amaral": "Jornalismo",
-      "grazielle.albuquerque": "Jornalismo",
-      "vitor.mello": "Comunicação",
-      "gilvaniogringo": "Vereador",
-    };
+      form.addEventListener("submit", function(e) {
+        e.preventDefault();
 
-    const form = document.getElementById("loginForm");
-    const msgErro = document.getElementById("msgErro");
+        const username = form.username.value.trim().toLowerCase();
+        const password = form.password.value;
 
-    form.addEventListener("submit", function(e) {
-      e.preventDefault();
+        // Verifica se o objeto usuarios está carregado
+        if (typeof usuarios === "undefined") {
+          msgErro.textContent = "Erro interno: dados de usuários não carregados.";
+          msgErro.classList.remove("hidden");
+          return;
+        }
 
-      const username = form.username.value.trim().toLowerCase();
-      const password = form.password.value;
+        if (!usuarios[username]) {
+          msgErro.textContent = "Usuário não encontrado.";
+          msgErro.classList.remove("hidden");
+          return;
+        }
 
-      if (!usuarios[username]) {
-        mostrarErro("Usuário não encontrado.");
-        return;
-      }
+        if (usuarios[username] !== password) {
+          msgErro.textContent = "Senha incorreta.";
+          msgErro.classList.remove("hidden");
+          return;
+        }
 
-      if (usuarios[username] !== password) {
-        mostrarErro("Senha incorreta.");
-        return;
-      }
-
-      // Login válido
-      msgErro.classList.add("hidden");
-      // Salva no localStorage o usuário logado
-      localStorage.setItem("usuarioLogado", username);
-
-      // Redireciona para perfil ou painel conforme cargo
-      // Por enquanto vamos direto para painel.html (pode ser ajustado conforme perfil)
-      window.location.href = "perfil.html";
+        // Login válido
+        msgErro.classList.add("hidden");
+        localStorage.setItem("usuarioLogado", username);
+        window.location.href = "perfil.html";
+      });
     });
-
-    function mostrarErro(msg) {
-      msgErro.textContent = msg;
-      msgErro.classList.remove("hidden");
-    }
   </script>
-
 </body>
 </html>
