@@ -38,7 +38,7 @@
       <a href="nova-postagem.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="Nova Postagem">
         <i class="fas fa-plus"></i> Nova Postagem
       </a>
-      <a href="ultimas-noticias2.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="Últimas Publicações">
+      <a href="publicacoes.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="Últimas Publicações">
         <i class="fas fa-newspaper"></i> Últimas Publicações
       </a>
       <a href="rascunhos.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="Rascunhos">
@@ -74,6 +74,9 @@
       "gilvaniogringo"
     ];
 
+    // Usuários autorizados para excluir publicações
+    const usuariosExcluir = ["karina.maia", "cristiano.santos", "gilvaniogringo"];
+
     // Função logout
     function logout() {
       localStorage.removeItem("usuarioLogado");
@@ -89,8 +92,8 @@
       return `${data} ${hora}`;
     }
 
-    // Função para criar o elemento de publicação com resumo e expandir
-    function criarPublicacaoElemento(pub) {
+    // Função para criar o elemento de publicação com resumo e expandir, e botão excluir se permitido
+    function criarPublicacaoElemento(pub, usuarioAtual) {
       const container = document.createElement("div");
       container.className = "border rounded p-4 shadow-sm";
 
@@ -102,7 +105,7 @@
 
       // Data/hora
       const dataHora = document.createElement("p");
-      dataHora.textContent = "Data/Hora: " + formatarDataHora(pub.dataHora);
+      dataHora.textContent = "Data/Hora: " + formatarDataHora(pub.data);
       dataHora.className = "text-gray-600 text-sm mb-2";
       container.appendChild(dataHora);
 
@@ -112,18 +115,20 @@
       const maxResumo = 200;
       let isExpandido = false;
 
-      const resumoTexto = pub.conteudo.length > maxResumo ? pub.conteudo.slice(0, maxResumo) + "..." : pub.conteudo;
+      const conteudoLimpo = pub.conteudo.replace(/<[^>]+>/g, ""); // remover tags HTML para resumo
+
+      const resumoTexto = conteudoLimpo.length > maxResumo ? conteudoLimpo.slice(0, maxResumo) + "..." : conteudoLimpo;
 
       conteudo.textContent = resumoTexto;
 
       const btnExpandir = document.createElement("span");
-      btnExpandir.textContent = pub.conteudo.length > maxResumo ? " (mostrar mais)" : "";
+      btnExpandir.textContent = conteudoLimpo.length > maxResumo ? " (mostrar mais)" : "";
       btnExpandir.className = "btn-expandir";
-      btnExpandir.style.display = pub.conteudo.length > maxResumo ? "inline" : "none";
+      btnExpandir.style.display = conteudoLimpo.length > maxResumo ? "inline" : "none";
 
       btnExpandir.addEventListener("click", () => {
         if (!isExpandido) {
-          conteudo.textContent = pub.conteudo;
+          conteudo.textContent = conteudoLimpo;
           btnExpandir.textContent = " (mostrar menos)";
         } else {
           conteudo.textContent = resumoTexto;
@@ -135,7 +140,28 @@
       container.appendChild(conteudo);
       container.appendChild(btnExpandir);
 
+      // Botão excluir somente para usuários autorizados
+      if (usuariosExcluir.includes(usuarioAtual)) {
+        const btnExcluir = document.createElement("button");
+        btnExcluir.textContent = "Excluir";
+        btnExcluir.className = "bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition mt-2";
+        btnExcluir.onclick = () => {
+          if (confirm("Deseja realmente excluir esta publicação?")) {
+            excluirPublicacao(pub.id);
+          }
+        };
+        container.appendChild(btnExcluir);
+      }
+
       return container;
+    }
+
+    // Excluir publicação por id
+    function excluirPublicacao(id) {
+      let publicacoes = JSON.parse(localStorage.getItem("publicacoes")) || [];
+      publicacoes = publicacoes.filter(pub => pub.id !== id);
+      localStorage.setItem("publicacoes", JSON.stringify(publicacoes));
+      carregarPublicacoes();
     }
 
     // Função principal para carregar e mostrar publicações agrupadas por autor
@@ -173,7 +199,7 @@
         grupo.appendChild(tituloAutor);
 
         publicacoesPorAutor[autor].forEach(pub => {
-          const elPub = criarPublicacaoElemento(pub);
+          const elPub = criarPublicacaoElemento(pub, usuario);
           grupo.appendChild(elPub);
         });
 
