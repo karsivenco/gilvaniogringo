@@ -9,18 +9,26 @@
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
   />
-  <!-- Arquivo externo de usuários e senhas -->
   <script src="senhas.js" defer></script>
 </head>
 <body class="bg-gray-100 min-h-screen flex items-center justify-center p-6">
 
-  <main class="bg-white rounded shadow-md p-8 w-full max-w-sm">
-    <h1 class="text-2xl font-bold mb-6 text-[#09679c] flex items-center gap-2">
+  <main class="bg-white rounded shadow-md p-8 w-full max-w-sm text-center">
+    
+    <!-- Logo centralizado -->
+    <img
+      src="img/logoazul.png"
+      alt="Logo Gringo Azul"
+      class="mx-auto mb-6 w-32 h-auto"
+      loading="lazy"
+    />
+
+    <h1 class="text-2xl font-bold mb-6 text-[#09679c] flex items-center justify-center gap-2">
       <i class="fas fa-lock"></i> Login Intranet do Gringo
     </h1>
 
     <form id="loginForm" class="space-y-4" autocomplete="off">
-      <div>
+      <div class="text-left">
         <label for="username" class="block mb-1 font-semibold text-gray-700">Usuário</label>
         <input
           type="text"
@@ -32,7 +40,7 @@
           autofocus
         />
       </div>
-      <div>
+      <div class="text-left">
         <label for="password" class="block mb-1 font-semibold text-gray-700">Senha</label>
         <input
           type="password"
@@ -60,13 +68,6 @@
       const form = document.getElementById("loginForm");
       const msgErro = document.getElementById("msgErro");
 
-      // Se já estiver logado, redireciona direto para painel.html
-      const usuarioLogado = localStorage.getItem("usuarioLogado");
-      if (usuarioLogado) {
-        window.location.href = "painel.html";
-        return;
-      }
-
       form.addEventListener("submit", function(e) {
         e.preventDefault();
 
@@ -91,9 +92,8 @@
           return;
         }
 
-        // Login válido: salvar e redirecionar para painel.html
+        // Login válido - salva usuário e redireciona
         localStorage.setItem("usuarioLogado", username);
-        msgErro.classList.add("hidden");
         window.location.href = "painel.html";
       });
     });
