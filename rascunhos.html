@@ -8,7 +8,16 @@
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    crossorigin="anonymous"
   />
+  <style>
+    .btn-expandir {
+      cursor: pointer;
+      color: #09679c;
+      font-weight: 600;
+      user-select: none;
+    }
+  </style>
 </head>
 <body class="bg-gray-100 min-h-screen flex flex-col">
 
@@ -19,21 +28,21 @@
       <h1 class="text-xl font-bold">Rascunhos</h1>
     </div>
     <nav class="flex items-center gap-3">
-      <a href="painel.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition" title="Painel">
+      <a href="painel.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="Painel">
         <i class="fas fa-home"></i> Painel
       </a>
-      <a href="nova-postagem.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition" title="Nova Postagem">
+      <a href="nova-postagem.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="Nova Postagem">
         <i class="fas fa-plus"></i> Nova Postagem
       </a>
-      <a href="publicacoes.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition" title="Últimas Publicações">
-        <i class="fas fa-newspaper"></i> Últimas Publicações
-      </a>
-      <a href="rascunhos.html" class="bg-[#074d6b] border border-white px-3 py-2 rounded" title="Rascunhos">
+      <a href="rascunhos.html" class="bg-[#053646] border border-white px-3 py-2 rounded hover:bg-[#032d39] transition flex items-center gap-1" title="Rascunhos">
         <i class="fas fa-file-alt"></i> Rascunhos
+      </a>
+      <a href="ultimas-noticias2.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="Últimas Publicações">
+        <i class="fas fa-newspaper"></i> Últimas Publicações
       </a>
       <button
         onclick="logout()"
-        class="bg-[#053646] px-3 py-2 rounded hover:bg-[#032d39] transition"
+        class="bg-[#053646] px-3 py-2 rounded hover:bg-[#032d39] transition flex items-center gap-1"
         title="Sair"
       >
         <i class="fas fa-sign-out-alt"></i> Sair
@@ -41,93 +50,131 @@
     </nav>
   </header>
 
-  <main class="flex-grow p-6 max-w-5xl mx-auto">
-    <h2 class="text-2xl font-bold mb-4 text-[#005075]">Meus Rascunhos</h2>
-
-    <div id="listaRascunhos" class="bg-white shadow rounded-lg p-6 space-y-4">
-      <!-- Rascunhos aparecerão aqui -->
-    </div>
-
+  <!-- Main -->
+  <main class="flex-grow p-6 max-w-5xl mx-auto bg-white rounded shadow mt-6 mb-10">
+    <section id="rascunhosContainer" class="space-y-8">
+      <!-- Rascunhos do usuário serão listados aqui -->
+    </section>
   </main>
 
   <script>
-    // Logout simples
+    // Usuários autorizados para acessar rascunhos
+    const usuariosAutorizados = [
+      "gabriel.amaral",
+      "graziele.albuquerque",
+      "karina.maia",
+      "cristiano.santos",
+      "gilvaniogringo"
+    ];
+
+    // Logout
     function logout() {
       localStorage.removeItem("usuarioLogado");
       window.location.href = "intranet.html";
     }
 
-    // Pega rascunhos do localStorage (objeto: { id: { titulo, conteudo, data, autor } })
-    function getRascunhos() {
-      return JSON.parse(localStorage.getItem("rascunhos")) || {};
+    // Pega usuário logado
+    const usuarioLogado = localStorage.getItem("usuarioLogado");
+
+    // Função para formatar data ISO para dd/mm/aaaa HH:mm
+    function formatarDataHora(dataISO) {
+      if (!dataISO) return "";
+      const dt = new Date(dataISO);
+      const data = dt.toLocaleDateString("pt-BR");
+      const hora = dt.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
+      return `${data} ${hora}`;
     }
 
-    // Salva rascunhos no localStorage
-    function setRascunhos(rascunhos) {
-      localStorage.setItem("rascunhos", JSON.stringify(rascunhos));
+    // Busca rascunhos do usuário logado no localStorage
+    function getRascunhosPorAutor(autor) {
+      if (!autor) return [];
+      const rascunhos = JSON.parse(localStorage.getItem("rascunhos")) || [];
+      return rascunhos.filter(p => p.autor === autor);
     }
 
-    // Remove rascunho por ID
+    // Remove rascunho por id e atualiza listagem
     function removerRascunho(id) {
-      if(!confirm("Deseja excluir este rascunho?")) return;
-      const rascunhos = getRascunhos();
-      delete rascunhos[id];
-      setRascunhos(rascunhos);
-      renderizarRascunhos();
+      if (!confirm("Deseja realmente excluir este rascunho?")) return;
+      let rascunhos = JSON.parse(localStorage.getItem("rascunhos")) || [];
+      rascunhos = rascunhos.filter(p => p.id !== id);
+      localStorage.setItem("rascunhos", JSON.stringify(rascunhos));
+      carregarRascunhos();
     }
 
-    // Editar rascunho: salvar no localStorage o id do rascunho a ser editado e ir para nova-postagem.html
-    function editarRascunho(id) {
-      localStorage.setItem("rascunhoEditar", id);
-      window.location.href = "nova-postagem.html";
+    // Monta cada rascunho na página
+    function criarElementoRascunho(rascunho) {
+      const container = document.createElement("div");
+      container.className = "border rounded p-4 shadow-sm";
+
+      const titulo = document.createElement("h3");
+      titulo.textContent = rascunho.titulo;
+      titulo.className = "text-xl font-bold mb-2 text-[#09679c]";
+      container.appendChild(titulo);
+
+      const dataHora = document.createElement("p");
+      dataHora.textContent = "Última edição: " + formatarDataHora(rascunho.data);
+      dataHora.className = "text-gray-600 text-sm mb-2";
+      container.appendChild(dataHora);
+
+      // Resumo conteúdo (texto plano, limitado)
+      const resumo = document.createElement("p");
+      resumo.className = "mb-2";
+      const textoLimite = 250;
+      const conteudoLimpo = rascunho.conteudo.replace(/<[^>]+>/g, ""); // remove tags HTML
+      resumo.textContent = conteudoLimpo.length > textoLimite
+        ? conteudoLimpo.slice(0, textoLimite) + "..."
+        : conteudoLimpo;
+      container.appendChild(resumo);
+
+      // Botões editar e excluir
+      const botoesDiv = document.createElement("div");
+      botoesDiv.className = "flex gap-3";
+
+      // Botão editar - abre nova-postagem.html com query string ?id=ID
+      const btnEditar = document.createElement("button");
+      btnEditar.textContent = "Editar";
+      btnEditar.className = "bg-[#09679c] text-white px-4 py-2 rounded hover:bg-[#074d6b] transition";
+      btnEditar.onclick = () => {
+        window.location.href = `nova-postagem.html?id=${rascunho.id}`;
+      };
+      botoesDiv.appendChild(btnEditar);
+
+      // Botão excluir
+      const btnExcluir = document.createElement("button");
+      btnExcluir.textContent = "Excluir";
+      btnExcluir.className = "bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition";
+      btnExcluir.onclick = () => removerRascunho(rascunho.id);
+      botoesDiv.appendChild(btnExcluir);
+
+      container.appendChild(botoesDiv);
+
+      return container;
     }
 
-    // Renderiza os rascunhos na página
-    function renderizarRascunhos() {
-      const container = document.getElementById("listaRascunhos");
-      const rascunhos = getRascunhos();
-      const usuario = localStorage.getItem("usuarioLogado");
-      container.innerHTML = "";
-
-      const rascunhosUsuario = Object.entries(rascunhos).filter(([id, rasc]) => rasc.autor === usuario);
-
-      if(rascunhosUsuario.length === 0) {
-        container.innerHTML = '<p class="italic text-gray-500">Nenhum rascunho encontrado.</p>';
-        return;
-      }
-
-      rascunhosUsuario.forEach(([id, rasc]) => {
-        const div = document.createElement("div");
-        div.className = "border border-gray-300 rounded p-4 flex justify-between items-center";
-
-        div.innerHTML = `
-          <div>
-            <h3 class="font-semibold text-lg">${rasc.titulo || "(Sem título)"}</h3>
-            <p class="text-sm text-gray-600">Data: ${new Date(rasc.data).toLocaleString()}</p>
-          </div>
-          <div class="flex gap-3">
-            <button onclick="editarRascunho('${id}')" class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 transition" title="Editar">
-              <i class="fas fa-edit"></i> Editar
-            </button>
-            <button onclick="removerRascunho('${id}')" class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 transition" title="Excluir">
-              <i class="fas fa-trash"></i> Excluir
-            </button>
-          </div>
-        `;
-
-        container.appendChild(div);
-      });
-    }
-
-    window.addEventListener("DOMContentLoaded", () => {
-      const usuario = localStorage.getItem("usuarioLogado");
-      if(!usuario){
-        alert("Usuário não logado. Redirecionando...");
+    // Carrega e exibe os rascunhos do usuário logado
+    function carregarRascunhos() {
+      if (!usuarioLogado || !usuariosAutorizados.includes(usuarioLogado)) {
+        alert("Você não tem permissão para acessar esta página.");
         window.location.href = "intranet.html";
         return;
       }
-      renderizarRascunhos();
-    });
+
+      const rascunhos = getRascunhosPorAutor(usuarioLogado);
+      const container = document.getElementById("rascunhosContainer");
+      container.innerHTML = "";
+
+      if (rascunhos.length === 0) {
+        container.textContent = "Nenhum rascunho encontrado.";
+        return;
+      }
+
+      rascunhos.forEach(r => {
+        const el = criarElementoRascunho(r);
+        container.appendChild(el);
+      });
+    }
+
+    window.onload = carregarRascunhos;
   </script>
 </body>
 </html>
