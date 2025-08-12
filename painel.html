@@ -5,12 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Painel - Intranet do Gringo</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     crossorigin="anonymous"
   />
+  <style>
+    /* Para melhor alinhamento dos cards */
+    .card {
+      min-height: 120px;
+    }
+  </style>
 </head>
 <body class="bg-gray-100 min-h-screen flex flex-col">
 
@@ -44,10 +49,10 @@
   </header>
 
   <!-- Main Content -->
-  <main class="flex-grow p-6 max-w-7xl mx-auto space-y-10">
+  <main class="flex-grow p-6 max-w-5xl mx-auto space-y-10">
 
-    <!-- Seção para todos os usuários -->
-    <section>
+    <!-- Conteúdo para usuários comuns -->
+    <section id="conteudoComum" class="hidden">
       <h2 class="text-2xl font-bold mb-6 text-[#005075]">Seja bem-vindo(a)!</h2>
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
         <a href="nova-postagem.html" class="bg-white rounded shadow p-6 hover:shadow-lg transition flex flex-col items-center text-center gap-3">
@@ -68,81 +73,31 @@
       </div>
     </section>
 
-    <!-- Seção exclusiva para gilvaniogringo -->
+    <!-- Conteúdo para gerente -->
     <section id="dashboardGerente" class="hidden bg-white rounded shadow p-6 space-y-8">
+
       <h2 class="text-3xl font-bold text-[#09679c] border-b-4 border-[#FF7DA4] pb-2">Dashboard Gerente - Métricas</h2>
 
-      <!-- Cards métricas -->
-      <div class="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-6">
-        <div class="bg-[#09679c] text-white rounded-lg p-5 shadow flex flex-col items-center">
-          <i class="fas fa-envelope fa-2x mb-3"></i>
-          <p class="text-xl font-semibold" id="totalMensagens">0</p>
-          <p>Volume de Mensagens</p>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+        <div class="bg-[#09679c] text-white rounded-lg p-5 shadow flex flex-col items-center card">
+          <i class="fas fa-user-friends fa-3x mb-3"></i>
+          <p class="text-3xl font-semibold" id="colaboradoresLogados">0</p>
+          <p class="text-lg">Colaboradores Logados</p>
         </div>
-        <div class="bg-[#DB2356] text-white rounded-lg p-5 shadow flex flex-col items-center">
-          <i class="fas fa-smile fa-2x mb-3"></i>
-          <p class="text-xl font-semibold" id="sentimentoCliente">Neutro</p>
-          <p>Sentimento do Cliente</p>
+        <div class="bg-[#DB2356] text-white rounded-lg p-5 shadow flex flex-col items-center card">
+          <i class="fas fa-envelope-open-text fa-3x mb-3"></i>
+          <p class="text-3xl font-semibold" id="mensagensResponder">0</p>
+          <p class="text-lg">Mensagens a Responder</p>
         </div>
-        <div class="bg-[#09679c] text-white rounded-lg p-5 shadow flex flex-col items-center">
-          <i class="fas fa-user-check fa-2x mb-3"></i>
-          <p class="text-xl font-semibold" id="performanceAgente">0%</p>
-          <p>Performance por Agente</p>
-        </div>
-        <div class="bg-[#DB2356] text-white rounded-lg p-5 shadow flex flex-col items-center">
-          <i class="fas fa-stopwatch fa-2x mb-3"></i>
-          <p class="text-xl font-semibold" id="tempoResposta">0s</p>
-          <p>Tempo Médio de Resposta</p>
-        </div>
-        <div class="bg-[#09679c] text-white rounded-lg p-5 shadow flex flex-col items-center">
-          <i class="fas fa-times-circle fa-2x mb-3"></i>
-          <p class="text-xl font-semibold" id="chatsPerdidos">0</p>
-          <p>Chats Perdidos</p>
-        </div>
-        <div class="bg-[#DB2356] text-white rounded-lg p-5 shadow flex flex-col items-center">
-          <i class="fas fa-check-circle fa-2x mb-3"></i>
-          <p class="text-xl font-semibold" id="ticketsResolvidos">0</p>
-          <p>Tickets Resolvidos</p>
-        </div>
-        <div class="bg-[#09679c] text-white rounded-lg p-5 shadow flex flex-col items-center">
-          <i class="fas fa-chart-line fa-2x mb-3"></i>
-          <p class="text-xl font-semibold" id="metrEngajamento">0%</p>
-          <p>Métricas de Engajamento</p>
-        </div>
-        <div class="bg-[#DB2356] text-white rounded-lg p-5 shadow flex flex-col items-center">
-          <i class="fas fa-comments fa-2x mb-3"></i>
-          <p class="text-xl font-semibold" id="profundidadeConversas">0%</p>
-          <p>Profundidade de Conversas</p>
+        <div class="bg-[#09679c] text-white rounded-lg p-5 shadow flex flex-col items-center card">
+          <i class="fas fa-stopwatch fa-3x mb-3"></i>
+          <p class="text-3xl font-semibold" id="tempoEsperaMedia">0s</p>
+          <p class="text-lg">Tempo Médio de Espera</p>
         </div>
       </div>
 
-      <!-- Gráfico semanal -->
-      <div>
-        <h3 class="text-xl font-bold mb-3 text-[#005075]">Gráfico Semanal - Volume e Engajamento</h3>
-        <canvas id="graficoSemanal" class="w-full max-w-4xl"></canvas>
-      </div>
-
-      <!-- Informações extras -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div class="bg-white border rounded shadow p-5 flex flex-col items-center">
-          <h4 class="font-semibold mb-2">Tempo de Inatividade</h4>
-          <p id="tempoInatividade" class="text-lg font-semibold text-[#DB2356]">00:00:00</p>
-        </div>
-        <div class="bg-white border rounded shadow p-5 flex flex-col items-center">
-          <h4 class="font-semibold mb-2">Contatos Cadastrados</h4>
-          <p id="contatosCadastrados" class="text-lg font-semibold text-[#09679c]">0</p>
-        </div>
-        <div class="bg-white border rounded shadow p-5 flex flex-col items-center">
-          <h4 class="font-semibold mb-2">Excluir Contatos</h4>
-          <button
-            id="btnExcluirContatos"
-            class="bg-[#DB2356] text-white px-4 py-2 rounded hover:bg-[#a91f46] transition"
-          >
-            Excluir todos os contatos
-          </button>
-        </div>
-      </div>
     </section>
+
   </main>
 
   <!-- Rodapé redes sociais -->
@@ -165,147 +120,82 @@
   </footer>
 
   <script>
-    // Logout
+    // Usuários cadastrados no sistema
+    const usuariosCadastrados = ["gilvaniogringo", "gabriel.amaral", "grazielle.albuquerque"];
+
+    // Simulando usuários logados - no sistema real deve vir do backend/login
+    // Aqui usamos localStorage com chave 'usuarioLogado'
+    // Para teste, no console do navegador rode:
+    // localStorage.setItem('usuarioLogado', 'gabriel.amaral');
+    // ou
+    // localStorage.setItem('usuarioLogado', 'gilvaniogringo');
+
     function logout() {
       localStorage.removeItem("usuarioLogado");
       window.location.href = "intranet.html";
     }
 
-    // Verificar usuário logado e mostrar painel gerente só para gilvaniogringo
-    const usuarioLogado = localStorage.getItem("usuarioLogado") || localStorage.getItem("logado"); // 'logado' para compatibilidade
-    const dashboardGerenteSection = document.getElementById("dashboardGerente");
-
-    if (usuarioLogado === "gilvaniogringo") {
-      dashboardGerenteSection.classList.remove("hidden");
-      iniciarDashboard();
+    // Função para simular pegar usuários logados (exemplo simples)
+    // No sistema real, esse dado deve vir do backend
+    function pegarUsuariosLogados() {
+      // Simular com um array de usuários que estão logados - em real teria sessão ativa
+      // Aqui vamos pegar o usuario atual só, mas pode expandir
+      const usuario = localStorage.getItem("usuarioLogado");
+      if (usuario && usuariosCadastrados.includes(usuario)) {
+        return [usuario];
+      }
+      return [];
     }
 
-    // Simulação de dados para o dashboard (pode ser substituído por dados reais via backend)
-    function iniciarDashboard() {
-      // Dados fictícios
-      const dados = {
-        totalMensagens: 12456,
-        sentimentoCliente: "Positivo", // Positivo, Neutro, Negativo
-        performanceAgente: 89, // %
-        tempoResposta: 27, // segundos
-        chatsPerdidos: 3,
-        ticketsResolvidos: 120,
-        metrEngajamento: 74, // %
-        profundidadeConversas: 65, // %
-        tempoInatividadeSegundos: 3600, // 1h
-        contatosCadastrados: JSON.parse(localStorage.getItem("contatos"))?.length || 0
-      };
-
-      // Atualizar cards
-      document.getElementById("totalMensagens").textContent = dados.totalMensagens.toLocaleString();
-      document.getElementById("sentimentoCliente").textContent = dados.sentimentoCliente;
-      document.getElementById("performanceAgente").textContent = dados.performanceAgente + "%";
-      document.getElementById("tempoResposta").textContent = dados.tempoResposta + "s";
-      document.getElementById("chatsPerdidos").textContent = dados.chatsPerdidos;
-      document.getElementById("ticketsResolvidos").textContent = dados.ticketsResolvidos;
-      document.getElementById("metrEngajamento").textContent = dados.metrEngajamento + "%";
-      document.getElementById("profundidadeConversas").textContent = dados.profundidadeConversas + "%";
-
-      // Formatar tempo inatividade hh:mm:ss
-      document.getElementById("tempoInatividade").textContent = segundosParaHMS(dados.tempoInatividadeSegundos);
-
-      // Contatos cadastrados
-      document.getElementById("contatosCadastrados").textContent = dados.contatosCadastrados;
-
-      // Gráfico semanal
-      montarGraficoSemanal();
-
-      // Botão excluir contatos
-      document.getElementById("btnExcluirContatos").onclick = () => {
-        if(confirm("Tem certeza que deseja excluir todos os contatos? Esta ação não pode ser desfeita.")) {
-          localStorage.removeItem("contatos");
-          document.getElementById("contatosCadastrados").textContent = 0;
-          alert("Contatos excluídos com sucesso!");
-        }
-      };
-    }
-
-    // Função para formatar segundos em hh:mm:ss
-    function segundosParaHMS(segundos) {
-      const h = Math.floor(segundos / 3600).toString().padStart(2, '0');
-      const m = Math.floor((segundos % 3600) / 60).toString().padStart(2, '0');
-      const s = (segundos % 60).toString().padStart(2, '0');
-      return `${h}:${m}:${s}`;
-    }
-
-    // Montar gráfico semanal com Chart.js
-    function montarGraficoSemanal() {
-      const ctx = document.getElementById('graficoSemanal').getContext('2d');
-
-      // Dados simulados semanais (7 dias)
-      const labels = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'];
-      const volumeMensagens = [1200, 1350, 1100, 1450, 1600, 1000, 900];
-      const engajamento = [70, 75, 68, 80, 78, 60, 55];
-
-      new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: labels,
-          datasets: [
-            {
-              label: 'Volume de Mensagens',
-              data: volumeMensagens,
-              borderColor: '#09679c',
-              backgroundColor: 'rgba(9,103,156,0.3)',
-              tension: 0.3,
-              fill: true,
-              yAxisID: 'y',
-              order: 2
-            },
-            {
-              label: 'Engajamento (%)',
-              data: engajamento,
-              borderColor: '#DB2356',
-              backgroundColor: 'rgba(219,35,86,0.3)',
-              tension: 0.3,
-              fill: true,
-              yAxisID: 'y1',
-              order: 1
-            }
-          ]
-        },
-        options: {
-          responsive: true,
-          interaction: {
-            mode: 'index',
-            intersect: false
-          },
-          stacked: false,
-          scales: {
-            y: {
-              type: 'linear',
-              display: true,
-              position: 'left',
-              beginAtZero: true,
-              title: {
-                display: true,
-                text: 'Mensagens'
-              }
-            },
-            y1: {
-              type: 'linear',
-              display: true,
-              position: 'right',
-              beginAtZero: true,
-              max: 100,
-              title: {
-                display: true,
-                text: 'Engajamento (%)'
-              },
-              grid: {
-                drawOnChartArea: false
-              }
-            }
-          }
-        }
+    // Simular busca dos dados do WhatsApp para mensagens e tempo
+    async function buscarDadosWhatsApp() {
+      // Aqui você deve colocar a integração real com backend ou API
+      // Por enquanto vamos simular com dados fixos e atraso
+      return new Promise(resolve => {
+        setTimeout(() => {
+          resolve({
+            mensagensResponder: Math.floor(Math.random() * 20),  // número aleatório entre 0 e 19
+            tempoEsperaMedia: Math.floor(Math.random() * 60)    // tempo em segundos, 0 a 59
+          });
+        }, 800);
       });
     }
 
+    // Inicializa o painel de acordo com usuário logado
+    async function iniciarPainel() {
+      const usuario = localStorage.getItem("usuarioLogado");
+
+      if (!usuario || !usuariosCadastrados.includes(usuario)) {
+        alert("Usuário não logado ou inválido. Redirecionando para login...");
+        window.location.href = "intranet.html";
+        return;
+      }
+
+      // Exibe conteúdo conforme tipo de usuário
+      if (usuario === "gilvaniogringo") {
+        // Mostrar dashboard gerente
+        document.getElementById("dashboardGerente").classList.remove("hidden");
+        document.getElementById("conteudoComum").classList.add("hidden");
+
+        // Pega colaboradores logados
+        const colaboradores = pegarUsuariosLogados();
+
+        // Busca dados do WhatsApp
+        const dadosWhatsApp = await buscarDadosWhatsApp();
+
+        // Atualiza painel gerente
+        document.getElementById("colaboradoresLogados").textContent = colaboradores.length;
+        document.getElementById("mensagensResponder").textContent = dadosWhatsApp.mensagensResponder;
+        document.getElementById("tempoEsperaMedia").textContent = dadosWhatsApp.tempoEsperaMedia + "s";
+
+      } else {
+        // Usuário comum
+        document.getElementById("conteudoComum").classList.remove("hidden");
+        document.getElementById("dashboardGerente").classList.add("hidden");
+      }
+    }
+
+    window.onload = iniciarPainel;
   </script>
 
 </body>
