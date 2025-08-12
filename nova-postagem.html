@@ -3,21 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Rascunhos - Intranet do Gringo</title>
+  <title>Nova Postagem - Intranet do Gringo</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     crossorigin="anonymous"
   />
-  <style>
-    .btn-expandir {
-      cursor: pointer;
-      color: #09679c;
-      font-weight: 600;
-      user-select: none;
-    }
-  </style>
 </head>
 <body class="bg-gray-100 min-h-screen flex flex-col">
 
@@ -25,23 +17,20 @@
   <header class="flex justify-between items-center bg-[#09679c] text-white p-4 shadow-md">
     <div class="flex items-center gap-3">
       <img src="img/logo.png" alt="Logo Gringo" class="h-10 w-auto" />
-      <h1 class="text-xl font-bold" id="tituloPagina">Rascunhos</h1>
-      <!-- Contagem -->
-      <span id="contadorRascunhos" class="ml-4 text-lg"></span>
+      <h1 class="text-xl font-bold">Nova Postagem</h1>
     </div>
-    <div id="relogio" class="text-white font-mono text-lg"></div> <!-- Relógio -->
 
     <nav class="flex items-center gap-3">
       <a href="painel.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="Painel">
         <i class="fas fa-home"></i> Painel
       </a>
-      <a href="nova-postagem.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="Nova Postagem">
+      <a href="nova-postagem.html" class="bg-[#053646] border border-white px-3 py-2 rounded hover:bg-[#032d39] transition flex items-center gap-1" title="Nova Postagem">
         <i class="fas fa-plus"></i> Nova Postagem
       </a>
       <a href="publicacoes.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="Últimas Publicações">
         <i class="fas fa-newspaper"></i> Últimas Publicações
       </a>
-      <a href="rascunhos.html" class="bg-[#053646] border border-white px-3 py-2 rounded hover:bg-[#032d39] transition flex items-center gap-1" title="Rascunhos">
+      <a href="rascunhos.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="Rascunhos">
         <i class="fas fa-file-alt"></i> Rascunhos
       </a>
       <a href="perfil.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="Perfil">
@@ -57,113 +46,95 @@
     </nav>
   </header>
 
-  <!-- Usuário e contagem logo abaixo do header, antes do conteúdo -->
-  <section class="max-w-5xl mx-auto p-6 mt-4 bg-white rounded shadow">
-    <p class="text-gray-700 text-lg">
-      Logado como: <strong id="nomeUsuario"></strong>
-    </p>
-    <p class="text-gray-600 text-md mt-1">
-      Rascunhos salvos: <strong id="contagemRascunhos"></strong>
-    </p>
-  </section>
+  <!-- Conteúdo -->
+  <main class="flex-grow p-6 max-w-4xl mx-auto bg-white rounded shadow mt-6 mb-10">
 
-  <!-- Main -->
-  <main class="flex-grow p-6 max-w-5xl mx-auto bg-white rounded shadow mt-6 mb-10">
-    <section id="rascunhosContainer" class="space-y-8">
-      <!-- Rascunhos do usuário serão listados aqui -->
-    </section>
+    <form id="formPost" class="space-y-6">
+      <div>
+        <label for="titulo" class="block font-semibold mb-1">Título da postagem</label>
+        <input
+          type="text"
+          id="titulo"
+          name="titulo"
+          class="w-full border border-gray-300 rounded px-3 py-2"
+          required
+          maxlength="100"
+        />
+      </div>
+
+      <div>
+        <label for="conteudo" class="block font-semibold mb-1">Conteúdo (HTML permitido)</label>
+        <textarea
+          id="conteudo"
+          name="conteudo"
+          rows="10"
+          class="w-full border border-gray-300 rounded px-3 py-2"
+          required
+        ></textarea>
+      </div>
+
+      <div class="flex gap-4">
+        <button
+          type="submit"
+          class="bg-[#09679c] text-white px-6 py-2 rounded hover:bg-[#074d6b] transition"
+        >
+          Salvar Rascunho
+        </button>
+
+        <button
+          type="button"
+          id="btnPublicar"
+          class="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 transition"
+        >
+          Publicar
+        </button>
+      </div>
+    </form>
+
   </main>
 
-  <script>
-    const usuariosAutorizados = [
-      "gabriel.amaral",
-      "graziele.albuquerque",
-      "karina.maia",
-      "cristiano.santos",
-      "gilvaniogringo"
-    ];
+  <script type="module">
+    import { gerarHtmlPostCompleto } from './post.js';
 
-    const usuarioLogado = localStorage.getItem("usuarioLogado");
+    // Pega usuário logado do localStorage
+    const usuarioLogado = localStorage.getItem('usuarioLogado');
 
     function logout() {
-      localStorage.removeItem("usuarioLogado");
-      window.location.href = "intranet.html";
+      localStorage.removeItem('usuarioLogado');
+      window.location.href = 'intranet.html';
     }
 
-    // Formata data ISO para dd/mm/aaaa HH:mm
-    function formatarDataHora(dataISO) {
-      if (!dataISO) return "";
-      const dt = new Date(dataISO);
-      const data = dt.toLocaleDateString("pt-BR");
-      const hora = dt.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
-      return `${data} ${hora}`;
-    }
+    // Salvar rascunho no localStorage
+    function salvarRascunho(post) {
+      const rascunhos = JSON.parse(localStorage.getItem('rascunhos')) || [];
 
-    // Busca rascunhos do usuário logado no localStorage
-    function getRascunhosPorAutor(autor) {
-      if (!autor) return [];
-      const rascunhos = JSON.parse(localStorage.getItem("rascunhos")) || [];
-      return rascunhos.filter(p => p.autor === autor);
-    }
-
-    // Remove rascunho por id e atualiza listagem (somente se usuário autorizado)
-    function removerRascunho(id) {
-      if (!["karina.maia", "cristiano.santos", "gilvaniogringo"].includes(usuarioLogado)) {
-        alert("Você não tem permissão para excluir este rascunho.");
-        return;
+      // Se já existir (edição), atualiza, senão cria novo
+      const indexExistente = rascunhos.findIndex(r => r.id === post.id);
+      if (indexExistente !== -1) {
+        rascunhos[indexExistente] = post;
+      } else {
+        rascunhos.push(post);
       }
-      if (!confirm("Deseja realmente excluir este rascunho?")) return;
 
-      let rascunhos = JSON.parse(localStorage.getItem("rascunhos")) || [];
-      rascunhos = rascunhos.filter(p => p.id !== id);
-      localStorage.setItem("rascunhos", JSON.stringify(rascunhos));
-      carregarRascunhos();
+      localStorage.setItem('rascunhos', JSON.stringify(rascunhos));
     }
 
-    // Gera slug para nome do arquivo
-    function gerarSlug(texto) {
-      return texto.toLowerCase()
-        .normalize('NFD').replace(/[\u0300-\u036f]/g, '') // remove acentos
-        .replace(/\s+/g, '-')  // espaços por hífen
-        .replace(/[^\w\-]+/g, '') // remove caracteres inválidos
-        .replace(/\-\-+/g, '-')  // múltiplos hífens
-        .replace(/^-+/, '')      // hífens no início
-        .replace(/-+$/, '');     // hífens no fim
+    // Gera ID único simples
+    function gerarId() {
+      return Date.now().toString(36) + Math.random().toString(36).slice(2);
     }
 
-    // Função para gerar o conteúdo do HTML da publicação
-    function gerarHtmlPublicacao(post) {
-      return `<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>${post.titulo}</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    crossorigin="anonymous"
-  />
-  <style>
-    body { background-color: #f9fafb; font-family: Arial, sans-serif; padding: 20px; }
-    h1 { color: #09679c; }
-    .content { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 8px rgba(0,0,0,0.1); max-width: 800px; margin: auto; }
-    a { color: #09679c; }
-  </style>
-</head>
-<body>
-  <div class="content">
-    <h1>${post.titulo}</h1>
-    <p><em>Publicado em: ${new Date(post.data).toLocaleDateString('pt-BR', {day:'2-digit', month:'2-digit', year:'numeric'})}</em></p>
-    <div>${post.conteudo}</div>
-    <p><a href="publicacoes.html">&larr; Voltar às publicações</a></p>
-  </div>
-</body>
-</html>`;
+    // Carrega dados para edição se houver ?id= no URL
+    function carregarEdicao() {
+      const params = new URLSearchParams(window.location.search);
+      const id = params.get('id');
+      if (!id) return null;
+
+      const rascunhos = JSON.parse(localStorage.getItem('rascunhos')) || [];
+      return rascunhos.find(r => r.id === id) || null;
     }
 
-    // Função para baixar arquivo HTML
+    // Baixa arquivo HTML gerado da publicação
     function baixarArquivo(nomeArquivo, conteudo) {
       const blob = new Blob([conteudo], { type: 'text/html;charset=utf-8' });
       const link = document.createElement('a');
@@ -175,152 +146,112 @@
       URL.revokeObjectURL(link.href);
     }
 
-    // Publicar um rascunho: mover para publicações, baixar arquivo e atualizar lista
-    function publicarRascunho(id) {
-      if (!confirm("Deseja publicar este rascunho?")) return;
+    document.getElementById('formPost').addEventListener('submit', e => {
+      e.preventDefault();
 
-      let rascunhos = JSON.parse(localStorage.getItem("rascunhos")) || [];
-      let publicacoes = JSON.parse(localStorage.getItem("publicacoes")) || [];
+      const titulo = e.target.titulo.value.trim();
+      const conteudo = e.target.conteudo.value.trim();
 
-      const idx = rascunhos.findIndex(r => r.id === id);
-      if (idx === -1) {
-        alert("Rascunho não encontrado.");
+      if (!titulo || !conteudo) {
+        alert('Preencha título e conteúdo.');
         return;
       }
 
-      const post = rascunhos[idx];
-      // Atualiza data de publicação para agora
-      post.data = new Date().toISOString();
-      post.status = "enviar";
-
-      // Remove dos rascunhos
-      rascunhos.splice(idx, 1);
-      localStorage.setItem("rascunhos", JSON.stringify(rascunhos));
-
-      // Adiciona nas publicações
-      publicacoes.push(post);
-      localStorage.setItem("publicacoes", JSON.stringify(publicacoes));
-
-      // Gera arquivo HTML e baixa
-      const slug = gerarSlug(post.titulo);
-      const nomeArquivo = slug + ".html";
-      const html = gerarHtmlPublicacao(post);
-      baixarArquivo(nomeArquivo, html);
-
-      alert("Rascunho publicado com sucesso!");
-
-      carregarRascunhos();
-    }
-
-    // Cria o elemento de cada rascunho
-    function criarElementoRascunho(rascunho) {
-      const container = document.createElement("div");
-      container.className = "border rounded p-4 shadow-sm";
-
-      const titulo = document.createElement("h3");
-      titulo.textContent = rascunho.titulo;
-      titulo.className = "text-xl font-bold mb-2 text-[#09679c]";
-      container.appendChild(titulo);
-
-      const dataHora = document.createElement("p");
-      dataHora.textContent = "Última edição: " + formatarDataHora(rascunho.data);
-      dataHora.className = "text-gray-600 text-sm mb-2";
-      container.appendChild(dataHora);
-
-      // Resumo conteúdo (texto plano, limitado)
-      const resumo = document.createElement("p");
-      resumo.className = "mb-2";
-      const textoLimite = 250;
-      const conteudoLimpo = rascunho.conteudo.replace(/<[^>]+>/g, "");
-      resumo.textContent = conteudoLimpo.length > textoLimite
-        ? conteudoLimpo.slice(0, textoLimite) + "..."
-        : conteudoLimpo;
-      container.appendChild(resumo);
-
-      // Botões: Editar, Publicar e Excluir
-      const botoesDiv = document.createElement("div");
-      botoesDiv.className = "flex gap-3";
-
-      const btnEditar = document.createElement("button");
-      btnEditar.textContent = "Editar";
-      btnEditar.className = "bg-[#09679c] text-white px-4 py-2 rounded hover:bg-[#074d6b] transition";
-      btnEditar.onclick = () => {
-        window.location.href = `nova-postagem.html?id=${rascunho.id}`;
+      const post = {
+        id: carregarEdicao()?.id || gerarId(),
+        titulo,
+        conteudo,
+        autor: usuarioLogado || 'anônimo',
+        data: new Date().toISOString(),
+        status: 'rascunho'
       };
-      botoesDiv.appendChild(btnEditar);
 
-      const btnPublicar = document.createElement("button");
-      btnPublicar.textContent = "Publicar";
-      btnPublicar.className = "bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition";
-      btnPublicar.onclick = () => publicarRascunho(rascunho.id);
-      botoesDiv.appendChild(btnPublicar);
+      salvarRascunho(post);
+      alert('Rascunho salvo com sucesso!');
+      // Você pode limpar o formulário ou não — aqui só atualiza data e mantém conteúdo
+      e.target.conteudo.value = conteudo;
+      e.target.titulo.value = titulo;
+      // Atualiza URL para edição do mesmo rascunho
+      history.replaceState(null, '', `nova-postagem.html?id=${post.id}`);
+    });
 
-      if (["karina.maia", "cristiano.santos", "gilvaniogringo"].includes(usuarioLogado)) {
-        const btnExcluir = document.createElement("button");
-        btnExcluir.textContent = "Excluir";
-        btnExcluir.className = "bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition";
-        btnExcluir.onclick = () => removerRascunho(rascunho.id);
-        botoesDiv.appendChild(btnExcluir);
-      }
+    document.getElementById('btnPublicar').addEventListener('click', () => {
+      const titulo = document.getElementById('titulo').value.trim();
+      const conteudo = document.getElementById('conteudo').value.trim();
 
-      container.appendChild(botoesDiv);
-
-      return container;
-    }
-
-    // Atualiza o relógio no header a cada segundo
-    function atualizarRelogio() {
-      const elRelogio = document.getElementById("relogio");
-      const agora = new Date();
-      elRelogio.textContent = agora.toLocaleString("pt-BR", {
-        dateStyle: "short",
-        timeStyle: "medium"
-      });
-    }
-
-    // Carrega e exibe os rascunhos do usuário logado
-    function carregarRascunhos() {
-      if (!usuarioLogado || !usuariosAutorizados.includes(usuarioLogado)) {
-        alert("Você não tem permissão para acessar esta página.");
-        window.location.href = "intranet.html";
+      if (!titulo || !conteudo) {
+        alert('Preencha título e conteúdo para publicar.');
         return;
       }
 
-      // Atualiza título com nome do usuário
-      const tituloPagina = document.getElementById("tituloPagina");
-      tituloPagina.textContent = `Rascunhos do ${usuarioLogado}`;
+      if (!confirm('Deseja publicar esta postagem?')) return;
 
-      // Atualiza usuário logado na seção abaixo do header
-      document.getElementById("nomeUsuario").textContent = usuarioLogado;
+      let rascunhos = JSON.parse(localStorage.getItem('rascunhos')) || [];
+      let publicacoes = JSON.parse(localStorage.getItem('publicacoes')) || [];
 
-      const rascunhos = getRascunhosPorAutor(usuarioLogado);
+      // Se está editando, usa o mesmo id, senão gera novo
+      const params = new URLSearchParams(window.location.search);
+      const id = params.get('id') || gerarId();
 
-      // Atualiza contador (abaixo do header)
-      document.getElementById("contagemRascunhos").textContent = `${rascunhos.length} ${rascunhos.length === 1 ? "rascunho" : "rascunhos"}`;
+      // Remove da lista de rascunhos, se existir
+      rascunhos = rascunhos.filter(r => r.id !== id);
 
-      // Atualiza contador ao lado do título no header
-      const contador = document.getElementById("contadorRascunhos");
-      contador.textContent = `(${rascunhos.length} ${rascunhos.length === 1 ? "rascunho" : "rascunhos"})`;
+      const post = {
+        id,
+        titulo,
+        conteudo,
+        autor: usuarioLogado || 'anônimo',
+        data: new Date().toISOString(),
+        status: 'publicado'
+      };
 
-      const container = document.getElementById("rascunhosContainer");
-      container.innerHTML = "";
+      // Adiciona na lista de publicações
+      publicacoes.push(post);
 
-      if (rascunhos.length === 0) {
-        container.textContent = "Nenhum rascunho encontrado.";
-        return;
+      // Salva listas atualizadas
+      localStorage.setItem('rascunhos', JSON.stringify(rascunhos));
+      localStorage.setItem('publicacoes', JSON.stringify(publicacoes));
+
+      // Gera HTML completo via função importada
+      const htmlCompleto = gerarHtmlPostCompleto(post);
+
+      // Gera slug para nome do arquivo
+      function gerarSlug(texto) {
+        return texto.toLowerCase()
+          .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+          .replace(/\s+/g, '-')
+          .replace(/[^\w\-]+/g, '')
+          .replace(/\-\-+/g, '-')
+          .replace(/^-+/, '')
+          .replace(/-+$/, '');
       }
 
-      rascunhos.forEach(r => {
-        const el = criarElementoRascunho(r);
-        container.appendChild(el);
-      });
-    }
+      const nomeArquivo = gerarSlug(titulo) + '.html';
 
+      // Baixa arquivo HTML
+      baixarArquivo(nomeArquivo, htmlCompleto);
+
+      alert('Postagem publicada com sucesso!');
+
+      // Redireciona para publicações ou limpa formulário
+      window.location.href = 'publicacoes.html';
+    });
+
+    // Se estiver editando, carrega os dados no formulário
     window.onload = () => {
-      carregarRascunhos();
-      atualizarRelogio();
-      setInterval(atualizarRelogio, 1000);
+      if (!usuarioLogado) {
+        alert('Você precisa estar logado para acessar esta página.');
+        window.location.href = 'intranet.html';
+        return;
+      }
+      const post = carregarEdicao();
+      if (post) {
+        document.getElementById('titulo').value = post.titulo;
+        document.getElementById('conteudo').value = post.conteudo;
+      }
     };
+
   </script>
+
 </body>
 </html>
