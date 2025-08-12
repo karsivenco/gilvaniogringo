@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Perfil - Intranet do Gringo</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+  />
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col">
+
+  <!-- Header/menu padrão -->
+  <header class="flex justify-between items-center bg-[#09679c] text-white p-4 shadow-md">
+    <div class="flex items-center gap-3">
+      <img src="img/logo.png" alt="Logo Gringo" class="h-10 w-auto" />
+      <h1 class="text-xl font-bold">Perfil do Usuário</h1>
+    </div>
+    <nav class="flex items-center gap-3">
+      <a href="painel.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="Início">
+        <i class="fas fa-home"></i> Início
+      </a>
+      <a href="cadastro.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="Cadastro">
+        <i class="fas fa-user-plus"></i> Cadastro
+      </a>
+      <a href="contatos.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="Contatos">
+        <i class="fas fa-address-book"></i> Contatos
+      </a>
+      <a href="perfil.html" class="bg-[#053646] px-3 py-2 rounded hover:bg-[#032d39] transition flex items-center gap-1" title="Perfil">
+        <i class="fas fa-user"></i> Perfil
+      </a>
+      <!-- Dashboard só para gilvaniogringo -->
+      <span id="linkDashboardContainer"></span>
+      <button
+        onclick="logout()"
+        class="bg-[#053646] px-3 py-2 rounded hover:bg-[#032d39] transition flex items-center gap-1"
+        title="Sair"
+      >
+        <i class="fas fa-sign-out-alt"></i> Sair
+      </button>
+    </nav>
+  </header>
+
+  <main class="flex-grow max-w-4xl mx-auto p-6">
+    <section class="bg-white rounded shadow p-6 mb-6">
+      <h2 class="text-2xl font-bold mb-4 text-[#005075]">Dados do Perfil</h2>
+      <p><strong>Usuário:</strong> <span id="usuarioNome"></span></p>
+      <p><strong>Cargo:</strong> <span id="usuarioCargo"></span></p>
+    </section>
+
+    <section class="bg-white rounded shadow p-6">
+      <h2 class="text-2xl font-bold mb-4 text-[#005075]">Log de Atividades</h2>
+      <ul id="logAtividades" class="mb-4 max-h-64 overflow-y-auto border border-gray-300 rounded p-4 space-y-2 text-gray-700"></ul>
+      <form id="formLog" class="flex gap-3">
+        <input
+          type="text"
+          id="novaAtividade"
+          placeholder="Adicionar nova atividade..."
+          class="flex-grow border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#09679c]"
+          required
+        />
+        <button
+          type="submit"
+          class="bg-[#09679c] text-white px-4 rounded hover:bg-[#074d6b] transition"
+        >Adicionar</button>
+      </form>
+    </section>
+  </main>
+
+  <script>
+    // Dados fixos dos usuários e cargos
+    const usuarios = {
+      "grazielle.albuquerque": { nome: "Grazielle Albuquerque", cargo: "Jornalismo" },
+      "gabriel.amaral": { nome: "Gabriel Amaral", cargo: "Jornalismo" },
+      "karina.maia": { nome: "Karina Maia", cargo: "Desenvolvedora Social Mídia" },
+      "gilvaniogringo": { nome: "Gilvani O Gringo", cargo: "Vereador" },
+      "anne.mattos": { nome: "Anne Mattos", cargo: "Comunicação" },
+      "tati.garcia": { nome: "Tatiane Garcia", cargo: "Comunicação" },
+      "cristiano.santos": { nome: "Cristiano Santos", cargo: "Mídias Sociais" },
+      "vitor.mello": { nome: "Vitor Mello", cargo: "Comunicação" }
+    };
+
+    // Função logout
+    function logout() {
+      localStorage.removeItem("usuarioLogado");
+      window.location.href = "intranet.html";
+    }
+
+    // Carrega dados do usuário logado
+    function carregarPerfil() {
+      const usuarioLogado = localStorage.getItem("usuarioLogado");
+      if (!usuarioLogado) {
+        alert("Usuário não está logado. Redirecionando...");
+        window.location.href = "intranet.html";
+        return;
+      }
+
+      // Define nome e cargo
+      const dadosUsuario = usuarios[usuarioLogado];
+      if (!dadosUsuario) {
+        alert("Usuário inválido. Redirecionando...");
+        window.location.href = "intranet.html";
+        return;
+      }
+
+      document.getElementById("usuarioNome").textContent = dadosUsuario.nome;
+      document.getElementById("usuarioCargo").textContent = dadosUsuario.cargo;
+
+      // Exibe link Dashboard só para gilvaniogringo
+      const linkDashboardContainer = document.getElementById("linkDashboardContainer");
+      if (usuarioLogado === "gilvaniogringo") {
+        linkDashboardContainer.innerHTML = `
+          <a href="dashboard.html" class="bg-[#053646] px-3 py-2 rounded hover:bg-[#032d39] transition flex items-center gap-1" title="Dashboard">
+            <i class="fas fa-chart-line"></i> Dashboard
+          </a>
+        `;
+      } else {
+        linkDashboardContainer.innerHTML = "";
+      }
+
+      carregarLogAtividades(usuarioLogado);
+    }
+
+    // Chave para armazenar log no localStorage
+    function chaveLog(usuario) {
+      return `logAtividades_${usuario}`;
+    }
+
+    // Carregar log de atividades do localStorage
+    function carregarLogAtividades(usuario) {
+      const logJSON = localStorage.getItem(chaveLog(usuario));
+      const log = logJSON ? JSON.parse(logJSON) : [];
+      renderizarLog(log);
+    }
+
+    // Renderiza o log no ul
+    function renderizarLog(log) {
+      const ul = document.getElementById("logAtividades");
+      ul.innerHTML = "";
+      if (log.length === 0) {
+        ul.innerHTML = '<li class="italic text-gray-400">Nenhuma atividade registrada.</li>';
+        return;
+      }
+      log.forEach(item => {
+        const li = document.createElement("li");
+        li.textContent = `${new Date(item.timestamp).toLocaleString('pt-BR')} - ${item.acao}`;
+        li.className = "border-b border-gray-200 pb-1";
+        ul.appendChild(li);
+      });
+    }
+
+    // Adiciona nova atividade no log e salva localStorage
+    function adicionarAtividade(acao) {
+      const usuarioLogado = localStorage.getItem("usuarioLogado");
+      if (!usuarioLogado) return;
+
+      const logJSON = localStorage.getItem(chaveLog(usuarioLogado));
+      const log = logJSON ? JSON.parse(logJSON) : [];
+
+      log.unshift({ acao, timestamp: Date.now() });
+      localStorage.setItem(chaveLog(usuarioLogado), JSON.stringify(log));
+
+      renderizarLog(log);
+    }
+
+    // Configura formulário para adicionar atividades
+    document.getElementById("formLog").addEventListener("submit", e => {
+      e.preventDefault();
+      const input = document.getElementById("novaAtividade");
+      const texto = input.value.trim();
+      if (!texto) return;
+      adicionarAtividade(texto);
+      input.value = "";
+    });
+
+    // Inicializa perfil ao carregar página
+    window.addEventListener("DOMContentLoaded", carregarPerfil);
+  </script>
+
+</body>
+</html>
