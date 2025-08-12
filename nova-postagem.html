@@ -173,7 +173,6 @@
   </main>
 
   <script>
-    // Usuários autorizados a postar e visualizar publicações
     const usuariosAutorizados = [
       "gabriel.amaral",
       "graziele.albuquerque",
@@ -182,10 +181,8 @@
       "gilvaniogringo"
     ];
 
-    // Usuário logado (pega do localStorage)
     const usuarioLogado = localStorage.getItem("usuarioLogado");
 
-    // Montar menu dinâmico
     function montarMenu() {
       const menu = document.getElementById("mainMenu");
       menu.innerHTML = `
@@ -194,6 +191,9 @@
         </a>
         <a href="nova-postagem.html" class="bg-[#053646] border border-white px-3 py-2 rounded hover:bg-[#032d39] transition flex items-center gap-1" title="Nova Postagem">
           <i class="fas fa-plus"></i> Nova Postagem
+        </a>
+        <a href="rascunhos.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="Rascunhos">
+          <i class="fas fa-file-alt"></i> Rascunhos
         </a>
         ${usuariosAutorizados.includes(usuarioLogado) ? `
         <a href="publicacoes.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="Últimas Publicações">
@@ -207,14 +207,11 @@
 
     montarMenu();
 
-    // Função para formatar texto (bold, italic, etc)
     function format(comando, valor=null) {
       document.execCommand(comando, false, valor);
-      // Focar no editor após executar comando
       document.getElementById("editor").focus();
     }
 
-    // Inserir link customizado
     function inserirLink() {
       const url = prompt("Digite o URL do link:");
       if (url) {
@@ -222,19 +219,16 @@
       }
     }
 
-    // Toggle emoji picker
     function toggleEmojiPicker() {
       const picker = document.getElementById("emojiPicker");
       picker.classList.toggle("hidden");
     }
 
-    // Insere emoji no editor
     function inserirEmoji(emoji) {
       format("insertText", emoji);
       toggleEmojiPicker();
     }
 
-    // Lista de emojis básicos
     const emojis = ["😀","😃","😄","😁","😆","😅","😂","🤣","😊","😍","😎","😢","😭","😡","👍","👎","🙏","🎉","🔥","💡"];
 
     function popularEmojis() {
@@ -250,7 +244,6 @@
     }
     popularEmojis();
 
-    // Inserir imagem no editor (como base64 inline)
     function inserirImagem(event) {
       const file = event.target.files[0];
       if (!file) return;
@@ -268,11 +261,9 @@
       };
       reader.readAsDataURL(file);
 
-      // Resetar input para permitir upload repetido da mesma imagem
       event.target.value = "";
     }
 
-    // Enviar postagem - salvar no localStorage e redirecionar
     function enviarPostagem(event) {
       event.preventDefault();
 
@@ -294,7 +285,6 @@
         return false;
       }
 
-      // Criar objeto postagem
       const postagem = {
         id: Date.now(),
         titulo,
@@ -304,11 +294,9 @@
         status
       };
 
-      // Salvar no localStorage (em rascunhos ou publicações)
       let chave = status === "rascunho" ? "rascunhos" : "publicacoes";
       let lista = JSON.parse(localStorage.getItem(chave)) || [];
 
-      // Atualizar: se já existe postagem com mesmo id, atualizar (edit)
       const indexExistente = lista.findIndex(p => p.id === postagem.id);
       if(indexExistente !== -1) {
         lista[indexExistente] = postagem;
@@ -319,7 +307,6 @@
 
       alert(`Postagem ${status === "rascunho" ? "salva como rascunho" : "publicada"} com sucesso!`);
 
-      // Redirecionar conforme status
       if(status === "rascunho") {
         window.location.href = "rascunhos.html";
       } else {
@@ -329,20 +316,17 @@
       return false;
     }
 
-    // Logout - remover usuario logado e redirecionar para login
     function logout() {
       localStorage.removeItem("usuarioLogado");
       window.location.href = "intranet.html";
     }
 
-    // Proteção simples - redireciona se não logado ou não autorizado
     window.onload = function() {
       if (!usuarioLogado) {
         alert("Usuário não logado.");
         window.location.href = "intranet.html";
         return;
       }
-      // Permitir acesso só para usuários com permissão de escrever
       if(!usuariosAutorizados.includes(usuarioLogado)) {
         alert("Você não tem permissão para acessar esta página.");
         window.location.href = "painel.html";
