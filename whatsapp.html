@@ -1,59 +1,123 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <title>WhatsApp - Atendimento</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-  />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WhatsApp - Intranet do Gringo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Simulação do usuário logado (substituir por sessão real no backend)
+        const usuarioLogado = localStorage.getItem("usuario") || "visitante";
+    </script>
 </head>
-<body class="bg-gray-100 min-h-screen flex flex-col">
+<body class="bg-gray-100">
 
-  <header class="bg-[#09679c] text-white p-4 flex justify-between items-center">
-    <h1 class="text-xl font-bold">WhatsApp - Atendimento</h1>
-    <nav class="flex gap-3">
-      <a href="painel.html" class="hover:underline">Painel</a>
-      <a href="contatos.html" class="hover:underline">Contatos</a>
-      <button onclick="logout()" class="bg-[#074d6b] px-3 py-1 rounded">Sair</button>
-    </nav>
-  </header>
+    <!-- Header padrão -->
+    <header class="bg-red-700 text-white shadow-md">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+            <h1 class="text-2xl font-bold">Intranet do Gringo</h1>
+            <nav>
+                <ul class="flex space-x-6">
+                    <li><a href="painel.html" class="hover:underline">Painel</a></li>
+                    <li><a href="nova-postagem.html" class="hover:underline">Nova Postagem</a></li>
+                    <li><a href="whatsapp.html" class="hover:underline font-bold">WhatsApp</a></li>
+                    <li><a href="perfil.html" class="hover:underline">Perfil</a></li>
+                    <li><a href="logout.html" class="hover:underline">Sair</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
 
-  <main class="p-6 flex-grow">
-    <!-- Conteúdo comum a todos -->
-    <section>
-      <h2 class="text-2xl font-bold mb-4">Área de Atendimento WhatsApp</h2>
-      <p>Conteúdo comum para todos os usuários que acessam esta página.</p>
-      <!-- Aqui ficaria a lista de contatos, chat, etc -->
-    </section>
+    <!-- Container principal -->
+    <div class="max-w-7xl mx-auto px-4 py-6 grid grid-cols-12 gap-6">
 
-    <!-- Dashboard Gerente só para gilvaniogringo -->
-    <section id="dashboardGerente" class="hidden mt-10 bg-white p-6 rounded shadow max-w-4xl mx-auto">
-      <h2 class="text-3xl font-bold text-[#09679c] mb-4">Dashboard Gerente (Exclusivo)</h2>
-      <p>Aqui vão métricas e dados exclusivos para o gerente.</p>
-      <!-- Seus cards e gráficos do dashboard -->
-    </section>
-  </main>
+        <!-- Menu lateral -->
+        <aside class="col-span-3 bg-white rounded-lg shadow p-4">
+            <h2 class="text-lg font-bold mb-4">Menu</h2>
+            <ul class="space-y-2">
+                <li><a href="whatsapp.html" class="block p-2 rounded bg-green-100 text-green-800">Conversar no WhatsApp</a></li>
+                <li id="dashboardMenu" class="hidden"><a href="dashboard.html" class="block p-2 rounded bg-blue-100 text-blue-800">Dashboard</a></li>
+            </ul>
+        </aside>
 
-  <footer class="bg-[#005075] text-white p-4 text-center">
-    <p>© 2025 Intranet do Gringo</p>
-  </footer>
+        <!-- Área de conversa -->
+        <main class="col-span-9 bg-white rounded-lg shadow p-4">
+            <h2 class="text-xl font-bold mb-4">Conversa no WhatsApp</h2>
+            
+            <div id="chatBox" class="h-96 border border-gray-200 rounded p-3 overflow-y-auto bg-gray-50 mb-4">
+                <div class="text-gray-500 text-sm">Nenhuma conversa iniciada.</div>
+            </div>
 
-  <script>
-    function logout() {
-      localStorage.removeItem("usuarioLogado");
-      window.location.href = "intranet.html";
-    }
+            <form id="whatsappForm" class="flex space-x-2">
+                <input type="text" id="phoneNumber" placeholder="Número com DDI e DDD (ex: 55...)"
+                    class="flex-1 border border-gray-300 rounded p-2" required>
+                <input type="text" id="message" placeholder="Digite sua mensagem"
+                    class="flex-1 border border-gray-300 rounded p-2" required>
+                <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+                    Enviar
+                </button>
+            </form>
+        </main>
+    </div>
 
-    // Mostrar dashboard somente para "gilvaniogringo"
-    const usuarioLogado = localStorage.getItem("usuarioLogado");
-    if (usuarioLogado === "gilvaniogringo") {
-      document.getElementById("dashboardGerente").classList.remove("hidden");
-      // Aqui você pode iniciar funções que carregam dados do dashboard
-    }
-  </script>
+    <script>
+        // Exibir dashboard apenas para gilvaniogringo
+        if (usuarioLogado === "gilvaniogringo") {
+            document.getElementById("dashboardMenu").classList.remove("hidden");
+        }
+
+        // Função para enviar mensagem via API oficial do WhatsApp Business
+        document.getElementById("whatsappForm").addEventListener("submit", async function (e) {
+            e.preventDefault();
+
+            const phoneNumber = document.getElementById("phoneNumber").value.trim();
+            const message = document.getElementById("message").value.trim();
+            const chatBox = document.getElementById("chatBox");
+
+            if (!phoneNumber || !message) return;
+
+            // Adiciona mensagem na tela
+            const msgElement = document.createElement("div");
+            msgElement.className = "bg-green-200 p-2 rounded my-1 text-sm";
+            msgElement.innerText = "Você: " + message;
+            chatBox.appendChild(msgElement);
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            // Chamada à API oficial do WhatsApp Business
+            try {
+                const token = "SEU_TOKEN_META_API"; // <- colocar token real da API Meta
+                const phoneId = "SEU_PHONE_NUMBER_ID"; // <- colocar ID do número no WhatsApp Business
+                const url = `https://graph.facebook.com/v17.0/${phoneId}/messages`;
+
+                const response = await fetch(url, {
+                    method: "POST",
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        messaging_product: "whatsapp",
+                        to: phoneNumber,
+                        type: "text",
+                        text: { body: message }
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error("Erro ao enviar mensagem");
+                }
+
+            } catch (error) {
+                const errElement = document.createElement("div");
+                errElement.className = "bg-red-200 p-2 rounded my-1 text-sm text-red-800";
+                errElement.innerText = "Erro ao enviar: " + error.message;
+                chatBox.appendChild(errElement);
+            }
+
+            // Limpa campo
+            document.getElementById("message").value = "";
+        });
+    </script>
 
 </body>
 </html>
-
