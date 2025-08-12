@@ -278,17 +278,20 @@
 </section>
 <script>
   async function carregarNoticiasHome() {
-    // Força atualização usando timestamp para evitar cache
+    // URL do feed com timestamp para evitar cache
     const url = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent('https://gilvaniogringo.blogspot.com/feeds/posts/default?alt=rss')}&_=${Date.now()}`;
 
     try {
       const res = await fetch(url);
-      if (!res.ok) throw new Error('Falha ao buscar dados');
+      if (!res.ok) throw new Error('Erro ao buscar dados: ' + res.status);
+
       const data = await res.json();
+      console.log('Feed carregado:', data); // Para debug
 
       const postsContainer = document.getElementById("blog-posts-home");
       postsContainer.innerHTML = "";
 
+      // Mostra até 50 posts
       data.items.slice(0, 50).forEach(post => {
         const descricaoLimpa = post.description.replace(/<[^>]+>/g, '').slice(0, 120);
         const postCard = `
@@ -303,10 +306,10 @@
       });
 
     } catch (error) {
+      console.error(error);
       document.getElementById("blog-posts-home").innerHTML = `
         <p class="text-red-600 text-center">Erro ao carregar notícias. Tente novamente mais tarde.</p>
       `;
-      console.error('Erro ao carregar notícias:', error);
     }
   }
 
