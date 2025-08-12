@@ -5,30 +5,20 @@ const storageKeys = {
   mensagens: "mensagens",
   conversasInfo: "conversasInfo",
   usuarioLogado: "usuarioLogado",
+  usuariosLogados: "usuariosLogados", // lista dos usuários logados (array)
   logAtividadesPrefix: "logAtividades_", // chave prefixo para logs do usuário
 };
 
 // ----------- CONTATOS -------------------
 
-/**
- * Retorna a lista de contatos do localStorage (array de objetos)
- */
 function getContatos() {
   return JSON.parse(localStorage.getItem(storageKeys.contatos)) || [];
 }
 
-/**
- * Salva lista de contatos no localStorage
- * @param {Array} contatos 
- */
 function setContatos(contatos) {
   localStorage.setItem(storageKeys.contatos, JSON.stringify(contatos));
 }
 
-/**
- * Adiciona um novo contato (objeto com nome, numero, origem, endereco)
- * @param {Object} contato 
- */
 function addContato(contato) {
   if (!contato.nome || !contato.numero || !contato.origem) {
     throw new Error("Contato deve ter nome, número e origem obrigatórios");
@@ -41,16 +31,12 @@ function addContato(contato) {
   setContatos(contatos);
 }
 
-/**
- * Remove contato e suas mensagens e conversaInfo pelo número
- * @param {string} numero 
- */
 function removeContato(numero) {
   let contatos = getContatos();
   contatos = contatos.filter(c => c.numero !== numero);
   setContatos(contatos);
 
-  // Remove mensagens e conversasInfo
+  // Remove mensagens e conversasInfo relacionadas
   const mensagens = getMensagens();
   const conversasInfo = getConversasInfo();
   delete mensagens[numero];
@@ -61,27 +47,14 @@ function removeContato(numero) {
 
 // ----------- MENSAGENS -------------------
 
-/**
- * Retorna objeto de mensagens: { numero: [ { texto, timestamp } ] }
- */
 function getMensagens() {
   return JSON.parse(localStorage.getItem(storageKeys.mensagens)) || {};
 }
 
-/**
- * Salva objeto de mensagens no localStorage
- * @param {Object} mensagens 
- */
 function setMensagens(mensagens) {
   localStorage.setItem(storageKeys.mensagens, JSON.stringify(mensagens));
 }
 
-/**
- * Adiciona mensagem para um número
- * @param {string} numero 
- * @param {string} texto 
- * @param {number} timestamp 
- */
 function addMensagem(numero, texto, timestamp = Date.now()) {
   if (!numero || !texto) throw new Error("Número e texto da mensagem são obrigatórios");
   const mensagens = getMensagens();
@@ -92,27 +65,14 @@ function addMensagem(numero, texto, timestamp = Date.now()) {
 
 // ----------- CONVERSAS (duração) -------------------
 
-/**
- * Retorna objeto conversasInfo: { numero: { duracaoTotalSeg, sessoes: [ { inicioTimestamp, fimTimestamp } ] } }
- */
 function getConversasInfo() {
   return JSON.parse(localStorage.getItem(storageKeys.conversasInfo)) || {};
 }
 
-/**
- * Salva objeto conversasInfo no localStorage
- * @param {Object} info 
- */
 function setConversasInfo(info) {
   localStorage.setItem(storageKeys.conversasInfo, JSON.stringify(info));
 }
 
-/**
- * Adiciona uma sessão de conversa para um contato
- * @param {string} numero 
- * @param {number} inicioTimestamp 
- * @param {number} fimTimestamp 
- */
 function addSessaoConversa(numero, inicioTimestamp, fimTimestamp) {
   if (!numero || !inicioTimestamp || !fimTimestamp) throw new Error("Dados incompletos da sessão");
   const info = getConversasInfo();
@@ -127,64 +87,66 @@ function addSessaoConversa(numero, inicioTimestamp, fimTimestamp) {
 
 // ----------- USUÁRIO LOGADO -------------------
 
-/**
- * Retorna usuário logado (string ou null)
- */
 function getUsuarioLogado() {
   return localStorage.getItem(storageKeys.usuarioLogado) || null;
 }
 
-/**
- * Define usuário logado
- * @param {string} usuario 
- */
 function setUsuarioLogado(usuario) {
   localStorage.setItem(storageKeys.usuarioLogado, usuario);
+  registrarUsuarioLogado(usuario);
 }
 
-/**
- * Remove usuário logado (logout)
- */
 function logout() {
+  const usuario = getUsuarioLogado();
+  if (usuario) {
+    removerUsuarioLogado(usuario);
+  }
   localStorage.removeItem(storageKeys.usuarioLogado);
   window.location.href = "intranet.html";
 }
 
+// ----------- USUÁRIOS LOGADOS (lista) -------------------
+
+function carregarUsuariosLogados() {
+  const logados = localStorage.getItem(storageKeys.usuariosLogados);
+  return logados ? JSON.parse(logados) : [];
+}
+
+function salvarUsuariosLogados(usuarios) {
+  localStorage.setItem(storageKeys.usuariosLogados, JSON.stringify(usuarios));
+}
+
+function registrarUsuarioLogado(usuario) {
+  if (!usuario) return;
+  let usuarios = carregarUsuariosLogados();
+  if (!usuarios.includes(usuario)) {
+    usuarios.push(usuario);
+    salvarUsuariosLogados(usuarios);
+  }
+}
+
+function removerUsuarioLogado(usuario) {
+  if (!usuario) return;
+  let usuarios = carregarUsuariosLogados();
+  usuarios = usuarios.filter(u => u !== usuario);
+  salvarUsuariosLogados(usuarios);
+}
+
 // ----------- LOG DE ATIVIDADES POR USUÁRIO -------------------
 
-/**
- * Retorna chave no localStorage para o log de um usuário
- * @param {string} usuario 
- * @returns {string}
- */
 function getChaveLog(usuario) {
   return storageKeys.logAtividadesPrefix + usuario;
 }
 
-/**
- * Busca log de atividades do usuário (array)
- * @param {string} usuario 
- * @returns {Array<{acao: string, timestamp: number}>}
- */
 function getLogAtividades(usuario) {
   const logJSON = localStorage.getItem(getChaveLog(usuario));
   return logJSON ? JSON.parse(logJSON) : [];
 }
 
-/**
- * Salva log de atividades do usuário
- * @param {string} usuario 
- * @param {Array<{acao: string, timestamp: number}>} log 
- */
 function setLogAtividades(usuario, log) {
   localStorage.setItem(getChaveLog(usuario), JSON.stringify(log));
 }
 
-/**
- * Adiciona nova atividade ao log do usuário
- * @param {string} usuario 
- * @param {string} acao 
- */
 function addAtividadeLog(usuario, acao) {
   if (!usuario || !acao) return;
   const log = getLogAtividades(usuario);
@@ -192,35 +154,54 @@ function addAtividadeLog(usuario, acao) {
   setLogAtividades(usuario, log);
 }
 
+// ----------- AUTENTICAÇÃO (USUÁRIOS E SENHAS) -------------------
+
+// Essa função deve ser usada na página de login (intranet.html) para validar usuário/senha,
+// utilizando o objeto 'usuariosSenhas' que deve ser importado do arquivo senhas.js externo (por segurança)
+function validarLogin(usuario, senha, usuariosSenhas) {
+  if (!usuario || !senha) return false;
+  return usuariosSenhas[usuario] && usuariosSenhas[usuario] === senha;
+}
+
+// ----------- PERMISSÕES -------------------
+
+const permissoesUsuarios = {
+  // Usuários que podem postar publicações
+  podePublicar: [
+    "gabriel.amaral",
+    "graziele.albuquerque",
+    "karina.maia",
+    "cristiano.santos",
+    "gilvaniogringo",
+  ],
+  // Pode acessar dashboard gerencial
+  acessoDashboardGerente: [
+    "gilvaniogringo",
+  ],
+  // Outros tipos de permissão podem ser adicionados aqui
+};
+
+function podeUsuarioPublicar(usuario) {
+  return permissoesUsuarios.podePublicar.includes(usuario);
+}
+
+function podeAcessarDashboard(usuario) {
+  return permissoesUsuarios.acessoDashboardGerente.includes(usuario);
+}
+
 // ----------- UTILS -------------------
 
-/**
- * Busca contato pelo número
- * @param {string} numero 
- * @returns {Object|null}
- */
 function getContatoPorNumero(numero) {
   const contatos = getContatos();
   return contatos.find(c => c.numero === numero) || null;
 }
 
-/**
- * Verifica se texto é considerado disparo para métricas (ex: "oi", "bom dia")
- * @param {string} texto 
- * @returns {boolean}
- */
 const disparos = ["oi", "bom dia", "boa tarde", "boa noite", "olá", "ola"];
-
 function isDisparo(texto) {
   if (!texto) return false;
   return disparos.includes(texto.toLowerCase().trim());
 }
 
-/**
- * Calcula média semanal de mensagens válidas dos últimos 4 semanas
- * @param {Object} mensagens 
- * @returns {number}
- */
 function calcularMediaSemanal(mensagens) {
   const agora = Date.now();
   const quatroSemanasMs = 4 * 7 * 24 * 60 * 60 * 1000;
@@ -239,22 +220,12 @@ function calcularMediaSemanal(mensagens) {
   return (totalMsgs / 4).toFixed(2);
 }
 
-/**
- * Formata segundos para string mm:ss
- * @param {number} segundos 
- * @returns {string}
- */
 function formatarDuracao(segundos) {
   const m = Math.floor(segundos / 60);
   const s = segundos % 60;
   return `${m}m ${s}s`;
 }
 
-/**
- * Formata timestamp para string "Hoje", "Ontem", "Há X dias"
- * @param {number|null} timestamp 
- * @returns {string}
- */
 function tempoDesde(timestamp) {
   if (!timestamp) return "Nunca";
   const diffMs = Date.now() - timestamp;
@@ -264,13 +235,8 @@ function tempoDesde(timestamp) {
   return `Há ${diffDias} dias`;
 }
 
-/**
- * Exclui contato e dados relacionados após confirmação
- * @param {string} numero 
- */
 function excluirContatoCompleto(numero) {
   if (!confirm("Deseja excluir este contato e suas mensagens?")) return;
   removeContato(numero);
   alert("Contato e mensagens excluídos com sucesso.");
 }
-
