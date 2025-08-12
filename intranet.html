@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Login - Intranet do Gringo</title>
+  <title>Intranet do Gringo</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
   />
-  <!-- Importa arquivo externo de usuários e senhas -->
+  <!-- Arquivo externo de usuários e senhas -->
   <script src="senhas.js" defer></script>
 </head>
 <body class="bg-gray-100 min-h-screen flex items-center justify-center p-6">
@@ -19,7 +19,7 @@
       <i class="fas fa-lock"></i> Login Intranet do Gringo
     </h1>
 
-    <form id="loginForm" class="space-y-4">
+    <form id="loginForm" class="space-y-4" autocomplete="off">
       <div>
         <label for="username" class="block mb-1 font-semibold text-gray-700">Usuário</label>
         <input
@@ -29,7 +29,6 @@
           placeholder="Digite seu usuário"
           class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#09679c]"
           required
-          autocomplete="username"
           autofocus
         />
       </div>
@@ -42,7 +41,6 @@
           placeholder="Digite sua senha"
           class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#09679c]"
           required
-          autocomplete="current-password"
         />
       </div>
 
@@ -62,20 +60,26 @@
       const form = document.getElementById("loginForm");
       const msgErro = document.getElementById("msgErro");
 
+      // Se já estiver logado, redireciona direto para painel.html
+      const usuarioLogado = localStorage.getItem("usuarioLogado");
+      if (usuarioLogado) {
+        window.location.href = "painel.html";
+        return;
+      }
+
       form.addEventListener("submit", function(e) {
         e.preventDefault();
 
         const username = form.username.value.trim().toLowerCase();
         const password = form.password.value;
 
-        // Verifica se o objeto usuarios está carregado
         if (typeof usuarios === "undefined") {
           msgErro.textContent = "Erro interno: dados de usuários não carregados.";
           msgErro.classList.remove("hidden");
           return;
         }
 
-        if (!usuarios[username]) {
+        if (!usuarios.hasOwnProperty(username)) {
           msgErro.textContent = "Usuário não encontrado.";
           msgErro.classList.remove("hidden");
           return;
@@ -87,10 +91,10 @@
           return;
         }
 
-        // Login válido
-        msgErro.classList.add("hidden");
+        // Login válido: salvar e redirecionar para painel.html
         localStorage.setItem("usuarioLogado", username);
-        window.location.href = "perfil.html";
+        msgErro.classList.add("hidden");
+        window.location.href = "painel.html";
       });
     });
   </script>
