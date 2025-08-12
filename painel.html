@@ -10,12 +10,6 @@
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     crossorigin="anonymous"
   />
-  <style>
-    /* Para melhor alinhamento dos cards */
-    .card {
-      min-height: 120px;
-    }
-  </style>
 </head>
 <body class="bg-gray-100 min-h-screen flex flex-col">
 
@@ -51,8 +45,8 @@
   <!-- Main Content -->
   <main class="flex-grow p-6 max-w-5xl mx-auto space-y-10">
 
-    <!-- Conteúdo para usuários comuns -->
-    <section id="conteudoComum" class="hidden">
+    <!-- Conteúdo comum para todos -->
+    <section id="conteudoComum" class="">
       <h2 class="text-2xl font-bold mb-6 text-[#005075]">Seja bem-vindo(a)!</h2>
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
         <a href="nova-postagem.html" class="bg-white rounded shadow p-6 hover:shadow-lg transition flex flex-col items-center text-center gap-3">
@@ -73,23 +67,23 @@
       </div>
     </section>
 
-    <!-- Conteúdo para gerente -->
+    <!-- Dashboard gerente, só visível para gilvaniogringo -->
     <section id="dashboardGerente" class="hidden bg-white rounded shadow p-6 space-y-8">
 
       <h2 class="text-3xl font-bold text-[#09679c] border-b-4 border-[#FF7DA4] pb-2">Dashboard Gerente - Métricas</h2>
 
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
-        <div class="bg-[#09679c] text-white rounded-lg p-5 shadow flex flex-col items-center card">
+        <div class="bg-[#09679c] text-white rounded-lg p-5 shadow flex flex-col items-center">
           <i class="fas fa-user-friends fa-3x mb-3"></i>
           <p class="text-3xl font-semibold" id="colaboradoresLogados">0</p>
           <p class="text-lg">Colaboradores Logados</p>
         </div>
-        <div class="bg-[#DB2356] text-white rounded-lg p-5 shadow flex flex-col items-center card">
+        <div class="bg-[#DB2356] text-white rounded-lg p-5 shadow flex flex-col items-center">
           <i class="fas fa-envelope-open-text fa-3x mb-3"></i>
           <p class="text-3xl font-semibold" id="mensagensResponder">0</p>
           <p class="text-lg">Mensagens a Responder</p>
         </div>
-        <div class="bg-[#09679c] text-white rounded-lg p-5 shadow flex flex-col items-center card">
+        <div class="bg-[#09679c] text-white rounded-lg p-5 shadow flex flex-col items-center">
           <i class="fas fa-stopwatch fa-3x mb-3"></i>
           <p class="text-3xl font-semibold" id="tempoEsperaMedia">0s</p>
           <p class="text-lg">Tempo Médio de Espera</p>
@@ -102,101 +96,6 @@
 
   <!-- Rodapé redes sociais -->
   <footer class="bg-[#005075] text-white p-4 flex justify-center space-x-8">
-    <a href="https://www.instagram.com/gilvaniogringo" target="_blank" rel="noopener" class="hover:text-[#FF7DA4] transition" aria-label="Instagram">
-      <i class="fab fa-instagram fa-lg"></i>
-    </a>
-    <a href="https://www.facebook.com/gilvaniogringo" target="_blank" rel="noopener" class="hover:text-[#FF7DA4] transition" aria-label="Facebook">
-      <i class="fab fa-facebook-f fa-lg"></i>
-    </a>
-    <a href="https://twitter.com/gilvaniogringo" target="_blank" rel="noopener" class="hover:text-[#FF7DA4] transition" aria-label="X Twitter">
-      <i class="fab fa-twitter fa-lg"></i>
-    </a>
-    <a href="https://www.tiktok.com/@gilvaniogringo" target="_blank" rel="noopener" class="hover:text-[#FF7DA4] transition" aria-label="TikTok">
-      <i class="fab fa-tiktok fa-lg"></i>
-    </a>
-    <a href="https://www.kwai.com/gilvaniogringo" target="_blank" rel="noopener" class="hover:text-[#FF7DA4] transition" aria-label="Kwai">
-      <i class="fas fa-video fa-lg"></i>
-    </a>
-  </footer>
+    <a href="https://www.instagram.com/gilvaniogringo" target="_blank" rel="noopener" class="hover:text-[#FF7DA]()_
 
-  <script>
-    // Usuários cadastrados no sistema
-    const usuariosCadastrados = ["gilvaniogringo", "gabriel.amaral", "grazielle.albuquerque"];
-
-    // Simulando usuários logados - no sistema real deve vir do backend/login
-    // Aqui usamos localStorage com chave 'usuarioLogado'
-    // Para teste, no console do navegador rode:
-    // localStorage.setItem('usuarioLogado', 'gabriel.amaral');
-    // ou
-    // localStorage.setItem('usuarioLogado', 'gilvaniogringo');
-
-    function logout() {
-      localStorage.removeItem("usuarioLogado");
-      window.location.href = "intranet.html";
-    }
-
-    // Função para simular pegar usuários logados (exemplo simples)
-    // No sistema real, esse dado deve vir do backend
-    function pegarUsuariosLogados() {
-      // Simular com um array de usuários que estão logados - em real teria sessão ativa
-      // Aqui vamos pegar o usuario atual só, mas pode expandir
-      const usuario = localStorage.getItem("usuarioLogado");
-      if (usuario && usuariosCadastrados.includes(usuario)) {
-        return [usuario];
-      }
-      return [];
-    }
-
-    // Simular busca dos dados do WhatsApp para mensagens e tempo
-    async function buscarDadosWhatsApp() {
-      // Aqui você deve colocar a integração real com backend ou API
-      // Por enquanto vamos simular com dados fixos e atraso
-      return new Promise(resolve => {
-        setTimeout(() => {
-          resolve({
-            mensagensResponder: Math.floor(Math.random() * 20),  // número aleatório entre 0 e 19
-            tempoEsperaMedia: Math.floor(Math.random() * 60)    // tempo em segundos, 0 a 59
-          });
-        }, 800);
-      });
-    }
-
-    // Inicializa o painel de acordo com usuário logado
-    async function iniciarPainel() {
-      const usuario = localStorage.getItem("usuarioLogado");
-
-      if (!usuario || !usuariosCadastrados.includes(usuario)) {
-        alert("Usuário não logado ou inválido. Redirecionando para login...");
-        window.location.href = "intranet.html";
-        return;
-      }
-
-      // Exibe conteúdo conforme tipo de usuário
-      if (usuario === "gilvaniogringo") {
-        // Mostrar dashboard gerente
-        document.getElementById("dashboardGerente").classList.remove("hidden");
-        document.getElementById("conteudoComum").classList.add("hidden");
-
-        // Pega colaboradores logados
-        const colaboradores = pegarUsuariosLogados();
-
-        // Busca dados do WhatsApp
-        const dadosWhatsApp = await buscarDadosWhatsApp();
-
-        // Atualiza painel gerente
-        document.getElementById("colaboradoresLogados").textContent = colaboradores.length;
-        document.getElementById("mensagensResponder").textContent = dadosWhatsApp.mensagensResponder;
-        document.getElementById("tempoEsperaMedia").textContent = dadosWhatsApp.tempoEsperaMedia + "s";
-
-      } else {
-        // Usuário comum
-        document.getElementById("conteudoComum").classList.remove("hidden");
-        document.getElementById("dashboardGerente").classList.add("hidden");
-      }
-    }
-
-    window.onload = iniciarPainel;
-  </script>
-
-</body>
-</html>
+      
