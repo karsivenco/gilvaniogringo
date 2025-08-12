@@ -5,59 +5,62 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Contatos - Intranet do Gringo</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-  />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 </head>
 <body class="bg-gray-100 min-h-screen flex flex-col">
 
-  <!-- Header -->
+  <!-- Header padrão -->
   <header class="flex justify-between items-center bg-[#09679c] text-white p-4 shadow-md">
     <div class="flex items-center gap-3">
       <img src="img/logo.png" alt="Logo Gringo" class="h-10 w-auto" />
       <h1 class="text-xl font-bold">Contatos</h1>
     </div>
-    <div class="flex items-center gap-3">
-      <a href="painel.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition" title="Inicio">
-        <i class="fas fa-home"></i> Inicio
-      </a>
-      <a href="whatsapp.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition" title="Retorno">
-        <i class="fab fa-whatsapp"></i> Retorno
-      </a>
-      <a href="dashboard.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition" title="Dashboard">
-        <i class="fas fa-tachometer-alt"></i> Dashboard
-      </a>
-      <a href="cadastro.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition" title="Cadastro de Pessoas">
-        <i class="fas fa-user-plus"></i> Cadastro
-      </a>
-      <button
-        onclick="logout()"
-        class="bg-[#053646] px-3 py-2 rounded hover:bg-[#032d39] transition"
-        title="Sair"
-      >
-        <i class="fas fa-sign-out-alt"></i> Sair
-      </button>
-    </div>
+    <nav id="mainMenu" class="flex items-center gap-3"></nav>
   </header>
 
+  <!-- Conteúdo -->
   <main class="flex-grow p-6 max-w-4xl mx-auto">
     <h2 class="text-2xl font-bold mb-4 text-[#005075]">Lista de Contatos</h2>
 
     <div id="msgSucesso" class="mb-4 text-center text-green-600 font-semibold"></div>
 
     <div class="bg-white shadow rounded-lg p-6">
-      <ul id="listaContatos" class="divide-y divide-gray-200">
-        <!-- contatos aqui -->
-      </ul>
+      <ul id="listaContatos" class="divide-y divide-gray-200"></ul>
     </div>
   </main>
 
   <script>
-    // Função de logout
     function logout() {
       localStorage.removeItem("usuarioLogado");
       window.location.href = "intranet.html";
+    }
+
+    /* ---------- Menu dinâmico com Dashboard condicional ---------- */
+    function buildMenu() {
+      const userLogged = localStorage.getItem("usuarioLogado");
+      const menu = document.getElementById("mainMenu");
+      menu.innerHTML = `
+        <a href="painel.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition" title="Início">
+          <i class="fas fa-home"></i> Início
+        </a>
+        <a href="cadastro.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition" title="Cadastro">
+          <i class="fas fa-user-plus"></i> Cadastro
+        </a>
+        <a href="contatos.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition" title="Contatos">
+          <i class="fas fa-address-book"></i> Contatos
+        </a>
+        <a href="perfil.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1">
+          <i class="fas fa-user"></i> Perfil
+        </a>
+        ${userLogged === "gilvaniogringo" ? `
+          <a href="dashboard.html" class="bg-[#053646] px-3 py-2 rounded hover:bg-[#032d39] transition flex items-center gap-1">
+            <i class="fas fa-chart-line"></i> Dashboard
+          </a>
+        ` : ""}
+        <button onclick="logout()" class="bg-[#053646] px-3 py-2 rounded hover:bg-[#032d39] transition flex items-center gap-1">
+          <i class="fas fa-sign-out-alt"></i> Sair
+        </button>
+      `;
     }
 
     // Pega contatos do localStorage
@@ -70,7 +73,7 @@
       localStorage.setItem("contatos", JSON.stringify(contatos));
     }
 
-    // Excluir contato por índice
+    // Excluir contato
     function excluirContato(index) {
       if (confirm("Deseja realmente excluir este contato?")) {
         let contatos = pegarContatos();
@@ -80,11 +83,10 @@
       }
     }
 
-    // Renderiza a lista
+    // Renderizar lista
     function renderizarContatos() {
       const listaEl = document.getElementById("listaContatos");
       const contatos = pegarContatos();
-
       listaEl.innerHTML = "";
 
       if (contatos.length === 0) {
@@ -95,7 +97,6 @@
       contatos.forEach((contato, idx) => {
         const li = document.createElement("li");
         li.className = "py-4 flex flex-col md:flex-row md:justify-between md:items-center";
-
         li.innerHTML = `
           <div class="mb-2 md:mb-0">
             <p><strong class="text-[#09679c]">${contato.nome}</strong></p>
@@ -104,22 +105,19 @@
             <p>Origem: <em>${contato.origem}</em></p>
           </div>
           <div class="flex gap-3">
-            <button
-              onclick="excluirContato(${idx})"
-              class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 transition"
-              title="Excluir contato"
-            >
+            <button onclick="excluirContato(${idx})" class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 transition">
               <i class="fas fa-trash"></i> Excluir
             </button>
           </div>
         `;
-
         listaEl.appendChild(li);
       });
     }
 
-    // Mostrar mensagem sucesso vindo do cadastro
+    // Ao carregar a página
     window.addEventListener("DOMContentLoaded", () => {
+      buildMenu();
+
       const msgSucesso = sessionStorage.getItem("msgSucessoCadastro");
       if (msgSucesso) {
         const msgEl = document.getElementById("msgSucesso");
