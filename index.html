@@ -303,8 +303,7 @@
 <!-- Terceiro destaque -->
 <div>
   <h2 class="mb-2 text-2xl md:text-3xl font-extrabold text-[#005075]">
-    Vereador Gilvani, "o Gringo" apresenta projeto para isenção do IPTU a pessoas com doenças graves em Porto Alegre
-  </h2>
+   INSENÇÃO DO IPTU A PESSOAS COM DOENÇAS GRAVES EM PORTO ALEGRE, UMA LUTA DO GRINGO </h2>
   <p class="text-base text-gray-700 mt-2">
     Gringo apresenta projeto para isenção do IPTU a pacientes com doenças graves em Porto Alegre, buscando aliviar custos e garantir dignidade.
   </p>
@@ -319,8 +318,7 @@
  <!-- segundo destaque -->
 <div>
   <h2 class="mb-2 text-2xl md:text-3xl font-extrabold text-[#005075]">
-    Vereador Gilvani “o Gringo” cobra projeto amplo para proteger São Luís/Canoas das enchentes
-  </h2>
+    VEREADOR GILVANI O GRINGO COBRA PROJETO AMPLO PARA PROTEGER SÃO LUÍS/CANOAS DAS ENCHENTES</h2>
   <p class="text-base text-gray-700 mt-2">
     Preocupado com a segurança da população, o Gringo defende anel de diques integrado para garantir proteção real e evitar novos prejuízos na região.
   </p>
@@ -377,16 +375,20 @@
 <!-- Script para carregar os 6 primeiros posts -->
 <script>
   async function carregarNoticiasHome() {
+    // URL do feed com timestamp para evitar cache
     const url = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent('https://gilvaniogringo.blogspot.com/feeds/posts/default?alt=rss')}&_=${Date.now()}`;
 
     try {
       const res = await fetch(url);
-      if (!res.ok) throw new Error('Falha ao buscar dados');
+      if (!res.ok) throw new Error('Erro ao buscar dados: ' + res.status);
+
       const data = await res.json();
+      console.log('Feed carregado:', data); // Para debug
 
       const postsContainer = document.getElementById("blog-posts-home");
       postsContainer.innerHTML = "";
 
+      // Mostra até 6 posts
       data.items.slice(0, 6).forEach(post => {
         const descricaoLimpa = post.description.replace(/<[^>]+>/g, '').slice(0, 120);
         const postCard = `
@@ -401,10 +403,10 @@
       });
 
     } catch (error) {
+      console.error(error);
       document.getElementById("blog-posts-home").innerHTML = `
         <p class="text-red-600 text-center">Erro ao carregar notícias. Tente novamente mais tarde.</p>
       `;
-      console.error('Erro ao carregar notícias:', error);
     }
   }
 
@@ -691,6 +693,7 @@
 </body>
 
 </html>
+
 
 
 
