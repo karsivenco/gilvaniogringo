@@ -25,8 +25,12 @@
   <header class="flex justify-between items-center bg-[#09679c] text-white p-4 shadow-md">
     <div class="flex items-center gap-3">
       <img src="img/logo.png" alt="Logo Gringo" class="h-10 w-auto" />
-      <h1 class="text-xl font-bold">Rascunhos</h1>
+      <h1 class="text-xl font-bold" id="tituloPagina">Rascunhos</h1>
+      <!-- Contagem -->
+      <span id="contadorRascunhos" class="ml-4 text-lg"></span>
     </div>
+    <div id="relogio" class="text-white font-mono text-lg"></div> <!-- Relógio -->
+
     <nav class="flex items-center gap-3">
       <a href="painel.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="Painel">
         <i class="fas fa-home"></i> Painel
@@ -37,7 +41,7 @@
       <a href="rascunhos.html" class="bg-[#053646] border border-white px-3 py-2 rounded hover:bg-[#032d39] transition flex items-center gap-1" title="Rascunhos">
         <i class="fas fa-file-alt"></i> Rascunhos
       </a>
-      <a href="ultimas-noticias2.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="Últimas Publicações">
+      <a href="publicacoes.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="Últimas Publicações">
         <i class="fas fa-newspaper"></i> Últimas Publicações
       </a>
       <button
@@ -58,7 +62,6 @@
   </main>
 
   <script>
-    // Usuários autorizados para acessar rascunhos
     const usuariosAutorizados = [
       "gabriel.amaral",
       "graziele.albuquerque",
@@ -67,16 +70,14 @@
       "gilvaniogringo"
     ];
 
-    // Logout
     function logout() {
       localStorage.removeItem("usuarioLogado");
       window.location.href = "intranet.html";
     }
 
-    // Pega usuário logado
     const usuarioLogado = localStorage.getItem("usuarioLogado");
 
-    // Função para formatar data ISO para dd/mm/aaaa HH:mm
+    // Formata data ISO para dd/mm/aaaa HH:mm
     function formatarDataHora(dataISO) {
       if (!dataISO) return "";
       const dt = new Date(dataISO);
@@ -101,7 +102,7 @@
       carregarRascunhos();
     }
 
-    // Monta cada rascunho na página
+    // Cria o elemento de cada rascunho
     function criarElementoRascunho(rascunho) {
       const container = document.createElement("div");
       container.className = "border rounded p-4 shadow-sm";
@@ -120,7 +121,7 @@
       const resumo = document.createElement("p");
       resumo.className = "mb-2";
       const textoLimite = 250;
-      const conteudoLimpo = rascunho.conteudo.replace(/<[^>]+>/g, ""); // remove tags HTML
+      const conteudoLimpo = rascunho.conteudo.replace(/<[^>]+>/g, "");
       resumo.textContent = conteudoLimpo.length > textoLimite
         ? conteudoLimpo.slice(0, textoLimite) + "..."
         : conteudoLimpo;
@@ -130,7 +131,6 @@
       const botoesDiv = document.createElement("div");
       botoesDiv.className = "flex gap-3";
 
-      // Botão editar - abre nova-postagem.html com query string ?id=ID
       const btnEditar = document.createElement("button");
       btnEditar.textContent = "Editar";
       btnEditar.className = "bg-[#09679c] text-white px-4 py-2 rounded hover:bg-[#074d6b] transition";
@@ -139,7 +139,6 @@
       };
       botoesDiv.appendChild(btnEditar);
 
-      // Botão excluir
       const btnExcluir = document.createElement("button");
       btnExcluir.textContent = "Excluir";
       btnExcluir.className = "bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition";
@@ -151,6 +150,16 @@
       return container;
     }
 
+    // Atualiza o relógio no header a cada segundo
+    function atualizarRelogio() {
+      const elRelogio = document.getElementById("relogio");
+      const agora = new Date();
+      elRelogio.textContent = agora.toLocaleString("pt-BR", {
+        dateStyle: "short",
+        timeStyle: "medium"
+      });
+    }
+
     // Carrega e exibe os rascunhos do usuário logado
     function carregarRascunhos() {
       if (!usuarioLogado || !usuariosAutorizados.includes(usuarioLogado)) {
@@ -159,7 +168,16 @@
         return;
       }
 
+      // Atualiza título com nome do usuário
+      const tituloPagina = document.getElementById("tituloPagina");
+      tituloPagina.textContent = `Rascunhos do ${usuarioLogado}`;
+
       const rascunhos = getRascunhosPorAutor(usuarioLogado);
+
+      // Atualiza contador
+      const contador = document.getElementById("contadorRascunhos");
+      contador.textContent = `(${rascunhos.length} ${rascunhos.length === 1 ? "rascunho" : "rascunhos"})`;
+
       const container = document.getElementById("rascunhosContainer");
       container.innerHTML = "";
 
@@ -174,7 +192,11 @@
       });
     }
 
-    window.onload = carregarRascunhos;
+    window.onload = () => {
+      carregarRascunhos();
+      atualizarRelogio();
+      setInterval(atualizarRelogio, 1000);
+    };
   </script>
 </body>
 </html>
