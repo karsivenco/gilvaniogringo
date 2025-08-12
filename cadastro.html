@@ -5,43 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Cadastro - Intranet do Gringo</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-  />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
 </head>
 <body class="bg-gray-100 min-h-screen flex flex-col">
 
-  <!-- Header -->
+  <!-- Header padrão -->
   <header class="flex justify-between items-center bg-[#09679c] text-white p-4 shadow-md">
     <div class="flex items-center gap-3">
       <img src="img/logo.png" alt="Logo Gringo" class="h-10 w-auto" />
-      <h1 class="text-xl font-bold">Contatos</h1>
+      <h1 class="text-xl font-bold">Cadastro</h1>
     </div>
-    <div class="flex items-center gap-3">
-      <a href="painel.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition" title="Painel">
-        <i class="fas fa-home"></i> Início
-      </a>
-      <a href="whatsapp.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition" title="WhatsApp">
-        <i class="fas fa-whatsapp"></i> WhatsApp
-      </a>
-      <a id="linkDashboard" href="dashboard.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition" title="Dashboard">
-        <i class="fas fa-tachometer-alt"></i> Dashboard
-      </a>
-      <a href="cadastro.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition" title="Cadastro de Pessoas">
-        <i class="fas fa-user-plus"></i> Cadastro
-      </a>
-      <a href="contatos.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition" title="Contatos">
-        <i class="fas fa-address-book"></i> Contatos
-      </a>
-      <button
-        onclick="logout()"
-        class="bg-[#053646] px-3 py-2 rounded hover:bg-[#032d39] transition"
-        title="Sair"
-      >
-        <i class="fas fa-sign-out-alt"></i> Sair
-      </button>
-    </div>
+    <nav id="mainMenu" class="flex items-center gap-3"></nav>
   </header>
 
   <!-- Conteúdo principal -->
@@ -50,45 +24,19 @@
     <form id="formCadastro" class="bg-white p-6 rounded shadow space-y-4">
       <div>
         <label for="nome" class="block mb-1 font-semibold text-gray-700">Nome</label>
-        <input
-          type="text"
-          id="nome"
-          name="nome"
-          class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#09679c]"
-          placeholder="Nome completo"
-          required
-        />
+        <input type="text" id="nome" name="nome" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#09679c]" placeholder="Nome completo" required />
       </div>
       <div>
         <label for="numero" class="block mb-1 font-semibold text-gray-700">Número (com DDI + DDD)</label>
-        <input
-          type="tel"
-          id="numero"
-          name="numero"
-          class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#09679c]"
-          placeholder="+5511999998888"
-          pattern="^\+?\d{10,15}$"
-          required
-        />
+        <input type="tel" id="numero" name="numero" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#09679c]" placeholder="+5511999998888" pattern="^\\+?\\d{10,15}$" required />
       </div>
       <div>
         <label for="endereco" class="block mb-1 font-semibold text-gray-700">Endereço (opcional)</label>
-        <input
-          type="text"
-          id="endereco"
-          name="endereco"
-          class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#09679c]"
-          placeholder="Rua, número, bairro, cidade"
-        />
+        <input type="text" id="endereco" name="endereco" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#09679c]" placeholder="Rua, número, bairro, cidade" />
       </div>
       <div>
         <label for="origem" class="block mb-1 font-semibold text-gray-700">Origem do contato</label>
-        <select
-          id="origem"
-          name="origem"
-          class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#09679c]"
-          required
-        >
+        <select id="origem" name="origem" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#09679c]" required>
           <option value="">Selecione a origem</option>
           <option value="Instagram">Instagram</option>
           <option value="WhatsApp">WhatsApp</option>
@@ -102,12 +50,7 @@
           <option value="Direto Gringo">Direto Gringo</option>
         </select>
       </div>
-      <button
-        type="submit"
-        class="w-full bg-[#09679c] text-white font-semibold py-2 rounded hover:bg-[#074d6b] transition"
-      >
-        Cadastrar
-      </button>
+      <button type="submit" class="w-full bg-[#09679c] text-white font-semibold py-2 rounded hover:bg-[#074d6b] transition">Cadastrar</button>
     </form>
     <p id="msgStatus" class="mt-4 text-center text-sm font-semibold"></p>
   </main>
@@ -118,15 +61,33 @@
       window.location.href = "intranet.html";
     }
 
-    // Oculta o link do Dashboard se o usuário não for gilvaniogringo
-    document.addEventListener("DOMContentLoaded", function () {
-      const usuarioLogado = localStorage.getItem("usuarioLogado");
-      const linkDashboard = document.getElementById("linkDashboard");
-
-      if (usuarioLogado !== "gilvaniogringo") {
-        linkDashboard.style.display = "none";
-      }
-    });
+    /* ---------- Menu dinâmico com Dashboard condicional ---------- */
+    function buildMenu() {
+      const userLogged = localStorage.getItem("usuarioLogado");
+      const menu = document.getElementById("mainMenu");
+      menu.innerHTML = `
+        <a href="painel.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition" title="Inicio">
+          <i class="fas fa-home"></i> Início
+        </a>
+        <a href="cadastro.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition" title="Cadastro">
+          <i class="fas fa-user-plus"></i> Cadastro
+        </a>
+        <a href="contatos.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition" title="Contatos">
+          <i class="fas fa-address-book"></i> Contatos
+        </a>
+        <a href="perfil.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1">
+          <i class="fas fa-user"></i> Perfil
+        </a>
+        ${userLogged === "gilvaniogringo" ? `
+          <a href="dashboard.html" class="bg-[#053646] px-3 py-2 rounded hover:bg-[#032d39] transition flex items-center gap-1">
+            <i class="fas fa-chart-line"></i> Dashboard
+          </a>
+        ` : ""}
+        <button onclick="logout()" class="bg-[#053646] px-3 py-2 rounded hover:bg-[#032d39] transition flex items-center gap-1">
+          <i class="fas fa-sign-out-alt"></i> Sair
+        </button>
+      `;
+    }
 
     // Salva contato no localStorage
     function salvarContato(contato) {
@@ -142,7 +103,6 @@
       const numero = e.target.numero.value.trim();
       const endereco = e.target.endereco.value.trim();
       const origem = e.target.origem.value;
-
       const msgStatus = document.getElementById("msgStatus");
 
       if (!nome || !numero || !origem) {
@@ -161,6 +121,9 @@
         window.location.href = "contatos.html";
       }, 1500);
     });
+
+    // Monta o menu ao carregar
+    buildMenu();
   </script>
 </body>
 </html>
