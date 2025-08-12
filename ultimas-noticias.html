@@ -280,7 +280,7 @@
 <!-- Script para carregar posts do Blogspot via RSS -->
   <script>
     async function carregarNoticias() {
-      const url = "https://api.rss2json.com/v1/api.json?rss_url=https://gilvaniogringo.blogspot.com/feeds/posts/default?alt=rss&_cache=true";
+      const url = "https://api.rss2json.com/v1/api.json?rss_url=https://gilvaniogringo.blogspot.com/feeds/posts/default?alt=rss&_cache=false";
 
       try {
         const res = await fetch(url);
