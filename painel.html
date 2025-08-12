@@ -96,6 +96,122 @@
 
   <!-- Rodapé redes sociais -->
   <footer class="bg-[#005075] text-white p-4 flex justify-center space-x-8">
-    <a href="https://www.instagram.com/gilvaniogringo" target="_blank" rel="noopener" class="hover:text-[#FF7DA]()_
+    <a href="https://www.instagram.com/gilvaniogringo" target="_blank" rel="noopener" class="hover:text-[#FF7DA4] transition" aria-label="Instagram">
+      <i class="fab fa-instagram fa-lg"></i>
+    </a>
+    <a href="https://www.facebook.com/gilvaniogringo" target="_blank" rel="noopener" class="hover:text-[#FF7DA4] transition" aria-label="Facebook">
+      <i class="fab fa-facebook-f fa-lg"></i>
+    </a>
+    <a href="https://twitter.com/gilvaniogringo" target="_blank" rel="noopener" class="hover:text-[#FF7DA4] transition" aria-label="X Twitter">
+      <i class="fab fa-twitter fa-lg"></i>
+    </a>
+    <a href="https://www.tiktok.com/@gilvaniogringo" target="_blank" rel="noopener" class="hover:text-[#FF7DA4] transition" aria-label="TikTok">
+      <i class="fab fa-tiktok fa-lg"></i>
+    </a>
+    <a href="https://www.kwai.com/gilvaniogringo" target="_blank" rel="noopener" class="hover:text-[#FF7DA4] transition" aria-label="Kwai">
+      <i class="fas fa-video fa-lg"></i>
+    </a>
+  </footer>
 
-      
+  <script>
+    // Usuários cadastrados no sistema
+    const usuariosCadastrados = [
+      "gilvaniogringo",
+      "gabriel.amaral",
+      "graziele.albuquerque"
+    ];
+
+    // Controla quais usuários estão logados (simulação)
+    let usuariosLogados = [];
+
+    // Simula recuperação dos usuários logados do localStorage
+    function carregarUsuariosLogados() {
+      const logados = localStorage.getItem("usuariosLogados");
+      if (logados) {
+        usuariosLogados = JSON.parse(logados);
+      } else {
+        usuariosLogados = [];
+      }
+    }
+
+    // Simula salvar usuários logados no localStorage
+    function salvarUsuariosLogados() {
+      localStorage.setItem("usuariosLogados", JSON.stringify(usuariosLogados));
+    }
+
+    // Marca o usuário atual como logado (se não estiver)
+    function registrarUsuarioLogado(usuario) {
+      if (!usuariosLogados.includes(usuario)) {
+        usuariosLogados.push(usuario);
+        salvarUsuariosLogados();
+      }
+    }
+
+    // Remove usuário da lista de logados (não usado aqui, mas pode ser útil)
+    function removerUsuarioLogado(usuario) {
+      usuariosLogados = usuariosLogados.filter(u => u !== usuario);
+      salvarUsuariosLogados();
+    }
+
+    // Simula pegar mensagens pendentes no WhatsApp integrado
+    async function buscarDadosWhatsApp() {
+      // Aqui deve ir integração real com o backend do WhatsApp
+      // Simulando com valores fixos
+      return {
+        mensagensResponder: 8,
+        tempoEsperaMedia: 35 // em segundos
+      };
+    }
+
+    // Logout
+    function logout() {
+      const usuario = localStorage.getItem("usuarioLogado");
+      if (usuario) {
+        // Remove da lista de logados
+        carregarUsuariosLogados();
+        usuariosLogados = usuariosLogados.filter(u => u !== usuario);
+        salvarUsuariosLogados();
+      }
+      localStorage.removeItem("usuarioLogado");
+      window.location.href = "intranet.html";
+    }
+
+    async function iniciarPainel() {
+      const usuario = localStorage.getItem("usuarioLogado");
+      carregarUsuariosLogados();
+
+      if (!usuario || !usuariosCadastrados.includes(usuario)) {
+        alert("Usuário não logado ou inválido. Redirecionando para login...");
+        window.location.href = "intranet.html";
+        return;
+      }
+
+       // Marca o usuário atual como logado (se já não estiver)
+      registrarUsuarioLogado(usuario);
+
+      // Atualiza contador de colaboradores logados
+      document.getElementById("colaboradoresLogados").textContent = usuariosLogados.length;
+
+      // Sempre mostra o conteúdo comum
+      document.getElementById("conteudoComum").classList.remove("hidden");
+
+      // Se for o gerente, mostra dashboard e atualiza dados
+      if (usuario === "gilvaniogringo") {
+        document.getElementById("dashboardGerente").classList.remove("hidden");
+
+        const dadosWhatsapp = await buscarDadosWhatsApp();
+
+        document.getElementById("mensagensResponder").textContent = dadosWhatsapp.mensagensResponder;
+        document.getElementById("tempoEsperaMedia").textContent = dadosWhatsapp.tempoEsperaMedia + "s";
+      } else {
+        // Usuários comuns não veem o dashboard
+        document.getElementById("dashboardGerente").classList.add("hidden");
+      }
+    }
+
+    // Inicia tudo ao carregar a página
+    window.onload = iniciarPainel;
+  </script>
+
+</body>
+</html>
