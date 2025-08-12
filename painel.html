@@ -35,4 +35,278 @@
       </a>
       <button
         onclick="logout()"
-        class="bg-[#053646] px-3 py-2 rounded hover:bg-[#032d39] transition flex items-center gap-1
+        class="bg-[#053646] px-3 py-2 rounded hover:bg-[#032d39] transition flex items-center gap-1"
+        title="Sair"
+      >
+        <i class="fas fa-sign-out-alt"></i> Sair
+      </button>
+    </nav>
+  </header>
+
+  <!-- Main Content -->
+  <main class="flex-grow p-6 max-w-7xl mx-auto space-y-10">
+
+    <!-- Seção para todos os usuários -->
+    <section>
+      <h2 class="text-2xl font-bold mb-6 text-[#005075]">Seja bem-vindo(a)!</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+        <a href="nova-postagem.html" class="bg-white rounded shadow p-6 hover:shadow-lg transition flex flex-col items-center text-center gap-3">
+          <i class="fas fa-plus fa-3x text-[#09679c]"></i>
+          <h3 class="font-semibold text-lg">+ Nova Postagem</h3>
+          <p>Crie e publique novas notícias no site oficial.</p>
+        </a>
+        <a href="ultimas-noticias.html" class="bg-white rounded shadow p-6 hover:shadow-lg transition flex flex-col items-center text-center gap-3">
+          <i class="fas fa-newspaper fa-3x text-[#09679c]"></i>
+          <h3 class="font-semibold text-lg">Últimas Notícias</h3>
+          <p>Veja todas as notícias publicadas no site.</p>
+        </a>
+        <a href="whatsapp.html" class="bg-[#e0f2fe] border border-[#09679c] rounded shadow p-6 hover:shadow-lg transition flex flex-col items-center text-center gap-3">
+          <i class="fab fa-whatsapp fa-3x text-[#09679c]"></i>
+          <h3 class="font-semibold text-lg text-[#09679c]">Atendimento WhatsApp</h3>
+          <p>Inicie as conversas no WhatsApp.</p>
+        </a>
+      </div>
+    </section>
+
+    <!-- Seção exclusiva para gilvaniogringo -->
+    <section id="dashboardGerente" class="hidden bg-white rounded shadow p-6 space-y-8">
+      <h2 class="text-3xl font-bold text-[#09679c] border-b-4 border-[#FF7DA4] pb-2">Dashboard Gerente - Métricas</h2>
+
+      <!-- Cards métricas -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div class="bg-[#09679c] text-white rounded-lg p-5 shadow flex flex-col items-center">
+          <i class="fas fa-envelope fa-2x mb-3"></i>
+          <p class="text-xl font-semibold" id="totalMensagens">0</p>
+          <p>Volume de Mensagens</p>
+        </div>
+        <div class="bg-[#DB2356] text-white rounded-lg p-5 shadow flex flex-col items-center">
+          <i class="fas fa-smile fa-2x mb-3"></i>
+          <p class="text-xl font-semibold" id="sentimentoCliente">Neutro</p>
+          <p>Sentimento do Cliente</p>
+        </div>
+        <div class="bg-[#09679c] text-white rounded-lg p-5 shadow flex flex-col items-center">
+          <i class="fas fa-user-check fa-2x mb-3"></i>
+          <p class="text-xl font-semibold" id="performanceAgente">0%</p>
+          <p>Performance por Agente</p>
+        </div>
+        <div class="bg-[#DB2356] text-white rounded-lg p-5 shadow flex flex-col items-center">
+          <i class="fas fa-stopwatch fa-2x mb-3"></i>
+          <p class="text-xl font-semibold" id="tempoResposta">0s</p>
+          <p>Tempo Médio de Resposta</p>
+        </div>
+        <div class="bg-[#09679c] text-white rounded-lg p-5 shadow flex flex-col items-center">
+          <i class="fas fa-times-circle fa-2x mb-3"></i>
+          <p class="text-xl font-semibold" id="chatsPerdidos">0</p>
+          <p>Chats Perdidos</p>
+        </div>
+        <div class="bg-[#DB2356] text-white rounded-lg p-5 shadow flex flex-col items-center">
+          <i class="fas fa-check-circle fa-2x mb-3"></i>
+          <p class="text-xl font-semibold" id="ticketsResolvidos">0</p>
+          <p>Tickets Resolvidos</p>
+        </div>
+        <div class="bg-[#09679c] text-white rounded-lg p-5 shadow flex flex-col items-center">
+          <i class="fas fa-chart-line fa-2x mb-3"></i>
+          <p class="text-xl font-semibold" id="metrEngajamento">0%</p>
+          <p>Métricas de Engajamento</p>
+        </div>
+        <div class="bg-[#DB2356] text-white rounded-lg p-5 shadow flex flex-col items-center">
+          <i class="fas fa-comments fa-2x mb-3"></i>
+          <p class="text-xl font-semibold" id="profundidadeConversas">0%</p>
+          <p>Profundidade de Conversas</p>
+        </div>
+      </div>
+
+      <!-- Gráfico semanal -->
+      <div>
+        <h3 class="text-xl font-bold mb-3 text-[#005075]">Gráfico Semanal - Volume e Engajamento</h3>
+        <canvas id="graficoSemanal" class="w-full max-w-4xl"></canvas>
+      </div>
+
+      <!-- Informações extras -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-white border rounded shadow p-5 flex flex-col items-center">
+          <h4 class="font-semibold mb-2">Tempo de Inatividade</h4>
+          <p id="tempoInatividade" class="text-lg font-semibold text-[#DB2356]">00:00:00</p>
+        </div>
+        <div class="bg-white border rounded shadow p-5 flex flex-col items-center">
+          <h4 class="font-semibold mb-2">Contatos Cadastrados</h4>
+          <p id="contatosCadastrados" class="text-lg font-semibold text-[#09679c]">0</p>
+        </div>
+        <div class="bg-white border rounded shadow p-5 flex flex-col items-center">
+          <h4 class="font-semibold mb-2">Excluir Contatos</h4>
+          <button
+            id="btnExcluirContatos"
+            class="bg-[#DB2356] text-white px-4 py-2 rounded hover:bg-[#a91f46] transition"
+          >
+            Excluir todos os contatos
+          </button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Rodapé redes sociais -->
+  <footer class="bg-[#005075] text-white p-4 flex justify-center space-x-8">
+    <a href="https://www.instagram.com/gilvaniogringo" target="_blank" rel="noopener" class="hover:text-[#FF7DA4] transition" aria-label="Instagram">
+      <i class="fab fa-instagram fa-lg"></i>
+    </a>
+    <a href="https://www.facebook.com/gilvaniogringo" target="_blank" rel="noopener" class="hover:text-[#FF7DA4] transition" aria-label="Facebook">
+      <i class="fab fa-facebook-f fa-lg"></i>
+    </a>
+    <a href="https://twitter.com/gilvaniogringo" target="_blank" rel="noopener" class="hover:text-[#FF7DA4] transition" aria-label="X Twitter">
+      <i class="fab fa-twitter fa-lg"></i>
+    </a>
+    <a href="https://www.tiktok.com/@gilvaniogringo" target="_blank" rel="noopener" class="hover:text-[#FF7DA4] transition" aria-label="TikTok">
+      <i class="fab fa-tiktok fa-lg"></i>
+    </a>
+    <a href="https://www.kwai.com/gilvaniogringo" target="_blank" rel="noopener" class="hover:text-[#FF7DA4] transition" aria-label="Kwai">
+      <i class="fas fa-video fa-lg"></i>
+    </a>
+  </footer>
+
+  <script>
+    // Logout
+    function logout() {
+      localStorage.removeItem("usuarioLogado");
+      window.location.href = "intranet.html";
+    }
+
+    // Verificar usuário logado e mostrar painel gerente só para gilvaniogringo
+    const usuarioLogado = localStorage.getItem("usuarioLogado") || localStorage.getItem("logado"); // 'logado' para compatibilidade
+    const dashboardGerenteSection = document.getElementById("dashboardGerente");
+
+    if (usuarioLogado === "gilvaniogringo") {
+      dashboardGerenteSection.classList.remove("hidden");
+      iniciarDashboard();
+    }
+
+    // Simulação de dados para o dashboard (pode ser substituído por dados reais via backend)
+    function iniciarDashboard() {
+      // Dados fictícios
+      const dados = {
+        totalMensagens: 12456,
+        sentimentoCliente: "Positivo", // Positivo, Neutro, Negativo
+        performanceAgente: 89, // %
+        tempoResposta: 27, // segundos
+        chatsPerdidos: 3,
+        ticketsResolvidos: 120,
+        metrEngajamento: 74, // %
+        profundidadeConversas: 65, // %
+        tempoInatividadeSegundos: 3600, // 1h
+        contatosCadastrados: JSON.parse(localStorage.getItem("contatos"))?.length || 0
+      };
+
+      // Atualizar cards
+      document.getElementById("totalMensagens").textContent = dados.totalMensagens.toLocaleString();
+      document.getElementById("sentimentoCliente").textContent = dados.sentimentoCliente;
+      document.getElementById("performanceAgente").textContent = dados.performanceAgente + "%";
+      document.getElementById("tempoResposta").textContent = dados.tempoResposta + "s";
+      document.getElementById("chatsPerdidos").textContent = dados.chatsPerdidos;
+      document.getElementById("ticketsResolvidos").textContent = dados.ticketsResolvidos;
+      document.getElementById("metrEngajamento").textContent = dados.metrEngajamento + "%";
+      document.getElementById("profundidadeConversas").textContent = dados.profundidadeConversas + "%";
+
+      // Formatar tempo inatividade hh:mm:ss
+      document.getElementById("tempoInatividade").textContent = segundosParaHMS(dados.tempoInatividadeSegundos);
+
+      // Contatos cadastrados
+      document.getElementById("contatosCadastrados").textContent = dados.contatosCadastrados;
+
+      // Gráfico semanal
+      montarGraficoSemanal();
+
+      // Botão excluir contatos
+      document.getElementById("btnExcluirContatos").onclick = () => {
+        if(confirm("Tem certeza que deseja excluir todos os contatos? Esta ação não pode ser desfeita.")) {
+          localStorage.removeItem("contatos");
+          document.getElementById("contatosCadastrados").textContent = 0;
+          alert("Contatos excluídos com sucesso!");
+        }
+      };
+    }
+
+    // Função para formatar segundos em hh:mm:ss
+    function segundosParaHMS(segundos) {
+      const h = Math.floor(segundos / 3600).toString().padStart(2, '0');
+      const m = Math.floor((segundos % 3600) / 60).toString().padStart(2, '0');
+      const s = (segundos % 60).toString().padStart(2, '0');
+      return `${h}:${m}:${s}`;
+    }
+
+    // Montar gráfico semanal com Chart.js
+    function montarGraficoSemanal() {
+      const ctx = document.getElementById('graficoSemanal').getContext('2d');
+
+      // Dados simulados semanais (7 dias)
+      const labels = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'];
+      const volumeMensagens = [1200, 1350, 1100, 1450, 1600, 1000, 900];
+      const engajamento = [70, 75, 68, 80, 78, 60, 55];
+
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: 'Volume de Mensagens',
+              data: volumeMensagens,
+              borderColor: '#09679c',
+              backgroundColor: 'rgba(9,103,156,0.3)',
+              tension: 0.3,
+              fill: true,
+              yAxisID: 'y',
+              order: 2
+            },
+            {
+              label: 'Engajamento (%)',
+              data: engajamento,
+              borderColor: '#DB2356',
+              backgroundColor: 'rgba(219,35,86,0.3)',
+              tension: 0.3,
+              fill: true,
+              yAxisID: 'y1',
+              order: 1
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          interaction: {
+            mode: 'index',
+            intersect: false
+          },
+          stacked: false,
+          scales: {
+            y: {
+              type: 'linear',
+              display: true,
+              position: 'left',
+              beginAtZero: true,
+              title: {
+                display: true,
+                text: 'Mensagens'
+              }
+            },
+            y1: {
+              type: 'linear',
+              display: true,
+              position: 'right',
+              beginAtZero: true,
+              max: 100,
+              title: {
+                display: true,
+                text: 'Engajamento (%)'
+              },
+              grid: {
+                drawOnChartArea: false
+              }
+            }
+          }
+        }
+      });
+    }
+
+  </script>
+
+</body>
+</html>
