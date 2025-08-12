@@ -156,7 +156,7 @@
           <label for="status" class="font-semibold text-gray-700">Status da publicação:</label>
           <select id="status" name="status" class="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#09679c]">
             <option value="rascunho" selected>Rascunho</option>
-            <option value="enviar">Publicação</option> <!-- label exatamente como pediu -->
+            <option value="enviar">Publicação</option>
           </select>
         </div>
 
@@ -175,7 +175,7 @@
   </main>
 
   <script>
-    // --- Configurações de usuários autorizados (mesma lista que você usa) ---
+    // Usuários autorizados
     const usuariosAutorizados = [
       "gabriel.amaral",
       "grazielle.albuquerque",
@@ -186,7 +186,7 @@
 
     const usuarioLogado = localStorage.getItem("usuarioLogado");
 
-    // Monta o menu com a ordem fixa solicitada
+    // Monta o menu
     function montarMenu() {
       const menu = document.getElementById("mainMenu");
       menu.innerHTML = `
@@ -196,13 +196,9 @@
         <a href="nova-postagem.html" class="bg-[#053646] border border-white px-3 py-2 rounded hover:bg-[#032d39] transition flex items-center gap-1" title="Nova Postagem">
           <i class="fas fa-plus"></i> Nova Postagem
         </a>
-        ${usuariosAutorizados.includes(usuarioLogado) ? `
-          <a href="publicacoes.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="Últimas Publicações">
-            <i class="fas fa-newspaper"></i> Últimas Publicações
-          </a>` : `
-          <a href="publicacoes.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="Últimas Publicações">
-            <i class="fas fa-newspaper"></i> Últimas Publicações
-          </a>`}
+        <a href="publicacoes.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="Últimas Publicações">
+          <i class="fas fa-newspaper"></i> Últimas Publicações
+        </a>
         <a href="rascunhos.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="Rascunhos">
           <i class="fas fa-file-alt"></i> Rascunhos
         </a>
@@ -220,7 +216,7 @@
       window.location.href = "intranet.html";
     }
 
-    // --- Editor helpers ---
+    // Editor commands
     function format(comando, valor = null) {
       document.execCommand(comando, false, valor);
       document.getElementById("editor").focus();
@@ -231,11 +227,9 @@
       const texto = selection.toString() || prompt("Texto do link (opcional):", "");
       const url = prompt("Digite o URL do link (ex: https://):");
       if (!url) return;
-      // se houver seleção, cria link em torno dela, senão insere <a>
       if (selection && selection.rangeCount > 0 && selection.toString()) {
         format("createLink", url);
       } else {
-        // cria um link contendo o texto informado (ou o próprio url)
         const linkText = texto || url;
         const a = document.createElement("a");
         a.href = url;
@@ -251,10 +245,8 @@
     }
 
     function inserirEmoji(emoji) {
-      // tenta inserir como texto/HTML
       document.execCommand("insertText", false, emoji);
       document.getElementById("editor").focus();
-      // manter picker fechado
       document.getElementById("emojiPicker").classList.add("hidden");
     }
 
@@ -273,7 +265,7 @@
     }
     popularEmojis();
 
-    // Inserir imagem (base64 inline)
+    // Inserir imagem
     function inserirImagem(event) {
       const file = event.target.files[0];
       if (!file) return;
@@ -286,21 +278,21 @@
       event.target.value = "";
     }
 
-    // --- Publicação / Rascunho handling ---
+    // Gera objeto postagem
     function gerarPostObject(titulo, conteudo, status) {
       const nowISO = new Date().toISOString();
       return {
         id: Date.now(),
         titulo,
-        conteudo,            // guarda HTML do editor
+        conteudo,
         autor: usuarioLogado,
-        data: nowISO,        // compat: outras páginas às vezes usam 'data'
-        dataHora: nowISO,    // compat: publicacoes.html usava dataHora em alguns lugares
+        data: nowISO,
+        dataHora: nowISO,
         status
       };
     }
 
-    // Carrega postagem para edição (se veio ?id=)
+    // Carrega postagem para edição
     function carregarPostagemParaEdicao() {
       const params = new URLSearchParams(window.location.search);
       const id = params.get("id");
@@ -314,13 +306,69 @@
       document.getElementById("editor").innerHTML = postagem.conteudo;
       document.getElementById("status").value = postagem.status || "rascunho";
 
-      // setando id de edição para reutilizar na submissão
+      // setando id para reutilizar na submissão
       document.getElementById("formPostagem").dataset.editandoId = String(postagem.id);
     }
 
-    // Enviar postagem (sem redirecionar) - salva em rascunhos ou publicacoes
+    // Gera slug para nome do arquivo
+    function gerarSlug(texto) {
+      return texto.toLowerCase()
+        .normalize('NFD').replace(/[\u0300-\u036f]/g, '') // remove acentos
+        .replace(/\s+/g, '-')  // espaços por hífen
+        .replace(/[^\w\-]+/g, '') // remove caracteres inválidos
+        .replace(/\-\-+/g, '-')  // múltiplos hífens
+        .replace(/^-+/, '')      // hífens no início
+        .replace(/-+$/, '');     // hífens no fim
+    }
+
+    // Função para gerar o conteúdo do HTML da publicação
+    function gerarHtmlPublicacao(post) {
+      return `<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>${post.titulo}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    crossorigin="anonymous"
+  />
+  <style>
+    body { background-color: #f9fafb; font-family: Arial, sans-serif; padding: 20px; }
+    h1 { color: #09679c; }
+    .content { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 8px rgba(0,0,0,0.1); max-width: 800px; margin: auto; }
+    a { color: #09679c; }
+  </style>
+</head>
+<body>
+  <div class="content">
+    <h1>${post.titulo}</h1>
+    <p><em>Publicado em: ${new Date(post.data).toLocaleDateString('pt-BR', {day:'2-digit', month:'2-digit', year:'numeric'})}</em></p>
+    <div>${post.conteudo}</div>
+    <p><a href="publicacoes.html">&larr; Voltar às publicações</a></p>
+  </div>
+</body>
+</html>`;
+    }
+
+    // Função para baixar arquivo HTML
+    function baixarArquivo(nomeArquivo, conteudo) {
+      const blob = new Blob([conteudo], { type: 'text/html;charset=utf-8' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = nomeArquivo;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(link.href);
+    }
+
+    // Enviar postagem
     function enviarPostagem(event) {
       event.preventDefault();
+
       const titulo = document.getElementById("titulo").value.trim();
       const conteudo = document.getElementById("editor").innerHTML.trim();
       const status = document.getElementById("status").value;
@@ -329,16 +377,13 @@
       if (!conteudo || conteudo === "<br>" || conteudo === "") { alert("Conteúdo não pode estar vazio."); return false; }
       if (!usuarioLogado) { alert("Usuário não logado."); window.location.href = "intranet.html"; return false; }
 
-      // carregar listas
       let rascunhos = JSON.parse(localStorage.getItem("rascunhos")) || [];
       let publicacoes = JSON.parse(localStorage.getItem("publicacoes")) || [];
 
       const form = document.getElementById("formPostagem");
       const editandoId = form.dataset.editandoId;
 
-      // se estivermos editando um rascunho existente
       if (editandoId) {
-        // encontrar no rascunhos
         const idx = rascunhos.findIndex(r => String(r.id) === String(editandoId));
         if (status === "rascunho") {
           if (idx !== -1) {
@@ -351,7 +396,6 @@
             mostrarStatus("Rascunho atualizado com sucesso!");
             return false;
           } else {
-            // não achou no rascunho: criar novo como segurança
             const novo = gerarPostObject(titulo, conteudo, "rascunho");
             rascunhos.push(novo);
             localStorage.setItem("rascunhos", JSON.stringify(rascunhos));
@@ -359,12 +403,11 @@
             return false;
           }
         } else if (status === "enviar") {
-          // mover para publicacoes (remover rascunho)
           if (idx !== -1) {
             rascunhos = rascunhos.filter(r => String(r.id) !== String(editandoId));
             localStorage.setItem("rascunhos", JSON.stringify(rascunhos));
           }
-          publicacoes.push({
+          const postPub = {
             id: Number(editandoId),
             titulo,
             conteudo,
@@ -372,38 +415,65 @@
             data: new Date().toISOString(),
             dataHora: new Date().toISOString(),
             status: "enviar"
-          });
+          };
+          publicacoes.push(postPub);
           localStorage.setItem("publicacoes", JSON.stringify(publicacoes));
+
+          // Gerar arquivo e baixar
+          const slug = gerarSlug(titulo);
+          const nomeArquivo = slug + ".html";
+          const html = gerarHtmlPublicacao(postPub);
+          baixarArquivo(nomeArquivo, html);
+
           mostrarStatus("Postagem publicada com sucesso!");
-          // removemos flag de edição
           delete form.dataset.editandoId;
+
+          setTimeout(() => {
+            window.location.href = "publicacoes.html";
+          }, 1500);
+
           return false;
         }
       }
 
       // Criar novo post
       const novo = gerarPostObject(titulo, conteudo, status);
+
       if (status === "rascunho") {
         rascunhos.push(novo);
         localStorage.setItem("rascunhos", JSON.stringify(rascunhos));
         mostrarStatus("Rascunho salvo com sucesso!");
+        setTimeout(() => {
+          window.location.href = "rascunhos.html";
+        }, 1500);
       } else if (status === "enviar") {
         publicacoes.push(novo);
         localStorage.setItem("publicacoes", JSON.stringify(publicacoes));
+
+        // Gerar arquivo e baixar
+        const slug = gerarSlug(titulo);
+        const nomeArquivo = slug + ".html";
+        const html = gerarHtmlPublicacao(novo);
+        baixarArquivo(nomeArquivo, html);
+
         mostrarStatus("Postagem publicada com sucesso!");
+
+        setTimeout(() => {
+          window.location.href = "publicacoes.html";
+        }, 1500);
       }
 
       return false;
     }
 
-    // mensagem de status (feedback ao usuário)
+    // Mostrar status
     function mostrarStatus(msg) {
       const el = document.getElementById("statusMsg");
       el.textContent = msg;
       setTimeout(() => el.textContent = "", 4000);
     }
 
-    // limpar editor
+    // Limpar editor
     document.getElementById("btnLimpar").addEventListener("click", () => {
       if (!confirm("Limpar título e conteúdo?")) return;
       document.getElementById("titulo").value = "";
@@ -414,7 +484,7 @@
       mostrarStatus("Editor limpo.");
     });
 
-    // --- inicialização ---
+    // Inicialização
     window.onload = () => {
       if (!usuarioLogado) {
         alert("Usuário não logado.");
