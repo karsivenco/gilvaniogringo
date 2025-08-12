@@ -1,242 +1,124 @@
-/* ==== Gerenciamento localStorage - Contatos, Mensagens, Conversas, Usuário e Logs ==== */
-
 const storageKeys = {
-  contatos: "contatos",
-  mensagens: "mensagens",
-  conversasInfo: "conversasInfo",
-  usuarioLogado: "usuarioLogado",
-  usuariosLogados: "usuariosLogados", // lista dos usuários logados (array)
-  logAtividadesPrefix: "logAtividades_", // chave prefixo para logs do usuário
+  // ... seus outros storageKeys ...
+  rascunhos: "rascunhos",
+  publicacoes: "publicacoes",
 };
 
-// ----------- CONTATOS -------------------
+// ======== GESTÃO DE POSTAGENS E RASCUNHOS ===========
 
-function getContatos() {
-  return JSON.parse(localStorage.getItem(storageKeys.contatos)) || [];
+// Retorna lista completa de rascunhos (array de objetos)
+function getRascunhos() {
+  return JSON.parse(localStorage.getItem(storageKeys.rascunhos)) || [];
 }
 
-function setContatos(contatos) {
-  localStorage.setItem(storageKeys.contatos, JSON.stringify(contatos));
+// Salva lista completa de rascunhos
+function setRascunhos(rascunhos) {
+  localStorage.setItem(storageKeys.rascunhos, JSON.stringify(rascunhos));
 }
 
-function addContato(contato) {
-  if (!contato.nome || !contato.numero || !contato.origem) {
-    throw new Error("Contato deve ter nome, número e origem obrigatórios");
+// Retorna lista completa de publicações (array de objetos)
+function getPublicacoes() {
+  return JSON.parse(localStorage.getItem(storageKeys.publicacoes)) || [];
+}
+
+// Salva lista completa de publicações
+function setPublicacoes(publicacoes) {
+  localStorage.setItem(storageKeys.publicacoes, JSON.stringify(publicacoes));
+}
+
+// Salva ou atualiza um rascunho
+function salvarOuAtualizarRascunho(postagem) {
+  if (!postagem || !postagem.id) throw new Error("Postagem inválida para salvar rascunho");
+  let rascunhos = getRascunhos();
+  const idx = rascunhos.findIndex(p => p.id === postagem.id);
+  if (idx >= 0) {
+    rascunhos[idx] = postagem; // atualiza
+  } else {
+    rascunhos.push(postagem); // adiciona novo
   }
-  const contatos = getContatos();
-  if (contatos.some(c => c.numero === contato.numero)) {
-    throw new Error("Contato já existe com esse número");
+  setRascunhos(rascunhos);
+}
+
+// Salva ou atualiza uma publicação
+function salvarOuAtualizarPublicacao(postagem) {
+  if (!postagem || !postagem.id) throw new Error("Postagem inválida para salvar publicação");
+  let publicacoes = getPublicacoes();
+  const idx = publicacoes.findIndex(p => p.id === postagem.id);
+  if (idx >= 0) {
+    publicacoes[idx] = postagem; // atualiza
+  } else {
+    publicacoes.push(postagem); // adiciona novo
   }
-  contatos.push(contato);
-  setContatos(contatos);
+  setPublicacoes(publicacoes);
 }
 
-function removeContato(numero) {
-  let contatos = getContatos();
-  contatos = contatos.filter(c => c.numero !== numero);
-  setContatos(contatos);
-
-  // Remove mensagens e conversasInfo relacionadas
-  const mensagens = getMensagens();
-  const conversasInfo = getConversasInfo();
-  delete mensagens[numero];
-  delete conversasInfo[numero];
-  setMensagens(mensagens);
-  setConversasInfo(conversasInfo);
+// Remove postagem de rascunho pelo ID
+function removerRascunho(id) {
+  if (!id) return;
+  let rascunhos = getRascunhos();
+  rascunhos = rascunhos.filter(p => p.id !== id);
+  setRascunhos(rascunhos);
 }
 
-// ----------- MENSAGENS -------------------
-
-function getMensagens() {
-  return JSON.parse(localStorage.getItem(storageKeys.mensagens)) || {};
+// Remove publicação pelo ID
+function removerPublicacao(id) {
+  if (!id) return;
+  let publicacoes = getPublicacoes();
+  publicacoes = publicacoes.filter(p => p.id !== id);
+  setPublicacoes(publicacoes);
 }
 
-function setMensagens(mensagens) {
-  localStorage.setItem(storageKeys.mensagens, JSON.stringify(mensagens));
+// Busca um rascunho por ID
+function buscarRascunhoPorId(id) {
+  if (!id) return null;
+  const rascunhos = getRascunhos();
+  return rascunhos.find(p => p.id === id) || null;
 }
 
-function addMensagem(numero, texto, timestamp = Date.now()) {
-  if (!numero || !texto) throw new Error("Número e texto da mensagem são obrigatórios");
-  const mensagens = getMensagens();
-  if (!mensagens[numero]) mensagens[numero] = [];
-  mensagens[numero].push({ texto, timestamp });
-  setMensagens(mensagens);
+// Busca uma publicação por ID
+function buscarPublicacaoPorId(id) {
+  if (!id) return null;
+  const publicacoes = getPublicacoes();
+  return publicacoes.find(p => p.id === id) || null;
 }
 
-// ----------- CONVERSAS (duração) -------------------
-
-function getConversasInfo() {
-  return JSON.parse(localStorage.getItem(storageKeys.conversasInfo)) || {};
+// Retorna publicações do usuário logado (array)
+function getPublicacoesPorAutor(autor) {
+  if (!autor) return [];
+  const publicacoes = getPublicacoes();
+  return publicacoes.filter(p => p.autor === autor);
 }
 
-function setConversasInfo(info) {
-  localStorage.setItem(storageKeys.conversasInfo, JSON.stringify(info));
+// Retorna rascunhos do usuário logado (array)
+function getRascunhosPorAutor(autor) {
+  if (!autor) return [];
+  const rascunhos = getRascunhos();
+  return rascunhos.filter(p => p.autor === autor);
 }
 
-function addSessaoConversa(numero, inicioTimestamp, fimTimestamp) {
-  if (!numero || !inicioTimestamp || !fimTimestamp) throw new Error("Dados incompletos da sessão");
-  const info = getConversasInfo();
-  if (!info[numero]) {
-    info[numero] = { duracaoTotalSeg: 0, sessoes: [] };
-  }
-  const duracaoSeg = Math.floor((fimTimestamp - inicioTimestamp) / 1000);
-  info[numero].duracaoTotalSeg += duracaoSeg;
-  info[numero].sessoes.push({ inicioTimestamp, fimTimestamp });
-  setConversasInfo(info);
-}
+// Função para salvar postagem (rascunho ou publicada) e atualizar localStorage
+function salvarPostagem(postagem, status) {
+  if (!postagem) throw new Error("Postagem inválida");
+  postagem.status = status;
+  postagem.data = new Date().toISOString();
 
-// ----------- USUÁRIO LOGADO -------------------
-
-function getUsuarioLogado() {
-  return localStorage.getItem(storageKeys.usuarioLogado) || null;
-}
-
-function setUsuarioLogado(usuario) {
-  localStorage.setItem(storageKeys.usuarioLogado, usuario);
-  registrarUsuarioLogado(usuario);
-}
-
-function logout() {
-  const usuario = getUsuarioLogado();
-  if (usuario) {
-    removerUsuarioLogado(usuario);
-  }
-  localStorage.removeItem(storageKeys.usuarioLogado);
-  window.location.href = "intranet.html";
-}
-
-// ----------- USUÁRIOS LOGADOS (lista) -------------------
-
-function carregarUsuariosLogados() {
-  const logados = localStorage.getItem(storageKeys.usuariosLogados);
-  return logados ? JSON.parse(logados) : [];
-}
-
-function salvarUsuariosLogados(usuarios) {
-  localStorage.setItem(storageKeys.usuariosLogados, JSON.stringify(usuarios));
-}
-
-function registrarUsuarioLogado(usuario) {
-  if (!usuario) return;
-  let usuarios = carregarUsuariosLogados();
-  if (!usuarios.includes(usuario)) {
-    usuarios.push(usuario);
-    salvarUsuariosLogados(usuarios);
+  if (status === "rascunho") {
+    salvarOuAtualizarRascunho(postagem);
+  } else if (status === "enviar") {
+    salvarOuAtualizarPublicacao(postagem);
+    // Opcional: remover da lista de rascunhos se existir
+    removerRascunho(postagem.id);
   }
 }
 
-function removerUsuarioLogado(usuario) {
-  if (!usuario) return;
-  let usuarios = carregarUsuariosLogados();
-  usuarios = usuarios.filter(u => u !== usuario);
-  salvarUsuariosLogados(usuarios);
-}
-
-// ----------- LOG DE ATIVIDADES POR USUÁRIO -------------------
-
-function getChaveLog(usuario) {
-  return storageKeys.logAtividadesPrefix + usuario;
-}
-
-function getLogAtividades(usuario) {
-  const logJSON = localStorage.getItem(getChaveLog(usuario));
-  return logJSON ? JSON.parse(logJSON) : [];
-}
-
-function setLogAtividades(usuario, log) {
-  localStorage.setItem(getChaveLog(usuario), JSON.stringify(log));
-}
-
-function addAtividadeLog(usuario, acao) {
-  if (!usuario || !acao) return;
-  const log = getLogAtividades(usuario);
-  log.unshift({ acao, timestamp: Date.now() });
-  setLogAtividades(usuario, log);
-}
-
-// ----------- AUTENTICAÇÃO (USUÁRIOS E SENHAS) -------------------
-
-// Essa função deve ser usada na página de login (intranet.html) para validar usuário/senha,
-// utilizando o objeto 'usuariosSenhas' que deve ser importado do arquivo senhas.js externo (por segurança)
-function validarLogin(usuario, senha, usuariosSenhas) {
-  if (!usuario || !senha) return false;
-  return usuariosSenhas[usuario] && usuariosSenhas[usuario] === senha;
-}
-
-// ----------- PERMISSÕES -------------------
-
-const permissoesUsuarios = {
-  // Usuários que podem postar publicações
-  podePublicar: [
+// Função para verificar se o usuário tem permissão para publicar
+function podeUsuarioPublicar(usuario) {
+  const autorizados = [
     "gabriel.amaral",
     "graziele.albuquerque",
     "karina.maia",
     "cristiano.santos",
     "gilvaniogringo",
-  ],
-  // Pode acessar dashboard gerencial
-  acessoDashboardGerente: [
-    "gilvaniogringo",
-  ],
-  // Outros tipos de permissão podem ser adicionados aqui
-};
-
-function podeUsuarioPublicar(usuario) {
-  return permissoesUsuarios.podePublicar.includes(usuario);
-}
-
-function podeAcessarDashboard(usuario) {
-  return permissoesUsuarios.acessoDashboardGerente.includes(usuario);
-}
-
-// ----------- UTILS -------------------
-
-function getContatoPorNumero(numero) {
-  const contatos = getContatos();
-  return contatos.find(c => c.numero === numero) || null;
-}
-
-const disparos = ["oi", "bom dia", "boa tarde", "boa noite", "olá", "ola"];
-function isDisparo(texto) {
-  if (!texto) return false;
-  return disparos.includes(texto.toLowerCase().trim());
-}
-
-function calcularMediaSemanal(mensagens) {
-  const agora = Date.now();
-  const quatroSemanasMs = 4 * 7 * 24 * 60 * 60 * 1000;
-  const limite = agora - quatroSemanasMs;
-
-  let totalMsgs = 0;
-
-  for (const msgs of Object.values(mensagens)) {
-    for (const m of msgs) {
-      if (m.timestamp >= limite && !isDisparo(m.texto)) {
-        totalMsgs++;
-      }
-    }
-  }
-
-  return (totalMsgs / 4).toFixed(2);
-}
-
-function formatarDuracao(segundos) {
-  const m = Math.floor(segundos / 60);
-  const s = segundos % 60;
-  return `${m}m ${s}s`;
-}
-
-function tempoDesde(timestamp) {
-  if (!timestamp) return "Nunca";
-  const diffMs = Date.now() - timestamp;
-  const diffDias = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-  if (diffDias === 0) return "Hoje";
-  if (diffDias === 1) return "Ontem";
-  return `Há ${diffDias} dias`;
-}
-
-function excluirContatoCompleto(numero) {
-  if (!confirm("Deseja excluir este contato e suas mensagens?")) return;
-  removeContato(numero);
-  alert("Contato e mensagens excluídos com sucesso.");
+  ];
+  return autorizados.includes(usuario);
 }
