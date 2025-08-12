@@ -1,71 +1,58 @@
 <!DOCTYPE html>
-<html lang="pt-BR" >
+<html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <title>Dashboard Geral - Gerente | Intranet do Gringo</title>
+  <title>WhatsApp - Atendimento</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    crossorigin="anonymous"
-    referrerpolicy="no-referrer"
   />
-  <!-- Chart.js para gráfico semanal -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body class="bg-gray-100 min-h-screen flex flex-col">
 
-  <!-- Header -->
-  <header class="flex justify-between items-center bg-[#09679c] text-white p-4 shadow-md">
-    <div class="flex items-center gap-3">
-      <img src="img/logo.png" alt="Logo Gringo" class="h-10 w-auto" />
-      <h1 class="text-xl font-bold">Dashboard Geral do Gerente</h1>
-    </div>
-    <nav class="flex items-center gap-3">
-      <a href="painel.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition">
-        <i class="fas fa-home"></i> Painel
-      </a>
-      <button
-        onclick="logout()"
-        class="bg-[#053646] px-3 py-2 rounded hover:bg-[#032d39] transition"
-        title="Sair"
-      >
-        <i class="fas fa-sign-out-alt"></i> Sair
-      </button>
+  <header class="bg-[#09679c] text-white p-4 flex justify-between items-center">
+    <h1 class="text-xl font-bold">WhatsApp - Atendimento</h1>
+    <nav class="flex gap-3">
+      <a href="painel.html" class="hover:underline">Painel</a>
+      <a href="contatos.html" class="hover:underline">Contatos</a>
+      <button onclick="logout()" class="bg-[#074d6b] px-3 py-1 rounded">Sair</button>
     </nav>
   </header>
 
-  <!-- Main Content -->
-  <main class="p-6 flex-grow max-w-7xl mx-auto">
-
-    <!-- Métricas principais em cards -->
-    <section class="mb-8">
-      <h2 class="text-2xl font-bold text-[#09679c] mb-4">Resumo Geral das Conversas</h2>
-
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div class="bg-white p-6 rounded shadow text-center">
-          <h3 class="text-lg font-semibold mb-2">Conversas Completas (≥ 3 mensagens)</h3>
-          <p id="conversasCompletas" class="text-4xl font-bold text-[#005075]">0</p>
-        </div>
-        <div class="bg-white p-6 rounded shadow text-center">
-          <h3 class="text-lg font-semibold mb-2">Chamadas (1 mensagem)</h3>
-          <p id="chamadas" class="text-4xl font-bold text-[#005075]">0</p>
-        </div>
-        <div class="bg-white p-6 rounded shadow text-center">
-          <h3 class="text-lg font-semibold mb-2">Tempo Médio Sem Conversação</h3>
-          <p id="tempoMedioSemConversa" class="text-4xl font-bold text-[#005075]">00:00:00</p>
-        </div>
-      </div>
+  <main class="p-6 flex-grow">
+    <!-- Conteúdo comum a todos -->
+    <section>
+      <h2 class="text-2xl font-bold mb-4">Área de Atendimento WhatsApp</h2>
+      <p>Conteúdo comum para todos os usuários que acessam esta página.</p>
+      <!-- Aqui ficaria a lista de contatos, chat, etc -->
     </section>
 
-    <!-- Gráfico semanal -->
-    <section class="bg-white p-6 rounded shadow mb-8">
-      <h2 class="text-2xl font-bold text-[#09679c] mb-4">Mensagens por Dia da Semana (Últimas 4 semanas)</h2>
-      <canvas id="graficoSemanal" class="w-full max-w-5xl" height="150"></canvas>
+    <!-- Dashboard Gerente só para gilvaniogringo -->
+    <section id="dashboardGerente" class="hidden mt-10 bg-white p-6 rounded shadow max-w-4xl mx-auto">
+      <h2 class="text-3xl font-bold text-[#09679c] mb-4">Dashboard Gerente (Exclusivo)</h2>
+      <p>Aqui vão métricas e dados exclusivos para o gerente.</p>
+      <!-- Seus cards e gráficos do dashboard -->
     </section>
+  </main>
 
-    <!-- Cronômetro geral -->
-    <section class="bg-white p-6 rounded shadow max-w-xs mx-auto">
-      <h2 class="text-2xl font-bold text-[#09679c] mb-4 text-center">Cronômetro de Conversação</h2>
-      <div class="flex justify-center gap-4">
-        <button id="b
+  <footer class="bg-[#005075] text-white p-4 text-center">
+    <p>© 2025 Intranet do Gringo</p>
+  </footer>
+
+  <script>
+    function logout() {
+      localStorage.removeItem("usuarioLogado");
+      window.location.href = "intranet.html";
+    }
+
+    // Mostrar dashboard somente para "gilvaniogringo"
+    const usuarioLogado = localStorage.getItem("usuarioLogado");
+    if (usuarioLogado === "gilvaniogringo") {
+      document.getElementById("dashboardGerente").classList.remove("hidden");
+      // Aqui você pode iniciar funções que carregam dados do dashboard
+    }
+  </script>
+
+</body>
+</html>
