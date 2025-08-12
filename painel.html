@@ -10,6 +10,8 @@
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     crossorigin="anonymous"
   />
+  <!-- Importa o arquivo de usuários e senhas -->
+  <script src="senhas.js" defer></script>
 </head>
 <body class="bg-gray-100 min-h-screen flex flex-col">
 
@@ -114,32 +116,20 @@
   </footer>
 
   <script>
-    // Usuários cadastrados no sistema
-    const usuariosCadastrados = [
-      "gilvaniogringo",
-      "gabriel.amaral",
-      "graziele.albuquerque"
-    ];
+    // Lista de usuários cadastrados
+    // Note: esse objeto 'usuarios' vem do senhas.js carregado externamente
 
-    // Controla quais usuários estão logados (simulação)
     let usuariosLogados = [];
 
-    // Simula recuperação dos usuários logados do localStorage
     function carregarUsuariosLogados() {
       const logados = localStorage.getItem("usuariosLogados");
-      if (logados) {
-        usuariosLogados = JSON.parse(logados);
-      } else {
-        usuariosLogados = [];
-      }
+      usuariosLogados = logados ? JSON.parse(logados) : [];
     }
 
-    // Simula salvar usuários logados no localStorage
     function salvarUsuariosLogados() {
       localStorage.setItem("usuariosLogados", JSON.stringify(usuariosLogados));
     }
 
-    // Marca o usuário atual como logado (se não estiver)
     function registrarUsuarioLogado(usuario) {
       if (!usuariosLogados.includes(usuario)) {
         usuariosLogados.push(usuario);
@@ -147,27 +137,22 @@
       }
     }
 
-    // Remove usuário da lista de logados (não usado aqui, mas pode ser útil)
     function removerUsuarioLogado(usuario) {
       usuariosLogados = usuariosLogados.filter(u => u !== usuario);
       salvarUsuariosLogados();
     }
 
-    // Simula pegar mensagens pendentes no WhatsApp integrado
     async function buscarDadosWhatsApp() {
-      // Aqui deve ir integração real com o backend do WhatsApp
-      // Simulando com valores fixos
+      // Simulação de dados reais, substituir por API real se existir
       return {
         mensagensResponder: 8,
-        tempoEsperaMedia: 35 // em segundos
+        tempoEsperaMedia: 35 // segundos
       };
     }
 
-    // Logout
     function logout() {
       const usuario = localStorage.getItem("usuarioLogado");
       if (usuario) {
-        // Remove da lista de logados
         carregarUsuariosLogados();
         usuariosLogados = usuariosLogados.filter(u => u !== usuario);
         salvarUsuariosLogados();
@@ -180,22 +165,23 @@
       const usuario = localStorage.getItem("usuarioLogado");
       carregarUsuariosLogados();
 
-      if (!usuario || !usuariosCadastrados.includes(usuario)) {
+      if (typeof usuarios === "undefined") {
+        alert("Erro interno: dados de usuários não carregados. Recarregue a página.");
+        return;
+      }
+
+      if (!usuario || !usuarios.hasOwnProperty(usuario)) {
         alert("Usuário não logado ou inválido. Redirecionando para login...");
         window.location.href = "intranet.html";
         return;
       }
 
-       // Marca o usuário atual como logado (se já não estiver)
       registrarUsuarioLogado(usuario);
 
-      // Atualiza contador de colaboradores logados
       document.getElementById("colaboradoresLogados").textContent = usuariosLogados.length;
 
-      // Sempre mostra o conteúdo comum
       document.getElementById("conteudoComum").classList.remove("hidden");
 
-      // Se for o gerente, mostra dashboard e atualiza dados
       if (usuario === "gilvaniogringo") {
         document.getElementById("dashboardGerente").classList.remove("hidden");
 
@@ -204,12 +190,10 @@
         document.getElementById("mensagensResponder").textContent = dadosWhatsapp.mensagensResponder;
         document.getElementById("tempoEsperaMedia").textContent = dadosWhatsapp.tempoEsperaMedia + "s";
       } else {
-        // Usuários comuns não veem o dashboard
         document.getElementById("dashboardGerente").classList.add("hidden");
       }
     }
 
-    // Inicia tudo ao carregar a página
     window.onload = iniciarPainel;
   </script>
 
