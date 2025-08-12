@@ -1,118 +1,478 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>WhatsApp - Painel do Gringo</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>WhatsApp - Intranet do Gringo</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    /* pequenas customizações para o estilo do chat */
+    .contact-line { cursor: pointer; }
+    .bubble { max-width: 70%; padding: 10px 12px; border-radius: 16px; margin: 6px 0; line-height: 1.3; }
+    .bubble.sent { background: #09679c; color: white; margin-left: auto; border-bottom-right-radius: 4px; }
+    .bubble.recv { background: #f1f1f1; color: #111827; margin-right: auto; border-bottom-left-radius: 4px; }
+    .time-small { font-size: 0.72rem; color: #6b7280; }
+    .scroll-area { max-height: 60vh; overflow-y: auto; }
+  </style>
 </head>
 <body class="bg-gray-100 min-h-screen flex flex-col">
 
-  <!-- Header -->
+  <!-- Header padrão em azul #09679c -->
   <header class="flex justify-between items-center bg-[#09679c] text-white p-4 shadow-md">
     <div class="flex items-center gap-3">
       <img src="img/logo.png" alt="Logo Gringo" class="h-10 w-auto" />
       <h1 class="text-xl font-bold">Painel do Gringo</h1>
     </div>
-    <nav id="menuLinks" class="flex items-center gap-3"></nav>
+
+    <nav id="mainMenu" class="flex items-center gap-3">
+      <!-- Menu gerado dinamicamente por JS -->
+    </nav>
   </header>
 
-  <!-- Área de mensagens -->
-  <main class="flex-1 p-4 overflow-y-auto">
-    <div id="chat" class="space-y-3"></div>
+  <!-- Conteúdo principal: esquerda contatos / direita chat -->
+  <main class="flex-1 p-6 max-w-7xl mx-auto w-full grid grid-cols-1 md:grid-cols-4 gap-6">
+
+    <!-- Coluna: contatos -->
+    <section class="md:col-span-1 bg-white rounded-lg shadow p-4 flex flex-col">
+      <div class="flex justify-between items-center mb-3">
+        <h2 class="text-lg font-semibold text-[#005075]">Contatos</h2>
+        <div class="flex items-center gap-2">
+          <button id="btnNovoContato" class="bg-[#09679c] text-white px-3 py-1 rounded hover:bg-[#074d6b]">
+            <i class="fas fa-plus"></i>
+          </button>
+          <button id="btnRefresh" title="Atualizar contatos" class="bg-[#e6f6fb] text-[#09679c] px-3 py-1 rounded hover:bg-[#d8f0fa]">
+            <i class="fas fa-sync"></i>
+          </button>
+        </div>
+      </div>
+
+      <div id="contactsList" class="flex-grow overflow-y-auto space-y-2">
+        <!-- Lista de contatos é carregada aqui -->
+      </div>
+
+      <div class="mt-3 text-sm text-center text-gray-500">
+        <small>Contatos sincronizados com o backend</small>
+      </div>
+    </section>
+
+    <!-- Coluna: chat -->
+    <section class="md:col-span-3 bg-white rounded-lg shadow p-4 flex flex-col">
+      <div id="chatHeader" class="flex items-center justify-between mb-4">
+        <div class="flex items-center gap-3">
+          <img id="chatAvatar" src="img/logo.png" alt="avatar" class="h-10 w-10 rounded-full">
+          <div>
+            <div id="chatName" class="font-semibold text-lg">Selecione um contato</div>
+            <div id="chatOrigin" class="text-sm text-gray-500">Origem</div>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <button id="btnDeleteContact" class="hidden bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"><i class="fas fa-trash"></i> Excluir</button>
+          <button id="btnOpenIframe" class="bg-[#e6f6fb] text-[#09679c] px-3 py-1 rounded hover:bg-[#d8f0fa]" title="Abrir espelhamento"><i class="fas fa-external-link-alt"></i> Espelhar</button>
+        </div>
+      </div>
+
+      <div id="messagesArea" class="flex-grow border border-gray-200 rounded p-4 mb-4 scroll-area bg-white">
+        <div class="text-gray-500 italic">Nenhuma conversa selecionada.</div>
+      </div>
+
+      <div class="flex gap-2 items-center">
+        <input id="inputMessage" type="text" placeholder="Digite sua mensagem..." class="flex-grow border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#09679c]" disabled>
+        <button id="btnSend" class="bg-[#09679c] text-white px-4 py-2 rounded hover:bg-[#074d6b]" disabled><i class="fas fa-paper-plane"></i> Enviar</button>
+      </div>
+    </section>
+
   </main>
 
-  <!-- Campo de envio -->
-  <footer class="bg-white p-4 flex border-t">
-    <input id="mensagem" type="text" placeholder="Digite sua mensagem..." class="flex-1 border rounded px-3 py-2">
-    <button onclick="enviarMensagem()" class="bg-[#09679c] text-white px-4 py-2 ml-2 rounded hover:bg-[#074d6b]">
-      Enviar
+  <!-- Modal: Novo contato -->
+  <div id="modalContato" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center">
+    <div class="bg-white rounded-lg p-6 w-full max-w-md shadow-lg">
+      <h3 class="text-xl font-semibold text-[#09679c] mb-4">Cadastrar contato</h3>
+      <form id="formContato" class="space-y-4">
+        <div>
+          <label class="block text-sm font-semibold">Nome *</label>
+          <input id="c_nome" type="text" class="w-full border p-2 rounded" required>
+        </div>
+        <div>
+          <label class="block text-sm font-semibold">Telefone * (DDI+DDD+Número)</label>
+          <input id="c_numero" type="tel" placeholder="5511999998888" class="w-full border p-2 rounded" required>
+        </div>
+        <div>
+          <label class="block text-sm font-semibold">Endereço</label>
+          <input id="c_endereco" type="text" class="w-full border p-2 rounded">
+        </div>
+        <div>
+          <label class="block text-sm font-semibold">Origem *</label>
+          <select id="c_origem" class="w-full border p-2 rounded" required>
+            <option value="">-- selecione --</option>
+            <option>Instagram</option>
+            <option>WhatsApp</option>
+            <option>Facebook</option>
+            <option>TikTok</option>
+            <option>Kwai</option>
+            <option>YouTube</option>
+            <option>Abaixo Assinado</option>
+            <option>Cartão de Visita</option>
+            <option>Gabinete</option>
+            <option>Direto Gringo</option>
+          </select>
+        </div>
+        <div class="flex justify-end gap-3">
+          <button type="button" id="btnCancelarContato" class="px-4 py-2 rounded border">Cancelar</button>
+          <button type="submit" class="px-4 py-2 rounded bg-[#09679c] text-white hover:bg-[#074d6b]">Salvar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+<script>
+/*
+  Front-end behavior:
+  - Carrega contatos via GET /api/contacts
+  - Add contato via POST /api/contacts
+  - Delete contato via DELETE /api/contacts/:id
+  - Carrega mensagens via GET /api/messages?contactId=...
+  - Envia mensagem via POST /api/send-message
+  - Dashboard link visível somente se localStorage.usuarioLogado === 'gilvaniogringo'
+*/
+
+/* ---------- Configurações: endpoints do backend (ajuste conforme seu servidor) ---------- */
+const API_BASE = '/api'; // se backend está no mesmo host. Ajuste para full URL se necessário.
+/* Exemplo:
+   GET  /api/contacts                -> lista contatos
+   POST /api/contacts                -> cria contato {nome, numero, endereco, origem}
+   DELETE /api/contacts/:id          -> excluir contato
+   GET  /api/messages?contactId=ID   -> retorna mensagens de conversa (array)
+   POST /api/send-message            -> enviar mensagem { contactId, number, text }
+   GET /api/dashboard/stats          -> retorna métricas para gestor (acesso restrito)
+*/
+
+/* ---------- Estado local ---------- */
+let contacts = []; // lista de contatos
+let currentContact = null; // contato selecionado (objeto)
+const userLogged = localStorage.getItem('usuarioLogado'); // deve ser salvo no login da intranet
+
+/* ---------- Inicialização UI ---------- */
+document.addEventListener('DOMContentLoaded', async () => {
+  buildMenu();
+  await loadContacts();
+  setupButtons();
+  if (userLogged === 'gilvaniogringo') {
+    // se quiser carregar dashboard resumo embutido aqui, podemos chamar /api/dashboard/stats
+    // fetchDashboardStats();
+  }
+});
+
+/* ---------- Menu dinâmico com Dashboard condicional ---------- */
+function buildMenu() {
+  const menu = document.getElementById('mainMenu');
+  menu.innerHTML = `
+    <a href="whatsapp.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1">
+      <i class="fab fa-whatsapp"></i> WhatsApp
+    </a>
+    <a href="nova-postagem.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1">
+      <i class="fas fa-plus"></i> Nova Postagem
+    </a>
+    <a href="ultimas-noticias.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1">
+      <i class="fas fa-newspaper"></i> Últimas Notícias
+    </a>
+    <a href="perfil.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1">
+      <i class="fas fa-user"></i> Perfil
+    </a>
+    ${userLogged === 'gilvaniogringo' ? `
+      <a href="dashboard.html" id="btnDashboard" class="bg-[#053646] px-3 py-2 rounded hover:bg-[#032d39] transition flex items-center gap-1">
+        <i class="fas fa-chart-line"></i> Dashboard
+      </a>
+    ` : ''}
+    <button onclick="logout()" class="bg-[#053646] px-3 py-2 rounded hover:bg-[#032d39] transition flex items-center gap-1">
+      <i class="fas fa-sign-out-alt"></i> Sair
     </button>
-  </footer>
+  `;
+}
 
-  <script>
-    // Simulação de autenticação
-    const usuarioLogado = localStorage.getItem("usuario") || "gilvaniogringo"; // substitua pela lógica real
+/* ---------- Botões e modais ---------- */
+function setupButtons() {
+  document.getElementById('btnNovoContato').addEventListener('click', () => {
+    document.getElementById('modalContato').classList.remove('hidden');
+  });
+  document.getElementById('btnCancelarContato').addEventListener('click', () => {
+    document.getElementById('modalContato').classList.add('hidden');
+  });
+  document.getElementById('formContato').addEventListener('submit', onFormContatoSubmit);
+  document.getElementById('btnRefresh').addEventListener('click', loadContacts);
+  document.getElementById('btnSend').addEventListener('click', sendMessageHandler);
 
-    // Montar menu dinamicamente
-    const menu = document.getElementById("menuLinks");
-    menu.innerHTML = `
-      <a href="whatsapp.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1">
-        <i class="fab fa-whatsapp"></i> WhatsApp
-      </a>
-      <a href="nova-postagem.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1">
-        <i class="fas fa-plus"></i> Nova Postagem
-      </a>
-      <a href="ultimas-noticias.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1">
-        <i class="fas fa-newspaper"></i> Últimas Notícias
-      </a>
-      <a href="perfil.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1">
-        <i class="fas fa-user"></i> Perfil
-      </a>
-      ${usuarioLogado === "gilvaniogringo" ? `
-        <a href="dashboard.html" class="bg-[#053646] px-3 py-2 rounded hover:bg-[#032d39] transition flex items-center gap-1">
-          <i class="fas fa-chart-line"></i> Dashboard
-        </a>
-      ` : ""}
-      <button onclick="logout()" class="bg-[#053646] px-3 py-2 rounded hover:bg-[#032d39] transition flex items-center gap-1">
-        <i class="fas fa-sign-out-alt"></i> Sair
-      </button>
+  document.getElementById('btnOpenIframe').addEventListener('click', () => {
+    // Opcional: abrir iframe com espelhamento - NÃO RECOMENDADO em produção por segurança.
+    alert('Espelhamento: essa função exige backend que mantenha sessão com WhatsApp Web (veja docs do backend).');
+  });
+
+  // permitir Enter no input
+  document.getElementById('inputMessage').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      sendMessageHandler();
+    }
+  });
+}
+
+/* ---------- Contatos: carregar / renderizar / criar / deletar ---------- */
+async function loadContacts() {
+  try {
+    const res = await fetch(`${API_BASE}/contacts`);
+    if (!res.ok) throw new Error('Falha ao buscar contatos (server).');
+    contacts = await res.json();
+  } catch (err) {
+    console.warn('Backend indisponível, usando localStorage como fallback.', err);
+    contacts = JSON.parse(localStorage.getItem('contatos')) || [];
+  }
+  renderContacts();
+}
+
+function renderContacts() {
+  const el = document.getElementById('contactsList');
+  el.innerHTML = '';
+  if (!contacts || contacts.length === 0) {
+    el.innerHTML = '<div class="text-gray-500 italic p-2">Nenhum contato cadastrado.</div>';
+    return;
+  }
+  contacts.forEach((c, idx) => {
+    const container = document.createElement('div');
+    container.className = 'p-2 rounded hover:bg-[#f0f9ff] flex items-center gap-3 contact-line';
+    container.innerHTML = `
+      <div class="w-12 h-12 rounded-full bg-[#e6f6fb] flex items-center justify-center text-[#09679c] font-bold">${(c.nome||'?').charAt(0).toUpperCase()}</div>
+      <div class="flex-1">
+        <div class="font-semibold">${c.nome}</div>
+        <div class="text-sm text-gray-500">${c.numero} • <span class="text-xs text-gray-400">${c.origem||''}</span></div>
+      </div>
+      <div class="text-sm text-gray-400">${c.lastTime ? new Date(c.lastTime).toLocaleTimeString() : ''}</div>
     `;
+    container.addEventListener('click', () => selectContact(idx));
+    // adicionar botão excluir rápido (aparece ao passar o mouse)
+    const btnDel = document.createElement('button');
+    btnDel.className = 'ml-2 text-red-500 hidden hover:text-red-700';
+    btnDel.innerHTML = '<i class="fas fa-trash"></i>';
+    btnDel.addEventListener('click', (ev) => {
+      ev.stopPropagation();
+      if (confirm(`Excluir contato ${c.nome}?`)) deleteContact(c.id || c.numero);
+    });
+    container.appendChild(btnDel);
+    container.addEventListener('mouseenter', () => btnDel.classList.remove('hidden'));
+    container.addEventListener('mouseleave', () => btnDel.classList.add('hidden'));
 
-    function logout() {
-      localStorage.removeItem("usuario");
-      window.location.href = "index.html";
-    }
+    el.appendChild(container);
+  });
+}
 
-    // Integração WhatsApp API (configurar com dados reais)
-    const WHATSAPP_API_URL = "https://graph.facebook.com/v20.0/SEU_NUMERO_ID/messages";
-    const WHATSAPP_TOKEN = "SEU_TOKEN_DE_ACESSO";
-    const NUMERO_DESTINO = "55SEUNUMERO";
+async function onFormContatoSubmit(e) {
+  e.preventDefault();
+  const nome = document.getElementById('c_nome').value.trim();
+  const numero = document.getElementById('c_numero').value.trim();
+  const endereco = document.getElementById('c_endereco').value.trim();
+  const origem = document.getElementById('c_origem').value;
 
-    function exibirMensagem(texto, tipo) {
-      const div = document.createElement("div");
-      div.className = tipo === "enviada" ? "text-right" : "text-left";
-      div.innerHTML = `
-        <span class="inline-block px-3 py-2 rounded-lg ${tipo === "enviada" ? "bg-[#09679c] text-white" : "bg-gray-200"}">
-          ${texto}
-        </span>
-      `;
-      document.getElementById("chat").appendChild(div);
-      document.getElementById("chat").scrollTop = document.getElementById("chat").scrollHeight;
-    }
+  if (!nome || !numero || !origem) {
+    alert('Preencha nome, número e origem.');
+    return;
+  }
 
-    async function enviarMensagem() {
-      const mensagem = document.getElementById("mensagem").value.trim();
-      if (!mensagem) return;
+  const novo = { nome, numero, endereco, origem, mensagens: [] };
 
-      exibirMensagem(mensagem, "enviada");
-      document.getElementById("mensagem").value = "";
+  try {
+    const res = await fetch(`${API_BASE}/contacts`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(novo)
+    });
+    if (!res.ok) throw new Error('Erro ao salvar no backend.');
+    const created = await res.json();
+    contacts.push(created);
+  } catch (err) {
+    console.warn('Falha no backend; salvando localmente.', err);
+    // fallback local
+    contacts.push(novo);
+    localStorage.setItem('contatos', JSON.stringify(contacts));
+  }
 
-      try {
-        const response = await fetch(WHATSAPP_API_URL, {
-          method: "POST",
-          headers: {
-            "Authorization": `Bearer ${WHATSAPP_TOKEN}`,
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            messaging_product: "whatsapp",
-            to: NUMERO_DESTINO,
-            type: "text",
-            text: { body: mensagem }
-          })
-        });
+  document.getElementById('modalContato').classList.add('hidden');
+  document.getElementById('formContato').reset();
+  renderContacts();
+}
 
-        if (!response.ok) {
-          console.error("Erro ao enviar mensagem:", await response.text());
-          alert("Não foi possível enviar a mensagem. Verifique o token e número.");
-        }
-      } catch (error) {
-        console.error("Erro na integração:", error);
-      }
-    }
-  </script>
+/* ---------- Excluir contato ---------- */
+async function deleteContact(contactId) {
+  try {
+    const res = await fetch(`${API_BASE}/contacts/${encodeURIComponent(contactId)}`, { method: 'DELETE'});
+    if (!res.ok) throw new Error('Erro ao excluir no backend.');
+    // remover localmente
+    contacts = contacts.filter(c => (c.id || c.numero) != contactId);
+  } catch (err) {
+    console.warn('Backend indisponível ao excluir; removendo localmente.', err);
+    contacts = contacts.filter(c => (c.id || c.numero) != contactId);
+    localStorage.setItem('contatos', JSON.stringify(contacts));
+  }
+  renderContacts();
+  // se era contato atual, limpar chat
+  if (currentContact && (currentContact.id || currentContact.numero) == contactId) {
+    setCurrentContact(null);
+  }
+}
+
+/* ---------- Selecionar contato e carregar mensagens ---------- */
+async function selectContact(index) {
+  currentContact = contacts[index];
+  setCurrentContact(currentContact);
+  await loadMessagesForCurrent();
+}
+
+function setCurrentContact(contact) {
+  const nameEl = document.getElementById('chatName');
+  const avatarEl = document.getElementById('chatAvatar');
+  const originEl = document.getElementById('chatOrigin');
+  const btnDel = document.getElementById('btnDeleteContact');
+
+  if (!contact) {
+    nameEl.textContent = 'Selecione um contato';
+    avatarEl.src = 'img/logo.png';
+    originEl.textContent = '';
+    btnDel.classList.add('hidden');
+    document.getElementById('inputMessage').disabled = true;
+    document.getElementById('btnSend').disabled = true;
+    document.getElementById('messagesArea').innerHTML = '<div class="text-gray-500 italic">Nenhuma conversa selecionada.</div>';
+    return;
+  }
+
+  nameEl.textContent = contact.nome || contact.numero;
+  avatarEl.src = contact.avatar || 'img/logo.png';
+  originEl.textContent = `${contact.origem || 'Origem desconhecida'} • ${contact.endereco || ''}`;
+  btnDel.classList.remove('hidden');
+  btnDel.onclick = () => {
+    if (confirm(`Excluir contato ${contact.nome}?`)) deleteContact(contact.id || contact.numero);
+  };
+  document.getElementById('inputMessage').disabled = false;
+  document.getElementById('btnSend').disabled = false;
+}
+
+/* ---------- Carregar mensagens do backend para o contato atual ---------- */
+async function loadMessagesForCurrent() {
+  const area = document.getElementById('messagesArea');
+  area.innerHTML = '<div class="text-gray-500 italic">Carregando mensagens...</div>';
+  if (!currentContact) return;
+
+  try {
+    const res = await fetch(`${API_BASE}/messages?contactId=${encodeURIComponent(currentContact.id || currentContact.numero)}`);
+    if (!res.ok) throw new Error('Falha ao carregar mensagens do backend.');
+    const messages = await res.json();
+    renderMessages(messages);
+  } catch (err) {
+    console.warn('Backend indisponível; mostrando histórico local se houver.', err);
+    const messages = currentContact.mensagens || [];
+    renderMessages(messages);
+  }
+}
+
+function renderMessages(messages) {
+  const area = document.getElementById('messagesArea');
+  area.innerHTML = '';
+  if (!messages || messages.length === 0) {
+    area.innerHTML = '<div class="text-gray-500 italic">Nenhuma mensagem trocada ainda.</div>';
+    return;
+  }
+  messages.forEach(m => {
+    const div = document.createElement('div');
+    div.className = 'flex flex-col';
+    const bubble = document.createElement('div');
+    bubble.className = `bubble ${m.de === 'eu' ? 'sent' : 'recv'}`;
+    bubble.textContent = m.texto;
+    const ts = document.createElement('div');
+    ts.className = 'time-small ml-1';
+    ts.textContent = new Date(m.data || m.timestamp || Date.now()).toLocaleString();
+    div.appendChild(bubble);
+    div.appendChild(ts);
+    area.appendChild(div);
+  });
+  area.scrollTop = area.scrollHeight;
+}
+
+/* ---------- Enviar mensagem (usa backend que chama WhatsApp API) ---------- */
+async function sendMessageHandler() {
+  const input = document.getElementById('inputMessage');
+  const text = input.value.trim();
+  if (!text || !currentContact) return;
+
+  // Append visual imediato
+  const now = new Date().toISOString();
+  appendLocalMessage({de: 'eu', texto: text, data: now});
+
+  // Tenta enviar via backend
+  try {
+    const payload = {
+      contactId: currentContact.id || currentContact.numero,
+      number: currentContact.numero,
+      text
+    };
+    const res = await fetch(`${API_BASE}/send-message`, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(payload)
+    });
+    if (!res.ok) throw new Error('Falha ao enviar mensagem via backend.');
+    const result = await res.json();
+    // opcional: atualizar mensagem local com status enviado/result.messageId
+    // atualizar histórico local no contact se for necessário
+    saveMessageToLocal(currentContact, {de: 'eu', texto: text, data: now});
+  } catch (err) {
+    console.error('Erro ao enviar:', err);
+    alert('Falha ao enviar mensagem. Verifique o backend e o token da API.');
+  } finally {
+    input.value = '';
+  }
+}
+
+function appendLocalMessage(msg) {
+  const area = document.getElementById('messagesArea');
+  const div = document.createElement('div');
+  div.className = 'flex flex-col';
+  const bubble = document.createElement('div');
+  bubble.className = `bubble ${msg.de === 'eu' ? 'sent' : 'recv'}`;
+  bubble.textContent = msg.texto;
+  const ts = document.createElement('div');
+  ts.className = 'time-small ml-1';
+  ts.textContent = new Date(msg.data || Date.now()).toLocaleString();
+  div.appendChild(bubble);
+  div.appendChild(ts);
+  area.appendChild(div);
+  area.scrollTop = area.scrollHeight;
+}
+
+/* ---------- salvar mensagem no contato local (fallback) ---------- */
+function saveMessageToLocal(contact, msg) {
+  if (!contact.mensagens) contact.mensagens = [];
+  contact.mensagens.push(msg);
+  // atualizar armazenamento local fallback
+  localStorage.setItem('contatos', JSON.stringify(contacts));
+}
+
+/* ---------- Logout ---------- */
+function logout() {
+  localStorage.removeItem('usuarioLogado');
+  window.location.href = 'intranet.html';
+}
+
+/* ---------- função opcional para puxar estatísticas gerenciais (apenas gilvaniogringo) ---------- */
+async function fetchDashboardStats() {
+  if (userLogged !== 'gilvaniogringo') return;
+  try {
+    const res = await fetch(`${API_BASE}/dashboard/stats`);
+    if (!res.ok) throw new Error('erro stats');
+    const stats = await res.json();
+    console.log('stats', stats);
+    // aqui você pode exibir cards/resumo no layout (implementar conforme necessidade)
+  } catch (err) {
+    console.warn('Não foi possível carregar dashboard stats.', err);
+  }
+}
+</script>
 
 </body>
 </html>
