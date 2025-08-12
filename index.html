@@ -300,8 +300,40 @@
     <div class="mx-auto max-w-3xl text-center wow animate__animated animate__fadeInUp space-y-10">
         <h2 class="mb-4 text-3xl md:text-4xl font-bold text-[#005075]"> NOTÍCIAS EM DESTAQUE</h2>
         
-         <!-- Terceiro destaque -->
-      <div>
+<!-- Terceiro destaque -->
+<div>
+  <h2 class="mb-2 text-2xl md:text-3xl font-extrabold text-[#005075]">
+    Vereador Gilvani, "o Gringo" apresenta projeto para isenção do IPTU a pessoas com doenças graves em Porto Alegre
+  </h2>
+  <p class="text-base text-gray-700 mt-2">
+    Gringo apresenta projeto para isenção do IPTU a pacientes com doenças graves em Porto Alegre, buscando aliviar custos e garantir dignidade.
+  </p>
+  <div class="mt-3">
+    <a href="/iptu.html" class="text-[#005075] text-base font-bold inline-block hover:underline">
+      CLIQUE E CONFIRA
+    </a>
+  </div>
+</div>
+
+
+ <!-- segundo destaque -->
+<div>
+  <h2 class="mb-2 text-2xl md:text-3xl font-extrabold text-[#005075]">
+    Vereador Gilvani “o Gringo” cobra projeto amplo para proteger São Luís/Canoas das enchentes
+  </h2>
+  <p class="text-base text-gray-700 mt-2">
+    Preocupado com a segurança da população, o Gringo defende anel de diques integrado para garantir proteção real e evitar novos prejuízos na região.
+  </p>
+  <div class="mt-3">
+    <a href="/canoas-sao-luis.html" class="text-[#005075] text-base font-bold inline-block hover:underline">
+      CLIQUE AQUI E LEIA A MATÉRIA COMPLETA
+    </a>
+  </div>
+</div>
+
+      <!-- primeiro destaque -->
+     
+    <div>
   <h2 class="mb-2 text-2xl md:text-3xl font-extrabold text-[#005075]">
     O GRINGO LUTA PELO TREM EM PORTO ALEGRE
   </h2>
@@ -314,37 +346,7 @@
     </a>
   </div>
 </div>
-
-      <!-- segundo destaque -->
-		  <div>
-  <h2 class="mb-2 text-2xl md:text-3xl font-extrabold text-[#005075]">
-    O QUE REALMENTE ACONTECEU NO PRIMEIRO SEMESTRE DE 2025 DO MANDATO DO GRINGO?
-  </h2>
-  <p class="text-base text-gray-700 mt-2">
-    Teve atuação nas ruas, polêmica, proposta ousada e números que poucos esperavam. Mas isso é só parte da história…
-  </p>
-  <div class="mt-3">
-    <a href="/primeiro-semestre-2025.html" class="text-[#005075] text-base font-bold inline-block">
-      CLIQUE AQUI E LEIA A MATÉRIA COMPLETA
-    </a>
-  </div>
-</div>
-      <!-- primeiro destaque -->
-     
-     <div>
-  <h2 class="mb-2 text-2xl md:text-3xl font-extrabold text-[#005075]">
-    GRINGO QUER REVOLUCIONAR AS UBSs COM AJUDA DE FORA. MAS COMO?
-  </h2>
-  <p class="text-base text-gray-700 mt-2">
-    Um novo projeto de lei promete transformar a saúde pública em Porto Alegre com apoio da iniciativa privada. Tem inovação, parceria e impacto direto nos postos de saúde da capital. Descubra o que está por vir.
-  </p>
-  <div class="mt-3">
-    <a href="/saude-ja.html" class="text-[#005075] text-base font-bold inline-block">
-      CLIQUE AQUI E LEIA A MATÉRIA COMPLETA
-    </a>
-  </div>
-</div>
-
+		
     </div>
   </div>
 </div>
@@ -375,22 +377,24 @@
 <!-- Script para carregar os 6 primeiros posts -->
 <script>
   async function carregarNoticiasHome() {
-    const url = "https://api.rss2json.com/v1/api.json?rss_url=https://gilvaniogringo.blogspot.com/feeds/posts/default?alt=rss&_cache=false";
+    const url = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent('https://gilvaniogringo.blogspot.com/feeds/posts/default?alt=rss')}&_=${Date.now()}`;
 
     try {
       const res = await fetch(url);
+      if (!res.ok) throw new Error('Falha ao buscar dados');
       const data = await res.json();
 
       const postsContainer = document.getElementById("blog-posts-home");
       postsContainer.innerHTML = "";
 
-      data.items.slice(0, 9).forEach(post => {
+      data.items.slice(0, 6).forEach(post => {
+        const descricaoLimpa = post.description.replace(/<[^>]+>/g, '').slice(0, 120);
         const postCard = `
           <div class="w-full max-w-md p-5 text-center bg-white shadow-none">
             <h3 class="text-xl font-semibold text-[#005075] mb-2">${post.title}</h3>
             <p class="text-gray-600 text-sm mb-2">${new Date(post.pubDate).toLocaleDateString()}</p>
-            <p class="text-gray-700 mb-4">${post.description.replace(/<[^>]+>/g, '').slice(0, 120)}...</p>
-            <a href="${post.link}" class="text-[#005075] font-medium hover:underline">Leia mais</a>
+            <p class="text-gray-700 mb-4">${descricaoLimpa}...</p>
+            <button onclick="abrirPostagem('${post.link}')" class="text-[#005075] font-medium hover:underline">Leia mais</button>
           </div>
         `;
         postsContainer.innerHTML += postCard;
@@ -400,7 +404,18 @@
       document.getElementById("blog-posts-home").innerHTML = `
         <p class="text-red-600 text-center">Erro ao carregar notícias. Tente novamente mais tarde.</p>
       `;
+      console.error('Erro ao carregar notícias:', error);
     }
+  }
+
+  function abrirPostagem(link) {
+    document.getElementById('iframe-leitura').src = link;
+    document.getElementById('iframe-post').classList.remove('hidden');
+  }
+
+  function fecharIframe() {
+    document.getElementById('iframe-post').classList.add('hidden');
+    document.getElementById('iframe-leitura').src = '';
   }
 
   carregarNoticiasHome();
@@ -676,6 +691,7 @@
 </body>
 
 </html>
+
 
 
 
