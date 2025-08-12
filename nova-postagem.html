@@ -10,6 +10,55 @@
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     crossorigin="anonymous"
   />
+  <style>
+    /* Editor styling */
+    #editor {
+      min-height: 250px;
+      border: 1px solid #ccc;
+      padding: 10px;
+      border-radius: 4px;
+      background: white;
+      overflow-y: auto;
+    }
+    #editor:focus {
+      outline: 2px solid #09679c;
+    }
+    .toolbar button {
+      background: #09679c;
+      color: white;
+      border: none;
+      padding: 6px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-right: 4px;
+      transition: background-color 0.3s;
+    }
+    .toolbar button:hover {
+      background: #074d6b;
+    }
+    .toolbar select {
+      padding: 5px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      margin-right: 8px;
+    }
+    .emoji-picker {
+      max-height: 120px;
+      overflow-y: scroll;
+      border: 1px solid #ccc;
+      background: white;
+      border-radius: 4px;
+      padding: 5px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 6px;
+    }
+    .emoji-picker span {
+      cursor: pointer;
+      font-size: 20px;
+    }
+  </style>
 </head>
 <body class="bg-gray-100 min-h-screen flex flex-col">
 
@@ -19,76 +68,92 @@
       <img src="img/logo.png" alt="Logo Gringo" class="h-10 w-auto" />
       <h1 class="text-xl font-bold">Nova Postagem</h1>
     </div>
-
-    <nav class="flex items-center gap-3">
-      <a href="painel.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="Painel">
-        <i class="fas fa-home"></i> Painel
-      </a>
-      <a href="nova-postagem.html" class="bg-[#053646] border border-white px-3 py-2 rounded hover:bg-[#032d39] transition flex items-center gap-1" title="Nova Postagem">
-        <i class="fas fa-plus"></i> Nova Postagem
-      </a>
-      <a href="publicacoes.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="Últimas Publicações">
-        <i class="fas fa-newspaper"></i> Últimas Publicações
-      </a>
-      <a href="rascunhos.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="Rascunhos">
-        <i class="fas fa-file-alt"></i> Rascunhos
-      </a>
-      <a href="perfil.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="Perfil">
-        <i class="fas fa-user"></i> Perfil
-      </a>
-      <button
-        onclick="logout()"
-        class="bg-[#053646] px-3 py-2 rounded hover:bg-[#032d39] transition flex items-center gap-1"
-        title="Sair"
-      >
-        <i class="fas fa-sign-out-alt"></i> Sair
-      </button>
+    <nav id="mainMenu" class="flex items-center gap-3">
+      <!-- Menu será inserido via JS -->
     </nav>
   </header>
 
-  <!-- Conteúdo -->
-  <main class="flex-grow p-6 max-w-4xl mx-auto bg-white rounded shadow mt-6 mb-10">
-
-    <form id="formPost" class="space-y-6">
+  <!-- Main Content -->
+  <main class="flex-grow max-w-4xl mx-auto p-6">
+    <form id="formPostagem" class="bg-white rounded shadow p-6 space-y-6" onsubmit="return enviarPostagem(event)">
+      
       <div>
-        <label for="titulo" class="block font-semibold mb-1">Título da postagem</label>
+        <label for="titulo" class="block font-semibold mb-1 text-gray-700">Título</label>
         <input
           type="text"
           id="titulo"
           name="titulo"
-          class="w-full border border-gray-300 rounded px-3 py-2"
+          class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#09679c]"
+          placeholder="Digite o título da postagem"
           required
-          maxlength="100"
         />
       </div>
 
       <div>
-        <label for="conteudo" class="block font-semibold mb-1">Conteúdo (HTML permitido)</label>
-        <textarea
-          id="conteudo"
-          name="conteudo"
-          rows="10"
-          class="w-full border border-gray-300 rounded px-3 py-2"
-          required
-        ></textarea>
+        <label class="block font-semibold mb-1 text-gray-700">Conteúdo</label>
+        <div class="toolbar mb-2 flex flex-wrap items-center gap-1">
+          <!-- Formatação básica -->
+          <button type="button" onclick="format('bold')" title="Negrito"><i class="fas fa-bold"></i></button>
+          <button type="button" onclick="format('italic')" title="Itálico"><i class="fas fa-italic"></i></button>
+          <button type="button" onclick="format('underline')" title="Sublinhado"><i class="fas fa-underline"></i></button>
+
+          <!-- Fonte -->
+          <select onchange="format('fontName', this.value)" title="Fonte">
+            <option value="Arial">Arial</option>
+            <option value="Courier New">Courier New</option>
+            <option value="Georgia">Georgia</option>
+            <option value="Tahoma">Tahoma</option>
+            <option value="Times New Roman">Times New Roman</option>
+            <option value="Verdana">Verdana</option>
+          </select>
+
+          <!-- Tamanho -->
+          <select onchange="format('fontSize', this.value)" title="Tamanho da fonte">
+            <option value="1">10px</option>
+            <option value="2">13px</option>
+            <option value="3" selected>16px</option>
+            <option value="4">18px</option>
+            <option value="5">24px</option>
+            <option value="6">32px</option>
+            <option value="7">48px</option>
+          </select>
+
+          <!-- Parágrafo -->
+          <button type="button" onclick="format('insertUnorderedList')" title="Lista com marcadores"><i class="fas fa-list-ul"></i></button>
+          <button type="button" onclick="format('insertOrderedList')" title="Lista numerada"><i class="fas fa-list-ol"></i></button>
+
+          <!-- Link -->
+          <button type="button" onclick="inserirLink()" title="Inserir link"><i class="fas fa-link"></i></button>
+
+          <!-- Inserir imagem -->
+          <input type="file" id="inputImagem" accept="image/*" style="display:none" onchange="inserirImagem(event)" />
+          <button type="button" onclick="document.getElementById('inputImagem').click()" title="Inserir imagem"><i class="fas fa-image"></i></button>
+
+          <!-- Emoji -->
+          <button type="button" onclick="toggleEmojiPicker()" title="Inserir emoji"><i class="fas fa-smile"></i></button>
+        </div>
+
+        <div id="emojiPicker" class="emoji-picker hidden" aria-label="Selecionar emoji" role="list">
+          <!-- Emojis serão inseridos via JS -->
+        </div>
+
+        <div id="editor" contenteditable="true" spellcheck="true" aria-multiline="true" aria-label="Editor de texto" class="prose max-w-none"></div>
       </div>
 
-      <div class="flex gap-4">
-        <button
-          type="submit"
-          class="bg-[#09679c] text-white px-6 py-2 rounded hover:bg-[#074d6b] transition"
-        >
-          Salvar Rascunho
-        </button>
+      <div class="flex flex-wrap gap-4 items-center justify-between">
+        <div>
+          <label for="status" class="font-semibold text-gray-700">Status da publicação:</label>
+          <select id="status" name="status" class="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#09679c]">
+            <option value="rascunho" selected>Rascunho</option>
+            <option value="enviar">Publicar</option>
+          </select>
+        </div>
 
-        <button
-          type="button"
-          id="btnPublicar"
-          class="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 transition"
-        >
-          Publicar
+        <button type="submit" id="btnEnviar" class="bg-[#09679c] hover:bg-[#074d6b] text-white font-semibold px-6 py-2 rounded transition">
+          Enviar
         </button>
       </div>
+
     </form>
 
   </main>
@@ -96,45 +161,227 @@
   <script type="module">
     import { gerarHtmlPostCompleto } from './post.js';
 
-    // Pega usuário logado do localStorage
-    const usuarioLogado = localStorage.getItem('usuarioLogado');
+    const usuariosAutorizados = [
+      "gabriel.amaral",
+      "graziele.albuquerque",
+      "karina.maia",
+      "cristiano.santos",
+      "gilvaniogringo"
+    ];
+
+    const usuarioLogado = localStorage.getItem("usuarioLogado");
+
+    function montarMenu() {
+      const menu = document.getElementById("mainMenu");
+      menu.innerHTML = `
+        <a href="painel.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="Painel">
+          <i class="fas fa-home"></i> Painel
+        </a>
+        <a href="nova-postagem.html" class="bg-[#053646] border border-white px-3 py-2 rounded hover:bg-[#032d39] transition flex items-center gap-1" title="Nova Postagem">
+          <i class="fas fa-plus"></i> Nova Postagem
+        </a>
+        <a href="rascunhos.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="Rascunhos">
+          <i class="fas fa-file-alt"></i> Rascunhos
+        </a>
+        ${usuariosAutorizados.includes(usuarioLogado) ? `
+        <a href="publicacoes.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="Últimas Publicações">
+          <i class="fas fa-newspaper"></i> Últimas Publicações
+        </a>` : ""}
+        <a href="perfil.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="Perfil">
+          <i class="fas fa-user"></i> Perfil
+        </a>
+        <button onclick="logout()" class="bg-[#053646] px-3 py-2 rounded hover:bg-[#032d39] transition flex items-center gap-1" title="Sair">
+          <i class="fas fa-sign-out-alt"></i> Sair
+        </button>
+      `;
+    }
+    montarMenu();
 
     function logout() {
-      localStorage.removeItem('usuarioLogado');
-      window.location.href = 'intranet.html';
+      localStorage.removeItem("usuarioLogado");
+      window.location.href = "intranet.html";
     }
 
-    // Salvar rascunho no localStorage
-    function salvarRascunho(post) {
-      const rascunhos = JSON.parse(localStorage.getItem('rascunhos')) || [];
+    function format(comando, valor = null) {
+      document.execCommand(comando, false, valor);
+      document.getElementById("editor").focus();
+    }
 
-      // Se já existir (edição), atualiza, senão cria novo
-      const indexExistente = rascunhos.findIndex(r => r.id === post.id);
-      if (indexExistente !== -1) {
-        rascunhos[indexExistente] = post;
-      } else {
-        rascunhos.push(post);
+    function inserirLink() {
+      const url = prompt("Digite o URL do link:");
+      if (url) {
+        format("createLink", url);
+      }
+    }
+
+    function toggleEmojiPicker() {
+      const picker = document.getElementById("emojiPicker");
+      picker.classList.toggle("hidden");
+    }
+
+    function inserirEmoji(emoji) {
+      format("insertText", emoji);
+      toggleEmojiPicker();
+    }
+
+    const emojis = ["😀","😃","😄","😁","😆","😅","😂","🤣","😊","😍","😎","😢","😭","😡","👍","👎","🙏","🎉","🔥","💡"];
+
+    function popularEmojis() {
+      const picker = document.getElementById("emojiPicker");
+      emojis.forEach(e => {
+        const span = document.createElement("span");
+        span.textContent = e;
+        span.title = e;
+        span.setAttribute("role", "listitem");
+        span.onclick = () => inserirEmoji(e);
+        picker.appendChild(span);
+      });
+    }
+    popularEmojis();
+
+    function inserirImagem(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const img = document.createElement("img");
+        img.src = e.target.result;
+        img.style.maxWidth = "100%";
+        img.style.borderRadius = "6px";
+        img.style.marginTop = "10px";
+
+        const editor = document.getElementById("editor");
+        editor.appendChild(img);
+      };
+      reader.readAsDataURL(file);
+      event.target.value = "";
+    }
+
+    // Carregar postagem para edição se id for passado na URL
+    function carregarPostagemParaEdicao() {
+      const params = new URLSearchParams(window.location.search);
+      const id = params.get("id");
+      if (!id) return;
+
+      // Procurar rascunho por id
+      let rascunhos = JSON.parse(localStorage.getItem("rascunhos")) || [];
+      const postagem = rascunhos.find(p => String(p.id) === id);
+
+      if (!postagem) return;
+
+      document.getElementById("titulo").value = postagem.titulo;
+      document.getElementById("editor").innerHTML = postagem.conteudo;
+      document.getElementById("status").value = postagem.status || "rascunho";
+
+      // Ao enviar edição, deve atualizar o rascunho existente e não criar novo
+      document.getElementById("formPostagem").dataset.editandoId = id;
+    }
+
+    function enviarPostagem(event) {
+      event.preventDefault();
+
+      const titulo = document.getElementById("titulo").value.trim();
+      const conteudo = document.getElementById("editor").innerHTML.trim();
+      const status = document.getElementById("status").value;
+
+      if (!titulo) {
+        alert("Título é obrigatório.");
+        return false;
+      }
+      if (!conteudo || conteudo === "<br>" || conteudo === "") {
+        alert("Conteúdo não pode estar vazio.");
+        return false;
+      }
+      if (!usuarioLogado) {
+        alert("Usuário não logado.");
+        window.location.href = "intranet.html";
+        return false;
       }
 
-      localStorage.setItem('rascunhos', JSON.stringify(rascunhos));
+      // Função auxiliar para slug
+      function gerarSlug(texto) {
+        return texto.toLowerCase()
+          .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+          .replace(/\s+/g, '-')
+          .replace(/[^\w\-]+/g, '')
+          .replace(/\-\-+/g, '-')
+          .replace(/^-+/, '')
+          .replace(/-+$/, '');
+      }
+
+      let rascunhos = JSON.parse(localStorage.getItem("rascunhos")) || [];
+      let publicacoes = JSON.parse(localStorage.getItem("publicacoes")) || [];
+
+      const form = document.getElementById("formPostagem");
+      const editandoId = form.dataset.editandoId;
+
+      if (editandoId) {
+        if (status === "rascunho") {
+          const index = rascunhos.findIndex(p => String(p.id) === editandoId);
+          if (index !== -1) {
+            rascunhos[index].titulo = titulo;
+            rascunhos[index].conteudo = conteudo;
+            rascunhos[index].data = new Date().toISOString();
+            rascunhos[index].status = status;
+            localStorage.setItem("rascunhos", JSON.stringify(rascunhos));
+            alert("Rascunho atualizado com sucesso!");
+            return false;
+          }
+        } else if (status === "enviar") {
+          rascunhos = rascunhos.filter(p => String(p.id) !== editandoId);
+          localStorage.setItem("rascunhos", JSON.stringify(rascunhos));
+
+          const postParaPublicar = {
+            id: Number(editandoId),
+            titulo,
+            conteudo,
+            autor: usuarioLogado,
+            data: new Date().toISOString(),
+            status
+          };
+
+          publicacoes.push(postParaPublicar);
+          localStorage.setItem("publicacoes", JSON.stringify(publicacoes));
+
+          const htmlCompleto = gerarHtmlPostCompleto(postParaPublicar);
+          const nomeArquivo = gerarSlug(titulo) + '.html';
+          baixarArquivo(nomeArquivo, htmlCompleto);
+
+          alert("Postagem enviada com sucesso!");
+          return false;
+        }
+      } else {
+        const novaPostagem = {
+          id: Date.now(),
+          titulo,
+          conteudo,
+          autor: usuarioLogado,
+          data: new Date().toISOString(),
+          status
+        };
+
+        if (status === "rascunho") {
+          rascunhos.push(novaPostagem);
+          localStorage.setItem("rascunhos", JSON.stringify(rascunhos));
+          alert("Rascunho salvo com sucesso!");
+          return false;
+        } else if (status === "enviar") {
+          publicacoes.push(novaPostagem);
+          localStorage.setItem("publicacoes", JSON.stringify(publicacoes));
+
+          const htmlCompleto = gerarHtmlPostCompleto(novaPostagem);
+          const nomeArquivo = gerarSlug(titulo) + '.html';
+          baixarArquivo(nomeArquivo, htmlCompleto);
+
+          alert("Postagem enviada com sucesso!");
+          return false;
+        }
+      }
+
+      return false;
     }
 
-    // Gera ID único simples
-    function gerarId() {
-      return Date.now().toString(36) + Math.random().toString(36).slice(2);
-    }
-
-    // Carrega dados para edição se houver ?id= no URL
-    function carregarEdicao() {
-      const params = new URLSearchParams(window.location.search);
-      const id = params.get('id');
-      if (!id) return null;
-
-      const rascunhos = JSON.parse(localStorage.getItem('rascunhos')) || [];
-      return rascunhos.find(r => r.id === id) || null;
-    }
-
-    // Baixa arquivo HTML gerado da publicação
     function baixarArquivo(nomeArquivo, conteudo) {
       const blob = new Blob([conteudo], { type: 'text/html;charset=utf-8' });
       const link = document.createElement('a');
@@ -146,112 +393,15 @@
       URL.revokeObjectURL(link.href);
     }
 
-    document.getElementById('formPost').addEventListener('submit', e => {
-      e.preventDefault();
-
-      const titulo = e.target.titulo.value.trim();
-      const conteudo = e.target.conteudo.value.trim();
-
-      if (!titulo || !conteudo) {
-        alert('Preencha título e conteúdo.');
-        return;
-      }
-
-      const post = {
-        id: carregarEdicao()?.id || gerarId(),
-        titulo,
-        conteudo,
-        autor: usuarioLogado || 'anônimo',
-        data: new Date().toISOString(),
-        status: 'rascunho'
-      };
-
-      salvarRascunho(post);
-      alert('Rascunho salvo com sucesso!');
-      // Você pode limpar o formulário ou não — aqui só atualiza data e mantém conteúdo
-      e.target.conteudo.value = conteudo;
-      e.target.titulo.value = titulo;
-      // Atualiza URL para edição do mesmo rascunho
-      history.replaceState(null, '', `nova-postagem.html?id=${post.id}`);
-    });
-
-    document.getElementById('btnPublicar').addEventListener('click', () => {
-      const titulo = document.getElementById('titulo').value.trim();
-      const conteudo = document.getElementById('conteudo').value.trim();
-
-      if (!titulo || !conteudo) {
-        alert('Preencha título e conteúdo para publicar.');
-        return;
-      }
-
-      if (!confirm('Deseja publicar esta postagem?')) return;
-
-      let rascunhos = JSON.parse(localStorage.getItem('rascunhos')) || [];
-      let publicacoes = JSON.parse(localStorage.getItem('publicacoes')) || [];
-
-      // Se está editando, usa o mesmo id, senão gera novo
-      const params = new URLSearchParams(window.location.search);
-      const id = params.get('id') || gerarId();
-
-      // Remove da lista de rascunhos, se existir
-      rascunhos = rascunhos.filter(r => r.id !== id);
-
-      const post = {
-        id,
-        titulo,
-        conteudo,
-        autor: usuarioLogado || 'anônimo',
-        data: new Date().toISOString(),
-        status: 'publicado'
-      };
-
-      // Adiciona na lista de publicações
-      publicacoes.push(post);
-
-      // Salva listas atualizadas
-      localStorage.setItem('rascunhos', JSON.stringify(rascunhos));
-      localStorage.setItem('publicacoes', JSON.stringify(publicacoes));
-
-      // Gera HTML completo via função importada
-      const htmlCompleto = gerarHtmlPostCompleto(post);
-
-      // Gera slug para nome do arquivo
-      function gerarSlug(texto) {
-        return texto.toLowerCase()
-          .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
-          .replace(/\s+/g, '-')
-          .replace(/[^\w\-]+/g, '')
-          .replace(/\-\-+/g, '-')
-          .replace(/^-+/, '')
-          .replace(/-+$/, '');
-      }
-
-      const nomeArquivo = gerarSlug(titulo) + '.html';
-
-      // Baixa arquivo HTML
-      baixarArquivo(nomeArquivo, htmlCompleto);
-
-      alert('Postagem publicada com sucesso!');
-
-      // Redireciona para publicações ou limpa formulário
-      window.location.href = 'publicacoes.html';
-    });
-
-    // Se estiver editando, carrega os dados no formulário
     window.onload = () => {
       if (!usuarioLogado) {
-        alert('Você precisa estar logado para acessar esta página.');
-        window.location.href = 'intranet.html';
+        alert("Usuário não logado.");
+        window.location.href = "intranet.html";
         return;
       }
-      const post = carregarEdicao();
-      if (post) {
-        document.getElementById('titulo').value = post.titulo;
-        document.getElementById('conteudo').value = post.conteudo;
-      }
+      montarMenu();
+      carregarPostagemParaEdicao();
     };
-
   </script>
-
 </body>
 </html>
