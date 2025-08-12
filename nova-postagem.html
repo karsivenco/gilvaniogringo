@@ -10,55 +10,6 @@
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     crossorigin="anonymous"
   />
-  <style>
-    /* Editor styling */
-    #editor {
-      min-height: 250px;
-      border: 1px solid #ccc;
-      padding: 10px;
-      border-radius: 4px;
-      background: white;
-      overflow-y: auto;
-    }
-    #editor:focus {
-      outline: 2px solid #09679c;
-    }
-    .toolbar button {
-      background: #09679c;
-      color: white;
-      border: none;
-      padding: 6px 10px;
-      border-radius: 4px;
-      cursor: pointer;
-      margin-right: 4px;
-      transition: background-color 0.3s;
-    }
-    .toolbar button:hover {
-      background: #074d6b;
-    }
-    .toolbar select {
-      padding: 5px;
-      border-radius: 4px;
-      border: 1px solid #ccc;
-      margin-right: 8px;
-    }
-    .emoji-picker {
-      max-height: 120px;
-      overflow-y: scroll;
-      border: 1px solid #ccc;
-      background: white;
-      border-radius: 4px;
-      padding: 5px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin-top: 6px;
-    }
-    .emoji-picker span {
-      cursor: pointer;
-      font-size: 20px;
-    }
-  </style>
 </head>
 <body class="bg-gray-100 min-h-screen flex flex-col">
 
@@ -68,246 +19,216 @@
       <img src="img/logo.png" alt="Logo Gringo" class="h-10 w-auto" />
       <h1 class="text-xl font-bold">Nova Postagem</h1>
     </div>
-    <nav id="mainMenu" class="flex items-center gap-3">
-      <!-- Menu será inserido via JS -->
+    <nav class="flex items-center gap-3">
+      <a href="painel.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="Painel">
+        <i class="fas fa-home"></i> Painel
+      </a>
+      <a href="nova-postagem.html" class="bg-[#053646] border border-white px-3 py-2 rounded hover:bg-[#032d39] transition flex items-center gap-1" title="Nova Postagem">
+        <i class="fas fa-plus"></i> Nova Postagem
+      </a>
+      <a href="rascunhos.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="Rascunhos">
+        <i class="fas fa-file-alt"></i> Rascunhos
+      </a>
+      <a href="ultimas-noticias2.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="Últimas Publicações">
+        <i class="fas fa-newspaper"></i> Últimas Publicações
+      </a>
+      <button
+        onclick="logout()"
+        class="bg-[#053646] px-3 py-2 rounded hover:bg-[#032d39] transition flex items-center gap-1"
+        title="Sair"
+      >
+        <i class="fas fa-sign-out-alt"></i> Sair
+      </button>
     </nav>
   </header>
 
-  <!-- Main Content -->
-  <main class="flex-grow max-w-4xl mx-auto p-6">
-    <form id="formPostagem" class="bg-white rounded shadow p-6 space-y-6" onsubmit="return enviarPostagem(event)">
-      
-      <div>
-        <label for="titulo" class="block font-semibold mb-1 text-gray-700">Título</label>
-        <input
-          type="text"
-          id="titulo"
-          name="titulo"
-          class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#09679c]"
-          placeholder="Digite o título da postagem"
-          required
-        />
-      </div>
+  <!-- Main -->
+  <main class="flex-grow p-6 max-w-5xl mx-auto bg-white rounded shadow mt-6 mb-10">
+    <form id="formPostagem" class="flex flex-col gap-4">
+      <label for="titulo" class="font-semibold text-gray-700">Título:</label>
+      <input type="text" id="titulo" name="titulo" required class="border p-2 rounded" />
 
-      <div>
-        <label class="block font-semibold mb-1 text-gray-700">Conteúdo</label>
-        <div class="toolbar mb-2 flex flex-wrap items-center gap-1">
-          <!-- Formatação básica -->
-          <button type="button" onclick="format('bold')" title="Negrito"><i class="fas fa-bold"></i></button>
-          <button type="button" onclick="format('italic')" title="Itálico"><i class="fas fa-italic"></i></button>
-          <button type="button" onclick="format('underline')" title="Sublinhado"><i class="fas fa-underline"></i></button>
+      <label for="conteudo" class="font-semibold text-gray-700">Conteúdo:</label>
+      <textarea id="conteudo" name="conteudo" rows="10" required class="border p-2 rounded"></textarea>
 
-          <!-- Fonte -->
-          <select onchange="format('fontName', this.value)" title="Fonte">
-            <option value="Arial">Arial</option>
-            <option value="Courier New">Courier New</option>
-            <option value="Georgia">Georgia</option>
-            <option value="Tahoma">Tahoma</option>
-            <option value="Times New Roman">Times New Roman</option>
-            <option value="Verdana">Verdana</option>
-          </select>
-
-          <!-- Tamanho -->
-          <select onchange="format('fontSize', this.value)" title="Tamanho da fonte">
-            <option value="1">10px</option>
-            <option value="2">13px</option>
-            <option value="3" selected>16px</option>
-            <option value="4">18px</option>
-            <option value="5">24px</option>
-            <option value="6">32px</option>
-            <option value="7">48px</option>
-          </select>
-
-          <!-- Parágrafo -->
-          <button type="button" onclick="format('insertUnorderedList')" title="Lista com marcadores"><i class="fas fa-list-ul"></i></button>
-          <button type="button" onclick="format('insertOrderedList')" title="Lista numerada"><i class="fas fa-list-ol"></i></button>
-
-          <!-- Link -->
-          <button type="button" onclick="inserirLink()" title="Inserir link"><i class="fas fa-link"></i></button>
-
-          <!-- Inserir imagem -->
-          <input type="file" id="inputImagem" accept="image/*" style="display:none" onchange="inserirImagem(event)" />
-          <button type="button" onclick="document.getElementById('inputImagem').click()" title="Inserir imagem"><i class="fas fa-image"></i></button>
-
-          <!-- Emoji -->
-          <button type="button" onclick="toggleEmojiPicker()" title="Inserir emoji"><i class="fas fa-smile"></i></button>
-        </div>
-
-        <div id="emojiPicker" class="emoji-picker hidden" aria-label="Selecionar emoji" role="list">
-          <!-- Emojis serão inseridos via JS -->
-        </div>
-
-        <div id="editor" contenteditable="true" spellcheck="true" aria-multiline="true" aria-label="Editor de texto" class="prose max-w-none"></div>
-      </div>
-
-      <div class="flex flex-wrap gap-4 items-center justify-between">
-        <div>
-          <label for="status" class="font-semibold text-gray-700">Status da publicação:</label>
-          <select id="status" name="status" class="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#09679c]">
-            <option value="rascunho" selected>Rascunho</option>
-            <option value="enviar">Enviar</option>
-          </select>
-        </div>
-
-        <button type="submit" id="btnEnviar" class="bg-[#09679c] hover:bg-[#074d6b] text-white font-semibold px-6 py-2 rounded transition">
-          Enviar
+      <div class="flex gap-4">
+        <button type="button" id="btnSalvarRascunho" class="bg-yellow-400 hover:bg-yellow-500 text-black px-6 py-2 rounded font-semibold">
+          Salvar Rascunho
+        </button>
+        <button type="submit" id="btnPublicar" class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded font-semibold">
+          Enviar Publicação
         </button>
       </div>
-
     </form>
 
+    <div id="notificacao" class="fixed bottom-5 right-5 bg-green-600 text-white px-6 py-3 rounded shadow-lg hidden"></div>
   </main>
 
   <script>
-    const usuariosAutorizados = [
-      "gabriel.amaral",
-      "graziele.albuquerque",
-      "karina.maia",
-      "cristiano.santos",
-      "gilvaniogringo"
-    ];
-
-    const usuarioLogado = localStorage.getItem("usuarioLogado");
-
-    function montarMenu() {
-      const menu = document.getElementById("mainMenu");
-      menu.innerHTML = `
-        <a href="painel.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="Painel">
-          <i class="fas fa-home"></i> Painel
-        </a>
-        <a href="nova-postagem.html" class="bg-[#053646] border border-white px-3 py-2 rounded hover:bg-[#032d39] transition flex items-center gap-1" title="Nova Postagem">
-          <i class="fas fa-plus"></i> Nova Postagem
-        </a>
-        <a href="rascunhos.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="Rascunhos">
-          <i class="fas fa-file-alt"></i> Rascunhos
-        </a>
-        ${usuariosAutorizados.includes(usuarioLogado) ? `
-        <a href="publicacoes.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="Últimas Publicações">
-          <i class="fas fa-newspaper"></i> Últimas Publicações
-        </a>` : ""}
-        <a href="perfil.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="Perfil">
-          <i class="fas fa-user"></i> Perfil
-        </a>
-        <button onclick="logout()" class="bg-[#053646] px-3 py-2 rounded hover:bg-[#032d39] transition flex items-center gap-1" title="Sair">
-          <i class="fas fa-sign-out-alt"></i> Sair
-        </button>
-      `;
-    }
-    montarMenu();
-
+    // Logout
     function logout() {
       localStorage.removeItem("usuarioLogado");
       window.location.href = "intranet.html";
     }
 
-    function format(comando, valor = null) {
-      document.execCommand(comando, false, valor);
-      document.getElementById("editor").focus();
+    // Pega usuário logado
+    const usuarioLogado = localStorage.getItem("usuarioLogado");
+    if (!usuarioLogado) {
+      alert("Usuário não logado. Faça login.");
+      window.location.href = "intranet.html";
     }
 
-    function inserirLink() {
-      const url = prompt("Digite o URL do link:");
-      if (url) {
-        format("createLink", url);
+    // Pega elementos
+    const form = document.getElementById("formPostagem");
+    const inputTitulo = document.getElementById("titulo");
+    const textareaConteudo = document.getElementById("conteudo");
+    const btnSalvarRascunho = document.getElementById("btnSalvarRascunho");
+    const notificacao = document.getElementById("notificacao");
+
+    // LocalStorage keys
+    const KEY_RASCUNHOS = "rascunhos";
+    const KEY_PUBLICACOES = "publicacoes";
+
+    // Função para gerar ID único simples
+    function gerarId() {
+      return 'id-' + Date.now() + '-' + Math.floor(Math.random() * 1000);
+    }
+
+    // Função para mostrar notificação
+    function mostrarNotificacao(mensagem, tipo = "sucesso") {
+      notificacao.textContent = mensagem;
+      notificacao.className = "fixed bottom-5 right-5 px-6 py-3 rounded shadow-lg z-50";
+      if (tipo === "sucesso") {
+        notificacao.classList.add("bg-green-600", "text-white");
+      } else if (tipo === "erro") {
+        notificacao.classList.add("bg-red-600", "text-white");
+      } else {
+        notificacao.classList.add("bg-gray-700", "text-white");
+      }
+      notificacao.style.display = "block";
+      setTimeout(() => {
+        notificacao.style.display = "none";
+      }, 4000);
+    }
+
+    // Função para salvar rascunho (não publica)
+    function salvarRascunho() {
+      const titulo = inputTitulo.value.trim();
+      const conteudo = textareaConteudo.value.trim();
+
+      if (!titulo && !conteudo) {
+        mostrarNotificacao("Nada para salvar.", "erro");
+        return;
+      }
+
+      let rascunhos = JSON.parse(localStorage.getItem(KEY_RASCUNHOS)) || [];
+
+      // Se estiver editando (id na URL), atualiza rascunho
+      const urlParams = new URLSearchParams(window.location.search);
+      const id = urlParams.get("id");
+      const agora = new Date().toISOString();
+
+      if (id) {
+        // Atualizar rascunho existente
+        const idx = rascunhos.findIndex(r => r.id === id);
+        if (idx > -1) {
+          rascunhos[idx].titulo = titulo;
+          rascunhos[idx].conteudo = conteudo;
+          rascunhos[idx].data = agora;
+        } else {
+          // Caso não encontre, cria novo
+          rascunhos.push({ id: id, autor: usuarioLogado, titulo, conteudo, data: agora });
+        }
+      } else {
+        // Criar novo
+        rascunhos.push({ id: gerarId(), autor: usuarioLogado, titulo, conteudo, data: agora });
+      }
+
+      localStorage.setItem(KEY_RASCUNHOS, JSON.stringify(rascunhos));
+      mostrarNotificacao("Rascunho salvo com sucesso.");
+    }
+
+    // Função para publicar: salvar em publicações E atualizar/retirar do rascunho
+    function publicar() {
+      const titulo = inputTitulo.value.trim();
+      const conteudo = textareaConteudo.value.trim();
+
+      if (!titulo || !conteudo) {
+        mostrarNotificacao("Título e conteúdo são obrigatórios para publicar.", "erro");
+        return;
+      }
+
+      let publicacoes = JSON.parse(localStorage.getItem(KEY_PUBLICACOES)) || [];
+      let rascunhos = JSON.parse(localStorage.getItem(KEY_RASCUNHOS)) || [];
+      const urlParams = new URLSearchParams(window.location.search);
+      const id = urlParams.get("id");
+      const agora = new Date().toISOString();
+
+      if (id) {
+        // Atualiza publicação existente
+        const idxPub = publicacoes.findIndex(p => p.id === id);
+        if (idxPub > -1) {
+          publicacoes[idxPub].titulo = titulo;
+          publicacoes[idxPub].conteudo = conteudo;
+          publicacoes[idxPub].dataHora = agora;
+          publicacoes[idxPub].autor = usuarioLogado;
+        } else {
+          // Caso não encontre publicação, adiciona nova
+          publicacoes.push({ id: id, autor: usuarioLogado, titulo, conteudo, dataHora: agora });
+        }
+
+        // Remove rascunho correspondente, se existir
+        rascunhos = rascunhos.filter(r => r.id !== id);
+
+      } else {
+        // Novo
+        const novoId = gerarId();
+        publicacoes.push({ id: novoId, autor: usuarioLogado, titulo, conteudo, dataHora: agora });
+      }
+
+      // Atualiza localStorage
+      localStorage.setItem(KEY_PUBLICACOES, JSON.stringify(publicacoes));
+      localStorage.setItem(KEY_RASCUNHOS, JSON.stringify(rascunhos));
+
+      mostrarNotificacao("Publicação enviada com sucesso.");
+
+      // Limpa formulário e remove parâmetro id da URL para evitar reenvio confuso
+      inputTitulo.value = "";
+      textareaConteudo.value = "";
+      history.replaceState(null, "", window.location.pathname);
+    }
+
+    // Carrega dados para edição caso tenha ?id=xxx na URL (busca em rascunhos ou publicações)
+    function carregarEdicao() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const id = urlParams.get("id");
+      if (!id) return;
+
+      const rascunhos = JSON.parse(localStorage.getItem(KEY_RASCUNHOS)) || [];
+      const publicacoes = JSON.parse(localStorage.getItem(KEY_PUBLICACOES)) || [];
+
+      let post = rascunhos.find(p => p.id === id) || publicacoes.find(p => p.id === id);
+      if (post) {
+        inputTitulo.value = post.titulo;
+        textareaConteudo.value = post.conteudo;
       }
     }
 
-    function toggleEmojiPicker() {
-      const picker = document.getElementById("emojiPicker");
-      picker.classList.toggle("hidden");
-    }
+    // Eventos
+    btnSalvarRascunho.addEventListener("click", e => {
+      e.preventDefault();
+      salvarRascunho();
+    });
 
-    function inserirEmoji(emoji) {
-      format("insertText", emoji);
-      toggleEmojiPicker();
-    }
+    form.addEventListener("submit", e => {
+      e.preventDefault();
+      publicar();
+    });
 
-    const emojis = ["😀","😃","😄","😁","😆","😅","😂","🤣","😊","😍","😎","😢","😭","😡","👍","👎","🙏","🎉","🔥","💡"];
-
-    function popularEmojis() {
-      const picker = document.getElementById("emojiPicker");
-      emojis.forEach(e => {
-        const span = document.createElement("span");
-        span.textContent = e;
-        span.title = e;
-        span.setAttribute("role", "listitem");
-        span.onclick = () => inserirEmoji(e);
-        picker.appendChild(span);
-      });
-    }
-    popularEmojis();
-
-    function inserirImagem(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        const img = document.createElement("img");
-        img.src = e.target.result;
-        img.style.maxWidth = "100%";
-        img.style.borderRadius = "6px";
-        img.style.marginTop = "10px";
-
-        const editor = document.getElementById("editor");
-        editor.appendChild(img);
-      };
-      reader.readAsDataURL(file);
-      event.target.value = "";
-    }
-
-    function enviarPostagem(event) {
-      event.preventDefault();
-
-      const titulo = document.getElementById("titulo").value.trim();
-      const conteudo = document.getElementById("editor").innerHTML.trim();
-      const status = document.getElementById("status").value;
-
-      if (!titulo) {
-        alert("Título é obrigatório.");
-        return false;
-      }
-      if (!conteudo || conteudo === "<br>" || conteudo === "") {
-        alert("Conteúdo não pode estar vazio.");
-        return false;
-      }
-      if (!usuarioLogado) {
-        alert("Usuário não logado.");
-        window.location.href = "intranet.html";
-        return false;
-      }
-
-      const postagem = {
-        id: Date.now(),
-        titulo,
-        conteudo,
-        autor: usuarioLogado,
-        data: new Date().toISOString(),
-        status
-      };
-
-      if (status === "rascunho") {
-        // Salvar no localStorage rascunhos
-        let rascunhos = JSON.parse(localStorage.getItem("rascunhos")) || [];
-        rascunhos.push(postagem);
-        localStorage.setItem("rascunhos", JSON.stringify(rascunhos));
-        alert("Rascunho salvo com sucesso!");
-        window.location.href = "rascunhos.html";
-      } else if (status === "enviar") {
-        // Salvar no localStorage publicações para ultimas-noticias2.html
-        let publicacoes = JSON.parse(localStorage.getItem("publicacoes")) || [];
-        publicacoes.push(postagem);
-        localStorage.setItem("publicacoes", JSON.stringify(publicacoes));
-
-        // Também salvar para publicacoes.html (mesma chave "publicacoes")
-        // já salvo acima e as duas páginas usam essa mesma chave
-
-        alert("Postagem enviada com sucesso!");
-        window.location.href = "ultimas-noticias2.html";
-      }
-
-      return false;
-    }
+    // Inicialização
+    window.onload = () => {
+      carregarEdicao();
+    };
   </script>
 </body>
 </html>
