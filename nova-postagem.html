@@ -1,88 +1,429 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Nova Postagem - Intranet do Gringo</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    crossorigin="anonymous"
+  />
+  <style>
+    /* Editor styling */
+    #editor {
+      min-height: 300px;
+      border: 1px solid #e5e7eb;
+      padding: 14px;
+      border-radius: 8px;
+      background: white;
+      overflow-y: auto;
+    }
+    #editor:focus {
+      outline: 2px solid #09679c;
+    }
+    .toolbar button {
+      background: #09679c;
+      color: white;
+      border: none;
+      padding: 6px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-right: 6px;
+      transition: background-color 0.2s;
+    }
+    .toolbar button:hover { background: #074d6b; }
+    .toolbar select {
+      padding: 6px;
+      border-radius: 6px;
+      border: 1px solid #cbd5e1;
+      margin-right: 8px;
+      background: white;
+    }
+    .emoji-picker {
+      max-height: 140px;
+      overflow-y: auto;
+      border: 1px solid #e5e7eb;
+      background: white;
+      border-radius: 6px;
+      padding: 8px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.04);
+    }
+    .emoji-picker span { cursor: pointer; font-size: 20px; padding: 4px; }
+    /* small responsive */
+    @media (max-width: 640px) {
+      .toolbar { gap: 6px; }
+      .toolbar button, .toolbar select { padding: 6px 8px; }
+    }
+    /* subtle editor default typography */
+    #editor p { margin: 0 0 8px 0; }
+  </style>
 </head>
-<body class="bg-gray-100 min-h-screen">
+<body class="bg-gray-100 min-h-screen flex flex-col">
 
-  <!-- Menu -->
-  <nav class="bg-red-600 text-white p-4 flex justify-between">
-    <span class="font-bold">Intranet do Gringo</span>
-    <div class="space-x-4">
-      <a href="publicacoes.html" class="hover:underline">Últimas Notícias</a>
-      <a href="rascunhos.html" class="hover:underline">Rascunhos</a>
-    </div>
-  </nav>
-
-  <div class="max-w-4xl mx-auto mt-8 bg-white p-6 rounded-lg shadow">
-    <h1 class="text-2xl font-bold mb-4">Nova Postagem</h1>
-
-    <label class="block mb-2 font-semibold">Título</label>
-    <input id="titulo" type="text" class="w-full p-2 border rounded mb-4">
-
-    <label class="block mb-2 font-semibold">Conteúdo</label>
-    <textarea id="conteudo" class="w-full p-2 border rounded mb-4 h-40"></textarea>
-
-    <label class="block mb-2 font-semibold">Imagem (URL opcional)</label>
-    <input id="imagem" type="text" class="w-full p-2 border rounded mb-4">
-
-    <div class="flex items-center mb-4">
-      <input id="publicar" type="checkbox" class="mr-2">
-      <label for="publicar">Publicar imediatamente</label>
+  <!-- Header (padrao de cores e estilo que você pediu) -->
+  <header class="flex justify-between items-center bg-[#09679c] text-white p-4 shadow-md">
+    <div class="flex items-center gap-3">
+      <img src="img/logo.png" alt="Logo Gringo" class="h-10 w-auto" />
+      <h1 class="text-xl font-bold">Nova Postagem</h1>
     </div>
 
-    <button onclick="salvarPostagem()" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">
-      Salvar
-    </button>
-  </div>
+    <!-- Menu com a ordem fixa solicitada -->
+    <nav id="mainMenu" class="flex items-center gap-3">
+      <!-- montado via JS -->
+    </nav>
+  </header>
+
+  <!-- Main Content -->
+  <main class="flex-grow max-w-4xl mx-auto p-6">
+    <form id="formPostagem" class="bg-white rounded shadow p-6 space-y-6" onsubmit="return enviarPostagem(event)">
+
+      <div>
+        <label for="titulo" class="block font-semibold mb-1 text-gray-700">Título</label>
+        <input
+          type="text"
+          id="titulo"
+          name="titulo"
+          class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#09679c]"
+          placeholder="Digite o título da postagem"
+          required
+        />
+      </div>
+
+      <div>
+        <label class="block font-semibold mb-1 text-gray-700">Conteúdo</label>
+
+        <div class="toolbar mb-2 flex flex-wrap items-center gap-2" role="toolbar" aria-label="Ferramentas de edição">
+          <!-- Formatação básica -->
+          <button type="button" onclick="format('bold')" title="Negrito"><i class="fas fa-bold"></i></button>
+          <button type="button" onclick="format('italic')" title="Itálico"><i class="fas fa-italic"></i></button>
+          <button type="button" onclick="format('underline')" title="Sublinhado"><i class="fas fa-underline"></i></button>
+
+          <!-- Parágrafo / títulos -->
+          <button type="button" onclick="format('formatBlock','<p>')" title="Parágrafo">P</button>
+          <button type="button" onclick="format('formatBlock','<h2>')" title="Título H2">H2</button>
+
+          <!-- Fonte -->
+          <select onchange="format('fontName', this.value)" title="Fonte" aria-label="Fonte">
+            <option value="Arial">Arial</option>
+            <option value="Courier New">Courier New</option>
+            <option value="Georgia">Georgia</option>
+            <option value="Tahoma">Tahoma</option>
+            <option value="Times New Roman">Times New Roman</option>
+            <option value="Verdana">Verdana</option>
+          </select>
+
+          <!-- Tamanho -->
+          <select onchange="format('fontSize', this.value)" title="Tamanho da fonte" aria-label="Tamanho da fonte">
+            <option value="1">10px</option>
+            <option value="2">13px</option>
+            <option value="3" selected>16px</option>
+            <option value="4">18px</option>
+            <option value="5">24px</option>
+            <option value="6">32px</option>
+            <option value="7">48px</option>
+          </select>
+
+          <!-- Listas (parágrafo numerado e marcadores) -->
+          <button type="button" onclick="format('insertUnorderedList')" title="Lista com marcadores"><i class="fas fa-list-ul"></i></button>
+          <button type="button" onclick="format('insertOrderedList')" title="Lista numerada"><i class="fas fa-list-ol"></i></button>
+
+          <!-- Link -->
+          <button type="button" onclick="inserirLink()" title="Inserir link"><i class="fas fa-link"></i></button>
+
+          <!-- Inserir imagem -->
+          <input type="file" id="inputImagem" accept="image/*" style="display:none" onchange="inserirImagem(event)" />
+          <button type="button" onclick="document.getElementById('inputImagem').click()" title="Inserir imagem"><i class="fas fa-image"></i></button>
+
+          <!-- Emoji -->
+          <button type="button" onclick="toggleEmojiPicker()" title="Inserir emoji"><i class="fas fa-smile"></i></button>
+        </div>
+
+        <!-- Emoji picker -->
+        <div id="emojiPicker" class="emoji-picker hidden" aria-label="Selecionar emoji" role="list"></div>
+
+        <!-- Editor contenteditable -->
+        <div id="editor" contenteditable="true" spellcheck="true" aria-multiline="true" aria-label="Editor de texto" class="prose max-w-none"></div>
+      </div>
+
+      <div class="flex flex-wrap gap-4 items-center justify-between">
+        <div>
+          <label for="status" class="font-semibold text-gray-700">Status da publicação:</label>
+          <select id="status" name="status" class="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#09679c]">
+            <option value="rascunho" selected>Rascunho</option>
+            <option value="enviar">Publicação</option> <!-- label exatamente como pediu -->
+          </select>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <button type="submit" id="btnEnviar" class="bg-[#09679c] hover:bg-[#074d6b] text-white font-semibold px-6 py-2 rounded transition">
+            Enviar
+          </button>
+          <button type="button" id="btnLimpar" class="bg-gray-200 text-gray-700 px-4 py-2 rounded hover:bg-gray-300" title="Limpar editor">
+            Limpar
+          </button>
+        </div>
+      </div>
+
+      <div id="statusMsg" class="text-sm font-medium text-green-600"></div>
+    </form>
+  </main>
 
   <script>
-    function salvarPostagem() {
-      const titulo = document.getElementById('titulo').value.trim();
-      const conteudo = document.getElementById('conteudo').value.trim();
-      const imagem = document.getElementById('imagem').value.trim();
-      const publicar = document.getElementById('publicar').checked;
+    // --- Configurações de usuários autorizados (mesma lista que você usa) ---
+    const usuariosAutorizados = [
+      "gabriel.amaral",
+      "grazielle.albuquerque",
+      "karina.maia",
+      "cristiano.santos",
+      "gilvaniogringo"
+    ];
 
-      if (!titulo || !conteudo) {
-        alert('Por favor, preencha título e conteúdo.');
+    const usuarioLogado = localStorage.getItem("usuarioLogado");
+
+    // Monta o menu com a ordem fixa solicitada
+    function montarMenu() {
+      const menu = document.getElementById("mainMenu");
+      menu.innerHTML = `
+        <a href="painel.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="Painel">
+          <i class="fas fa-home"></i> Painel
+        </a>
+        <a href="nova-postagem.html" class="bg-[#053646] border border-white px-3 py-2 rounded hover:bg-[#032d39] transition flex items-center gap-1" title="Nova Postagem">
+          <i class="fas fa-plus"></i> Nova Postagem
+        </a>
+        ${usuariosAutorizados.includes(usuarioLogado) ? `
+          <a href="publicacoes.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="Últimas Publicações">
+            <i class="fas fa-newspaper"></i> Últimas Publicações
+          </a>` : `
+          <a href="publicacoes.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="Últimas Publicações">
+            <i class="fas fa-newspaper"></i> Últimas Publicações
+          </a>`}
+        <a href="rascunhos.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="Rascunhos">
+          <i class="fas fa-file-alt"></i> Rascunhos
+        </a>
+        <a href="perfil.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="Perfil">
+          <i class="fas fa-user"></i> Perfil
+        </a>
+        <button onclick="logout()" class="bg-[#053646] px-3 py-2 rounded hover:bg-[#032d39] transition flex items-center gap-1" title="Sair">
+          <i class="fas fa-sign-out-alt"></i> Sair
+        </button>
+      `;
+    }
+
+    function logout() {
+      localStorage.removeItem("usuarioLogado");
+      window.location.href = "intranet.html";
+    }
+
+    // --- Editor helpers ---
+    function format(comando, valor = null) {
+      document.execCommand(comando, false, valor);
+      document.getElementById("editor").focus();
+    }
+
+    function inserirLink() {
+      const selection = window.getSelection();
+      const texto = selection.toString() || prompt("Texto do link (opcional):", "");
+      const url = prompt("Digite o URL do link (ex: https://):");
+      if (!url) return;
+      // se houver seleção, cria link em torno dela, senão insere <a>
+      if (selection && selection.rangeCount > 0 && selection.toString()) {
+        format("createLink", url);
+      } else {
+        // cria um link contendo o texto informado (ou o próprio url)
+        const linkText = texto || url;
+        const a = document.createElement("a");
+        a.href = url;
+        a.textContent = linkText;
+        a.target = "_blank";
+        document.getElementById("editor").appendChild(a);
+      }
+    }
+
+    // Emoji picker
+    function toggleEmojiPicker() {
+      document.getElementById("emojiPicker").classList.toggle("hidden");
+    }
+
+    function inserirEmoji(emoji) {
+      // tenta inserir como texto/HTML
+      document.execCommand("insertText", false, emoji);
+      document.getElementById("editor").focus();
+      // manter picker fechado
+      document.getElementById("emojiPicker").classList.add("hidden");
+    }
+
+    const emojis = ["😀","😃","😄","😁","😆","😅","😂","🤣","😊","😍","😎","😢","😭","😡","👍","👎","🙏","🎉","🔥","💡","🤝","📷","📝","📌"];
+    function popularEmojis() {
+      const picker = document.getElementById("emojiPicker");
+      picker.innerHTML = "";
+      emojis.forEach(e => {
+        const span = document.createElement("span");
+        span.textContent = e;
+        span.title = e;
+        span.setAttribute("role", "listitem");
+        span.onclick = () => inserirEmoji(e);
+        picker.appendChild(span);
+      });
+    }
+    popularEmojis();
+
+    // Inserir imagem (base64 inline)
+    function inserirImagem(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const imgHTML = `<img src="${e.target.result}" style="max-width:100%; border-radius:6px; margin-top:8px;">`;
+        document.execCommand("insertHTML", false, imgHTML);
+      };
+      reader.readAsDataURL(file);
+      event.target.value = "";
+    }
+
+    // --- Publicação / Rascunho handling ---
+    function gerarPostObject(titulo, conteudo, status) {
+      const nowISO = new Date().toISOString();
+      return {
+        id: Date.now(),
+        titulo,
+        conteudo,            // guarda HTML do editor
+        autor: usuarioLogado,
+        data: nowISO,        // compat: outras páginas às vezes usam 'data'
+        dataHora: nowISO,    // compat: publicacoes.html usava dataHora em alguns lugares
+        status
+      };
+    }
+
+    // Carrega postagem para edição (se veio ?id=)
+    function carregarPostagemParaEdicao() {
+      const params = new URLSearchParams(window.location.search);
+      const id = params.get("id");
+      if (!id) return;
+
+      const rascunhos = JSON.parse(localStorage.getItem("rascunhos")) || [];
+      const postagem = rascunhos.find(p => String(p.id) === String(id));
+      if (!postagem) return;
+
+      document.getElementById("titulo").value = postagem.titulo;
+      document.getElementById("editor").innerHTML = postagem.conteudo;
+      document.getElementById("status").value = postagem.status || "rascunho";
+
+      // setando id de edição para reutilizar na submissão
+      document.getElementById("formPostagem").dataset.editandoId = String(postagem.id);
+    }
+
+    // Enviar postagem (sem redirecionar) - salva em rascunhos ou publicacoes
+    function enviarPostagem(event) {
+      event.preventDefault();
+      const titulo = document.getElementById("titulo").value.trim();
+      const conteudo = document.getElementById("editor").innerHTML.trim();
+      const status = document.getElementById("status").value;
+
+      if (!titulo) { alert("Título é obrigatório."); return false; }
+      if (!conteudo || conteudo === "<br>" || conteudo === "") { alert("Conteúdo não pode estar vazio."); return false; }
+      if (!usuarioLogado) { alert("Usuário não logado."); window.location.href = "intranet.html"; return false; }
+
+      // carregar listas
+      let rascunhos = JSON.parse(localStorage.getItem("rascunhos")) || [];
+      let publicacoes = JSON.parse(localStorage.getItem("publicacoes")) || [];
+
+      const form = document.getElementById("formPostagem");
+      const editandoId = form.dataset.editandoId;
+
+      // se estivermos editando um rascunho existente
+      if (editandoId) {
+        // encontrar no rascunhos
+        const idx = rascunhos.findIndex(r => String(r.id) === String(editandoId));
+        if (status === "rascunho") {
+          if (idx !== -1) {
+            rascunhos[idx].titulo = titulo;
+            rascunhos[idx].conteudo = conteudo;
+            rascunhos[idx].data = new Date().toISOString();
+            rascunhos[idx].dataHora = new Date().toISOString();
+            rascunhos[idx].status = "rascunho";
+            localStorage.setItem("rascunhos", JSON.stringify(rascunhos));
+            mostrarStatus("Rascunho atualizado com sucesso!");
+            return false;
+          } else {
+            // não achou no rascunho: criar novo como segurança
+            const novo = gerarPostObject(titulo, conteudo, "rascunho");
+            rascunhos.push(novo);
+            localStorage.setItem("rascunhos", JSON.stringify(rascunhos));
+            mostrarStatus("Rascunho salvo (novo).");
+            return false;
+          }
+        } else if (status === "enviar") {
+          // mover para publicacoes (remover rascunho)
+          if (idx !== -1) {
+            rascunhos = rascunhos.filter(r => String(r.id) !== String(editandoId));
+            localStorage.setItem("rascunhos", JSON.stringify(rascunhos));
+          }
+          publicacoes.push({
+            id: Number(editandoId),
+            titulo,
+            conteudo,
+            autor: usuarioLogado,
+            data: new Date().toISOString(),
+            dataHora: new Date().toISOString(),
+            status: "enviar"
+          });
+          localStorage.setItem("publicacoes", JSON.stringify(publicacoes));
+          mostrarStatus("Postagem publicada com sucesso!");
+          // removemos flag de edição
+          delete form.dataset.editandoId;
+          return false;
+        }
+      }
+
+      // Criar novo post
+      const novo = gerarPostObject(titulo, conteudo, status);
+      if (status === "rascunho") {
+        rascunhos.push(novo);
+        localStorage.setItem("rascunhos", JSON.stringify(rascunhos));
+        mostrarStatus("Rascunho salvo com sucesso!");
+      } else if (status === "enviar") {
+        publicacoes.push(novo);
+        localStorage.setItem("publicacoes", JSON.stringify(publicacoes));
+        mostrarStatus("Postagem publicada com sucesso!");
+      }
+
+      return false;
+    }
+
+    // mensagem de status (feedback ao usuário)
+    function mostrarStatus(msg) {
+      const el = document.getElementById("statusMsg");
+      el.textContent = msg;
+      setTimeout(() => el.textContent = "", 4000);
+    }
+
+    // limpar editor
+    document.getElementById("btnLimpar").addEventListener("click", () => {
+      if (!confirm("Limpar título e conteúdo?")) return;
+      document.getElementById("titulo").value = "";
+      document.getElementById("editor").innerHTML = "";
+      document.getElementById("status").value = "rascunho";
+      const form = document.getElementById("formPostagem");
+      delete form.dataset.editandoId;
+      mostrarStatus("Editor limpo.");
+    });
+
+    // --- inicialização ---
+    window.onload = () => {
+      if (!usuarioLogado) {
+        alert("Usuário não logado.");
+        window.location.href = "intranet.html";
         return;
       }
-
-      const postagem = {
-        titulo,
-        conteudo,
-        imagem,
-        data: new Date().toLocaleString('pt-BR')
-      };
-
-      // Salva em rascunhos sempre
-      let rascunhos = JSON.parse(localStorage.getItem('rascunhos')) || [];
-      rascunhos.unshift(postagem);
-      localStorage.setItem('rascunhos', JSON.stringify(rascunhos));
-
-      if (publicar) {
-        // Salva em publicações (intranet)
-        let publicacoes = JSON.parse(localStorage.getItem('publicacoes')) || [];
-        publicacoes.unshift(postagem);
-        localStorage.setItem('publicacoes', JSON.stringify(publicacoes));
-
-        // Salva em últimas notícias (site)
-        let ultimasNoticias = JSON.parse(localStorage.getItem('ultimasNoticias')) || [];
-        ultimasNoticias.unshift(postagem);
-        localStorage.setItem('ultimasNoticias', JSON.stringify(ultimasNoticias));
-      }
-
-      alert('Postagem salva com sucesso!');
-      
-      // Limpa o formulário
-      document.getElementById('titulo').value = '';
-      document.getElementById('conteudo').value = '';
-      document.getElementById('imagem').value = '';
-      document.getElementById('publicar').checked = false;
-    }
+      montarMenu();
+      carregarPostagemParaEdicao();
+    };
   </script>
 </body>
 </html>
