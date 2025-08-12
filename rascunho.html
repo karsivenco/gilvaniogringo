@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Rascunhos - Intranet do Gringo</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+  />
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col">
+
+  <!-- Header -->
+  <header class="flex justify-between items-center bg-[#09679c] text-white p-4 shadow-md">
+    <div class="flex items-center gap-3">
+      <img src="img/logo.png" alt="Logo Gringo" class="h-10 w-auto" />
+      <h1 class="text-xl font-bold">Rascunhos</h1>
+    </div>
+    <nav class="flex items-center gap-3">
+      <a href="painel.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition" title="Painel">
+        <i class="fas fa-home"></i> Painel
+      </a>
+      <a href="nova-postagem.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition" title="Nova Postagem">
+        <i class="fas fa-plus"></i> Nova Postagem
+      </a>
+      <a href="ultimas-noticias2.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition" title="Últimas Publicações">
+        <i class="fas fa-newspaper"></i> Últimas Publicações
+      </a>
+      <a href="rascunhos.html" class="bg-[#074d6b] border border-white px-3 py-2 rounded" title="Rascunhos">
+        <i class="fas fa-file-alt"></i> Rascunhos
+      </a>
+      <button
+        onclick="logout()"
+        class="bg-[#053646] px-3 py-2 rounded hover:bg-[#032d39] transition"
+        title="Sair"
+      >
+        <i class="fas fa-sign-out-alt"></i> Sair
+      </button>
+    </nav>
+  </header>
+
+  <main class="flex-grow p-6 max-w-5xl mx-auto">
+    <h2 class="text-2xl font-bold mb-4 text-[#005075]">Meus Rascunhos</h2>
+
+    <div id="listaRascunhos" class="bg-white shadow rounded-lg p-6 space-y-4">
+      <!-- Rascunhos aparecerão aqui -->
+    </div>
+
+  </main>
+
+  <script>
+    // Logout simples
+    function logout() {
+      localStorage.removeItem("usuarioLogado");
+      window.location.href = "intranet.html";
+    }
+
+    // Pega rascunhos do localStorage (objeto: { id: { titulo, conteudo, data, autor } })
+    function getRascunhos() {
+      return JSON.parse(localStorage.getItem("rascunhos")) || {};
+    }
+
+    // Salva rascunhos no localStorage
+    function setRascunhos(rascunhos) {
+      localStorage.setItem("rascunhos", JSON.stringify(rascunhos));
+    }
+
+    // Remove rascunho por ID
+    function removerRascunho(id) {
+      if(!confirm("Deseja excluir este rascunho?")) return;
+      const rascunhos = getRascunhos();
+      delete rascunhos[id];
+      setRascunhos(rascunhos);
+      renderizarRascunhos();
+    }
+
+    // Editar rascunho: salvar no localStorage o id do rascunho a ser editado e ir para nova-postagem.html
+    function editarRascunho(id) {
+      localStorage.setItem("rascunhoEditar", id);
+      window.location.href = "nova-postagem.html";
+    }
+
+    // Renderiza os rascunhos na página
+    function renderizarRascunhos() {
+      const container = document.getElementById("listaRascunhos");
+      const rascunhos = getRascunhos();
+      const usuario = localStorage.getItem("usuarioLogado");
+      container.innerHTML = "";
+
+      const rascunhosUsuario = Object.entries(rascunhos).filter(([id, rasc]) => rasc.autor === usuario);
+
+      if(rascunhosUsuario.length === 0) {
+        container.innerHTML = '<p class="italic text-gray-500">Nenhum rascunho encontrado.</p>';
+        return;
+      }
+
+      rascunhosUsuario.forEach(([id, rasc]) => {
+        const div = document.createElement("div");
+        div.className = "border border-gray-300 rounded p-4 flex justify-between items-center";
+
+        div.innerHTML = `
+          <div>
+            <h3 class="font-semibold text-lg">${rasc.titulo || "(Sem título)"}</h3>
+            <p class="text-sm text-gray-600">Data: ${new Date(rasc.data).toLocaleString()}</p>
+          </div>
+          <div class="flex gap-3">
+            <button onclick="editarRascunho('${id}')" class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 transition" title="Editar">
+              <i class="fas fa-edit"></i> Editar
+            </button>
+            <button onclick="removerRascunho('${id}')" class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 transition" title="Excluir">
+              <i class="fas fa-trash"></i> Excluir
+            </button>
+          </div>
+        `;
+
+        container.appendChild(div);
+      });
+    }
+
+    window.addEventListener("DOMContentLoaded", () => {
+      const usuario = localStorage.getItem("usuarioLogado");
+      if(!usuario){
+        alert("Usuário não logado. Redirecionando...");
+        window.location.href = "intranet.html";
+        return;
+      }
+      renderizarRascunhos();
+    });
+  </script>
+</body>
+</html>
