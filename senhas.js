@@ -9,6 +9,7 @@ const usuarios = {
   "tati.garcia": "Gringo1975",
   "cristiano.santos": "Gringo1975",
   "vitor.mello": "Gringo1975",
+  "lucas.bitencourt": "Gringo1975",
 };
 
 const perfis = {
@@ -20,4 +21,5 @@ const perfis = {
   "grazielle.albuquerque": "Jornalismo",
   "vitor.mello": "Comunicação",
   "gilvaniogringo": "Vereador",
+  "lucas.bitencourt": "Comunicação"
 };
