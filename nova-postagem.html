@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Nova Postagem - Intranet do Gringo</title>
+  <title>Rascunhos - Intranet do Gringo</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link
     rel="stylesheet"
@@ -11,174 +11,73 @@
     crossorigin="anonymous"
   />
   <style>
-    /* Editor styling */
-    #editor {
-      min-height: 300px;
-      border: 1px solid #e5e7eb;
-      padding: 14px;
-      border-radius: 8px;
-      background: white;
-      overflow-y: auto;
-    }
-    #editor:focus {
-      outline: 2px solid #09679c;
-    }
-    .toolbar button {
-      background: #09679c;
-      color: white;
-      border: none;
-      padding: 6px 10px;
-      border-radius: 6px;
+    .btn-expandir {
       cursor: pointer;
-      margin-right: 6px;
-      transition: background-color 0.2s;
+      color: #09679c;
+      font-weight: 600;
+      user-select: none;
     }
-    .toolbar button:hover { background: #074d6b; }
-    .toolbar select {
-      padding: 6px;
-      border-radius: 6px;
-      border: 1px solid #cbd5e1;
-      margin-right: 8px;
-      background: white;
-    }
-    .emoji-picker {
-      max-height: 140px;
-      overflow-y: auto;
-      border: 1px solid #e5e7eb;
-      background: white;
-      border-radius: 6px;
-      padding: 8px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 8px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.04);
-    }
-    .emoji-picker span { cursor: pointer; font-size: 20px; padding: 4px; }
-    /* small responsive */
-    @media (max-width: 640px) {
-      .toolbar { gap: 6px; }
-      .toolbar button, .toolbar select { padding: 6px 8px; }
-    }
-    /* subtle editor default typography */
-    #editor p { margin: 0 0 8px 0; }
   </style>
 </head>
 <body class="bg-gray-100 min-h-screen flex flex-col">
 
-  <!-- Header (padrao de cores e estilo que você pediu) -->
+  <!-- Header -->
   <header class="flex justify-between items-center bg-[#09679c] text-white p-4 shadow-md">
     <div class="flex items-center gap-3">
       <img src="img/logo.png" alt="Logo Gringo" class="h-10 w-auto" />
-      <h1 class="text-xl font-bold">Nova Postagem</h1>
+      <h1 class="text-xl font-bold" id="tituloPagina">Rascunhos</h1>
+      <!-- Contagem -->
+      <span id="contadorRascunhos" class="ml-4 text-lg"></span>
     </div>
+    <div id="relogio" class="text-white font-mono text-lg"></div> <!-- Relógio -->
 
-    <!-- Menu com a ordem fixa solicitada -->
-    <nav id="mainMenu" class="flex items-center gap-3">
-      <!-- montado via JS -->
+    <nav class="flex items-center gap-3">
+      <a href="painel.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="Painel">
+        <i class="fas fa-home"></i> Painel
+      </a>
+      <a href="nova-postagem.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="Nova Postagem">
+        <i class="fas fa-plus"></i> Nova Postagem
+      </a>
+      <a href="publicacoes.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="Últimas Publicações">
+        <i class="fas fa-newspaper"></i> Últimas Publicações
+      </a>
+      <a href="rascunhos.html" class="bg-[#053646] border border-white px-3 py-2 rounded hover:bg-[#032d39] transition flex items-center gap-1" title="Rascunhos">
+        <i class="fas fa-file-alt"></i> Rascunhos
+      </a>
+      <a href="perfil.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="Perfil">
+        <i class="fas fa-user"></i> Perfil
+      </a>
+      <button
+        onclick="logout()"
+        class="bg-[#053646] px-3 py-2 rounded hover:bg-[#032d39] transition flex items-center gap-1"
+        title="Sair"
+      >
+        <i class="fas fa-sign-out-alt"></i> Sair
+      </button>
     </nav>
   </header>
 
-  <!-- Main Content -->
-  <main class="flex-grow max-w-4xl mx-auto p-6">
-    <form id="formPostagem" class="bg-white rounded shadow p-6 space-y-6" onsubmit="return enviarPostagem(event)">
+  <!-- Usuário e contagem logo abaixo do header, antes do conteúdo -->
+  <section class="max-w-5xl mx-auto p-6 mt-4 bg-white rounded shadow">
+    <p class="text-gray-700 text-lg">
+      Logado como: <strong id="nomeUsuario"></strong>
+    </p>
+    <p class="text-gray-600 text-md mt-1">
+      Rascunhos salvos: <strong id="contagemRascunhos"></strong>
+    </p>
+  </section>
 
-      <div>
-        <label for="titulo" class="block font-semibold mb-1 text-gray-700">Título</label>
-        <input
-          type="text"
-          id="titulo"
-          name="titulo"
-          class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#09679c]"
-          placeholder="Digite o título da postagem"
-          required
-        />
-      </div>
-
-      <div>
-        <label class="block font-semibold mb-1 text-gray-700">Conteúdo</label>
-
-        <div class="toolbar mb-2 flex flex-wrap items-center gap-2" role="toolbar" aria-label="Ferramentas de edição">
-          <!-- Formatação básica -->
-          <button type="button" onclick="format('bold')" title="Negrito"><i class="fas fa-bold"></i></button>
-          <button type="button" onclick="format('italic')" title="Itálico"><i class="fas fa-italic"></i></button>
-          <button type="button" onclick="format('underline')" title="Sublinhado"><i class="fas fa-underline"></i></button>
-
-          <!-- Parágrafo / títulos -->
-          <button type="button" onclick="format('formatBlock','<p>')" title="Parágrafo">P</button>
-          <button type="button" onclick="format('formatBlock','<h2>')" title="Título H2">H2</button>
-
-          <!-- Fonte -->
-          <select onchange="format('fontName', this.value)" title="Fonte" aria-label="Fonte">
-            <option value="Arial">Arial</option>
-            <option value="Courier New">Courier New</option>
-            <option value="Georgia">Georgia</option>
-            <option value="Tahoma">Tahoma</option>
-            <option value="Times New Roman">Times New Roman</option>
-            <option value="Verdana">Verdana</option>
-          </select>
-
-          <!-- Tamanho -->
-          <select onchange="format('fontSize', this.value)" title="Tamanho da fonte" aria-label="Tamanho da fonte">
-            <option value="1">10px</option>
-            <option value="2">13px</option>
-            <option value="3" selected>16px</option>
-            <option value="4">18px</option>
-            <option value="5">24px</option>
-            <option value="6">32px</option>
-            <option value="7">48px</option>
-          </select>
-
-          <!-- Listas (parágrafo numerado e marcadores) -->
-          <button type="button" onclick="format('insertUnorderedList')" title="Lista com marcadores"><i class="fas fa-list-ul"></i></button>
-          <button type="button" onclick="format('insertOrderedList')" title="Lista numerada"><i class="fas fa-list-ol"></i></button>
-
-          <!-- Link -->
-          <button type="button" onclick="inserirLink()" title="Inserir link"><i class="fas fa-link"></i></button>
-
-          <!-- Inserir imagem -->
-          <input type="file" id="inputImagem" accept="image/*" style="display:none" onchange="inserirImagem(event)" />
-          <button type="button" onclick="document.getElementById('inputImagem').click()" title="Inserir imagem"><i class="fas fa-image"></i></button>
-
-          <!-- Emoji -->
-          <button type="button" onclick="toggleEmojiPicker()" title="Inserir emoji"><i class="fas fa-smile"></i></button>
-        </div>
-
-        <!-- Emoji picker -->
-        <div id="emojiPicker" class="emoji-picker hidden" aria-label="Selecionar emoji" role="list"></div>
-
-        <!-- Editor contenteditable -->
-        <div id="editor" contenteditable="true" spellcheck="true" aria-multiline="true" aria-label="Editor de texto" class="prose max-w-none"></div>
-      </div>
-
-      <div class="flex flex-wrap gap-4 items-center justify-between">
-        <div>
-          <label for="status" class="font-semibold text-gray-700">Status da publicação:</label>
-          <select id="status" name="status" class="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#09679c]">
-            <option value="rascunho" selected>Rascunho</option>
-            <option value="enviar">Publicação</option>
-          </select>
-        </div>
-
-        <div class="flex items-center gap-3">
-          <button type="submit" id="btnEnviar" class="bg-[#09679c] hover:bg-[#074d6b] text-white font-semibold px-6 py-2 rounded transition">
-            Enviar
-          </button>
-          <button type="button" id="btnLimpar" class="bg-gray-200 text-gray-700 px-4 py-2 rounded hover:bg-gray-300" title="Limpar editor">
-            Limpar
-          </button>
-        </div>
-      </div>
-
-      <div id="statusMsg" class="text-sm font-medium text-green-600"></div>
-    </form>
+  <!-- Main -->
+  <main class="flex-grow p-6 max-w-5xl mx-auto bg-white rounded shadow mt-6 mb-10">
+    <section id="rascunhosContainer" class="space-y-8">
+      <!-- Rascunhos do usuário serão listados aqui -->
+    </section>
   </main>
 
   <script>
-    // Usuários autorizados
     const usuariosAutorizados = [
       "gabriel.amaral",
-      "grazielle.albuquerque",
+      "graziele.albuquerque",
       "karina.maia",
       "cristiano.santos",
       "gilvaniogringo"
@@ -186,128 +85,39 @@
 
     const usuarioLogado = localStorage.getItem("usuarioLogado");
 
-    // Monta o menu
-    function montarMenu() {
-      const menu = document.getElementById("mainMenu");
-      menu.innerHTML = `
-        <a href="painel.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="Painel">
-          <i class="fas fa-home"></i> Painel
-        </a>
-        <a href="nova-postagem.html" class="bg-[#053646] border border-white px-3 py-2 rounded hover:bg-[#032d39] transition flex items-center gap-1" title="Nova Postagem">
-          <i class="fas fa-plus"></i> Nova Postagem
-        </a>
-        <a href="publicacoes.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="Últimas Publicações">
-          <i class="fas fa-newspaper"></i> Últimas Publicações
-        </a>
-        <a href="rascunhos.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="Rascunhos">
-          <i class="fas fa-file-alt"></i> Rascunhos
-        </a>
-        <a href="perfil.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="Perfil">
-          <i class="fas fa-user"></i> Perfil
-        </a>
-        <button onclick="logout()" class="bg-[#053646] px-3 py-2 rounded hover:bg-[#032d39] transition flex items-center gap-1" title="Sair">
-          <i class="fas fa-sign-out-alt"></i> Sair
-        </button>
-      `;
-    }
-
     function logout() {
       localStorage.removeItem("usuarioLogado");
       window.location.href = "intranet.html";
     }
 
-    // Editor commands
-    function format(comando, valor = null) {
-      document.execCommand(comando, false, valor);
-      document.getElementById("editor").focus();
+    // Formata data ISO para dd/mm/aaaa HH:mm
+    function formatarDataHora(dataISO) {
+      if (!dataISO) return "";
+      const dt = new Date(dataISO);
+      const data = dt.toLocaleDateString("pt-BR");
+      const hora = dt.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
+      return `${data} ${hora}`;
     }
 
-    function inserirLink() {
-      const selection = window.getSelection();
-      const texto = selection.toString() || prompt("Texto do link (opcional):", "");
-      const url = prompt("Digite o URL do link (ex: https://):");
-      if (!url) return;
-      if (selection && selection.rangeCount > 0 && selection.toString()) {
-        format("createLink", url);
-      } else {
-        const linkText = texto || url;
-        const a = document.createElement("a");
-        a.href = url;
-        a.textContent = linkText;
-        a.target = "_blank";
-        document.getElementById("editor").appendChild(a);
-      }
-    }
-
-    // Emoji picker
-    function toggleEmojiPicker() {
-      document.getElementById("emojiPicker").classList.toggle("hidden");
-    }
-
-    function inserirEmoji(emoji) {
-      document.execCommand("insertText", false, emoji);
-      document.getElementById("editor").focus();
-      document.getElementById("emojiPicker").classList.add("hidden");
-    }
-
-    const emojis = ["😀","😃","😄","😁","😆","😅","😂","🤣","😊","😍","😎","😢","😭","😡","👍","👎","🙏","🎉","🔥","💡","🤝","📷","📝","📌"];
-    function popularEmojis() {
-      const picker = document.getElementById("emojiPicker");
-      picker.innerHTML = "";
-      emojis.forEach(e => {
-        const span = document.createElement("span");
-        span.textContent = e;
-        span.title = e;
-        span.setAttribute("role", "listitem");
-        span.onclick = () => inserirEmoji(e);
-        picker.appendChild(span);
-      });
-    }
-    popularEmojis();
-
-    // Inserir imagem
-    function inserirImagem(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        const imgHTML = `<img src="${e.target.result}" style="max-width:100%; border-radius:6px; margin-top:8px;">`;
-        document.execCommand("insertHTML", false, imgHTML);
-      };
-      reader.readAsDataURL(file);
-      event.target.value = "";
-    }
-
-    // Gera objeto postagem
-    function gerarPostObject(titulo, conteudo, status) {
-      const nowISO = new Date().toISOString();
-      return {
-        id: Date.now(),
-        titulo,
-        conteudo,
-        autor: usuarioLogado,
-        data: nowISO,
-        dataHora: nowISO,
-        status
-      };
-    }
-
-    // Carrega postagem para edição
-    function carregarPostagemParaEdicao() {
-      const params = new URLSearchParams(window.location.search);
-      const id = params.get("id");
-      if (!id) return;
-
+    // Busca rascunhos do usuário logado no localStorage
+    function getRascunhosPorAutor(autor) {
+      if (!autor) return [];
       const rascunhos = JSON.parse(localStorage.getItem("rascunhos")) || [];
-      const postagem = rascunhos.find(p => String(p.id) === String(id));
-      if (!postagem) return;
+      return rascunhos.filter(p => p.autor === autor);
+    }
 
-      document.getElementById("titulo").value = postagem.titulo;
-      document.getElementById("editor").innerHTML = postagem.conteudo;
-      document.getElementById("status").value = postagem.status || "rascunho";
+    // Remove rascunho por id e atualiza listagem (somente se usuário autorizado)
+    function removerRascunho(id) {
+      if (!["karina.maia", "cristiano.santos", "gilvaniogringo"].includes(usuarioLogado)) {
+        alert("Você não tem permissão para excluir este rascunho.");
+        return;
+      }
+      if (!confirm("Deseja realmente excluir este rascunho?")) return;
 
-      // setando id para reutilizar na submissão
-      document.getElementById("formPostagem").dataset.editandoId = String(postagem.id);
+      let rascunhos = JSON.parse(localStorage.getItem("rascunhos")) || [];
+      rascunhos = rascunhos.filter(p => p.id !== id);
+      localStorage.setItem("rascunhos", JSON.stringify(rascunhos));
+      carregarRascunhos();
     }
 
     // Gera slug para nome do arquivo
@@ -365,134 +175,151 @@
       URL.revokeObjectURL(link.href);
     }
 
-    // Enviar postagem
-    function enviarPostagem(event) {
-      event.preventDefault();
-
-      const titulo = document.getElementById("titulo").value.trim();
-      const conteudo = document.getElementById("editor").innerHTML.trim();
-      const status = document.getElementById("status").value;
-
-      if (!titulo) { alert("Título é obrigatório."); return false; }
-      if (!conteudo || conteudo === "<br>" || conteudo === "") { alert("Conteúdo não pode estar vazio."); return false; }
-      if (!usuarioLogado) { alert("Usuário não logado."); window.location.href = "intranet.html"; return false; }
+    // Publicar um rascunho: mover para publicações, baixar arquivo e atualizar lista
+    function publicarRascunho(id) {
+      if (!confirm("Deseja publicar este rascunho?")) return;
 
       let rascunhos = JSON.parse(localStorage.getItem("rascunhos")) || [];
       let publicacoes = JSON.parse(localStorage.getItem("publicacoes")) || [];
 
-      const form = document.getElementById("formPostagem");
-      const editandoId = form.dataset.editandoId;
-
-      if (editandoId) {
-        const idx = rascunhos.findIndex(r => String(r.id) === String(editandoId));
-        if (status === "rascunho") {
-          if (idx !== -1) {
-            rascunhos[idx].titulo = titulo;
-            rascunhos[idx].conteudo = conteudo;
-            rascunhos[idx].data = new Date().toISOString();
-            rascunhos[idx].dataHora = new Date().toISOString();
-            rascunhos[idx].status = "rascunho";
-            localStorage.setItem("rascunhos", JSON.stringify(rascunhos));
-            mostrarStatus("Rascunho atualizado com sucesso!");
-            return false;
-          } else {
-            const novo = gerarPostObject(titulo, conteudo, "rascunho");
-            rascunhos.push(novo);
-            localStorage.setItem("rascunhos", JSON.stringify(rascunhos));
-            mostrarStatus("Rascunho salvo (novo).");
-            return false;
-          }
-        } else if (status === "enviar") {
-          if (idx !== -1) {
-            rascunhos = rascunhos.filter(r => String(r.id) !== String(editandoId));
-            localStorage.setItem("rascunhos", JSON.stringify(rascunhos));
-          }
-          const postPub = {
-            id: Number(editandoId),
-            titulo,
-            conteudo,
-            autor: usuarioLogado,
-            data: new Date().toISOString(),
-            dataHora: new Date().toISOString(),
-            status: "enviar"
-          };
-          publicacoes.push(postPub);
-          localStorage.setItem("publicacoes", JSON.stringify(publicacoes));
-
-          // Gerar arquivo e baixar
-          const slug = gerarSlug(titulo);
-          const nomeArquivo = slug + ".html";
-          const html = gerarHtmlPublicacao(postPub);
-          baixarArquivo(nomeArquivo, html);
-
-          mostrarStatus("Postagem publicada com sucesso!");
-          delete form.dataset.editandoId;
-
-          setTimeout(() => {
-            window.location.href = "publicacoes.html";
-          }, 1500);
-
-          return false;
-        }
+      const idx = rascunhos.findIndex(r => r.id === id);
+      if (idx === -1) {
+        alert("Rascunho não encontrado.");
+        return;
       }
 
-      // Criar novo post
-      const novo = gerarPostObject(titulo, conteudo, status);
+      const post = rascunhos[idx];
+      // Atualiza data de publicação para agora
+      post.data = new Date().toISOString();
+      post.status = "enviar";
 
-      if (status === "rascunho") {
-        rascunhos.push(novo);
-        localStorage.setItem("rascunhos", JSON.stringify(rascunhos));
-        mostrarStatus("Rascunho salvo com sucesso!");
-        setTimeout(() => {
-          window.location.href = "rascunhos.html";
-        }, 1500);
-      } else if (status === "enviar") {
-        publicacoes.push(novo);
-        localStorage.setItem("publicacoes", JSON.stringify(publicacoes));
+      // Remove dos rascunhos
+      rascunhos.splice(idx, 1);
+      localStorage.setItem("rascunhos", JSON.stringify(rascunhos));
 
-        // Gerar arquivo e baixar
-        const slug = gerarSlug(titulo);
-        const nomeArquivo = slug + ".html";
-        const html = gerarHtmlPublicacao(novo);
-        baixarArquivo(nomeArquivo, html);
+      // Adiciona nas publicações
+      publicacoes.push(post);
+      localStorage.setItem("publicacoes", JSON.stringify(publicacoes));
 
-        mostrarStatus("Postagem publicada com sucesso!");
+      // Gera arquivo HTML e baixa
+      const slug = gerarSlug(post.titulo);
+      const nomeArquivo = slug + ".html";
+      const html = gerarHtmlPublicacao(post);
+      baixarArquivo(nomeArquivo, html);
 
-        setTimeout(() => {
-          window.location.href = "publicacoes.html";
-        }, 1500);
+      alert("Rascunho publicado com sucesso!");
+
+      carregarRascunhos();
+    }
+
+    // Cria o elemento de cada rascunho
+    function criarElementoRascunho(rascunho) {
+      const container = document.createElement("div");
+      container.className = "border rounded p-4 shadow-sm";
+
+      const titulo = document.createElement("h3");
+      titulo.textContent = rascunho.titulo;
+      titulo.className = "text-xl font-bold mb-2 text-[#09679c]";
+      container.appendChild(titulo);
+
+      const dataHora = document.createElement("p");
+      dataHora.textContent = "Última edição: " + formatarDataHora(rascunho.data);
+      dataHora.className = "text-gray-600 text-sm mb-2";
+      container.appendChild(dataHora);
+
+      // Resumo conteúdo (texto plano, limitado)
+      const resumo = document.createElement("p");
+      resumo.className = "mb-2";
+      const textoLimite = 250;
+      const conteudoLimpo = rascunho.conteudo.replace(/<[^>]+>/g, "");
+      resumo.textContent = conteudoLimpo.length > textoLimite
+        ? conteudoLimpo.slice(0, textoLimite) + "..."
+        : conteudoLimpo;
+      container.appendChild(resumo);
+
+      // Botões: Editar, Publicar e Excluir
+      const botoesDiv = document.createElement("div");
+      botoesDiv.className = "flex gap-3";
+
+      const btnEditar = document.createElement("button");
+      btnEditar.textContent = "Editar";
+      btnEditar.className = "bg-[#09679c] text-white px-4 py-2 rounded hover:bg-[#074d6b] transition";
+      btnEditar.onclick = () => {
+        window.location.href = `nova-postagem.html?id=${rascunho.id}`;
+      };
+      botoesDiv.appendChild(btnEditar);
+
+      const btnPublicar = document.createElement("button");
+      btnPublicar.textContent = "Publicar";
+      btnPublicar.className = "bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition";
+      btnPublicar.onclick = () => publicarRascunho(rascunho.id);
+      botoesDiv.appendChild(btnPublicar);
+
+      if (["karina.maia", "cristiano.santos", "gilvaniogringo"].includes(usuarioLogado)) {
+        const btnExcluir = document.createElement("button");
+        btnExcluir.textContent = "Excluir";
+        btnExcluir.className = "bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition";
+        btnExcluir.onclick = () => removerRascunho(rascunho.id);
+        botoesDiv.appendChild(btnExcluir);
       }
 
-      return false;
+      container.appendChild(botoesDiv);
+
+      return container;
     }
 
-    // Mostrar status
-    function mostrarStatus(msg) {
-      const el = document.getElementById("statusMsg");
-      el.textContent = msg;
-      setTimeout(() => el.textContent = "", 4000);
+    // Atualiza o relógio no header a cada segundo
+    function atualizarRelogio() {
+      const elRelogio = document.getElementById("relogio");
+      const agora = new Date();
+      elRelogio.textContent = agora.toLocaleString("pt-BR", {
+        dateStyle: "short",
+        timeStyle: "medium"
+      });
     }
 
-    // Limpar editor
-    document.getElementById("btnLimpar").addEventListener("click", () => {
-      if (!confirm("Limpar título e conteúdo?")) return;
-      document.getElementById("titulo").value = "";
-      document.getElementById("editor").innerHTML = "";
-      document.getElementById("status").value = "rascunho";
-      const form = document.getElementById("formPostagem");
-      delete form.dataset.editandoId;
-      mostrarStatus("Editor limpo.");
-    });
-
-    // Inicialização
-    window.onload = () => {
-      if (!usuarioLogado) {
-        alert("Usuário não logado.");
+    // Carrega e exibe os rascunhos do usuário logado
+    function carregarRascunhos() {
+      if (!usuarioLogado || !usuariosAutorizados.includes(usuarioLogado)) {
+        alert("Você não tem permissão para acessar esta página.");
         window.location.href = "intranet.html";
         return;
       }
-      montarMenu();
-      carregarPostagemParaEdicao();
+
+      // Atualiza título com nome do usuário
+      const tituloPagina = document.getElementById("tituloPagina");
+      tituloPagina.textContent = `Rascunhos do ${usuarioLogado}`;
+
+      // Atualiza usuário logado na seção abaixo do header
+      document.getElementById("nomeUsuario").textContent = usuarioLogado;
+
+      const rascunhos = getRascunhosPorAutor(usuarioLogado);
+
+      // Atualiza contador (abaixo do header)
+      document.getElementById("contagemRascunhos").textContent = `${rascunhos.length} ${rascunhos.length === 1 ? "rascunho" : "rascunhos"}`;
+
+      // Atualiza contador ao lado do título no header
+      const contador = document.getElementById("contadorRascunhos");
+      contador.textContent = `(${rascunhos.length} ${rascunhos.length === 1 ? "rascunho" : "rascunhos"})`;
+
+      const container = document.getElementById("rascunhosContainer");
+      container.innerHTML = "";
+
+      if (rascunhos.length === 0) {
+        container.textContent = "Nenhum rascunho encontrado.";
+        return;
+      }
+
+      rascunhos.forEach(r => {
+        const el = criarElementoRascunho(r);
+        container.appendChild(el);
+      });
+    }
+
+    window.onload = () => {
+      carregarRascunhos();
+      atualizarRelogio();
+      setInterval(atualizarRelogio, 1000);
     };
   </script>
 </body>
