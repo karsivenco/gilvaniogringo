@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Publicações - Intranet do Gringo</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    crossorigin="anonymous"
+  />
+  <style>
+    /* Limita o tamanho do resumo */
+    .resumo {
+      white-space: pre-wrap;
+    }
+    .btn-expandir {
+      cursor: pointer;
+      color: #09679c;
+      font-weight: 600;
+      user-select: none;
+    }
+  </style>
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col">
+
+  <!-- Header -->
+  <header class="flex justify-between items-center bg-[#09679c] text-white p-4 shadow-md">
+    <div class="flex items-center gap-3">
+      <img src="img/logo.png" alt="Logo Gringo" class="h-10 w-auto" />
+      <h1 class="text-xl font-bold">Publicações</h1>
+    </div>
+    <nav class="flex items-center gap-3">
+      <a href="painel.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="Painel">
+        <i class="fas fa-home"></i> Painel
+      </a>
+      <a href="nova-postagem.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="Nova Postagem">
+        <i class="fas fa-plus"></i> Nova Postagem
+      </a>
+      <a href="ultimas-noticias2.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="Últimas Publicações">
+        <i class="fas fa-newspaper"></i> Últimas Publicações
+      </a>
+      <a href="rascunhos.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="Rascunhos">
+        <i class="fas fa-file-alt"></i> Rascunhos
+      </a>
+      <a href="perfil.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="Perfil">
+        <i class="fas fa-user"></i> Perfil
+      </a>
+      <button
+        onclick="logout()"
+        class="bg-[#053646] px-3 py-2 rounded hover:bg-[#032d39] transition flex items-center gap-1"
+        title="Sair"
+      >
+        <i class="fas fa-sign-out-alt"></i> Sair
+      </button>
+    </nav>
+  </header>
+
+  <!-- Main -->
+  <main class="flex-grow p-6 max-w-5xl mx-auto bg-white rounded shadow mt-6 mb-10">
+    <section id="publicacoesContainer" class="space-y-8">
+      <!-- Publicações agrupadas por autor serão inseridas aqui -->
+    </section>
+  </main>
+
+  <script>
+    // Usuários autorizados para visualizar publicações
+    const usuariosAutorizados = [
+      "gabriel.amaral",
+      "graziele.albuquerque",
+      "karina.maia",
+      "cristiano.santos",
+      "gilvaniogringo"
+    ];
+
+    // Função logout
+    function logout() {
+      localStorage.removeItem("usuarioLogado");
+      window.location.href = "intranet.html";
+    }
+
+    // Formata data ISO para dd/mm/aaaa HH:mm
+    function formatarDataHora(dataISO) {
+      if (!dataISO) return "";
+      const dt = new Date(dataISO);
+      const data = dt.toLocaleDateString("pt-BR");
+      const hora = dt.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
+      return `${data} ${hora}`;
+    }
+
+    // Função para criar o elemento de publicação com resumo e expandir
+    function criarPublicacaoElemento(pub) {
+      const container = document.createElement("div");
+      container.className = "border rounded p-4 shadow-sm";
+
+      // Título
+      const titulo = document.createElement("h3");
+      titulo.textContent = pub.titulo;
+      titulo.className = "text-xl font-bold mb-2 text-[#09679c]";
+      container.appendChild(titulo);
+
+      // Data/hora
+      const dataHora = document.createElement("p");
+      dataHora.textContent = "Data/Hora: " + formatarDataHora(pub.dataHora);
+      dataHora.className = "text-gray-600 text-sm mb-2";
+      container.appendChild(dataHora);
+
+      // Resumo / Conteúdo completo toggler
+      const conteudo = document.createElement("p");
+      conteudo.className = "resumo mb-2";
+      const maxResumo = 200;
+      let isExpandido = false;
+
+      const resumoTexto = pub.conteudo.length > maxResumo ? pub.conteudo.slice(0, maxResumo) + "..." : pub.conteudo;
+
+      conteudo.textContent = resumoTexto;
+
+      const btnExpandir = document.createElement("span");
+      btnExpandir.textContent = pub.conteudo.length > maxResumo ? " (mostrar mais)" : "";
+      btnExpandir.className = "btn-expandir";
+      btnExpandir.style.display = pub.conteudo.length > maxResumo ? "inline" : "none";
+
+      btnExpandir.addEventListener("click", () => {
+        if (!isExpandido) {
+          conteudo.textContent = pub.conteudo;
+          btnExpandir.textContent = " (mostrar menos)";
+        } else {
+          conteudo.textContent = resumoTexto;
+          btnExpandir.textContent = " (mostrar mais)";
+        }
+        isExpandido = !isExpandido;
+      });
+
+      container.appendChild(conteudo);
+      container.appendChild(btnExpandir);
+
+      return container;
+    }
+
+    // Função principal para carregar e mostrar publicações agrupadas por autor
+    function carregarPublicacoes() {
+      const usuario = localStorage.getItem("usuarioLogado");
+
+      if (!usuario || !usuariosAutorizados.includes(usuario)) {
+        alert("Você não tem permissão para acessar esta página.");
+        window.location.href = "intranet.html";
+        return;
+      }
+
+      const publicacoes = JSON.parse(localStorage.getItem("publicacoes")) || [];
+
+      // Agrupar publicações por autor
+      const publicacoesPorAutor = {};
+      publicacoes.forEach(pub => {
+        if (!publicacoesPorAutor[pub.autor]) {
+          publicacoesPorAutor[pub.autor] = [];
+        }
+        publicacoesPorAutor[pub.autor].push(pub);
+      });
+
+      const container = document.getElementById("publicacoesContainer");
+      container.innerHTML = "";
+
+      // Itera autores e exibe publicações
+      for (const autor in publicacoesPorAutor) {
+        const grupo = document.createElement("section");
+        grupo.className = "mb-10";
+
+        const tituloAutor = document.createElement("h2");
+        tituloAutor.textContent = `Publicações de ${autor}`;
+        tituloAutor.className = "text-2xl font-bold text-[#005075] border-b-4 border-[#FF7DA4] pb-2 mb-6";
+        grupo.appendChild(tituloAutor);
+
+        publicacoesPorAutor[autor].forEach(pub => {
+          const elPub = criarPublicacaoElemento(pub);
+          grupo.appendChild(elPub);
+        });
+
+        container.appendChild(grupo);
+      }
+
+      if (publicacoes.length === 0) {
+        container.textContent = "Nenhuma publicação encontrada.";
+      }
+    }
+
+    window.onload = carregarPublicacoes;
+  </script>
+
+</body>
+</html>
