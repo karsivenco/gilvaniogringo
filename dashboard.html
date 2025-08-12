@@ -1,100 +1,238 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Dashboard - Intranet do Gringo</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    crossorigin="anonymous"
+  />
 </head>
 <body class="bg-gray-100 min-h-screen flex flex-col">
 
-  <!-- Header padrão -->
+  <!-- Header/menu padrão -->
   <header class="flex justify-between items-center bg-[#09679c] text-white p-4 shadow-md">
     <div class="flex items-center gap-3">
       <img src="img/logo.png" alt="Logo Gringo" class="h-10 w-auto" />
       <h1 class="text-xl font-bold">Painel do Gringo</h1>
     </div>
-
     <nav class="flex items-center gap-3">
-      <a href="painel.html" class="hover:bg-[#074d6b] px-3 py-2 rounded flex items-center gap-1" title="Início">
-        <i class="fas fa-home"></i> Início
+      <a href="whatsapp.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="WhatsApp">
+        <i class="fab fa-whatsapp"></i> WhatsApp
       </a>
-      <a href="cadastro.html" class="hover:bg-[#074d6b] px-3 py-2 rounded flex items-center gap-1" title="Cadastro">
-        <i class="fas fa-user-plus"></i> Cadastro
+      <a href="nova-postagem.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="Nova Postagem">
+        <i class="fas fa-plus"></i> Nova Postagem
       </a>
-      <a href="contatos.html" class="hover:bg-[#074d6b] px-3 py-2 rounded flex items-center gap-1" title="Contatos">
-        <i class="fas fa-address-book"></i> Contatos
+      <a href="ultimas-noticias.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="Últimas Notícias">
+        <i class="fas fa-newspaper"></i> Últimas Notícias
       </a>
-      <a href="perfil.html" class="hover:bg-[#074d6b] px-3 py-2 rounded flex items-center gap-1" title="Perfil">
+      <a href="perfil.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="Perfil">
         <i class="fas fa-user"></i> Perfil
       </a>
-      <button onclick="logout()" class="hover:bg-[#032d39] px-3 py-2 rounded flex items-center gap-1 bg-[#053646]">
+      <button
+        onclick="logout()"
+        class="bg-[#053646] px-3 py-2 rounded hover:bg-[#032d39] transition flex items-center gap-1"
+        title="Sair"
+      >
         <i class="fas fa-sign-out-alt"></i> Sair
       </button>
     </nav>
   </header>
 
-  <main class="flex-grow p-6 max-w-7xl mx-auto">
-    <h2 class="text-2xl font-semibold mb-6 text-[#053646]">Dashboard Geral - Número 5551991714976</h2>
+  <!-- Conteúdo principal -->
+  <main class="flex-grow p-6 max-w-7xl mx-auto space-y-10">
 
-    <div id="metricsGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-      <!-- Cards das métricas aparecerão aqui -->
-    </div>
+    <!-- Seja bem-vindo sempre visível -->
+    <section>
+      <h2 class="text-2xl font-bold mb-6 text-[#005075]">Seja bem-vindo(a)!</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+        <a href="nova-postagem.html" class="bg-white rounded shadow p-6 hover:shadow-lg transition flex flex-col items-center text-center gap-3">
+          <i class="fas fa-plus fa-3x text-[#09679c]"></i>
+          <h3 class="font-semibold text-lg">+ Nova Postagem</h3>
+          <p>Crie e publique novas notícias no site oficial.</p>
+        </a>
+        <a href="ultimas-noticias.html" class="bg-white rounded shadow p-6 hover:shadow-lg transition flex flex-col items-center text-center gap-3">
+          <i class="fas fa-newspaper fa-3x text-[#09679c]"></i>
+          <h3 class="font-semibold text-lg">Últimas Notícias</h3>
+          <p>Veja todas as notícias publicadas no site.</p>
+        </a>
+        <a href="whatsapp.html" class="bg-[#e0f2fe] border border-[#09679c] rounded shadow p-6 hover:shadow-lg transition flex flex-col items-center text-center gap-3">
+          <i class="fab fa-whatsapp fa-3x text-[#09679c]"></i>
+          <h3 class="font-semibold text-lg text-[#09679c]">Atendimento WhatsApp</h3>
+          <p>Inicie as conversas no WhatsApp.</p>
+        </a>
+      </div>
+    </section>
+
+    <!-- Dashboard Métricas (apenas para gerente) -->
+    <section id="dashboardGerente" class="hidden bg-white rounded shadow p-6 space-y-8">
+      <h2 class="text-3xl font-bold text-[#09679c] border-b-4 border-[#FF7DA4] pb-2">Dashboard Gerente - Métricas</h2>
+
+      <!-- Cards métricas -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div class="bg-[#09679c] text-white rounded-lg p-5 shadow flex flex-col items-center">
+          <i class="fas fa-envelope fa-2x mb-3"></i>
+          <p class="text-xl font-semibold" id="totalMensagens">0</p>
+          <p>Volume de Mensagens</p>
+        </div>
+        <div class="bg-[#DB2356] text-white rounded-lg p-5 shadow flex flex-col items-center">
+          <i class="fas fa-smile fa-2x mb-3"></i>
+          <p class="text-xl font-semibold" id="sentimentoCliente">Neutro</p>
+          <p>Sentimento do Cliente</p>
+        </div>
+        <div class="bg-[#09679c] text-white rounded-lg p-5 shadow flex flex-col items-center">
+          <i class="fas fa-user-check fa-2x mb-3"></i>
+          <p class="text-xl font-semibold" id="performanceAgente">0%</p>
+          <p>Performance por Agente</p>
+        </div>
+        <div class="bg-[#DB2356] text-white rounded-lg p-5 shadow flex flex-col items-center">
+          <i class="fas fa-stopwatch fa-2x mb-3"></i>
+          <p class="text-xl font-semibold" id="tempoResposta">0s</p>
+          <p>Tempo Médio de Resposta</p>
+        </div>
+      </div>
+
+      <!-- Gráfico semanal -->
+      <div>
+        <h3 class="text-xl font-bold mb-3 text-[#005075]">Gráfico Semanal - Volume e Engajamento</h3>
+        <canvas id="graficoSemanal" class="w-full max-w-4xl"></canvas>
+      </div>
+    </section>
+
   </main>
 
+  <!-- Rodapé redes sociais -->
+  <footer class="bg-[#005075] text-white p-4 flex justify-center space-x-8">
+    <a href="https://www.instagram.com/gilvaniogringo" target="_blank" rel="noopener" class="hover:text-[#FF7DA4] transition" aria-label="Instagram">
+      <i class="fab fa-instagram fa-lg"></i>
+    </a>
+    <a href="https://www.facebook.com/gilvaniogringo" target="_blank" rel="noopener" class="hover:text-[#FF7DA4] transition" aria-label="Facebook">
+      <i class="fab fa-facebook-f fa-lg"></i>
+    </a>
+    <a href="https://twitter.com/gilvaniogringo" target="_blank" rel="noopener" class="hover:text-[#FF7DA4] transition" aria-label="X Twitter">
+      <i class="fab fa-twitter fa-lg"></i>
+    </a>
+    <a href="https://www.tiktok.com/@gilvaniogringo" target="_blank" rel="noopener" class="hover:text-[#FF7DA4] transition" aria-label="TikTok">
+      <i class="fab fa-tiktok fa-lg"></i>
+    </a>
+    <a href="https://www.kwai.com/gilvaniogringo" target="_blank" rel="noopener" class="hover:text-[#FF7DA4] transition" aria-label="Kwai">
+      <i class="fas fa-video fa-lg"></i>
+    </a>
+  </footer>
+
   <script>
-    const API_BASE = '/api';
-
+    // Logout
     function logout() {
-      localStorage.removeItem('usuarioLogado');
-      window.location.href = 'intranet.html';
+      localStorage.removeItem("usuarioLogado");
+      window.location.href = "intranet.html";
     }
 
-    async function fetchDashboardData() {
-      try {
-        const number = '5551991714976';
-        const res = await fetch(`${API_BASE}/dashboard/stats?number=${number}`);
-        if (!res.ok) throw new Error('Erro ao buscar dados do dashboard');
-        const data = await res.json();
-        renderMetrics(data);
-      } catch (err) {
-        console.error(err);
-        document.getElementById('metricsGrid').innerHTML = '<p class="text-red-500">Falha ao carregar métricas. Tente novamente mais tarde.</p>';
-      }
+    // Mostrar dashboard gerente só para gilvaniogringo
+    const usuarioLogado = localStorage.getItem("usuarioLogado");
+    const dashboardGerenteSection = document.getElementById("dashboardGerente");
+
+    if (usuarioLogado === "gilvaniogringo") {
+      dashboardGerenteSection.classList.remove("hidden");
+      iniciarDashboard();
     }
 
-    function renderMetrics(data) {
-      const grid = document.getElementById('metricsGrid');
-      grid.innerHTML = '';
+    // Dados simulados para o dashboard
+    function iniciarDashboard() {
+      // Simular dados para os cards
+      const dados = {
+        totalMensagens: 12456,
+        sentimentoCliente: "Positivo",
+        performanceAgente: 89,
+        tempoResposta: 27, // segundos
+        // outros dados podem ser adicionados conforme necessidade
+      };
 
-      const cards = [
-        { title: 'Volume de Mensagens', value: data.volumeMensagens, icon: 'fa-comments' },
-        { title: 'Sentimento do Cliente', value: data.sentimentoCliente, icon: 'fa-smile' },
-        { title: 'Performance por Agente', value: data.performanceAgente, icon: 'fa-user-check' },
-        { title: 'Tempo Médio de Resposta', value: data.tempoResposta, icon: 'fa-stopwatch' },
-        { title: 'Chats Perdidos', value: data.chatsPerdidos, icon: 'fa-user-times' },
-        { title: 'Tickets Resolvidos', value: data.ticketsResolvidos, icon: 'fa-check-circle' },
-        { title: 'Engajamento', value: data.engajamento, icon: 'fa-chart-line' },
-        { title: 'Conversas Profundas', value: data.conversasProfundas, icon: 'fa-comments-alt' },
-        { title: 'Mensagens Únicas por Dia', value: data.mensagensUnicasDia, icon: 'fa-calendar-alt' },
-      ];
+      // Atualizar elementos na página
+      document.getElementById("totalMensagens").textContent = dados.totalMensagens.toLocaleString();
+      document.getElementById("sentimentoCliente").textContent = dados.sentimentoCliente;
+      document.getElementById("performanceAgente").textContent = dados.performanceAgente + "%";
+      document.getElementById("tempoResposta").textContent = dados.tempoResposta + "s";
 
-      cards.forEach(({title, value, icon}) => {
-        const card = document.createElement('div');
-        card.className = 'bg-white rounded shadow p-5 flex items-center gap-4';
-        card.innerHTML = `
-          <i class="fas ${icon} text-4xl text-[#09679c]"></i>
-          <div>
-            <div class="text-sm text-gray-500">${title}</div>
-            <div class="text-2xl font-bold text-[#053646]">${value !== undefined ? value : '-'}</div>
-          </div>
-        `;
-        grid.appendChild(card);
+      // Criar gráfico com Chart.js
+      montarGraficoSemanal();
+    }
+
+    // Montar gráfico semanal com Chart.js
+    function montarGraficoSemanal() {
+      const ctx = document.getElementById('graficoSemanal').getContext('2d');
+
+      const labels = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'];
+      const volumeMensagens = [1200, 1350, 1100, 1450, 1600, 1000, 900];
+      const engajamento = [70, 75, 68, 80, 78, 60, 55];
+
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: 'Volume de Mensagens',
+              data: volumeMensagens,
+              borderColor: '#09679c',
+              backgroundColor: 'rgba(9,103,156,0.3)',
+              tension: 0.3,
+              fill: true,
+              yAxisID: 'y',
+              order: 2
+            },
+            {
+              label: 'Engajamento (%)',
+              data: engajamento,
+              borderColor: '#DB2356',
+              backgroundColor: 'rgba(219,35,86,0.3)',
+              tension: 0.3,
+              fill: true,
+              yAxisID: 'y1',
+              order: 1
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          interaction: {
+            mode: 'index',
+            intersect: false
+          },
+          stacked: false,
+          scales: {
+            y: {
+              type: 'linear',
+              display: true,
+              position: 'left',
+              beginAtZero: true,
+              title: {
+                display: true,
+                text: 'Mensagens'
+              }
+            },
+            y1: {
+              type: 'linear',
+              display: true,
+              position: 'right',
+              beginAtZero: true,
+              max: 100,
+              title: {
+                display: true,
+                text: 'Engajamento (%)'
+              },
+              grid: {
+                drawOnChartArea: false
+              }
+            }
+          }
+        }
       });
     }
-
-    fetchDashboardData();
   </script>
+
 </body>
 </html>
