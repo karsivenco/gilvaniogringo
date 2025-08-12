@@ -3,12 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Painel do Gerente - Intranet do Gringo</title>
+  <title>Painel - Intranet do Gringo</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    crossorigin="anonymous"
   />
 </head>
 <body class="bg-gray-100 min-h-screen flex flex-col">
@@ -17,243 +18,21 @@
   <header class="flex justify-between items-center bg-[#09679c] text-white p-4 shadow-md">
     <div class="flex items-center gap-3">
       <img src="img/logo.png" alt="Logo Gringo" class="h-10 w-auto" />
-      <h1 class="text-xl font-bold">Painel do Gerente</h1>
+      <h1 class="text-xl font-bold">Painel do Gringo</h1>
     </div>
     <nav class="flex items-center gap-3">
-      <a href="painel.html" class="bg-[#074d6b] border border-white px-3 py-2 rounded hover:bg-[#053646] transition" title="Painel">
-        <i class="fas fa-tachometer-alt"></i> Painel
-      </a>
-      <a href="whatsapp.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition" title="WhatsApp">
+      <a href="whatsapp.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="WhatsApp">
         <i class="fab fa-whatsapp"></i> WhatsApp
       </a>
-      <a href="intranet.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition" title="Sair">
-        <i class="fas fa-sign-out-alt"></i> Sair
+      <a href="nova-postagem.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="Nova Postagem">
+        <i class="fas fa-plus"></i> Nova Postagem
       </a>
-    </nav>
-  </header>
-
-  <!-- Conteúdo principal -->
-  <main class="flex-grow p-6 max-w-7xl mx-auto">
-    <section class="mb-6">
-      <h2 class="text-3xl font-bold mb-4 text-[#005075]">Resumo Geral</h2>
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div class="bg-white p-6 rounded shadow text-center">
-          <h3 class="text-lg font-semibold mb-2">Contatos Cadastrados</h3>
-          <p id="totalContatos" class="text-4xl font-bold text-[#09679c]">0</p>
-        </div>
-        <div class="bg-white p-6 rounded shadow text-center">
-          <h3 class="text-lg font-semibold mb-2">Conversas Ativas (≥ 3 msgs)</h3>
-          <p id="conversasAtivas" class="text-4xl font-bold text-[#09679c]">0</p>
-        </div>
-        <div class="bg-white p-6 rounded shadow text-center">
-          <h3 class="text-lg font-semibold mb-2">Chamadas (1 msg)</h3>
-          <p id="conversasChamada" class="text-4xl font-bold text-[#09679c]">0</p>
-        </div>
-        <div class="bg-white p-6 rounded shadow text-center">
-          <h3 class="text-lg font-semibold mb-2">Média Sem Conversação (horas)</h3>
-          <p id="mediaSemConversa" class="text-4xl font-bold text-[#09679c]">0</p>
-        </div>
-      </div>
-    </section>
-
-    <section class="mb-6">
-      <h2 class="text-3xl font-bold mb-4 text-[#005075]">Métricas Avançadas</h2>
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div class="bg-white p-6 rounded shadow text-center">
-          <h3 class="text-lg font-semibold mb-2">Volume de Mensagens</h3>
-          <p id="volumeMensagens" class="text-4xl font-bold text-[#09679c]">0</p>
-        </div>
-        <div class="bg-white p-6 rounded shadow text-center">
-          <h3 class="text-lg font-semibold mb-2">Sentimento do Cliente</h3>
-          <p id="sentimentoCliente" class="text-4xl font-bold text-[#09679c]">Neutro</p>
-        </div>
-        <div class="bg-white p-6 rounded shadow text-center">
-          <h3 class="text-lg font-semibold mb-2">Chats Perdidos</h3>
-          <p id="chatsPerdidos" class="text-4xl font-bold text-[#09679c]">0</p>
-        </div>
-        <div class="bg-white p-6 rounded shadow text-center">
-          <h3 class="text-lg font-semibold mb-2">Tickets Resolvidos</h3>
-          <p id="ticketsResolvidos" class="text-4xl font-bold text-[#09679c]">0</p>
-        </div>
-      </div>
-    </section>
-
-    <section class="mb-6">
-      <h2 class="text-3xl font-bold mb-4 text-[#005075]">Performance por Agente</h2>
-      <div class="overflow-auto">
-        <table class="min-w-full bg-white rounded shadow text-left">
-          <thead>
-            <tr class="bg-[#09679c] text-white">
-              <th class="py-3 px-4">Agente</th>
-              <th class="py-3 px-4">Mensagens Enviadas</th>
-              <th class="py-3 px-4">Tempo Médio Resposta (s)</th>
-            </tr>
-          </thead>
-          <tbody id="tabelaAgentes">
-            <!-- Gerado via JS -->
-          </tbody>
-        </table>
-      </div>
-    </section>
-
-    <section>
-      <h2 class="text-3xl font-bold mb-4 text-[#005075]">Mensagens Semanais</h2>
-      <canvas id="graficoMensagens" class="bg-white p-4 rounded shadow"></canvas>
-    </section>
-
-  </main>
-
-  <!-- Rodapé -->
-  <footer class="bg-[#005075] text-white p-4 flex justify-center space-x-8">
-    <a href="https://www.instagram.com/gilvaniogringo" target="_blank" rel="noopener" class="hover:text-[#FF7DA4] transition" aria-label="Instagram">
-      <i class="fab fa-instagram fa-lg"></i>
-    </a>
-    <a href="https://www.facebook.com/gilvaniogringo" target="_blank" rel="noopener" class="hover:text-[#FF7DA4] transition" aria-label="Facebook">
-      <i class="fab fa-facebook-f fa-lg"></i>
-    </a>
-    <a href="https://twitter.com/gilvaniogringo" target="_blank" rel="noopener" class="hover:text-[#FF7DA4] transition" aria-label="X Twitter">
-      <i class="fab fa-twitter fa-lg"></i>
-    </a>
-    <a href="https://www.tiktok.com/@gilvaniogringo" target="_blank" rel="noopener" class="hover:text-[#FF7DA4] transition" aria-label="TikTok">
-      <i class="fab fa-tiktok fa-lg"></i>
-    </a>
-    <a href="https://www.kwai.com/gilvaniogringo" target="_blank" rel="noopener" class="hover:text-[#FF7DA4] transition" aria-label="Kwai">
-      <i class="fas fa-video fa-lg"></i>
-    </a>
-  </footer>
-
-  <script>
-    // Verifica se usuário é gerente
-    const usuarioLogado = localStorage.getItem("usuarioLogado");
-    if (usuarioLogado !== "gilvaniogringo") {
-      alert("Acesso restrito. Você será redirecionado.");
-      window.location.href = "intranet.html";
-    }
-
-    // Pega contatos do localStorage
-    let contatos = JSON.parse(localStorage.getItem("contatos")) || [];
-
-    // Mensagens consideradas "disparo"
-    const mensagensDisparo = [
-      "oi", "bom dia", "boa tarde", "boa noite",
-      "olá", "ola", "tudo bem?", "tudo bem", "oii"
-    ];
-
-    // Palavras para sentimento simples
-    const palavrasPositivas = ["obrigado", "bom", "ótimo", "excelente", "legal", "positivo", "bom trabalho"];
-    const palavrasNegativas = ["ruim", "péssimo", "não gostei", "problema", "reclamo", "demora", "cancelar"];
-
-    // Função para calcular sentimento simples (positivo, negativo, neutro)
-    function calcularSentimento(mensagens) {
-      let positivo = 0;
-      let negativo = 0;
-      mensagens.forEach(msg => {
-        const texto = msg.texto.toLowerCase();
-        palavrasPositivas.forEach(p => { if (texto.includes(p)) positivo++; });
-        palavrasNegativas.forEach(n => { if (texto.includes(n)) negativo++; });
-      });
-      if (positivo > negativo) return "Positivo";
-      if (negativo > positivo) return "Negativo";
-      return "Neutro";
-    }
-
-    // Função para calcular tempo médio de resposta de um agente
-    // Considera mensagens do agente como "eu" e do cliente como "cliente"
-    // Retorna tempo médio em segundos
-    function calcularTempoMedioResposta(mensagens) {
-      let totalSegundos = 0;
-      let respostas = 0;
-
-      for (let i = 1; i < mensagens.length; i++) {
-        const atual = mensagens[i];
-        const anterior = mensagens[i-1];
-        if (anterior.de === "cliente" && atual.de === "eu") {
-          const diff = (new Date(atual.data) - new Date(anterior.data)) / 1000;
-          if(diff >= 10) { // filtra respostas muito rápidas < 10s
-            totalSegundos += diff;
-            respostas++;
-          }
-        }
-      }
-      if (respostas === 0) return 0;
-      return Math.round(totalSegundos / respostas);
-    }
-
-    // Análise geral
-    function atualizarDashboard() {
-      const totalContatos = contatos.length;
-      let conversasAtivas = 0;
-      let conversasChamada = 0;
-      let somaHorasSemConversa = 0;
-      let contatosComUltimaMsg = 0;
-      let volumeMensagens = 0;
-      let chatsPerdidos = 0; // contatos sem resposta do agente
-      let ticketsResolvidos = 0; // contatos com flag resolvido true
-
-      // Para performance por agente (supõe "eu" é o agente)
-      let mensagensPorAgente = {};
-      let tempoRespostaPorAgente = {};
-
-      const agora = new Date();
-
-      contatos.forEach(contato => {
-        const msgs = contato.mensagens || [];
-
-        // Volume total
-        volumeMensagens += msgs.length;
-
-        // Filtra mensagens válidas (não disparo)
-        const msgsValidas = msgs.filter(m => !mensagensDisparo.includes(m.texto.toLowerCase().trim()));
-
-        // Conversas ativas e chamadas
-        if (msgsValidas.length >= 3) conversasAtivas++;
-        else if (msgsValidas.length === 1) conversasChamada++;
-
-        // Última mensagem válida
-        let ultimaData = null;
-        for(let i=msgs.length-1; i>=0; i--) {
-          if(!mensagensDisparo.includes(msgs[i].texto.toLowerCase().trim())) {
-            ultimaData = new Date(msgs[i].data);
-            break;
-          }
-        }
-        if (ultimaData) {
-          contatosComUltimaMsg++;
-          somaHorasSemConversa += (agora - ultimaData) / (1000 * 60 * 60);
-        }
-
-        // Chats perdidos = contatos que o agente nunca respondeu
-        const respondeuAgente = msgs.some(m => m.de === "eu");
-        if (!respondeuAgente && msgs.length > 0) chatsPerdidos++;
-
-        // Tickets resolvidos (flag no contato)
-        if (contato.resolvido === true) ticketsResolvidos++;
-
-        // Performance por agente (simplificado, só um agente "eu" no momento)
-        if (!mensagensPorAgente["Gilvani"]) mensagensPorAgente["Gilvani"] = 0;
-        mensagensPorAgente["Gilvani"] += msgs.filter(m => m.de === "eu").length;
-        
-        // Tempo médio resposta (por agente "Gilvani")
-        if (!tempoRespostaPorAgente["Gilvani"]) tempoRespostaPorAgente["Gilvani"] = [];
-        const tempoResp = calcularTempoMedioResposta(msgs);
-        if (tempoResp > 0) tempoRespostaPorAgente["Gilvani"].push(tempoResp);
-      });
-
-      const mediaSemConversa = contatosComUltimaMsg ? (somaHorasSemConversa / contatosComUltimaMsg).toFixed(2) : 0;
-
-      // Atualiza cards resumo geral
-      document.getElementById("totalContatos").textContent = totalContatos;
-      document.getElementById("conversasAtivas").textContent = conversasAtivas;
-      document.getElementById("conversasChamada").textContent = conversasChamada;
-      document.getElementById("mediaSemConversa").textContent = mediaSemConversa;
-
-      // Atualiza cards métricas avançadas
-      document.getElementById("volumeMensagens").textContent = volumeMensagens;
-      // Para sentimento, concatena todas msgs clientes e calcula
-      let todasMensagensCliente = [];
-      contatos.forEach(c => {
-        if(c.mensagens) todasMensagensCliente = todasMensagensCliente.concat(c.mensagens.filter(m => m.de === "cliente"));
-      });
-      document.getElementById("sentimentoCliente").textContent = calcularSentimento(todasMensagensCliente);
-      document.getElementById("chatsPerdidos").textContent = chatsPerdidos;
-      document.getElementById
+      <a href="ultimas-noticias.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="Últimas Notícias">
+        <i class="fas fa-newspaper"></i> Últimas Notícias
+      </a>
+      <a href="perfil.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="Perfil">
+        <i class="fas fa-user"></i> Perfil
+      </a>
+      <button
+        onclick="logout()"
+        class="bg-[#053646] px-3 py-2 rounded hover:bg-[#032d39] transition flex items-center gap-1
