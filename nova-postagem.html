@@ -145,7 +145,7 @@
           <label for="status" class="font-semibold text-gray-700">Status da publicação:</label>
           <select id="status" name="status" class="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#09679c]">
             <option value="rascunho" selected>Rascunho</option>
-            <option value="enviar">Enviar</option>
+            <option value="enviar">Publicar</option>
           </select>
         </div>
 
@@ -256,6 +256,26 @@
       event.target.value = "";
     }
 
+    // Carregar postagem para edição se id for passado na URL
+    function carregarPostagemParaEdicao() {
+      const params = new URLSearchParams(window.location.search);
+      const id = params.get("id");
+      if (!id) return;
+
+      // Procurar rascunho por id
+      let rascunhos = JSON.parse(localStorage.getItem("rascunhos")) || [];
+      const postagem = rascunhos.find(p => String(p.id) === id);
+
+      if (!postagem) return;
+
+      document.getElementById("titulo").value = postagem.titulo;
+      document.getElementById("editor").innerHTML = postagem.conteudo;
+      document.getElementById("status").value = postagem.status || "rascunho";
+
+      // Ao enviar edição, deve atualizar o rascunho existente e não criar novo
+      document.getElementById("formPostagem").dataset.editandoId = id;
+    }
+
     function enviarPostagem(event) {
       event.preventDefault();
 
@@ -277,33 +297,78 @@
         return false;
       }
 
-      const postagem = {
-        id: Date.now(),
-        titulo,
-        conteudo,
-        autor: usuarioLogado,
-        data: new Date().toISOString(),
-        status
-      };
+      let rascunhos = JSON.parse(localStorage.getItem("rascunhos")) || [];
+      let publicacoes = JSON.parse(localStorage.getItem("publicacoes")) || [];
 
-      if (status === "rascunho") {
-        // Salvar no localStorage rascunhos
-        let rascunhos = JSON.parse(localStorage.getItem("rascunhos")) || [];
-        rascunhos.push(postagem);
-        localStorage.setItem("rascunhos", JSON.stringify(rascunhos));
-        alert("Rascunho salvo com sucesso!");
-        // Removido redirecionamento
-      } else if (status === "enviar") {
-        // Salvar no localStorage publicações para ultimas-noticias2.html e publicacoes.html
-        let publicacoes = JSON.parse(localStorage.getItem("publicacoes")) || [];
-        publicacoes.push(postagem);
-        localStorage.setItem("publicacoes", JSON.stringify(publicacoes));
-        alert("Postagem enviada com sucesso!");
-        // Removido redirecionamento
+      const form = document.getElementById("formPostagem");
+      const editandoId = form.dataset.editandoId;
+
+      if (editandoId) {
+        // Atualizar postagem existente no rascunho ou publicação
+        if (status === "rascunho") {
+          const index = rascunhos.findIndex(p => String(p.id) === editandoId);
+          if (index !== -1) {
+            rascunhos[index].titulo = titulo;
+            rascunhos[index].conteudo = conteudo;
+            rascunhos[index].data = new Date().toISOString();
+            rascunhos[index].status = status;
+            localStorage.setItem("rascunhos", JSON.stringify(rascunhos));
+            alert("Rascunho atualizado com sucesso!");
+            return false;
+          }
+        } else if (status === "enviar") {
+          // Se estava rascunho e vai enviar, remove do rascunho e adiciona em publicações
+          rascunhos = rascunhos.filter(p => String(p.id) !== editandoId);
+          localStorage.setItem("rascunhos", JSON.stringify(rascunhos));
+
+          publicacoes.push({
+            id: Number(editandoId),
+            titulo,
+            conteudo,
+            autor: usuarioLogado,
+            data: new Date().toISOString(),
+            status
+          });
+          localStorage.setItem("publicacoes", JSON.stringify(publicacoes));
+          alert("Postagem enviada com sucesso!");
+          return false;
+        }
+      } else {
+        // Criar novo post
+        const novaPostagem = {
+          id: Date.now(),
+          titulo,
+          conteudo,
+          autor: usuarioLogado,
+          data: new Date().toISOString(),
+          status
+        };
+
+        if (status === "rascunho") {
+          rascunhos.push(novaPostagem);
+          localStorage.setItem("rascunhos", JSON.stringify(rascunhos));
+          alert("Rascunho salvo com sucesso!");
+          return false;
+        } else if (status === "enviar") {
+          publicacoes.push(novaPostagem);
+          localStorage.setItem("publicacoes", JSON.stringify(publicacoes));
+          alert("Postagem enviada com sucesso!");
+          return false;
+        }
       }
 
       return false;
     }
+
+    window.onload = () => {
+      if (!usuarioLogado) {
+        alert("Usuário não logado.");
+        window.location.href = "intranet.html";
+        return;
+      }
+      montarMenu();
+      carregarPostagemParaEdicao();
+    };
   </script>
 </body>
 </html>
