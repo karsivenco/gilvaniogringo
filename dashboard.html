@@ -1,58 +1,100 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <title>WhatsApp - Atendimento</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Dashboard - Intranet do Gringo</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-  />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>
 <body class="bg-gray-100 min-h-screen flex flex-col">
 
-  <header class="bg-[#09679c] text-white p-4 flex justify-between items-center">
-    <h1 class="text-xl font-bold">WhatsApp - Atendimento</h1>
-    <nav class="flex gap-3">
-      <a href="painel.html" class="hover:underline">Painel</a>
-      <a href="contatos.html" class="hover:underline">Contatos</a>
-      <button onclick="logout()" class="bg-[#074d6b] px-3 py-1 rounded">Sair</button>
+  <!-- Header padrão -->
+  <header class="flex justify-between items-center bg-[#09679c] text-white p-4 shadow-md">
+    <div class="flex items-center gap-3">
+      <img src="img/logo.png" alt="Logo Gringo" class="h-10 w-auto" />
+      <h1 class="text-xl font-bold">Painel do Gringo</h1>
+    </div>
+
+    <nav class="flex items-center gap-3">
+      <a href="painel.html" class="hover:bg-[#074d6b] px-3 py-2 rounded flex items-center gap-1" title="Início">
+        <i class="fas fa-home"></i> Início
+      </a>
+      <a href="cadastro.html" class="hover:bg-[#074d6b] px-3 py-2 rounded flex items-center gap-1" title="Cadastro">
+        <i class="fas fa-user-plus"></i> Cadastro
+      </a>
+      <a href="contatos.html" class="hover:bg-[#074d6b] px-3 py-2 rounded flex items-center gap-1" title="Contatos">
+        <i class="fas fa-address-book"></i> Contatos
+      </a>
+      <a href="perfil.html" class="hover:bg-[#074d6b] px-3 py-2 rounded flex items-center gap-1" title="Perfil">
+        <i class="fas fa-user"></i> Perfil
+      </a>
+      <button onclick="logout()" class="hover:bg-[#032d39] px-3 py-2 rounded flex items-center gap-1 bg-[#053646]">
+        <i class="fas fa-sign-out-alt"></i> Sair
+      </button>
     </nav>
   </header>
 
-  <main class="p-6 flex-grow">
-    <!-- Conteúdo comum a todos -->
-    <section>
-      <h2 class="text-2xl font-bold mb-4">Área de Atendimento WhatsApp</h2>
-      <p>Conteúdo comum para todos os usuários que acessam esta página.</p>
-      <!-- Aqui ficaria a lista de contatos, chat, etc -->
-    </section>
+  <main class="flex-grow p-6 max-w-7xl mx-auto">
+    <h2 class="text-2xl font-semibold mb-6 text-[#053646]">Dashboard Geral - Número 5551991714976</h2>
 
-    <!-- Dashboard Gerente só para gilvaniogringo -->
-    <section id="dashboardGerente" class="hidden mt-10 bg-white p-6 rounded shadow max-w-4xl mx-auto">
-      <h2 class="text-3xl font-bold text-[#09679c] mb-4">Dashboard Gerente (Exclusivo)</h2>
-      <p>Aqui vão métricas e dados exclusivos para o gerente.</p>
-      <!-- Seus cards e gráficos do dashboard -->
-    </section>
+    <div id="metricsGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+      <!-- Cards das métricas aparecerão aqui -->
+    </div>
   </main>
 
-  <footer class="bg-[#005075] text-white p-4 text-center">
-    <p>© 2025 Intranet do Gringo</p>
-  </footer>
-
   <script>
+    const API_BASE = '/api';
+
     function logout() {
-      localStorage.removeItem("usuarioLogado");
-      window.location.href = "intranet.html";
+      localStorage.removeItem('usuarioLogado');
+      window.location.href = 'intranet.html';
     }
 
-    // Mostrar dashboard somente para "gilvaniogringo"
-    const usuarioLogado = localStorage.getItem("usuarioLogado");
-    if (usuarioLogado === "gilvaniogringo") {
-      document.getElementById("dashboardGerente").classList.remove("hidden");
-      // Aqui você pode iniciar funções que carregam dados do dashboard
+    async function fetchDashboardData() {
+      try {
+        const number = '5551991714976';
+        const res = await fetch(`${API_BASE}/dashboard/stats?number=${number}`);
+        if (!res.ok) throw new Error('Erro ao buscar dados do dashboard');
+        const data = await res.json();
+        renderMetrics(data);
+      } catch (err) {
+        console.error(err);
+        document.getElementById('metricsGrid').innerHTML = '<p class="text-red-500">Falha ao carregar métricas. Tente novamente mais tarde.</p>';
+      }
     }
+
+    function renderMetrics(data) {
+      const grid = document.getElementById('metricsGrid');
+      grid.innerHTML = '';
+
+      const cards = [
+        { title: 'Volume de Mensagens', value: data.volumeMensagens, icon: 'fa-comments' },
+        { title: 'Sentimento do Cliente', value: data.sentimentoCliente, icon: 'fa-smile' },
+        { title: 'Performance por Agente', value: data.performanceAgente, icon: 'fa-user-check' },
+        { title: 'Tempo Médio de Resposta', value: data.tempoResposta, icon: 'fa-stopwatch' },
+        { title: 'Chats Perdidos', value: data.chatsPerdidos, icon: 'fa-user-times' },
+        { title: 'Tickets Resolvidos', value: data.ticketsResolvidos, icon: 'fa-check-circle' },
+        { title: 'Engajamento', value: data.engajamento, icon: 'fa-chart-line' },
+        { title: 'Conversas Profundas', value: data.conversasProfundas, icon: 'fa-comments-alt' },
+        { title: 'Mensagens Únicas por Dia', value: data.mensagensUnicasDia, icon: 'fa-calendar-alt' },
+      ];
+
+      cards.forEach(({title, value, icon}) => {
+        const card = document.createElement('div');
+        card.className = 'bg-white rounded shadow p-5 flex items-center gap-4';
+        card.innerHTML = `
+          <i class="fas ${icon} text-4xl text-[#09679c]"></i>
+          <div>
+            <div class="text-sm text-gray-500">${title}</div>
+            <div class="text-2xl font-bold text-[#053646]">${value !== undefined ? value : '-'}</div>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    fetchDashboardData();
   </script>
-
 </body>
 </html>
