@@ -133,19 +133,26 @@
         <div id="editor" contenteditable="true" spellcheck="true" aria-multiline="true" aria-label="Editor de texto" class="prose max-w-none"></div>
       </div>
 
-      <div class="flex flex-wrap gap-4 items-center justify-end">
-        <button id="btnSalvarRascunho" class="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold px-6 py-2 rounded transition" type="button">
-          Salvar Rascunho
-        </button>
-        <button id="btnPublicar" class="bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-2 rounded transition" type="button">
-          Publicar
-        </button>
+      <div class="flex flex-wrap gap-4 items-center justify-between">
+        <div>
+          <label for="statusInfo" class="font-semibold text-gray-700">Escolha uma ação:</label>
+        </div>
+
+        <div class="flex gap-4">
+          <button type="button" id="btnSalvarRascunho" class="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold px-6 py-2 rounded transition" title="Salvar Rascunho">
+            <i class="fas fa-save"></i> Salvar Rascunho
+          </button>
+
+          <button type="button" id="btnPublicar" class="bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-2 rounded transition" title="Publicar">
+            <i class="fas fa-upload"></i> Publicar
+          </button>
+        </div>
       </div>
 
     </form>
   </main>
 
-  <script src="localStorage.js"></script> <!-- Importa funções do localStorage -->
+  <script src="localStorage.js"></script> <!-- Importa as funções do localStorage -->
 
   <script>
     const usuariosAutorizados = [
@@ -158,6 +165,7 @@
 
     const usuarioLogado = localStorage.getItem("usuarioLogado");
 
+    // Monta menu dinamicamente
     function montarMenu() {
       const menu = document.getElementById("mainMenu");
       menu.innerHTML = `
@@ -222,7 +230,6 @@
         picker.appendChild(span);
       });
     }
-
     popularEmojis();
 
     function inserirImagem(event) {
@@ -247,6 +254,7 @@
     function validarCampos() {
       const titulo = document.getElementById("titulo").value.trim();
       const conteudo = document.getElementById("editor").innerHTML.trim();
+
       if (!titulo) {
         alert("Título é obrigatório.");
         return false;
@@ -281,11 +289,13 @@
         titulo,
         conteudo,
         autor: usuarioLogado,
+        status,
+        data: new Date().toISOString()
       };
 
       try {
         salvarPostagem(postagem, status);
-        alert(status === "rascunho" ? "Rascunho salvo com sucesso!" : "Publicação enviada com sucesso!");
+        alert(status === "rascunho" ? "Rascunho salvo com sucesso!" : "Postagem publicada com sucesso!");
         if (status === "rascunho") {
           window.location.href = "rascunhos.html";
         } else if (status === "enviar") {
@@ -297,28 +307,25 @@
       }
     }
 
-    document.getElementById("btnSalvarRascunho").onclick = () => salvar("rascunho");
-    document.getElementById("btnPublicar").onclick = () => salvar("enviar");
-
-    // Carregar postagem para edição se id for passado na URL
+    // Carrega postagem para edição caso venha id na URL
     function carregarPostagemParaEdicao() {
       const params = new URLSearchParams(window.location.search);
       const id = params.get("id");
       if (!id) return;
 
-      // Buscar rascunho ou publicação pelo ID usando funções do localStorage.js
+      // Buscando rascunho ou publicação pelo ID
       let postagem = buscarRascunhoPorId(id) || buscarPublicacaoPorId(id);
       if (!postagem) return;
 
       document.getElementById("titulo").value = postagem.titulo;
       document.getElementById("editor").innerHTML = postagem.conteudo;
-      // Ajusta status para selecionar correto
-      document.getElementById("status").value = postagem.status === "publicado" ? "enviar" : "rascunho";
 
-      // Sinaliza que está editando essa postagem
-      document.getElementById("formPostagem").dataset.editandoId = id;
+      // Sinaliza que está editando
+      const form = document.getElementById("formPostagem");
+      form.dataset.editandoId = id;
     }
 
+    // Event Listeners dos botões
     window.onload = () => {
       if (!usuarioLogado || !usuariosAutorizados.includes(usuarioLogado)) {
         alert("Você não tem permissão para acessar esta página.");
@@ -327,6 +334,9 @@
       }
       montarMenu();
       carregarPostagemParaEdicao();
+
+      document.getElementById("btnSalvarRascunho").onclick = () => salvar("rascunho");
+      document.getElementById("btnPublicar").onclick = () => salvar("enviar");
     };
   </script>
 </body>
