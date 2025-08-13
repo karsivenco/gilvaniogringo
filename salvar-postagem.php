@@ -1,28 +1,35 @@
 <?php
 include 'conexao.php';
 
+header('Content-Type: application/json');
+
 $titulo = $_POST['titulo'] ?? '';
 $conteudo = $_POST['conteudo'] ?? '';
-$tipo = $_POST['tipo'] ?? 'rascunho'; // 'rascunho' ou 'publicar'
-$autor = $_POST['autor'] ?? 'Desconhecido';
-$data = date('Y-m-d H:i:s');
+$tipo = $_POST['tipo'] ?? '';
+$autor = 'gilvaniogringo'; // ou recuperar do session/localStorage
 
-$status = $tipo === 'publicar' ? 'publicado' : 'rascunho';
-
-$stmt = $conn->prepare("INSERT INTO postagens (titulo, conteudo, autor, status, data_publicacao) VALUES (?, ?, ?, ?, ?)");
-$stmt->bind_param("sssss", $titulo, $conteudo, $autor, $status, $data);
-
-if ($stmt->execute()) {
-    if ($tipo === 'publicar') {
-        header("Location: publicacoes.html?msg=Publicação realizada com sucesso");
-    } else {
-        header("Location: rascunhos.html?msg=Rascunho salvo com sucesso");
-    }
+if (!$titulo || !$conteudo) {
+    echo json_encode(['sucesso' => false, 'mensagem' => 'Título ou conteúdo vazio.']);
     exit;
-} else {
-    echo "Erro ao salvar postagem: " . $conn->error;
 }
 
-$stmt->close();
-$conn->close();
+$status = ($tipo === 'rascunho') ? 'rascunho' : 'publicado';
+
+try {
+    $stmt = $conn->prepare("INSERT INTO postagens (titulo, conteudo, autor, status) VALUES (:titulo, :conteudo, :autor, :status)");
+    $stmt->execute([
+        ':titulo' => $titulo,
+        ':conteudo' => $conteudo,
+        ':autor' => $autor,
+        ':status' => $status
+    ]);
+
+    echo json_encode([
+        'sucesso' => true,
+        'mensagem' => ($status === 'rascunho') ? 'Rascunho salvo!' : 'Post publicado!',
+        'tipo' => $tipo
+    ]);
+} catch(PDOException $e) {
+    echo json_encode(['sucesso' => false, 'mensagem' => 'Erro ao salvar postagem: ' . $e->getMessage()]);
+}
 ?>
