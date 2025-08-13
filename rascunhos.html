@@ -24,6 +24,11 @@
     .btn-excluir:hover {
       background-color: #b91c1c;
     }
+    /* Melhor alinhamento do container para não centralizar demais */
+    #rascunhosContainer > div {
+      max-width: 700px;
+      margin: 0 auto;
+    }
   </style>
 </head>
 <body class="bg-gray-100 min-h-screen flex flex-col">
@@ -68,7 +73,6 @@
   </main>
 
   <script>
-    // Usuários autorizados para visualizar rascunhos
     const usuariosAutorizados = [
       "gabriel.amaral",
       "graziele.albuquerque",
@@ -77,16 +81,13 @@
       "gilvaniogringo"
     ];
 
-    // Usuários autorizados para excluir rascunhos (pode ser o mesmo que visualizar)
     const usuariosExcluir = ["karina.maia", "cristiano.santos", "gilvaniogringo"];
 
-    // Função logout
     function logout() {
       localStorage.removeItem("usuarioLogado");
       window.location.href = "intranet.html";
     }
 
-    // Formata data ISO para dd/mm/aaaa HH:mm
     function formatarDataHora(dataISO) {
       if (!dataISO) return "";
       const dt = new Date(dataISO);
@@ -95,12 +96,11 @@
       return `${data} ${hora}`;
     }
 
-    // Função para criar o elemento do rascunho
     function criarRascunhoElemento(rascunho, usuarioAtual) {
       const container = document.createElement("div");
       container.className = "border rounded p-4 shadow-sm flex justify-between items-center";
 
-      // Div conteúdo texto
+      // Conteúdo texto
       const conteudoDiv = document.createElement("div");
 
       // Título
@@ -139,7 +139,6 @@
       return container;
     }
 
-    // Excluir rascunho por id
     function excluirRascunho(id) {
       let rascunhos = JSON.parse(localStorage.getItem("rascunhos")) || [];
       rascunhos = rascunhos.filter(r => r.id !== id);
@@ -147,7 +146,6 @@
       carregarRascunhos();
     }
 
-    // Carregar e exibir os rascunhos
     function carregarRascunhos() {
       const usuario = localStorage.getItem("usuarioLogado");
       if (!usuario || !usuariosAutorizados.includes(usuario)) {
