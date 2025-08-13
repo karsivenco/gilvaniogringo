@@ -50,3 +50,13 @@ CREATE TABLE IF NOT EXISTS `contatos` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- Tabela imagens
+CREATE TABLE imagens_postagens (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    postagem_id INT NOT NULL,
+    nome VARCHAR(255) NOT NULL,
+    tipo VARCHAR(50) NOT NULL,
+    dados LONGBLOB NOT NULL,
+    data_upload DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (postagem_id) REFERENCES postagens(id) ON DELETE CASCADE
+);
