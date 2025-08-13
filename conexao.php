@@ -1,14 +1,15 @@
 <?php
-// Dados de conexão com o banco da Locaweb
-$host = 'localhost'; // ou 'mysql01.locawest.com.br' se seu plano usar host externo
-$banco = 'gilvaniogringo'; // substitua pelo nome real do seu banco
-$usuario = 'SEU_USUARIO_MYSQL'; // fornecido pela Locaweb no painel
-$senha = 'SUA_SENHA_MYSQL';     // fornecida pela Locaweb no painel
+$host = "gilvaniogringo.mysql.dbaas.com.br";  // seu servidor
+$db   = "gilvaniogringo";                     // seu banco de dados
+$user = "gilvaniogringo";                     // seu usuário
+$pass = "Gringo@20";                          // sua senha
 
-try {
-    $pdo = new PDO("mysql:host=$host;dbname=$banco;charset=utf8", $usuario, $senha);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    die("Erro ao conectar ao banco de dados: " . $e->getMessage());
+// Criar conexão
+$conn = new mysqli($host, $user, $pass, $db);
+
+// Verificar conexão
+if ($conn->connect_error) {
+    die("Conexão falhou: " . $conn->connect_error);
 }
+// echo "Conexão bem-sucedida!";
 ?>
