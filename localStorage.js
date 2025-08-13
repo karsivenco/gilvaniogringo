@@ -1,5 +1,6 @@
+// localStorage.js
+
 const storageKeys = {
-  // ... seus outros storageKeys ...
   rascunhos: "rascunhos",
   publicacoes: "publicacoes",
 };
@@ -106,7 +107,7 @@ function salvarPostagem(postagem, status) {
     salvarOuAtualizarRascunho(postagem);
   } else if (status === "enviar") {
     salvarOuAtualizarPublicacao(postagem);
-    // Opcional: remover da lista de rascunhos se existir
+    // Remover da lista de rascunhos se existir
     removerRascunho(postagem.id);
   }
 }
@@ -122,3 +123,4 @@ function podeUsuarioPublicar(usuario) {
   ];
   return autorizados.includes(usuario);
 }
+
