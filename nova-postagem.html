@@ -58,7 +58,9 @@
 </header>
 
 <main class="flex-grow max-w-4xl mx-auto p-6">
-  <form id="formPostagem" class="bg-white rounded shadow p-6 space-y-6" action="salvar-postagem.php" method="POST" onsubmit="return validarForm()">
+  <form id="formPostagem" class="bg-white rounded shadow p-6 space-y-6">
+    <div id="msgSucesso" class="text-center font-semibold mb-4"></div>
+    
     <div>
       <label for="titulo" class="block font-semibold mb-1 text-gray-700">Título</label>
       <input type="text" id="titulo" name="titulo"
@@ -109,13 +111,7 @@
 </main>
 
 <script>
-  const usuariosAutorizados = [
-    "gabriel.amaral",
-    "graziele.albuquerque",
-    "karina.maia",
-    "cristiano.santos",
-    "gilvaniogringo"
-  ];
+  const usuariosAutorizados = ["gabriel.amaral","graziele.albuquerque","karina.maia","cristiano.santos","gilvaniogringo"];
   const usuarioLogado = localStorage.getItem("usuarioLogado");
 
   function montarMenu() {
@@ -142,7 +138,7 @@
 
   function inserirLink() {
     const url = prompt("Digite o URL do link:");
-    if (url) format("createLink", url);
+    if(url) format("createLink", url);
   }
 
   function toggleEmojiPicker() {
@@ -193,6 +189,44 @@
     return true;
   }
 
+  // ----------------- AJAX para salvar postagem sem redirecionar -----------------
+  const form = document.getElementById("formPostagem");
+  form.addEventListener("submit", async e => {
+    e.preventDefault();
+    if (!validarForm()) return;
+
+    const btnClicado = document.activeElement.value; // publicar ou rascunho
+    const formData = new FormData();
+    formData.append("titulo", document.getElementById("titulo").value.trim());
+    formData.append("conteudo", document.getElementById("editor").innerHTML.trim());
+    formData.append("tipo", btnClicado);
+
+    try {
+      const resp = await fetch("salvar-postagem.php", {
+        method: "POST",
+        body: formData
+      });
+      const data = await resp.json();
+      const msgEl = document.getElementById("msgSucesso");
+      if(data.sucesso) {
+        msgEl.textContent = data.mensagem;
+        msgEl.classList.remove("text-red-600");
+        msgEl.classList.add("text-green-600");
+        if(data.tipo === "publicar") {
+          document.getElementById("titulo").value = "";
+          document.getElementById("editor").innerHTML = "";
+        }
+      } else {
+        msgEl.textContent = data.mensagem || "Erro ao salvar.";
+        msgEl.classList.remove("text-green-600");
+        msgEl.classList.add("text-red-600");
+      }
+    } catch(err) {
+      console.error(err);
+      alert("Erro ao conectar com o servidor.");
+    }
+  });
+
   window.onload = () => {
     if (!usuarioLogado || !usuariosAutorizados.includes(usuarioLogado)) {
       alert("Acesso negado.");
@@ -205,4 +239,3 @@
 </script>
 </body>
 </html>
-
