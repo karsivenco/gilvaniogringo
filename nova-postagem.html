@@ -5,8 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Nova Postagem - Intranet do Gringo</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" />
   <style>
     #editor {
@@ -60,8 +58,7 @@
 </header>
 
 <main class="flex-grow max-w-4xl mx-auto p-6">
-  <form id="formPostagem" class="bg-white rounded shadow p-6 space-y-6" onsubmit="return false">
-    
+  <form id="formPostagem" class="bg-white rounded shadow p-6 space-y-6" action="salvar-postagem.php" method="POST" onsubmit="return validarForm()">
     <div>
       <label for="titulo" class="block font-semibold mb-1 text-gray-700">Título</label>
       <input type="text" id="titulo" name="titulo"
@@ -75,7 +72,6 @@
         <button type="button" onclick="format('bold')"><i class="fas fa-bold"></i></button>
         <button type="button" onclick="format('italic')"><i class="fas fa-italic"></i></button>
         <button type="button" onclick="format('underline')"><i class="fas fa-underline"></i></button>
-
         <select onchange="format('fontName', this.value)">
           <option value="Arial">Arial</option>
           <option value="Courier New">Courier New</option>
@@ -84,7 +80,6 @@
           <option value="Times New Roman">Times New Roman</option>
           <option value="Verdana">Verdana</option>
         </select>
-
         <select onchange="format('fontSize', this.value)">
           <option value="1">10px</option>
           <option value="2">13px</option>
@@ -94,7 +89,6 @@
           <option value="6">32px</option>
           <option value="7">48px</option>
         </select>
-
         <button type="button" onclick="format('insertUnorderedList')"><i class="fas fa-list-ul"></i></button>
         <button type="button" onclick="format('insertOrderedList')"><i class="fas fa-list-ol"></i></button>
         <button type="button" onclick="inserirLink()"><i class="fas fa-link"></i></button>
@@ -102,16 +96,15 @@
         <button type="button" onclick="document.getElementById('inputImagem').click()"><i class="fas fa-image"></i></button>
         <button type="button" onclick="toggleEmojiPicker()"><i class="fas fa-smile"></i></button>
       </div>
-
       <div id="emojiPicker" class="emoji-picker hidden"></div>
       <div id="editor" contenteditable="true" spellcheck="true" class="prose max-w-none"></div>
+      <input type="hidden" id="conteudo" name="conteudo">
     </div>
 
     <div class="flex gap-3">
-      <button type="button" id="btnSalvarRascunho" class="bg-yellow-600 hover:bg-yellow-700 text-white font-semibold px-6 py-2 rounded">Salvar Rascunho</button>
-      <button type="button" id="btnPublicar" class="bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-2 rounded">Publicar</button>
+      <button type="submit" name="tipo" value="rascunho" class="bg-yellow-600 hover:bg-yellow-700 text-white font-semibold px-6 py-2 rounded">Salvar Rascunho</button>
+      <button type="submit" name="tipo" value="publicar" class="bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-2 rounded">Publicar</button>
     </div>
-
   </form>
 </main>
 
@@ -125,48 +118,42 @@
   ];
   const usuarioLogado = localStorage.getItem("usuarioLogado");
 
-  // Firebase Config
-  const firebaseConfig = {
-    apiKey: "SUA_API_KEY",
-    authDomain: "SEU_DOMINIO.firebaseapp.com",
-    projectId: "SEU_PROJECT_ID",
-    storageBucket: "SEU_BUCKET.appspot.com",
-    messagingSenderId: "SEU_SENDER_ID",
-    appId: "SEU_APP_ID"
-  };
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.firestore();
-
   function montarMenu() {
     const menu = document.getElementById("mainMenu");
     menu.innerHTML = `
-      <a href="painel.html" class="bg-[#09679c] border border-white px-3 py-2 rounded">Painel</a>
-      <a href="nova-postagem.html" class="bg-[#053646] border border-white px-3 py-2 rounded">Nova Postagem</a>
-      <a href="publicacoes.html" class="bg-[#09679c] border border-white px-3 py-2 rounded">Últimas Publicações</a>
-      <a href="rascunhos.html" class="bg-[#09679c] border border-white px-3 py-2 rounded">Rascunhos</a>
-      <a href="perfil.html" class="bg-[#09679c] border border-white px-3 py-2 rounded">Perfil</a>
-      <button onclick="logout()" class="bg-[#053646] px-3 py-2 rounded">Sair</button>
+      <a href="painel.html" class="bg-[#09679c] border border-white px-3 py-2 rounded flex items-center gap-1">Painel</a>
+      <a href="nova-postagem.html" class="bg-[#053646] border border-white px-3 py-2 rounded flex items-center gap-1">Nova Postagem</a>
+      <a href="publicacoes.html" class="bg-[#09679c] border border-white px-3 py-2 rounded flex items-center gap-1">Últimas Publicações</a>
+      <a href="rascunhos.html" class="bg-[#09679c] border border-white px-3 py-2 rounded flex items-center gap-1">Rascunhos</a>
+      <a href="perfil.html" class="bg-[#09679c] border border-white px-3 py-2 rounded flex items-center gap-1">Perfil</a>
+      <button onclick="logout()" class="bg-[#053646] px-3 py-2 rounded flex items-center gap-1">Sair</button>
     `;
   }
+
   function logout() {
     localStorage.removeItem("usuarioLogado");
     window.location.href = "intranet.html";
   }
+
   function format(cmd, val = null) {
     document.execCommand(cmd, false, val);
     document.getElementById("editor").focus();
   }
+
   function inserirLink() {
     const url = prompt("Digite o URL do link:");
     if (url) format("createLink", url);
   }
+
   function toggleEmojiPicker() {
     document.getElementById("emojiPicker").classList.toggle("hidden");
   }
+
   function inserirEmoji(emoji) {
     format("insertText", emoji);
     toggleEmojiPicker();
   }
+
   const emojis = ["😀","😃","😄","😁","😆","😅","😂","🤣","😊","😍","😎","😢","😭","😡","👍","👎","🙏","🎉","🔥","💡"];
   function popularEmojis() {
     const picker = document.getElementById("emojiPicker");
@@ -177,6 +164,7 @@
       picker.appendChild(span);
     });
   }
+
   function inserirImagem(event) {
     const file = event.target.files[0];
     if (!file) return;
@@ -190,33 +178,21 @@
     reader.readAsDataURL(file);
     event.target.value = "";
   }
-  async function enviarPostagem(tipo) {
+
+  function validarForm() {
     if (!usuarioLogado || !usuariosAutorizados.includes(usuarioLogado)) {
       alert("Você não tem permissão para publicar.");
-      return;
+      return false;
     }
-    const titulo = document.getElementById("titulo").value.trim();
-    const conteudo = document.getElementById("editor").innerHTML.trim();
-    if (!titulo || !conteudo) {
-      alert("Preencha título e conteúdo.");
-      return;
+    const conteudoHTML = document.getElementById("editor").innerHTML.trim();
+    if (!conteudoHTML) {
+      alert("O conteúdo não pode estar vazio.");
+      return false;
     }
-    const postagem = {
-      titulo,
-      conteudo,
-      autor: usuarioLogado,
-      status: tipo === "rascunho" ? "rascunho" : "publicado",
-      data: new Date().toISOString()
-    };
-    try {
-      await db.collection(tipo === "rascunho" ? "rascunhos" : "publicacoes").add(postagem);
-      alert(tipo === "rascunho" ? "Rascunho salvo!" : "Postagem publicada!");
-      document.getElementById("titulo").value = "";
-      document.getElementById("editor").innerHTML = "";
-    } catch (e) {
-      alert("Erro: " + e.message);
-    }
+    document.getElementById("conteudo").value = conteudoHTML;
+    return true;
   }
+
   window.onload = () => {
     if (!usuarioLogado || !usuariosAutorizados.includes(usuarioLogado)) {
       alert("Acesso negado.");
@@ -225,9 +201,8 @@
     }
     montarMenu();
     popularEmojis();
-    document.getElementById("btnSalvarRascunho").onclick = () => enviarPostagem("rascunho");
-    document.getElementById("btnPublicar").onclick = () => enviarPostagem("publicar");
   };
 </script>
 </body>
 </html>
+
