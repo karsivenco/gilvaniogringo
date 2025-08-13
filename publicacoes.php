@@ -1,33 +1,16 @@
 <?php
 include 'conexao.php';
-session_start();
+header('Content-Type: application/json');
 
-// Usuário logado (substitua pelo seu sistema de login)
-$usuarioLogado = isset($_SESSION['usuarioLogado']) ? $_SESSION['usuarioLogado'] : 'gilvaniogringo';
-$usuariosAutorizados = ["gabriel.amaral", "graziele.albuquerque", "karina.maia", "cristiano.santos", "gilvaniogringo"];
-$usuariosExcluir = ["karina.maia", "cristiano.santos", "gilvaniogringo"];
-
-if (!in_array($usuarioLogado, $usuariosAutorizados)) {
-    die("Acesso negado.");
+try {
+    $stmt = $conn->query("SELECT * FROM postagens WHERE status='publicado' ORDER BY data_publicacao DESC");
+    $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    echo json_encode(['sucesso' => true, 'posts' => $posts]);
+} catch(PDOException $e) {
+    echo json_encode(['sucesso' => false, 'mensagem' => $e->getMessage()]);
 }
-
-// Excluir publicação
-if (isset($_GET['excluir'])) {
-    $id = intval($_GET['excluir']);
-    $stmt = $conn->prepare("DELETE FROM postagens WHERE idPrimária=? AND autor=? AND status='publicado'");
-    $stmt->bind_param("is", $id, $usuarioLogado);
-    $stmt->execute();
-    header("Location: publicacoes.php");
-    exit;
-}
-
-// Buscar publicações publicadas
-$stmt = $conn->prepare("SELECT idPrimária, titulo, conteudo, autor, data_publicacao FROM postagens WHERE status='publicado' ORDER BY data_publicacao DESC");
-$stmt->execute();
-$result = $stmt->get_result();
-$publicacoes = $result->fetch_all(MYSQLI_ASSOC);
-$stmt->close();
 ?>
+
 
 <!DOCTYPE html>
 <html lang="pt-BR">
