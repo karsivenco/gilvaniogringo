@@ -11,11 +11,18 @@
     crossorigin="anonymous"
   />
   <style>
-    .btn-expandir {
+    .btn-excluir {
       cursor: pointer;
-      color: #09679c;
+      background-color: #dc2626;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 0.375rem;
       font-weight: 600;
-      user-select: none;
+      border: none;
+      transition: background-color 0.2s ease-in-out;
+    }
+    .btn-excluir:hover {
+      background-color: #b91c1c;
     }
   </style>
 </head>
@@ -25,25 +32,43 @@
   <header class="flex justify-between items-center bg-[#09679c] text-white p-4 shadow-md">
     <div class="flex items-center gap-3">
       <img src="img/logo.png" alt="Logo Gringo" class="h-10 w-auto" />
-      <h1 class="text-xl font-bold" id="tituloPagina">Rascunhos</h1>
-      <!-- Contagem -->
-      <span id="contadorRascunhos" class="ml-4 text-lg"></span>
+      <h1 class="text-xl font-bold">Rascunhos</h1>
     </div>
-    <div id="relogio" class="text-white font-mono text-lg"></div> <!-- Relógio -->
-
-    <nav id="mainMenu" class="flex items-center gap-3">
-      <!-- Menu será inserido via JS -->
+    <nav class="flex items-center gap-3">
+      <a href="painel.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="Painel">
+        <i class="fas fa-home"></i> Painel
+      </a>
+      <a href="nova-postagem.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="Nova Postagem">
+        <i class="fas fa-plus"></i> Nova Postagem
+      </a>
+      <a href="publicacoes.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="Últimas Publicações">
+        <i class="fas fa-newspaper"></i> Últimas Publicações
+      </a>
+      <a href="rascunhos.html" class="bg-[#074d6b] border border-white px-3 py-2 rounded bg-opacity-90 flex items-center gap-1" title="Rascunhos">
+        <i class="fas fa-file-alt"></i> Rascunhos
+      </a>
+      <a href="perfil.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="Perfil">
+        <i class="fas fa-user"></i> Perfil
+      </a>
+      <button
+        onclick="logout()"
+        class="bg-[#053646] px-3 py-2 rounded hover:bg-[#032d39] transition flex items-center gap-1"
+        title="Sair"
+      >
+        <i class="fas fa-sign-out-alt"></i> Sair
+      </button>
     </nav>
   </header>
 
   <!-- Main -->
   <main class="flex-grow p-6 max-w-5xl mx-auto bg-white rounded shadow mt-6 mb-10">
-    <section id="rascunhosContainer" class="space-y-8">
-      <!-- Rascunhos do usuário serão listados aqui -->
+    <section id="rascunhosContainer" class="space-y-6">
+      <!-- Rascunhos serão inseridos aqui -->
     </section>
   </main>
 
   <script>
+    // Usuários autorizados para visualizar rascunhos
     const usuariosAutorizados = [
       "gabriel.amaral",
       "graziele.albuquerque",
@@ -52,35 +77,13 @@
       "gilvaniogringo"
     ];
 
-    const usuarioLogado = localStorage.getItem("usuarioLogado");
+    // Usuários autorizados para excluir rascunhos (pode ser o mesmo que visualizar)
+    const usuariosExcluir = ["karina.maia", "cristiano.santos", "gilvaniogringo"];
 
+    // Função logout
     function logout() {
       localStorage.removeItem("usuarioLogado");
       window.location.href = "intranet.html";
-    }
-
-    function montarMenu() {
-      const menu = document.getElementById("mainMenu");
-      menu.innerHTML = `
-        <a href="painel.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="Painel">
-          <i class="fas fa-home"></i> Painel
-        </a>
-        <a href="nova-postagem.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="Nova Postagem">
-          <i class="fas fa-plus"></i> Nova Postagem
-        </a>
-        <a href="publicacoes.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="Últimas Publicações">
-          <i class="fas fa-newspaper"></i> Últimas Publicações
-        </a>
-        <a href="rascunhos.html" class="bg-[#053646] border border-white px-3 py-2 rounded hover:bg-[#032d39] transition flex items-center gap-1" title="Rascunhos">
-          <i class="fas fa-file-alt"></i> Rascunhos
-        </a>
-        <a href="perfil.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="Perfil">
-          <i class="fas fa-user"></i> Perfil
-        </a>
-        <button onclick="logout()" class="bg-[#053646] px-3 py-2 rounded hover:bg-[#032d39] transition flex items-center gap-1" title="Sair">
-          <i class="fas fa-sign-out-alt"></i> Sair
-        </button>
-      `;
     }
 
     // Formata data ISO para dd/mm/aaaa HH:mm
@@ -92,107 +95,68 @@
       return `${data} ${hora}`;
     }
 
-    // Busca rascunhos do usuário logado no localStorage
-    function getRascunhosPorAutor(autor) {
-      if (!autor) return [];
-      const rascunhos = JSON.parse(localStorage.getItem("rascunhos")) || [];
-      return rascunhos.filter(p => p.autor === autor);
-    }
-
-    // Remove rascunho por id e atualiza listagem (somente se usuário autorizado)
-    function removerRascunho(id) {
-      if (!["karina.maia", "cristiano.santos", "gilvaniogringo"].includes(usuarioLogado)) {
-        alert("Você não tem permissão para excluir este rascunho.");
-        return;
-      }
-      if (!confirm("Deseja realmente excluir este rascunho?")) return;
-
-      let rascunhos = JSON.parse(localStorage.getItem("rascunhos")) || [];
-      rascunhos = rascunhos.filter(p => p.id !== id);
-      localStorage.setItem("rascunhos", JSON.stringify(rascunhos));
-      carregarRascunhos();
-    }
-
-    // Cria o elemento de cada rascunho
-    function criarElementoRascunho(rascunho) {
+    // Função para criar o elemento do rascunho
+    function criarRascunhoElemento(rascunho, usuarioAtual) {
       const container = document.createElement("div");
-      container.className = "border rounded p-4 shadow-sm";
+      container.className = "border rounded p-4 shadow-sm flex justify-between items-center";
 
+      // Div conteúdo texto
+      const conteudoDiv = document.createElement("div");
+
+      // Título
       const titulo = document.createElement("h3");
-      titulo.textContent = rascunho.titulo;
-      titulo.className = "text-xl font-bold mb-2 text-[#09679c]";
-      container.appendChild(titulo);
+      titulo.textContent = rascunho.titulo || "(Sem título)";
+      titulo.className = "text-xl font-bold mb-1 text-[#09679c]";
+      conteudoDiv.appendChild(titulo);
 
-      const dataHora = document.createElement("p");
-      dataHora.textContent = "Última edição: " + formatarDataHora(rascunho.data);
-      dataHora.className = "text-gray-600 text-sm mb-2";
-      container.appendChild(dataHora);
+      // Data
+      const dataP = document.createElement("p");
+      dataP.textContent = "Data: " + formatarDataHora(rascunho.data);
+      dataP.className = "text-gray-600 text-sm";
+      conteudoDiv.appendChild(dataP);
 
-      // Resumo conteúdo (texto plano, limitado)
-      const resumo = document.createElement("p");
-      resumo.className = "mb-2";
-      const textoLimite = 250;
-      const conteudoLimpo = rascunho.conteudo.replace(/<[^>]+>/g, "");
-      resumo.textContent = conteudoLimpo.length > textoLimite
-        ? conteudoLimpo.slice(0, textoLimite) + "..."
-        : conteudoLimpo;
-      container.appendChild(resumo);
+      // Autor
+      const autorP = document.createElement("p");
+      autorP.textContent = "Autor: " + (rascunho.autor || "Desconhecido");
+      autorP.className = "text-gray-600 text-sm";
+      conteudoDiv.appendChild(autorP);
 
-      // Botões editar e excluir
-      const botoesDiv = document.createElement("div");
-      botoesDiv.className = "flex gap-3";
+      container.appendChild(conteudoDiv);
 
-      const btnEditar = document.createElement("button");
-      btnEditar.textContent = "Editar";
-      btnEditar.className = "bg-[#09679c] text-white px-4 py-2 rounded hover:bg-[#074d6b] transition";
-      btnEditar.onclick = () => {
-        window.location.href = `nova-postagem.html?id=${rascunho.id}`;
-      };
-      botoesDiv.appendChild(btnEditar);
-
-      // Mostrar botão excluir só para usuários autorizados
-      if (["karina.maia", "cristiano.santos", "gilvaniogringo"].includes(usuarioLogado)) {
+      // Botão excluir
+      if (usuariosExcluir.includes(usuarioAtual)) {
         const btnExcluir = document.createElement("button");
         btnExcluir.textContent = "Excluir";
-        btnExcluir.className = "bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition";
-        btnExcluir.onclick = () => removerRascunho(rascunho.id);
-        botoesDiv.appendChild(btnExcluir);
+        btnExcluir.className = "btn-excluir";
+        btnExcluir.onclick = () => {
+          if (confirm("Deseja realmente excluir este rascunho?")) {
+            excluirRascunho(rascunho.id);
+          }
+        };
+        container.appendChild(btnExcluir);
       }
-
-      container.appendChild(botoesDiv);
 
       return container;
     }
 
-    // Atualiza o relógio no header a cada segundo
-    function atualizarRelogio() {
-      const elRelogio = document.getElementById("relogio");
-      const agora = new Date();
-      elRelogio.textContent = agora.toLocaleString("pt-BR", {
-        dateStyle: "short",
-        timeStyle: "medium"
-      });
+    // Excluir rascunho por id
+    function excluirRascunho(id) {
+      let rascunhos = JSON.parse(localStorage.getItem("rascunhos")) || [];
+      rascunhos = rascunhos.filter(r => r.id !== id);
+      localStorage.setItem("rascunhos", JSON.stringify(rascunhos));
+      carregarRascunhos();
     }
 
-    // Carrega e exibe os rascunhos do usuário logado
+    // Carregar e exibir os rascunhos
     function carregarRascunhos() {
-      if (!usuarioLogado || !usuariosAutorizados.includes(usuarioLogado)) {
+      const usuario = localStorage.getItem("usuarioLogado");
+      if (!usuario || !usuariosAutorizados.includes(usuario)) {
         alert("Você não tem permissão para acessar esta página.");
         window.location.href = "intranet.html";
         return;
       }
 
-      montarMenu();
-
-      // Atualiza título com nome do usuário
-      const tituloPagina = document.getElementById("tituloPagina");
-      tituloPagina.textContent = `Rascunhos do ${usuarioLogado}`;
-
-      const rascunhos = getRascunhosPorAutor(usuarioLogado);
-
-      // Atualiza contador
-      const contador = document.getElementById("contadorRascunhos");
-      contador.textContent = `(${rascunhos.length} ${rascunhos.length === 1 ? "rascunho" : "rascunhos"})`;
+      const rascunhos = JSON.parse(localStorage.getItem("rascunhos")) || [];
 
       const container = document.getElementById("rascunhosContainer");
       container.innerHTML = "";
@@ -202,17 +166,16 @@
         return;
       }
 
-      rascunhos.forEach(r => {
-        const el = criarElementoRascunho(r);
+      // Ordenar por data decrescente (mais recente primeiro)
+      rascunhos.sort((a,b) => new Date(b.data) - new Date(a.data));
+
+      rascunhos.forEach(rascunho => {
+        const el = criarRascunhoElemento(rascunho, usuario);
         container.appendChild(el);
       });
     }
 
-    window.onload = () => {
-      carregarRascunhos();
-      atualizarRelogio();
-      setInterval(atualizarRelogio, 1000);
-    };
+    window.onload = carregarRascunhos;
   </script>
 </body>
 </html>
