@@ -1,29 +1,24 @@
 <?php
-$host = "localhost";
-$db = "intranet_gringo";
-$user = "gringo_user";
-$pass = "senhaSegura123";
+include 'conexao.php';  // conecta ao banco real
 
-$conn = new mysqli($host, $user, $pass, $db);
-if ($conn->connect_error) {
-    die("Falha na conexão: " . $conn->connect_error);
-}
-
+// Recebe dados do formulário
 $titulo = $_POST['titulo'];
 $conteudo = $_POST['conteudo'];
 $autor = $_POST['autor'];
 $status = $_POST['status'];
+$data = date("Y-m-d H:i:s");
 
-$sql = "INSERT INTO postagens (titulo, conteudo, autor, status) VALUES (?, ?, ?, ?)";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("ssss", $titulo, $conteudo, $autor, $status);
+// Insere no banco
+$sql = "INSERT INTO postagens (titulo, conteudo, autor, status, data_publicacao)
+        VALUES ('$titulo', '$conteudo', '$autor', '$status', '$data')";
 
-if ($stmt->execute()) {
-    echo "OK";
+if ($conn->query($sql) === TRUE) {
+    echo "Postagem salva com sucesso!";
+    // Opcional: redirecionar para rascunhos ou últimas notícias
+    // header("Location: rascunhos.php");
 } else {
-    echo "Erro: " . $stmt->error;
+    echo "Erro: " . $conn->error;
 }
 
-$stmt->close();
 $conn->close();
 ?>
