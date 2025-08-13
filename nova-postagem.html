@@ -134,24 +134,30 @@
       </div>
 
       <div class="flex flex-wrap gap-4 items-center justify-between">
+        <div>
+          <label for="status" class="font-semibold text-gray-700">Status da publicação:</label>
+          <select id="status" name="status" class="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#09679c]" disabled>
+            <option value="rascunho" selected>Rascunho</option>
+            <option value="enviar">Publicar</option>
+          </select>
+        </div>
 
-        <button type="button" id="btnSalvarRascunho" class="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold px-6 py-2 rounded transition" title="Salvar Rascunho">
-          Salvar Rascunho
-        </button>
-
-        <button type="button" id="btnPublicar" class="bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-2 rounded transition" title="Publicar Postagem">
-          Publicar
-        </button>
-
+        <div class="flex gap-3">
+          <button type="button" id="btnSalvarRascunho" class="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold px-6 py-2 rounded transition" title="Salvar Rascunho">
+            Salvar Rascunho
+          </button>
+          <button type="button" id="btnPublicar" class="bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-2 rounded transition" title="Publicar Postagem">
+            Publicar
+          </button>
+        </div>
       </div>
 
     </form>
   </main>
 
-  <script src="localStorage.js"></script> <!-- Importa as funções do localStorage -->
+  <script src="localStorage.js"></script> <!-- Seu arquivo localStorage.js -->
 
   <script>
-    // Lista de usuários autorizados para postar
     const usuariosAutorizados = [
       "gabriel.amaral",
       "graziele.albuquerque",
@@ -162,7 +168,7 @@
 
     const usuarioLogado = localStorage.getItem("usuarioLogado");
 
-    // Monta menu dinâmico
+    // Monta menu dinamicamente
     function montarMenu() {
       const menu = document.getElementById("mainMenu");
       menu.innerHTML = `
@@ -248,27 +254,25 @@
       event.target.value = "";
     }
 
-    // Carregar postagem para edição se tiver id na URL
+    // Carregar postagem para edição se id for passado na URL
     function carregarPostagemParaEdicao() {
       const params = new URLSearchParams(window.location.search);
       const id = params.get("id");
       if (!id) return;
 
-      // Usar funções globais do localStorage.js
+      // Busca rascunho ou publicação pelo ID
       let postagem = buscarRascunhoPorId(id) || buscarPublicacaoPorId(id);
       if (!postagem) return;
 
       document.getElementById("titulo").value = postagem.titulo;
       document.getElementById("editor").innerHTML = postagem.conteudo;
-      
-      // Se status estiver 'publicado', considerar 'enviar' no select
-      document.getElementById("status").value = postagem.status === "publicado" ? "enviar" : "rascunho";
+      document.getElementById("status").value = postagem.status === "enviar" ? "enviar" : "rascunho";
 
-      // Marcar que está editando
+      // Sinaliza que está editando essa postagem
       document.getElementById("formPostagem").dataset.editandoId = id;
     }
 
-    // Função que efetivamente salva a postagem, chamando o localStorage.js
+    // Função que executa a gravação no localStorage e redireciona conforme o botão clicado
     function salvarPostagemComStatus(status) {
       if (!usuarioLogado) {
         alert("Usuário não logado.");
@@ -276,6 +280,7 @@
         return;
       }
 
+      // Verifica se usuário está na lista autorizada para postar
       if (!usuariosAutorizados.includes(usuarioLogado)) {
         alert("Você não tem permissão para postar.");
         return;
@@ -294,8 +299,10 @@
       }
 
       const form = document.getElementById("formPostagem");
+
+      // Garante que o id seja sempre string única — cria se não existir
       let id = form.dataset.editandoId;
-      if (!id) {
+      if (!id || id === "null" || id === "undefined") {
         id = Date.now().toString();
       }
 
@@ -307,16 +314,20 @@
       };
 
       try {
-        salvarPostagem(postagem, status);
-        alert(status === "rascunho" ? "Rascunho salvo com sucesso!" : "Postagem publicada com sucesso!");
+        // Ajusta status para plural "rascunhos" para salvar rascunho
+        const statusParaSalvar = status === "rascunho" ? "rascunhos" : status;
 
-        // Depois que salvar/publicar limpa o formulário e remove edição
+        salvarPostagem(postagem, statusParaSalvar);
+
+        alert(statusParaSalvar === "rascunhos" ? "Rascunho salvo com sucesso!" : "Postagem publicada com sucesso!");
+
+        // Limpa form para nova postagem
         form.reset();
         document.getElementById("editor").innerHTML = "";
         delete form.dataset.editandoId;
 
-        // Redirecionar conforme ação
-        if(status === "rascunhos") {
+        // Redireciona conforme status
+        if (statusParaSalvar === "rascunhos") {
           window.location.href = "rascunhos.html";
         } else {
           window.location.href = "publicacoes.html";
@@ -326,25 +337,18 @@
       }
     }
 
-    // Eventos dos botões separados
+    // Eventos dos botões
     window.onload = () => {
       if (!usuarioLogado || !usuariosAutorizados.includes(usuarioLogado)) {
         alert("Você não tem permissão para acessar esta página.");
         window.location.href = "intranet.html";
         return;
       }
-
       montarMenu();
-      popularEmojis();
       carregarPostagemParaEdicao();
 
-      document.getElementById("btnSalvarRascunho").addEventListener("click", () => {
-        salvarPostagemComStatus("rascunho");
-      });
-
-      document.getElementById("btnPublicar").addEventListener("click", () => {
-        salvarPostagemComStatus("enviar");
-      });
+      document.getElementById("btnSalvarRascunho").onclick = () => salvarPostagemComStatus("rascunho");
+      document.getElementById("btnPublicar").onclick = () => salvarPostagemComStatus("enviar");
     };
   </script>
 </body>
