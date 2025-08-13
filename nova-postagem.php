@@ -32,12 +32,43 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" />
   <style>
-    #editor { min-height: 250px; border: 1px solid #ccc; padding: 10px; border-radius: 4px; background: white; overflow-y: auto; }
+    #editor {
+      min-height: 250px;
+      border: 1px solid #ccc;
+      padding: 10px;
+      border-radius: 4px;
+      background: white;
+      overflow-y: auto;
+    }
     #editor:focus { outline: 2px solid #09679c; }
-    .toolbar button { background: #09679c; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; margin-right: 4px; }
+    .toolbar button {
+      background: #09679c;
+      color: white;
+      border: none;
+      padding: 6px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-right: 4px;
+    }
     .toolbar button:hover { background: #074d6b; }
-    .toolbar select { padding: 5px; border-radius: 4px; border: 1px solid #ccc; margin-right: 8px; }
-    .emoji-picker { max-height: 120px; overflow-y: scroll; border: 1px solid #ccc; background: white; border-radius: 4px; padding: 5px; display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+    .toolbar select {
+      padding: 5px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      margin-right: 8px;
+    }
+    .emoji-picker {
+      max-height: 120px;
+      overflow-y: scroll;
+      border: 1px solid #ccc;
+      background: white;
+      border-radius: 4px;
+      padding: 5px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 6px;
+    }
     .emoji-picker span { cursor: pointer; font-size: 20px; }
   </style>
 </head>
@@ -52,10 +83,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </header>
 
 <main class="flex-grow max-w-4xl mx-auto p-6">
-
-  <?php if($mensagemSucesso) echo "<p class='mb-4 text-green-700 font-semibold'>$mensagemSucesso</p>"; ?>
-
-  <form id="formPostagem" class="bg-white rounded shadow p-6 space-y-6" method="POST" onsubmit="return validarForm()">
+  <form id="formPostagem" class="bg-white rounded shadow p-6 space-y-6">
+    <div id="msgSucesso" class="text-center font-semibold mb-4"></div>
+    
     <div>
       <label for="titulo" class="block font-semibold mb-1 text-gray-700">Título</label>
       <input type="text" id="titulo" name="titulo"
@@ -106,23 +136,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </main>
 
 <script>
-  const usuariosAutorizados = [
-    "gabriel.amaral",
-    "graziele.albuquerque",
-    "karina.maia",
-    "cristiano.santos",
-    "gilvaniogringo"
-  ];
+  const usuariosAutorizados = ["gabriel.amaral","graziele.albuquerque","karina.maia","cristiano.santos","gilvaniogringo"];
   const usuarioLogado = localStorage.getItem("usuarioLogado");
 
   function montarMenu() {
     const menu = document.getElementById("mainMenu");
     menu.innerHTML = `
       <a href="painel.html" class="bg-[#09679c] border border-white px-3 py-2 rounded flex items-center gap-1">Painel</a>
-      <a href="nova-postagem.php" class="bg-[#053646] border border-white px-3 py-2 rounded flex items-center gap-1">Nova Postagem</a>
-      <a href="publicacoes.php" class="bg-[#09679c] border border-white px-3 py-2 rounded flex items-center gap-1">Últimas Publicações</a>
-      <a href="rascunhos.php" class="bg-[#09679c] border border-white px-3 py-2 rounded flex items-center gap-1">Rascunhos</a>
-      <a href="perfil.php" class="bg-[#09679c] border border-white px-3 py-2 rounded flex items-center gap-1">Perfil</a>
+      <a href="nova-postagem.html" class="bg-[#053646] border border-white px-3 py-2 rounded flex items-center gap-1">Nova Postagem</a>
+      <a href="publicacoes.html" class="bg-[#09679c] border border-white px-3 py-2 rounded flex items-center gap-1">Últimas Publicações</a>
+      <a href="rascunhos.html" class="bg-[#09679c] border border-white px-3 py-2 rounded flex items-center gap-1">Rascunhos</a>
+      <a href="perfil.html" class="bg-[#09679c] border border-white px-3 py-2 rounded flex items-center gap-1">Perfil</a>
       <button onclick="logout()" class="bg-[#053646] px-3 py-2 rounded flex items-center gap-1">Sair</button>
     `;
   }
@@ -139,7 +163,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
   function inserirLink() {
     const url = prompt("Digite o URL do link:");
-    if (url) format("createLink", url);
+    if(url) format("createLink", url);
   }
 
   function toggleEmojiPicker() {
@@ -189,6 +213,44 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     document.getElementById("conteudo").value = conteudoHTML;
     return true;
   }
+
+  // ----------------- AJAX para salvar postagem sem redirecionar -----------------
+  const form = document.getElementById("formPostagem");
+  form.addEventListener("submit", async e => {
+    e.preventDefault();
+    if (!validarForm()) return;
+
+    const btnClicado = document.activeElement.value; // publicar ou rascunho
+    const formData = new FormData();
+    formData.append("titulo", document.getElementById("titulo").value.trim());
+    formData.append("conteudo", document.getElementById("editor").innerHTML.trim());
+    formData.append("tipo", btnClicado);
+
+    try {
+      const resp = await fetch("salvar-postagem.php", {
+        method: "POST",
+        body: formData
+      });
+      const data = await resp.json();
+      const msgEl = document.getElementById("msgSucesso");
+      if(data.sucesso) {
+        msgEl.textContent = data.mensagem;
+        msgEl.classList.remove("text-red-600");
+        msgEl.classList.add("text-green-600");
+        if(data.tipo === "publicar") {
+          document.getElementById("titulo").value = "";
+          document.getElementById("editor").innerHTML = "";
+        }
+      } else {
+        msgEl.textContent = data.mensagem || "Erro ao salvar.";
+        msgEl.classList.remove("text-green-600");
+        msgEl.classList.add("text-red-600");
+      }
+    } catch(err) {
+      console.error(err);
+      alert("Erro ao conectar com o servidor.");
+    }
+  });
 
   window.onload = () => {
     if (!usuarioLogado || !usuariosAutorizados.includes(usuarioLogado)) {
