@@ -30,6 +30,7 @@ function setPublicacoes(publicacoes) {
 // Salva ou atualiza um rascunho
 function salvarOuAtualizarRascunho(postagem) {
   if (!postagem || !postagem.id) throw new Error("Postagem inválida para salvar rascunho");
+  if (!postagem.autor) throw new Error("Autor não informado no rascunho");
   let rascunhos = getRascunhos();
   const idx = rascunhos.findIndex(p => p.id === postagem.id);
   if (idx >= 0) {
@@ -43,6 +44,7 @@ function salvarOuAtualizarRascunho(postagem) {
 // Salva ou atualiza uma publicação
 function salvarOuAtualizarPublicacao(postagem) {
   if (!postagem || !postagem.id) throw new Error("Postagem inválida para salvar publicação");
+  if (!postagem.autor) throw new Error("Autor não informado na publicação");
   let publicacoes = getPublicacoes();
   const idx = publicacoes.findIndex(p => p.id === postagem.id);
   if (idx >= 0) {
@@ -100,6 +102,9 @@ function getRascunhosPorAutor(autor) {
 // Função para salvar postagem (rascunho ou publicada) e atualizar localStorage
 function salvarPostagem(postagem, status) {
   if (!postagem) throw new Error("Postagem inválida");
+  if (!postagem.autor) throw new Error("Autor não informado");
+  if (!postagem.id) throw new Error("ID da postagem não informado");
+
   postagem.status = status;
   postagem.data = new Date().toISOString();
 
@@ -109,6 +114,8 @@ function salvarPostagem(postagem, status) {
     salvarOuAtualizarPublicacao(postagem);
     // Remover da lista de rascunhos se existir
     removerRascunho(postagem.id);
+  } else {
+    throw new Error("Status inválido: deve ser 'rascunho' ou 'enviar'");
   }
 }
 
