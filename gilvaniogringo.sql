@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Inserir usuários
-INSERT INTO `usuarios` (`nome`, `email`, `senha`, `perfil`) VALUES
+INSERT INTO `usuarios` (`nome`, `usuario`, `senha`, `perfil`) VALUES
 ('Grazielle Albuquerque', 'grazielle.albuquerque', 'Gringo1975', 'Jornalismo'),
 ('Gabriel Amaral', 'gabriel.amaral', 'Gringo1975', 'Jornalismo'),
 ('Karina Maia', 'karina.maia', 'Gringo@20', 'Desenvolvedora Social Mídia'),
