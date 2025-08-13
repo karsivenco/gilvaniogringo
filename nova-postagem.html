@@ -385,10 +385,11 @@
 
       alert(status === "rascunho" ? "Rascunho salvo com sucesso!" : "Postagem publicada com sucesso!");
 
-      // Limpa formulário para nova postagem e mantém na mesma página
-      document.getElementById("titulo").value = "";
-      document.getElementById("editor").innerHTML = "";
-      document.getElementById("status").value = "rascunho";
+      if(status === "rascunho") {
+        window.location.href = "rascunhos.html";
+      } else {
+        window.location.href = "ultimas-noticias2.html";
+      }
 
       return false;
     }
