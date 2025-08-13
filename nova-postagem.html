@@ -274,7 +274,7 @@
 
       document.getElementById("titulo").value = postagem.titulo;
       document.getElementById("editor").innerHTML = postagem.conteudo;
-      document.getElementById("status").value = postagem.status || "rascunho";
+      document.getElementById("status").value = postagem.status === "publicado" ? "enviar" : "rascunho";
 
       // Ao enviar edição, deve atualizar o item existente (rascunho ou publicação)
       document.getElementById("formPostagem").dataset.editandoId = id;
@@ -308,7 +308,6 @@
       const editandoId = form.dataset.editandoId;
 
       if (editandoId) {
-        // Atualizar postagem existente
         if (status === "rascunho") {
           // Atualizar ou inserir rascunho
           let idxRascunho = rascunhos.findIndex(p => String(p.id) === editandoId);
@@ -322,7 +321,6 @@
               status: "rascunho"
             };
           } else {
-            // Se não estava nos rascunhos, adicionar
             rascunhos.push({
               id: editandoId,
               titulo,
@@ -332,14 +330,11 @@
               status: "rascunho"
             });
           }
-          // Se estava publicado, remover da publicações
+          // Remove da publicações para evitar duplicidade
           publicacoes = publicacoes.filter(p => String(p.id) !== editandoId);
 
         } else if (status === "enviar") {
-          // Publicar: remover dos rascunhos se existir
-          rascunhos = rascunhos.filter(p => String(p.id) !== editandoId);
-
-          // Atualizar ou adicionar em publicações
+          // Atualizar ou inserir publicação
           let idxPub = publicacoes.findIndex(p => String(p.id) === editandoId);
           if (idxPub !== -1) {
             publicacoes[idxPub] = {
@@ -360,7 +355,13 @@
               status: "publicado"
             });
           }
+          // Remove do rascunho para evitar duplicidade
+          rascunhos = rascunhos.filter(p => String(p.id) !== editandoId);
         }
+
+        // Limpar atributo editandoId para nova postagem
+        delete form.dataset.editandoId;
+
       } else {
         // Nova postagem
         const novoId = Date.now().toString();
@@ -386,23 +387,21 @@
         }
       }
 
-      // Salvar localStorage
       localStorage.setItem("rascunhos", JSON.stringify(rascunhos));
       localStorage.setItem("publicacoes", JSON.stringify(publicacoes));
 
       alert(status === "rascunho" ? "Rascunho salvo com sucesso!" : "Postagem publicada com sucesso!");
 
-      // Limpar formulário e redirecionar para páginas correspondentes
       if (status === "rascunho") {
         window.location.href = "rascunhos.html";
       } else {
-        // Redirecionar para publicações após publicar
         window.location.href = "publicacoes.html";
       }
+
       return false;
     }
 
-    // Função para carregar edição se id na URL
+    // Inicialização
     window.onload = () => {
       if (!usuarioLogado || !usuariosAutorizados.includes(usuarioLogado)) {
         alert("Você não tem permissão para acessar esta página.");
