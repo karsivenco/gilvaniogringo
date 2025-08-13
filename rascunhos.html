@@ -37,7 +37,7 @@
   <header class="flex justify-between items-center bg-[#09679c] text-white p-4 shadow-md">
     <div class="flex items-center gap-3">
       <img src="img/logo.png" alt="Logo Gringo" class="h-10 w-auto" />
-      <h1 class="text-xl font-bold">Rascunhos</h1>
+      <h1 id="tituloPagina" class="text-xl font-bold">Rascunhos</h1>
     </div>
     <nav class="flex items-center gap-3">
       <a href="painel.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="Painel">
@@ -67,6 +67,7 @@
 
   <!-- Main -->
   <main class="flex-grow p-6 max-w-5xl mx-auto bg-white rounded shadow mt-6 mb-10">
+    <h2 id="subtituloUsuario" class="text-lg font-semibold mb-4 text-[#09679c]"></h2>
     <section id="rascunhosContainer" class="space-y-6">
       <!-- Rascunhos serão inseridos aqui -->
     </section>
@@ -81,6 +82,7 @@
       "gilvaniogringo"
     ];
 
+    // Usuários que podem excluir rascunhos
     const usuariosExcluir = ["karina.maia", "cristiano.santos", "gilvaniogringo"];
 
     function logout() {
@@ -136,6 +138,13 @@
         container.appendChild(btnExcluir);
       }
 
+      // Clique no título abre edição da postagem
+      titulo.style.cursor = "pointer";
+      titulo.title = "Clique para editar";
+      titulo.onclick = () => {
+        window.location.href = `nova-postagem.html?id=${rascunho.id}`;
+      };
+
       return container;
     }
 
@@ -154,13 +163,20 @@
         return;
       }
 
-      const rascunhos = JSON.parse(localStorage.getItem("rascunhos")) || [];
+      const rascunhos = (JSON.parse(localStorage.getItem("rascunhos")) || [])
+        .filter(r => r.autor === usuario);
+
+      // Atualiza título no header
+      document.getElementById("tituloPagina").textContent = `Rascunhos de ${usuario}`;
+
+      // Atualiza subtítulo dentro do main
+      document.getElementById("subtituloUsuario").textContent = `Rascunhos de ${usuario}`;
 
       const container = document.getElementById("rascunhosContainer");
       container.innerHTML = "";
 
       if (rascunhos.length === 0) {
-        container.textContent = "Nenhum rascunho encontrado.";
+        container.textContent = "Sem rascunhos";
         return;
       }
 
@@ -177,3 +193,4 @@
   </script>
 </body>
 </html>
+
