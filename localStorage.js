@@ -97,24 +97,14 @@ function getRascunhosPorAutor(autor) {
   return rascunhos.filter(p => p.autor === autor);
 }
 
-/**
- * Salva uma postagem como rascunho ou publicada, atribuindo autor, id e data
- * @param {Object} postagem - objeto com ao menos id, titulo, conteudo
- * @param {string} status - "rascunho" ou "enviar"
- * @param {string} autor - login do usuário que está salvando
- */
-function salvarPostagem(postagem, status, autor) {
+// Função para salvar postagem (rascunho ou publicada) e atualizar localStorage
+function salvarPostagem(postagem, status) {
   if (!postagem) throw new Error("Postagem inválida");
-  if (!autor) throw new Error("Autor não informado");
-
   postagem.status = status;
   postagem.data = new Date().toISOString();
-  postagem.autor = autor;
 
   if (status === "rascunho") {
     salvarOuAtualizarRascunho(postagem);
-    // Remover da publicações caso exista
-    removerPublicacao(postagem.id);
   } else if (status === "enviar") {
     salvarOuAtualizarPublicacao(postagem);
     // Remover da lista de rascunhos se existir
