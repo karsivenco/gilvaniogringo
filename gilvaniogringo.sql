@@ -6,7 +6,7 @@
 CREATE TABLE IF NOT EXISTS `usuarios` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `nome` varchar(100) NOT NULL,
-  `email` varchar(150) NOT NULL,
+  `usuario` varchar(100) NOT NULL,
   `senha` varchar(255) NOT NULL,
   `perfil` varchar(100) NOT NULL,
   PRIMARY KEY (`id`)
@@ -26,19 +26,20 @@ INSERT INTO `usuarios` (`nome`, `usuario`, `senha`, `perfil`) VALUES
 
 -- Tabela postagens
 CREATE TABLE IF NOT EXISTS `postagens` (
-  `idPrimária` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `titulo` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `conteudo` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `autor` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'Gilvani',
-  `status` enum('publicado','rascunho') COLLATE utf8mb4_unicode_ci DEFAULT 'rascunho',
+  `status` enum('publicado','rascunho','ultimas-postagens2') COLLATE utf8mb4_unicode_ci DEFAULT 'rascunho',
   `data_publicacao` datetime DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`idPrimária`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Inserir posts de teste
+-- Inserir posts
 INSERT INTO `postagens` (`titulo`, `conteudo`, `autor`, `status`) VALUES
 ('Primeiro post', 'Conteúdo do primeiro post', 'Gilvani', 'publicado'),
-('Segundo post', 'Conteúdo do segundo post', 'Gilvani', 'rascunho');
+('Segundo post', 'Conteúdo do segundo post', 'Gilvani', 'rascunho'),
+('Terceiro post', 'Conteúdo do terceiro post', 'Gilvani', 'ultimas-postagens2');
 
 -- Tabela contatos
 CREATE TABLE IF NOT EXISTS `contatos` (
@@ -51,12 +52,12 @@ CREATE TABLE IF NOT EXISTS `contatos` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Tabela imagens
-CREATE TABLE imagens_postagens (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    postagem_id INT NOT NULL,
-    nome VARCHAR(255) NOT NULL,
-    tipo VARCHAR(50) NOT NULL,
-    dados LONGBLOB NOT NULL,
-    data_upload DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (postagem_id) REFERENCES postagens(id) ON DELETE CASCADE
-);
+CREATE TABLE IF NOT EXISTS `img` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `postagem_id` INT NOT NULL,
+  `nome` VARCHAR(255) NOT NULL,
+  `tipo` VARCHAR(50) NOT NULL,
+  `dados` LONGBLOB NOT NULL,
+  `data_upload` DATETIME DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (`postagem_id`) REFERENCES `postagens`(`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
