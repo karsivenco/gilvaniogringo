@@ -75,7 +75,7 @@
 
   <!-- Main Content -->
   <main class="flex-grow max-w-4xl mx-auto p-6">
-    <form id="formPostagem" class="bg-white rounded shadow p-6 space-y-6" onsubmit="return enviarPostagem(event)">
+    <form id="formPostagem" class="bg-white rounded shadow p-6 space-y-6" onsubmit="return false;">
       
       <div>
         <label for="titulo" class="block font-semibold mb-1 text-gray-700">Título</label>
@@ -92,12 +92,10 @@
       <div>
         <label class="block font-semibold mb-1 text-gray-700">Conteúdo</label>
         <div class="toolbar mb-2 flex flex-wrap items-center gap-1">
-          <!-- Formatação básica -->
           <button type="button" onclick="format('bold')" title="Negrito"><i class="fas fa-bold"></i></button>
           <button type="button" onclick="format('italic')" title="Itálico"><i class="fas fa-italic"></i></button>
           <button type="button" onclick="format('underline')" title="Sublinhado"><i class="fas fa-underline"></i></button>
 
-          <!-- Fonte -->
           <select onchange="format('fontName', this.value)" title="Fonte">
             <option value="Arial">Arial</option>
             <option value="Courier New">Courier New</option>
@@ -107,7 +105,6 @@
             <option value="Verdana">Verdana</option>
           </select>
 
-          <!-- Tamanho -->
           <select onchange="format('fontSize', this.value)" title="Tamanho da fonte">
             <option value="1">10px</option>
             <option value="2">13px</option>
@@ -118,18 +115,14 @@
             <option value="7">48px</option>
           </select>
 
-          <!-- Parágrafo -->
           <button type="button" onclick="format('insertUnorderedList')" title="Lista com marcadores"><i class="fas fa-list-ul"></i></button>
           <button type="button" onclick="format('insertOrderedList')" title="Lista numerada"><i class="fas fa-list-ol"></i></button>
 
-          <!-- Link -->
           <button type="button" onclick="inserirLink()" title="Inserir link"><i class="fas fa-link"></i></button>
 
-          <!-- Inserir imagem -->
           <input type="file" id="inputImagem" accept="image/*" style="display:none" onchange="inserirImagem(event)" />
           <button type="button" onclick="document.getElementById('inputImagem').click()" title="Inserir imagem"><i class="fas fa-image"></i></button>
 
-          <!-- Emoji -->
           <button type="button" onclick="toggleEmojiPicker()" title="Inserir emoji"><i class="fas fa-smile"></i></button>
         </div>
 
@@ -140,23 +133,19 @@
         <div id="editor" contenteditable="true" spellcheck="true" aria-multiline="true" aria-label="Editor de texto" class="prose max-w-none"></div>
       </div>
 
-      <div class="flex flex-wrap gap-4 items-center justify-between">
-        <div>
-          <label for="status" class="font-semibold text-gray-700">Status da publicação:</label>
-          <select id="status" name="status" class="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#09679c]">
-            <option value="rascunho" selected>Rascunho</option>
-            <option value="enviar">Publicar</option>
-          </select>
-        </div>
-
-        <button type="submit" id="btnEnviar" class="bg-[#09679c] hover:bg-[#074d6b] text-white font-semibold px-6 py-2 rounded transition">
-          Enviar
+      <div class="flex flex-wrap gap-4 items-center justify-end">
+        <button id="btnSalvarRascunho" class="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold px-6 py-2 rounded transition" type="button">
+          Salvar Rascunho
+        </button>
+        <button id="btnPublicar" class="bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-2 rounded transition" type="button">
+          Publicar
         </button>
       </div>
 
     </form>
-
   </main>
+
+  <script src="localStorage.js"></script> <!-- Importa funções do localStorage -->
 
   <script>
     const usuariosAutorizados = [
@@ -233,6 +222,7 @@
         picker.appendChild(span);
       });
     }
+
     popularEmojis();
 
     function inserirImagem(event) {
@@ -254,39 +244,9 @@
       event.target.value = "";
     }
 
-    // Carregar postagem para edição se id for passado na URL
-    function carregarPostagemParaEdicao() {
-      const params = new URLSearchParams(window.location.search);
-      const id = params.get("id");
-      if (!id) return;
-
-      let rascunhos = JSON.parse(localStorage.getItem("rascunhos")) || [];
-      let publicacoes = JSON.parse(localStorage.getItem("publicacoes")) || [];
-
-      // Procurar rascunho ou publicação com o id
-      let postagem = rascunhos.find(p => String(p.id) === id);
-
-      if (!postagem) {
-        postagem = publicacoes.find(p => String(p.id) === id);
-      }
-
-      if (!postagem) return;
-
-      document.getElementById("titulo").value = postagem.titulo;
-      document.getElementById("editor").innerHTML = postagem.conteudo;
-      document.getElementById("status").value = postagem.status === "publicado" ? "enviar" : "rascunho";
-
-      // Ao enviar edição, deve atualizar o item existente (rascunho ou publicação)
-      document.getElementById("formPostagem").dataset.editandoId = id;
-    }
-
-    function enviarPostagem(event) {
-      event.preventDefault();
-
+    function validarCampos() {
       const titulo = document.getElementById("titulo").value.trim();
       const conteudo = document.getElementById("editor").innerHTML.trim();
-      const status = document.getElementById("status").value;
-
       if (!titulo) {
         alert("Título é obrigatório.");
         return false;
@@ -295,106 +255,70 @@
         alert("Conteúdo não pode estar vazio.");
         return false;
       }
+      return true;
+    }
+
+    function salvar(status) {
       if (!usuarioLogado) {
         alert("Usuário não logado.");
         window.location.href = "intranet.html";
-        return false;
+        return;
       }
 
-      let rascunhos = JSON.parse(localStorage.getItem("rascunhos")) || [];
-      let publicacoes = JSON.parse(localStorage.getItem("publicacoes")) || [];
+      if (!validarCampos()) return;
 
+      const titulo = document.getElementById("titulo").value.trim();
+      const conteudo = document.getElementById("editor").innerHTML.trim();
       const form = document.getElementById("formPostagem");
-      const editandoId = form.dataset.editandoId;
 
-      if (editandoId) {
-        if (status === "rascunho") {
-          let idxRascunho = rascunhos.findIndex(p => String(p.id) === editandoId);
-          if (idxRascunho !== -1) {
-            rascunhos[idxRascunho] = {
-              id: editandoId,
-              titulo,
-              conteudo,
-              data: new Date().toISOString(),
-              autor: usuarioLogado,
-              status: "rascunho"
-            };
-          } else {
-            rascunhos.push({
-              id: editandoId,
-              titulo,
-              conteudo,
-              data: new Date().toISOString(),
-              autor: usuarioLogado,
-              status: "rascunho"
-            });
-          }
-          publicacoes = publicacoes.filter(p => String(p.id) !== editandoId);
-        } else if (status === "enviar") {
-          let idxPub = publicacoes.findIndex(p => String(p.id) === editandoId);
-          if (idxPub !== -1) {
-            publicacoes[idxPub] = {
-              id: editandoId,
-              titulo,
-              conteudo,
-              data: new Date().toISOString(),
-              autor: usuarioLogado,
-              status: "publicado"
-            };
-          } else {
-            publicacoes.push({
-              id: editandoId,
-              titulo,
-              conteudo,
-              data: new Date().toISOString(),
-              autor: usuarioLogado,
-              status: "publicado"
-            });
-          }
-          rascunhos = rascunhos.filter(p => String(p.id) !== editandoId);
-        }
-
-        delete form.dataset.editandoId;
-
-      } else {
-        const novoId = Date.now().toString();
-
-        if (status === "rascunho") {
-          rascunhos.push({
-            id: novoId,
-            titulo,
-            conteudo,
-            data: new Date().toISOString(),
-            autor: usuarioLogado,
-            status: "rascunho"
-          });
-        } else if (status === "enviar") {
-          publicacoes.push({
-            id: novoId,
-            titulo,
-            conteudo,
-            data: new Date().toISOString(),
-            autor: usuarioLogado,
-            status: "publicado"
-          });
-        }
+      let id = form.dataset.editandoId;
+      if (!id) {
+        id = Date.now().toString();
       }
 
-      localStorage.setItem("rascunhos", JSON.stringify(rascunhos));
-      localStorage.setItem("publicacoes", JSON.stringify(publicacoes));
+      const postagem = {
+        id,
+        titulo,
+        conteudo,
+        autor: usuarioLogado,
+      };
 
-      alert(status === "rascunho" ? "Rascunho salvo com sucesso!" : "Postagem publicada com sucesso!");
-
-      if(status === "rascunho") {
-        window.location.href = "rascunhos.html";
-      } else {
-        window.location.href = "ultimas-noticias2.html";
+      try {
+        salvarPostagem(postagem, status);
+        alert(status === "rascunho" ? "Rascunho salvo com sucesso!" : "Publicação enviada com sucesso!");
+        if (status === "rascunho") {
+          window.location.href = "rascunhos.html";
+        } else if (status === "enviar") {
+          window.location.href = "publicacoes.html";
+          window.open("ultimas-noticias2.html", "_blank");
+        }
+      } catch (e) {
+        alert("Erro ao salvar postagem: " + e.message);
       }
-
-      return false;
     }
 
-    // Inicialização
+    document.getElementById("btnSalvarRascunho").onclick = () => salvar("rascunho");
+    document.getElementById("btnPublicar").onclick = () => salvar("enviar");
+
+    // Carregar postagem para edição se id for passado na URL
+    function carregarPostagemParaEdicao() {
+      const params = new URLSearchParams(window.location.search);
+      const id = params.get("id");
+      if (!id) return;
+
+      // Buscar rascunho ou publicação pelo ID usando funções do localStorage.js
+      let postagem = buscarRascunhoPorId(id) || buscarPublicacaoPorId(id);
+      if (!postagem) return;
+
+      document.getElementById("titulo").value = postagem.titulo;
+      document.getElementById("editor").innerHTML = postagem.conteudo;
+      // Ajusta status para selecionar correto
+      document.getElementById("status").value = postagem.status === "publicado" ? "enviar" : "rascunho";
+
+      // Sinaliza que está editando essa postagem
+      document.getElementById("formPostagem").dataset.editandoId = id;
+    }
+
     window.onload = () => {
       if (!usuarioLogado || !usuariosAutorizados.includes(usuarioLogado)) {
         alert("Você não tem permissão para acessar esta página.");
