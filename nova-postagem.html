@@ -75,7 +75,7 @@
 
   <!-- Main Content -->
   <main class="flex-grow max-w-4xl mx-auto p-6">
-    <form id="formPostagem" class="bg-white rounded shadow p-6 space-y-6" onsubmit="return false;">
+    <form id="formPostagem" class="bg-white rounded shadow p-6 space-y-6" onsubmit="return enviarPostagem(event)">
       
       <div>
         <label for="titulo" class="block font-semibold mb-1 text-gray-700">Título</label>
@@ -136,26 +136,23 @@
       <div class="flex flex-wrap gap-4 items-center justify-between">
         <div>
           <label for="status" class="font-semibold text-gray-700">Status da publicação:</label>
-          <select id="status" name="status" class="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#09679c]" disabled>
-            <option value="rascunho" selected>Rascunho</option>
+          <select id="status" name="status" class="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#09679c]">
+            <option value="rascunhos" selected>Rascunho</option>
             <option value="enviar">Publicar</option>
           </select>
         </div>
 
         <div class="flex gap-3">
-          <button type="button" id="btnSalvarRascunho" class="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold px-6 py-2 rounded transition" title="Salvar Rascunho">
-            Salvar Rascunho
-          </button>
-          <button type="button" id="btnPublicar" class="bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-2 rounded transition" title="Publicar Postagem">
-            Publicar
-          </button>
+          <button type="button" id="btnSalvarRascunho" class="bg-yellow-600 hover:bg-yellow-700 text-white font-semibold px-6 py-2 rounded transition">Salvar Rascunho</button>
+          <button type="button" id="btnPublicar" class="bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-2 rounded transition">Publicar</button>
         </div>
       </div>
 
     </form>
+
   </main>
 
-  <script src="localStorage.js"></script> <!-- Seu arquivo localStorage.js -->
+  <script src="localStorage.js"></script>
 
   <script>
     const usuariosAutorizados = [
@@ -168,7 +165,6 @@
 
     const usuarioLogado = localStorage.getItem("usuarioLogado");
 
-    // Monta menu dinamicamente
     function montarMenu() {
       const menu = document.getElementById("mainMenu");
       menu.innerHTML = `
@@ -254,36 +250,17 @@
       event.target.value = "";
     }
 
-    // Carregar postagem para edição se id for passado na URL
-    function carregarPostagemParaEdicao() {
-      const params = new URLSearchParams(window.location.search);
-      const id = params.get("id");
-      if (!id) return;
-
-      // Busca rascunho ou publicação pelo ID
-      let postagem = buscarRascunhoPorId(id) || buscarPublicacaoPorId(id);
-      if (!postagem) return;
-
-      document.getElementById("titulo").value = postagem.titulo;
-      document.getElementById("editor").innerHTML = postagem.conteudo;
-      document.getElementById("status").value = postagem.status === "enviar" ? "enviar" : "rascunho";
-
-      // Sinaliza que está editando essa postagem
-      document.getElementById("formPostagem").dataset.editandoId = id;
-    }
-
-    // Função que executa a gravação no localStorage e redireciona conforme o botão clicado
-    function salvarPostagemComStatus(status) {
+    // Função para enviar postagem
+    function enviarPostagem(status) {
       if (!usuarioLogado) {
         alert("Usuário não logado.");
         window.location.href = "intranet.html";
-        return;
+        return false;
       }
 
-      // Verifica se usuário está na lista autorizada para postar
       if (!usuariosAutorizados.includes(usuarioLogado)) {
-        alert("Você não tem permissão para postar.");
-        return;
+        alert("Você não tem permissão para publicar.");
+        return false;
       }
 
       const titulo = document.getElementById("titulo").value.trim();
@@ -291,53 +268,40 @@
 
       if (!titulo) {
         alert("Título é obrigatório.");
-        return;
+        return false;
       }
       if (!conteudo || conteudo === "<br>" || conteudo === "") {
         alert("Conteúdo não pode estar vazio.");
-        return;
+        return false;
       }
 
-      const form = document.getElementById("formPostagem");
-
-      // Garante que o id seja sempre string única — cria se não existir
-      let id = form.dataset.editandoId;
-      if (!id || id === "null" || id === "undefined") {
-        id = Date.now().toString();
-      }
+      const id = Date.now().toString();
 
       const postagem = {
-        id: id,
-        titulo: titulo,
-        conteudo: conteudo,
+        id,
+        titulo,
+        conteudo,
         autor: usuarioLogado,
+        status: status === "rascunhos" ? "rascunho" : "publicado",
+        data: new Date().toISOString(),
       };
 
       try {
-        // Ajusta status para plural "rascunhos" para salvar rascunho
-        const statusParaSalvar = status === "rascunho" ? "rascunhos" : status;
-
-        salvarPostagem(postagem, statusParaSalvar);
-
-        alert(statusParaSalvar === "rascunhos" ? "Rascunho salvo com sucesso!" : "Postagem publicada com sucesso!");
-
-        // Limpa form para nova postagem
-        form.reset();
-        document.getElementById("editor").innerHTML = "";
-        delete form.dataset.editandoId;
-
-        // Redireciona conforme status
-        if (statusParaSalvar === "rascunhos") {
-          window.location.href = "rascunhos.html";
-        } else {
-          window.location.href = "publicacoes.html";
-        }
+        salvarPostagem(postagem, status);
+        alert(status === "rascunhos" ? "Rascunho salvo com sucesso!" : "Postagem publicada com sucesso!");
       } catch (e) {
         alert("Erro ao salvar postagem: " + e.message);
+        return false;
       }
+
+      // Limpa formulário após salvar
+      document.getElementById("titulo").value = "";
+      document.getElementById("editor").innerHTML = "";
+
+      return false;
     }
 
-    // Eventos dos botões
+    // Liga os botões a suas funções
     window.onload = () => {
       if (!usuarioLogado || !usuariosAutorizados.includes(usuarioLogado)) {
         alert("Você não tem permissão para acessar esta página.");
@@ -345,10 +309,9 @@
         return;
       }
       montarMenu();
-      carregarPostagemParaEdicao();
 
-      document.getElementById("btnSalvarRascunho").onclick = () => salvarPostagemComStatus("rascunho");
-      document.getElementById("btnPublicar").onclick = () => salvarPostagemComStatus("enviar");
+      document.getElementById("btnSalvarRascunho").onclick = () => enviarPostagem("rascunhos");
+      document.getElementById("btnPublicar").onclick = () => enviarPostagem("enviar");
     };
   </script>
 </body>
