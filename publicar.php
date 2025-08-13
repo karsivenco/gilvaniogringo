@@ -1,39 +1,19 @@
 <?php
-session_start();
+header('Content-Type: application/json');
 include 'conexao.php';
 
-// Usuário logado
-$usuarioLogado = isset($_SESSION['usuarioLogado']) ? $_SESSION['usuarioLogado'] : null;
+$id = $_POST['id'] ?? 0;
 
-// Usuários autorizados a publicar
-$usuariosAutorizados = [
-    "gabriel.amaral",
-    "graziele.albuquerque",
-    "karina.maia",
-    "cristiano.santos",
-    "gilvaniogringo"
-];
-
-if (!$usuarioLogado || !in_array($usuarioLogado, $usuariosAutorizados)) {
-    die("Você não tem permissão para publicar.");
-}
-
-// Receber ID do rascunho
-$id = isset($_GET['id']) ? intval($_GET['id']) : 0;
-
-if ($id <= 0) {
-    die("ID inválido.");
-}
-
-// Atualizar status no banco
-$stmt = $conn->prepare("UPDATE postagens SET status = 'publicado', data_publicacao = NOW() WHERE idPrimária = ? AND autor = ?");
-$stmt->bind_param("is", $id, $usuarioLogado);
-
-if ($stmt->execute()) {
-    $stmt->close();
-    // Redirecionar para rascunhos ou publicações
-    header("Location: publicacoes.php");
+if(!$id){
+    echo json_encode(["sucesso" => false, "mensagem" => "ID do post é obrigatório."]);
     exit;
-} else {
-    die("Erro ao publicar o rascunho: " . $stmt->error);
 }
+
+try {
+    $stmt = $pdo->prepare("UPDATE postagens SET status='publicado' WHERE idPrimária=:id");
+    $stmt->execute([":id" => $id]);
+    echo json_encode(["sucesso" => true, "mensagem" => "Postagem publicada!"]);
+} catch(PDOException $e){
+    echo json_encode(["sucesso" => false, "mensagem" => "Erro ao publicar: " . $e->getMessage()]);
+}
+?>
