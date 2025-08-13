@@ -283,4 +283,126 @@
     function enviarPostagem(event) {
       event.preventDefault();
 
-      const titulo = document.getElementById("titulo").value.t
+      const titulo = document.getElementById("titulo").value.trim();
+      const conteudo = document.getElementById("editor").innerHTML.trim();
+      const status = document.getElementById("status").value;
+
+      if (!titulo) {
+        alert("Título é obrigatório.");
+        return false;
+      }
+      if (!conteudo || conteudo === "<br>" || conteudo === "") {
+        alert("Conteúdo não pode estar vazio.");
+        return false;
+      }
+      if (!usuarioLogado) {
+        alert("Usuário não logado.");
+        window.location.href = "intranet.html";
+        return false;
+      }
+
+      let rascunhos = JSON.parse(localStorage.getItem("rascunhos")) || [];
+      let publicacoes = JSON.parse(localStorage.getItem("publicacoes")) || [];
+
+      const form = document.getElementById("formPostagem");
+      const editandoId = form.dataset.editandoId;
+
+      if (editandoId) {
+        if (status === "rascunho") {
+          let idxRascunho = rascunhos.findIndex(p => String(p.id) === editandoId);
+          if (idxRascunho !== -1) {
+            rascunhos[idxRascunho] = {
+              id: editandoId,
+              titulo,
+              conteudo,
+              data: new Date().toISOString(),
+              autor: usuarioLogado,
+              status: "rascunho"
+            };
+          } else {
+            rascunhos.push({
+              id: editandoId,
+              titulo,
+              conteudo,
+              data: new Date().toISOString(),
+              autor: usuarioLogado,
+              status: "rascunho"
+            });
+          }
+          publicacoes = publicacoes.filter(p => String(p.id) !== editandoId);
+        } else if (status === "enviar") {
+          let idxPub = publicacoes.findIndex(p => String(p.id) === editandoId);
+          if (idxPub !== -1) {
+            publicacoes[idxPub] = {
+              id: editandoId,
+              titulo,
+              conteudo,
+              data: new Date().toISOString(),
+              autor: usuarioLogado,
+              status: "publicado"
+            };
+          } else {
+            publicacoes.push({
+              id: editandoId,
+              titulo,
+              conteudo,
+              data: new Date().toISOString(),
+              autor: usuarioLogado,
+              status: "publicado"
+            });
+          }
+          rascunhos = rascunhos.filter(p => String(p.id) !== editandoId);
+        }
+
+        delete form.dataset.editandoId;
+
+      } else {
+        const novoId = Date.now().toString();
+
+        if (status === "rascunho") {
+          rascunhos.push({
+            id: novoId,
+            titulo,
+            conteudo,
+            data: new Date().toISOString(),
+            autor: usuarioLogado,
+            status: "rascunho"
+          });
+        } else if (status === "enviar") {
+          publicacoes.push({
+            id: novoId,
+            titulo,
+            conteudo,
+            data: new Date().toISOString(),
+            autor: usuarioLogado,
+            status: "publicado"
+          });
+        }
+      }
+
+      localStorage.setItem("rascunhos", JSON.stringify(rascunhos));
+      localStorage.setItem("publicacoes", JSON.stringify(publicacoes));
+
+      alert(status === "rascunho" ? "Rascunho salvo com sucesso!" : "Postagem publicada com sucesso!");
+
+      // Limpa formulário para nova postagem e mantém na mesma página
+      document.getElementById("titulo").value = "";
+      document.getElementById("editor").innerHTML = "";
+      document.getElementById("status").value = "rascunho";
+
+      return false;
+    }
+
+    // Inicialização
+    window.onload = () => {
+      if (!usuarioLogado || !usuariosAutorizados.includes(usuarioLogado)) {
+        alert("Você não tem permissão para acessar esta página.");
+        window.location.href = "intranet.html";
+        return;
+      }
+      montarMenu();
+      carregarPostagemParaEdicao();
+    };
+  </script>
+</body>
+</html>
