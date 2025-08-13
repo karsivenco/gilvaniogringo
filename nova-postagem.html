@@ -134,25 +134,19 @@
       </div>
 
       <div class="flex flex-wrap gap-4 items-center justify-between">
-        <div>
-          <label for="statusInfo" class="font-semibold text-gray-700">Escolha uma ação:</label>
-        </div>
-
-        <div class="flex gap-4">
-          <button type="button" id="btnSalvarRascunho" class="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold px-6 py-2 rounded transition" title="Salvar Rascunho">
-            <i class="fas fa-save"></i> Salvar Rascunho
-          </button>
-
-          <button type="button" id="btnPublicar" class="bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-2 rounded transition" title="Publicar">
-            <i class="fas fa-upload"></i> Publicar
-          </button>
-        </div>
+        <button type="button" id="btnSalvarRascunho" class="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold px-6 py-2 rounded transition">
+          Salvar Rascunho
+        </button>
+        <button type="button" id="btnPublicar" class="bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-2 rounded transition">
+          Publicar
+        </button>
       </div>
 
     </form>
+
   </main>
 
-  <script src="localStorage.js"></script> <!-- Importa as funções do localStorage -->
+  <script src="localStorage.js"></script> <!-- Funções para localStorage -->
 
   <script>
     const usuariosAutorizados = [
@@ -251,7 +245,25 @@
       event.target.value = "";
     }
 
-    function validarCampos() {
+    // Carregar postagem para edição se id for passado na URL
+    function carregarPostagemParaEdicao() {
+      const params = new URLSearchParams(window.location.search);
+      const id = params.get("id");
+      if (!id) return;
+
+      // Busca rascunho ou publicação pelo ID
+      let postagem = buscarRascunhoPorId(id) || buscarPublicacaoPorId(id);
+      if (!postagem) return;
+
+      document.getElementById("titulo").value = postagem.titulo;
+      document.getElementById("editor").innerHTML = postagem.conteudo;
+      // Não colocamos status, pq agora o controle é por botões
+
+      // Sinaliza que está editando essa postagem
+      document.getElementById("formPostagem").dataset.editandoId = id;
+    }
+
+    function validarFormulario() {
       const titulo = document.getElementById("titulo").value.trim();
       const conteudo = document.getElementById("editor").innerHTML.trim();
 
@@ -266,66 +278,53 @@
       return true;
     }
 
-    function salvar(status) {
+    function salvarOuPublicar(status) {
       if (!usuarioLogado) {
         alert("Usuário não logado.");
         window.location.href = "intranet.html";
         return;
       }
 
-      if (!validarCampos()) return;
+      if (!validarFormulario()) return;
 
-      const titulo = document.getElementById("titulo").value.trim();
-      const conteudo = document.getElementById("editor").innerHTML.trim();
       const form = document.getElementById("formPostagem");
-
       let id = form.dataset.editandoId;
+
       if (!id) {
         id = Date.now().toString();
       }
+
+      const titulo = document.getElementById("titulo").value.trim();
+      const conteudo = document.getElementById("editor").innerHTML.trim();
 
       const postagem = {
         id,
         titulo,
         conteudo,
-        autor: usuarioLogado,
-        status,
-        data: new Date().toISOString()
+        autor: usuarioLogado
       };
 
       try {
         salvarPostagem(postagem, status);
         alert(status === "rascunho" ? "Rascunho salvo com sucesso!" : "Postagem publicada com sucesso!");
+
+        // Limpa formulário para nova postagem
+        document.getElementById("titulo").value = "";
+        document.getElementById("editor").innerHTML = "";
+        delete form.dataset.editandoId;
+
+        // Redireciona conforme status
         if (status === "rascunho") {
           window.location.href = "rascunhos.html";
         } else if (status === "enviar") {
           window.location.href = "publicacoes.html";
-          window.open("ultimas-noticias2.html", "_blank");
         }
+
       } catch (e) {
         alert("Erro ao salvar postagem: " + e.message);
       }
     }
 
-    // Carrega postagem para edição caso venha id na URL
-    function carregarPostagemParaEdicao() {
-      const params = new URLSearchParams(window.location.search);
-      const id = params.get("id");
-      if (!id) return;
-
-      // Buscando rascunho ou publicação pelo ID
-      let postagem = buscarRascunhoPorId(id) || buscarPublicacaoPorId(id);
-      if (!postagem) return;
-
-      document.getElementById("titulo").value = postagem.titulo;
-      document.getElementById("editor").innerHTML = postagem.conteudo;
-
-      // Sinaliza que está editando
-      const form = document.getElementById("formPostagem");
-      form.dataset.editandoId = id;
-    }
-
-    // Event Listeners dos botões
     window.onload = () => {
       if (!usuarioLogado || !usuariosAutorizados.includes(usuarioLogado)) {
         alert("Você não tem permissão para acessar esta página.");
@@ -335,8 +334,9 @@
       montarMenu();
       carregarPostagemParaEdicao();
 
-      document.getElementById("btnSalvarRascunho").onclick = () => salvar("rascunho");
-      document.getElementById("btnPublicar").onclick = () => salvar("enviar");
+      // Eventos para os botões
+      document.getElementById("btnSalvarRascunho").onclick = () => salvarOuPublicar("rascunho");
+      document.getElementById("btnPublicar").onclick = () => salvarOuPublicar("enviar");
     };
   </script>
 </body>
