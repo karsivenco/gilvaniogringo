@@ -21,7 +21,7 @@
   <main class="flex flex-1">
     <!-- Menu lateral -->
     <aside class="bg-[#09679c] w-64 p-6 text-white flex flex-col gap-4">
-      <h2 class="font-bold text-lg border-b border-[#096 pb-2">CADASTRO</h2>
+      <h2 class="font-bold text-lg border-b border-white pb-2">CADASTRO</h2>
       <button onclick="mostrarAba('dadosPessoais')" class="text-left hover:underline">Dados Pessoais</button>
       <button onclick="mostrarAba('aniversario')" class="text-left hover:underline">Aniversário</button>
       <button onclick="mostrarAba('mensagens')" class="text-left hover:underline">Mensagens Prontas</button>
@@ -32,48 +32,44 @@
     <section class="flex-1 p-6 space-y-6">
       <!-- Dados Pessoais -->
       <div id="dadosPessoais" class="aba bg-white text-black shadow rounded-lg p-6 hidden">
-        <h3 class="text-xl font-bold mb-4">Dados Pessoais</h3>
+        <h3 class="text-xl font-bold mb-4 text-[#09679c]">Dados Pessoais</h3>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <input type="text" id="nome" placeholder="Nome" class="p-2 rounded border border-yellow-500 bg-[#1f2937]"/>
-          <input type="tel" id="telefone" placeholder="Telefone" class="p-2 rounded border border-yellow-500 bg-[#1f2937]"/>
-          <select id="municipio" class="p-2 rounded border border-yellow-500 bg-[#1f2937]" onchange="toggleBairro()">
+          <input type="text" id="nome" placeholder="Nome" class="p-2 rounded border border-gray-300 focus:border-[#09679c]" />
+          <input type="tel" id="telefone" placeholder="Telefone" class="p-2 rounded border border-gray-300 focus:border-[#09679c]" />
+          <select id="municipio" class="p-2 rounded border border-gray-300 focus:border-[#09679c]" onchange="toggleBairro()">
             <option value="">Selecione a cidade</option>
           </select>
-          <select id="bairro" class="p-2 rounded border border-[#09679c] bg-white hidden">
+          <select id="bairro" class="p-2 rounded border border-gray-300 focus:border-[#09679c] hidden">
             <option value="">Selecione o bairro</option>
           </select>
-          <input type="date" id="dataNascimento" class="p-2 rounded border border-yellow-500 bg-[#1f2937]" />
+          <input type="date" id="dataNascimento" class="p-2 rounded border border-gray-300 focus:border-[#09679c]" />
         </div>
-        <button onclick="salvarCliente()" class="mt-4 bg-[#09679c] text-white px-4 py-2 rounded hover:bg-[#09679c] transition">Salvar</button>
+        <button onclick="salvarCliente()" class="mt-4 bg-[#09679c] text-white px-4 py-2 rounded hover:bg-[#074d6b] transition">Salvar</button>
       </div>
 
       <!-- Aniversário -->
       <div id="aniversario" class="aba bg-white text-black shadow rounded-lg p-6 hidden">
-        <h3 class="text-xl font-bold mb-4">Aniversário</h3>
+        <h3 class="text-xl font-bold mb-4 text-[#09679c]">Aniversário</h3>
         <p>Os aniversariantes cadastrados receberão um cartão automaticamente no dia do aniversário.</p>
       </div>
 
       <!-- Mensagens Prontas -->
       <div id="mensagens" class="aba bg-white text-black shadow rounded-lg p-6 hidden">
-        <h3 class="text-xl font-bold mb-4">Mensagens Prontas</h3>
+        <h3 class="text-xl font-bold mb-4 text-[#09679c]">Mensagens Prontas</h3>
         <p>Escolha uma festividade para enviar a mensagem com anexo.</p>
-        <button class="bg-[#09679c] text-white px-4 py-2 rounded hover:bg-[#09679c] transition">Enviar Mensagem</button>
+        <button class="bg-[#09679c] text-white px-4 py-2 rounded hover:bg-[#074d6b] transition">Enviar Mensagem</button>
       </div>
 
       <!-- Lista de Transmissão -->
-      <div id="listaTransmissao" class="aba bg-[#09679c] text-white shadow rounded-lg p-6 hidden">
-        <h3 class="text-xl font-bold mb-4">Lista de Transmissão</h3>
-        <ul id="listaClientes" class="divide-y divide-black-600"></ul>
+      <div id="listaTransmissao" class="aba bg-white text-black shadow rounded-lg p-6 hidden">
+        <h3 class="text-xl font-bold mb-4 text-[#09679c]">Lista de Transmissão</h3>
+        <ul id="listaClientes" class="divide-y divide-gray-300"></ul>
       </div>
     </section>
   </main>
 
   <script>
-    function logout() {
-      localStorage.removeItem("usuarioLogado");
-      window.location.href = "intranet.html";
-    }
-/* ---------- Menu dinâmico ---------- */
+    // Menu dinâmico
     function buildMenu() {
       const userLogged = localStorage.getItem("usuarioLogado");
       const menu = document.getElementById("mainMenu");
@@ -100,6 +96,12 @@
         </button>
       `;
     }
+
+    function logout() {
+      localStorage.removeItem("usuarioLogado");
+      window.location.href = "intranet.html";
+    }
+
     function mostrarAba(id) {
       document.querySelectorAll('.aba').forEach(el => el.classList.add('hidden'));
       document.getElementById(id).classList.remove('hidden');
@@ -150,13 +152,16 @@
       'VICENTE DUTRA','VICTOR GRAEFF','VILA FLORES','VILA MARIA','VISTA ALEGRE','VISTA ALEGRE DO PRATA','VITÓRIA DAS MISSÕES','WESTFALIA','XANGRI-LÁ'
     ];
 
-    const bairros = ["Centro Histórico","Floresta","Auxiliadora","Moinhos de Vento","Independência","Bom Fim","Rio Branco","Montserrat","Bela Vista",
+    const bairros = [
+      "Centro Histórico","Floresta","Auxiliadora","Moinhos de Vento","Independência","Bom Fim","Rio Branco","Montserrat","Bela Vista",
       "Farroupilha","Santana","Petrópolis","Santa Cecília","Jardim Botânico","Praia de Belas","Cidade Baixa","Menino Deus","Azenha",
       "Farrapos","Humaitá","Navegantes","São Geraldo","Anchieta","São João","Santa Maria Goretti","Higienópolis","Boa Vista","Passo D'Areia",
       "Jardim São Pedro","Jardim Floresta","Cristo Redentor","Jardim Lindóia","São Sebastião","Vila Ipiranga","Jardim Itu","Jardim Europa",
       "Camaquã","Cavalhada","Nonoai","Teresópolis","Vila Nova","Vila Assunção","Tristeza","Vila Conceição","Pedra Redonda","Ipanema",
       "Espírito Santo","Guarujá","Serraria","Hípica","Campo Novo","Jardim Isabel","Aberta dos Morros","Sétimo Céu",
-      "Sarandi","Rubem Berta","Passo das Pedras","Santa Rosa de Lima","Parque Santa Fé","Costa e Silva","Jardim Leopoldina","Jardim Itu"];
+      "Sarandi","Rubem Berta","Passo das Pedras","Santa Rosa de Lima","Parque Santa Fé","Costa e Silva","Jardim Leopoldina","Jardim Itu"
+    ];
+
 
     function popularSelects() {
       const selMunicipio = document.getElementById("municipio");
@@ -167,7 +172,7 @@
 
     function toggleBairro() {
       const municipio = document.getElementById("municipio").value;
-      document.getElementById("bairro").classList.toggle("hidden", municipio !== "PORTO ALEGRE");
+      document.getElementById("bairro").classList.toggle("hidden", municipio !== "Porto Alegre");
     }
 
     function salvarCliente() {
@@ -198,6 +203,7 @@
     }
 
     window.addEventListener("DOMContentLoaded", () => {
+      buildMenu(); // <-- Chamando o menu dinâmico
       mostrarAba("dadosPessoais");
       popularSelects();
       atualizarListaTransmissao();
