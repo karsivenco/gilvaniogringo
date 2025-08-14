@@ -3,73 +3,81 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Contatos - Intranet do Gringo</title>
+  <title>Cadastro e Contatos - Intranet do Gringo</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 </head>
-<body class="bg-gray-100 min-h-screen flex flex-col">
+<body class="flex min-h-screen bg-gray-100">
 
-  <!-- Header -->
-  <header class="flex justify-between items-center bg-[#09679c] text-white p-4 shadow-md">
-    <div class="flex items-center gap-3">
-      <img src="img/logo.png" alt="Logo Gringo" class="h-10 w-auto" />
-      <h1 class="text-xl font-bold">Contatos</h1>
+  <!-- Menu lateral fixo -->
+  <aside class="bg-[#09679c] w-64 min-h-screen p-6 text-white flex flex-col gap-4 fixed">
+    <h2 class="font-bold text-lg border-b border-white pb-2 mb-4">CADASTRO</h2>
+    <button onclick="mostrarAba('dadosPessoais')" class="text-left hover:underline">Dados Pessoais</button>
+    <button onclick="mostrarAba('aniversario')" class="text-left hover:underline">Aniversário</button>
+    <button onclick="mostrarAba('mensagens')" class="text-left hover:underline">Mensagens Prontas</button>
+    <button onclick="mostrarAba('listaTransmissao')" class="text-left hover:underline">Lista de Transmissão</button>
+  </aside>
+
+  <!-- Conteúdo principal -->
+  <main class="flex-1 ml-64 p-6 space-y-6">
+    <!-- Header superior com menu dinâmico -->
+    <header class="flex justify-between items-center bg-[#09679c] text-white p-4 shadow-md rounded-lg">
+      <div class="flex items-center gap-3">
+        <img src="img/logo.png" alt="Logo Gringo" class="h-10 w-auto" />
+        <h1 class="text-xl font-bold">Contatos</h1>
+      </div>
+      <nav id="mainMenu" class="flex items-center gap-3"></nav>
+    </header>
+
+    <!-- Abas -->
+    <!-- Dados Pessoais -->
+    <div id="dadosPessoais" class="aba hidden bg-white p-6 rounded shadow">
+      <h3 class="text-xl font-bold mb-4 text-[#09679c]">Pesquisar Cliente</h3>
+      <input type="text" id="pesquisaNome" placeholder="Digite o nome..." class="border p-2 rounded w-full mb-4"/>
+      <ul id="resultadoPesquisa" class="divide-y divide-gray-200"></ul>
     </div>
-    <nav id="mainMenu" class="flex items-center gap-3"></nav>
-  </header>
 
-  <!-- Main -->
-  <main class="flex flex-1 gap-6 p-6 max-w-7xl mx-auto">
-    
-    <!-- Menu lateral -->
-    <aside class="bg-[#09679c] w-64 p-6 text-white flex flex-col gap-4 rounded-lg shadow-md">
-      <h2 class="font-bold text-lg border-b border-white pb-2">CONTATOS</h2>
-      <button onclick="mostrarAba('dadosPessoais')" class="text-left hover:underline">Dados Pessoais</button>
-      <button onclick="mostrarAba('aniversario')" class="text-left hover:underline">Aniversário</button>
-      <button onclick="mostrarAba('mensagens')" class="text-left hover:underline">Mensagens Prontas</button>
-      <button onclick="mostrarAba('listaTransmissao')" class="text-left hover:underline">Lista de Transmissão</button>
-    </aside>
+    <!-- Aniversário -->
+    <div id="aniversario" class="aba hidden bg-white p-6 rounded shadow">
+      <h3 class="text-xl font-bold mb-4 text-[#09679c]">Aniversariantes do Mês</h3>
+      <div id="calendarioMeses" class="grid grid-cols-3 md:grid-cols-4 gap-4 mb-4"></div>
+      <ul id="listaAniversariantes" class="divide-y divide-gray-200 mb-4"></ul>
+      <button id="btnEnviarAniversario" class="bg-[#09679c] text-white px-4 py-2 rounded hover:bg-[#074d6b] transition">Enviar para Lista de Transmissão</button>
+    </div>
 
-    <!-- Conteúdo central -->
-    <section class="flex-1 space-y-6">
-
-      <!-- Dados Pessoais -->
-      <div id="dadosPessoais" class="aba bg-white text-black shadow rounded-lg p-6 hidden">
-        <h3 class="text-xl font-bold mb-4 text-[#09679c]">Pesquisar Clientes</h3>
-        <input type="text" id="pesquisaNome" placeholder="Digite o nome" class="w-full p-2 border rounded bg-gray-100 mb-4"/>
-        <ul id="resultadoPesquisa" class="divide-y divide-gray-200"></ul>
+    <!-- Mensagens Prontas -->
+    <div id="mensagens" class="aba hidden bg-white p-6 rounded shadow">
+      <h3 class="text-xl font-bold mb-4 text-[#09679c]">Mensagens Prontas</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Cada evento -->
+        <div class="bg-gray-100 p-3 rounded shadow flex flex-col items-center">
+          <img src="img/natal.png" alt="Natal" class="h-20 mb-2"/>
+          <strong>Natal</strong>
+          <textarea class="border p-2 mt-2 w-full" placeholder="Mensagem de Natal..."></textarea>
+          <button class="bg-[#09679c] text-white px-4 py-2 mt-2 rounded hover:bg-[#074d6b] transition">Enviar</button>
+        </div>
+        <div class="bg-gray-100 p-3 rounded shadow flex flex-col items-center">
+          <img src="img/anoNovo.png" alt="Ano Novo" class="h-20 mb-2"/>
+          <strong>Ano Novo</strong>
+          <textarea class="border p-2 mt-2 w-full" placeholder="Mensagem de Ano Novo..."></textarea>
+          <button class="bg-[#09679c] text-white px-4 py-2 mt-2 rounded hover:bg-[#074d6b] transition">Enviar</button>
+        </div>
+        <!-- Replicar para Páscoa, 7/9, 20/9, Dia das Mães, Pais, Amigo e Saudações -->
       </div>
+    </div>
 
-      <!-- Aniversário -->
-      <div id="aniversario" class="aba bg-white text-black shadow rounded-lg p-6 hidden">
-        <h3 class="text-xl font-bold mb-4 text-[#09679c]">Aniversariantes</h3>
-        <div id="calendarioMeses" class="grid grid-cols-3 gap-4 mb-4"></div>
-        <ul id="listaAniversariantes" class="divide-y divide-gray-200 mb-4"></ul>
-        <img id="imagemAniversario" src="img/cartao-aniversario.png" alt="Cartão Aniversário" class="mb-4 w-48"/>
-        <button id="btnEnviarAniversario" class="bg-[#09679c] text-white px-4 py-2 rounded hover:bg-[#074d6b] transition">
-          Enviar para Lista de Transmissão
-        </button>
-      </div>
-
-      <!-- Mensagens Prontas -->
-      <div id="mensagens" class="aba bg-white text-black shadow rounded-lg p-6 hidden">
-        <h3 class="text-xl font-bold mb-4 text-[#09679c]">Mensagens Prontas</h3>
-        <div id="eventosMensagens" class="space-y-3"></div>
-      </div>
-
-      <!-- Lista de Transmissão -->
-      <div id="listaTransmissao" class="aba bg-white text-black shadow rounded-lg p-6 hidden">
-        <h3 class="text-xl font-bold mb-4 text-[#09679c]">Lista de Transmissão</h3>
-        <div id="listaPorBairro"></div>
-      </div>
-
-    </section>
+    <!-- Lista de Transmissão -->
+    <div id="listaTransmissao" class="aba hidden bg-white p-6 rounded shadow">
+      <h3 class="text-xl font-bold mb-4 text-[#09679c]">Lista de Transmissão por Região/Bairro</h3>
+      <div id="listaPorRegiao"></div>
+    </div>
   </main>
 
-  <!-- JS Externos -->
-  <script src="menu.js"></script>
-  <script src="clientes.js"></script>
-  <script src="mensagens.js"></script>
-
+  <!-- JS separados -->
+  <script src="js/menu.js"></script>
+  <script src="js/clientes.js"></script>
+  <script src="js/aniversario.js"></script>
+  <script src="js/mensagens.js"></script>
+  <script src="js/transmissao.js"></script>
 </body>
 </html>
