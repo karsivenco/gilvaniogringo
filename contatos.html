@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Cadastro de Clientes - Intranet do Gringo</title>
+  <title>Contatos - Intranet do Gringo</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 </head>
 <body class="bg-gray-100 min-h-screen flex flex-col">
 
-  <!-- Header padrão -->
+  <!-- Header -->
   <header class="flex justify-between items-center bg-[#09679c] text-white p-4 shadow-md">
     <div class="flex items-center gap-3">
       <img src="img/logo.png" alt="Logo Gringo" class="h-10 w-auto" />
@@ -18,196 +18,58 @@
     <nav id="mainMenu" class="flex items-center gap-3"></nav>
   </header>
 
-  <main class="flex flex-1">
+  <!-- Main -->
+  <main class="flex flex-1 gap-6 p-6 max-w-7xl mx-auto">
+    
     <!-- Menu lateral -->
-    <aside class="bg-[#09679c] w-64 p-6 text-white flex flex-col gap-4">
-      <h2 class="font-bold text-lg border-b border-white pb-2">CADASTRO</h2>
+    <aside class="bg-[#09679c] w-64 p-6 text-white flex flex-col gap-4 rounded-lg shadow-md">
+      <h2 class="font-bold text-lg border-b border-white pb-2">CONTATOS</h2>
       <button onclick="mostrarAba('dadosPessoais')" class="text-left hover:underline">Dados Pessoais</button>
       <button onclick="mostrarAba('aniversario')" class="text-left hover:underline">Aniversário</button>
       <button onclick="mostrarAba('mensagens')" class="text-left hover:underline">Mensagens Prontas</button>
       <button onclick="mostrarAba('listaTransmissao')" class="text-left hover:underline">Lista de Transmissão</button>
     </aside>
 
-    <!-- Conteúdo principal -->
-    <section class="flex-1 p-6 space-y-6">
+    <!-- Conteúdo central -->
+    <section class="flex-1 space-y-6">
+
       <!-- Dados Pessoais -->
       <div id="dadosPessoais" class="aba bg-white text-black shadow rounded-lg p-6 hidden">
-        <h3 class="text-xl font-bold mb-4 text-[#09679c]">Dados Pessoais</h3>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <input type="text" id="nome" placeholder="Nome" class="p-2 rounded border border-gray-300 focus:border-[#09679c]" />
-          <input type="tel" id="telefone" placeholder="Telefone" class="p-2 rounded border border-gray-300 focus:border-[#09679c]" />
-          <select id="municipio" class="p-2 rounded border border-gray-300 focus:border-[#09679c]" onchange="toggleBairro()">
-            <option value="">Selecione a cidade</option>
-          </select>
-          <select id="bairro" class="p-2 rounded border border-gray-300 focus:border-[#09679c] hidden">
-            <option value="">Selecione o bairro</option>
-          </select>
-          <input type="date" id="dataNascimento" class="p-2 rounded border border-gray-300 focus:border-[#09679c]" />
-        </div>
-        <button onclick="salvarCliente()" class="mt-4 bg-[#09679c] text-white px-4 py-2 rounded hover:bg-[#074d6b] transition">Salvar</button>
+        <h3 class="text-xl font-bold mb-4 text-[#09679c]">Pesquisar Clientes</h3>
+        <input type="text" id="pesquisaNome" placeholder="Digite o nome" class="w-full p-2 border rounded bg-gray-100 mb-4"/>
+        <ul id="resultadoPesquisa" class="divide-y divide-gray-200"></ul>
       </div>
 
       <!-- Aniversário -->
       <div id="aniversario" class="aba bg-white text-black shadow rounded-lg p-6 hidden">
-        <h3 class="text-xl font-bold mb-4 text-[#09679c]">Aniversário</h3>
-        <p>Os aniversariantes cadastrados receberão um cartão automaticamente no dia do aniversário.</p>
+        <h3 class="text-xl font-bold mb-4 text-[#09679c]">Aniversariantes</h3>
+        <div id="calendarioMeses" class="grid grid-cols-3 gap-4 mb-4"></div>
+        <ul id="listaAniversariantes" class="divide-y divide-gray-200 mb-4"></ul>
+        <img id="imagemAniversario" src="img/cartao-aniversario.png" alt="Cartão Aniversário" class="mb-4 w-48"/>
+        <button id="btnEnviarAniversario" class="bg-[#09679c] text-white px-4 py-2 rounded hover:bg-[#074d6b] transition">
+          Enviar para Lista de Transmissão
+        </button>
       </div>
 
       <!-- Mensagens Prontas -->
       <div id="mensagens" class="aba bg-white text-black shadow rounded-lg p-6 hidden">
         <h3 class="text-xl font-bold mb-4 text-[#09679c]">Mensagens Prontas</h3>
-        <p>Escolha uma festividade para enviar a mensagem com anexo.</p>
-        <button class="bg-[#09679c] text-white px-4 py-2 rounded hover:bg-[#074d6b] transition">Enviar Mensagem</button>
+        <div id="eventosMensagens" class="space-y-3"></div>
       </div>
 
       <!-- Lista de Transmissão -->
       <div id="listaTransmissao" class="aba bg-white text-black shadow rounded-lg p-6 hidden">
         <h3 class="text-xl font-bold mb-4 text-[#09679c]">Lista de Transmissão</h3>
-        <ul id="listaClientes" class="divide-y divide-gray-300"></ul>
+        <div id="listaPorBairro"></div>
       </div>
+
     </section>
   </main>
 
-  <script>
-    // Menu dinâmico
-    function buildMenu() {
-      const userLogged = localStorage.getItem("usuarioLogado");
-      const menu = document.getElementById("mainMenu");
-      menu.innerHTML = `
-        <a href="painel.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition" title="Início">
-          <i class="fas fa-home"></i> Início
-        </a>
-        <a href="cadastro.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition" title="Cadastro">
-          <i class="fas fa-user-plus"></i> Cadastro
-        </a>
-        <a href="contatos.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition" title="Contatos">
-          <i class="fas fa-address-book"></i> Contatos
-        </a>
-        <a href="perfil.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1">
-          <i class="fas fa-user"></i> Perfil
-        </a>
-        ${userLogged === "gilvaniogringo" ? `
-          <a href="dashboard.html" class="bg-[#053646] px-3 py-2 rounded hover:bg-[#032d39] transition flex items-center gap-1">
-            <i class="fas fa-chart-line"></i> Dashboard
-          </a>
-        ` : ""}
-        <button onclick="logout()" class="bg-[#053646] px-3 py-2 rounded hover:bg-[#032d39] transition flex items-center gap-1">
-          <i class="fas fa-sign-out-alt"></i> Sair
-        </button>
-      `;
-    }
+  <!-- JS Externos -->
+  <script src="menu.js"></script>
+  <script src="clientes.js"></script>
+  <script src="mensagens.js"></script>
 
-    function logout() {
-      localStorage.removeItem("usuarioLogado");
-      window.location.href = "intranet.html";
-    }
-
-    function mostrarAba(id) {
-      document.querySelectorAll('.aba').forEach(el => el.classList.add('hidden'));
-      document.getElementById(id).classList.remove('hidden');
-    }
-
-    const municipios = [
-      'ACEGUÁ','ÁGUA SANTA','AGUDO','AJURICABA','ALECRIM','ALEGRETE','ALMIRANTE TAMANDARÉ DO SUL',
-      'ALPESTRE','ALTO ALEGRE','ALVORADA','AMETISTA DO SUL','ANDRÉ DA ROCHA','ANTA GORDA','ANTÔNIO PRADO',
-      'ARATIBA','ARROIO DO MEIO','ARROIO DO SAL','ARROIO DO TIGRE','ARROIO GRANDE','ARVOREZINHA','AUGUSTO PESTANA',
-      'BAGÉ','BALNEÁRIO PINHAL','BARÃO DE COTEGIPE','BARÃO DO TRIUNFO','BARRACÃO','BARRA DO QUARAÍ','BARRA DO RIBEIRO',
-      'BARRA FUNDA','BARROS CASSAL','BENTO GONÇALVES','BOA VISTA DAS MISSÕES','BOA VISTA DO BURICÁ','BOA VISTA DO CADEADO',
-      'BOA VISTA DO SUL','BOM JESUS','BOM PRINCÍPIO','BOM RETIRO DO SUL','BOQUEIRÃO DO LEÃO','BRAGA','BROCHIER','BUTIÁ',
-      'CAÇAPAVA DO SUL','CACEQUI','CACHOEIRA DO SUL','CACHOEIRINHA','CACIQUE DOBLE','CAIBATÉ','CAIÇARA','CAMAQUÃ','CAMARGO',
-      'CAMBARÁ DO SUL','CAMPESTRE DA SERRA','CAMPINAS DO SUL','CAMPO BOM','CAMPOS BORGES','CANDELÁRIA','CÂNDIDO GODÓI',
-      'CANDIOTA','CANELA','CANGUÇU','CANOAS','CAPÃO BONITO DO SUL','CAPÃO DA CANOA','CAPÃO DO LEÃO','CARAZINHO','CARLOS BARBOSA',
-      'CASCA','CASEIROS','CAXIAS DO SUL','CERRO GRANDE','CERRO LARGO','CHAPADA','CHARQUEADAS','CHARRUA','CHIAPETTA','CIRÍACO',
-      'COLORADO','CONDOR','CONSTANTINA','COQUEIROS DO SUL','CORONEL BARROS','CORONEL BICACO','CORONEL PILAR','COTIPORÃ',
-      'CRISSIUMAL','CRISTAL','CRISTAL DO SUL','CRUZ ALTA','CRUZALTENSE','CRUZEIRO DO SUL','DAVID CANABARRO','DERRUBADAS',
-      'DOIS IRMÃOS','DOM FELICIANO','DOM PEDRO DE ALCÂNTARA','DOM PEDRITO','DONA FRANCISCA','ELDORADO DO SUL','ENCANTADO',
-      'ENCRUZILHADA DO SUL','ENGENHO VELHO','ENTRE-IJUÍS','ENTRE RIOS DO SUL','ERECHIM','ERNESTINA','ERVAL GRANDE','ERVAL SECO',
-      'ESMERALDA','ESPUMOSO','ESTÂNCIA VELHA','ESTEIO','ESTRELA','FAGUNDES VARELA','FARROUPILHA','FAXINAL DO SOTURNO',
-      'FAZENDA VILANOVA','FELIZ','FLORES DA CUNHA','FONTOURA XAVIER','FORQUETINHA','FORTALEZA DOS VALOS','FREDERICO WESTPHALEN',
-      'GARIBALDI','GENERAL CÂMARA','GENTIL','GETÚLIO VARGAS','GIRUÁ','GRAMADO','GRAMADO XAVIER','GRAVATAÍ','GUABIJU','GUAÍBA',
-      'GUAPORÉ','GUARANI DAS MISSÕES','HORIZONTINA','HUMAITÁ','IBIAÇÁ','IBIRAIARAS','IBIRAPUITÃ','IBIRUBÁ','IGREJINHA','IJUÍ',
-      'ILÓPOLIS','IMBÉ','IMIGRANTE','INDEPENDÊNCIA','IPÊ','IRAÍ','ITAPUCA','ITAQUI','ITATIBA DO SUL','IVOTI','JABOTICABA','JAGUARÃO',
-      'JAGUARI','JAQUIRANA','JÓIA','JÚLIO DE CASTILHOS','LAGOÃO','LAGOA DOS TRÊS CANTOS','LAGOA VERMELHA','LAJEADO','LAVRAS DO SUL',
-      'LIBERATO SALZANO','LINHA NOVA','MACHADINHO','MANOEL VIANA','MARATÁ','MARAU','MARCELINO RAMOS','MARQUES DE SOUZA',
-      'MATO CASTELHANO','MATO LEITÃO','MAXIMILIANO DE ALMEIDA','MINAS DO LEÃO','MIRAGUAÍ','MONTAURI','MONTE ALEGRE DOS CAMPOS',
-      'MONTE BELO DO SUL','MONTENEGRO','MORMAÇO','MUÇUM','MUITOS CAPÕES','MULITERNO','NICOLAU VERGUEIRO','NONOAI','NOVA ALVORADA',
-      'NOVA ARAÇÁ','NOVA BASSANO','NOVA BOA VISTA','NOVA BRÉSCIA','NOVA CANDELÁRIA','NOVA PÁDUA','NOVA PALMA','NOVA PETRÓPOLIS',
-      'NOVA PRATA','NOVA ROMA DO SUL','NOVA SANTA RITA','NOVO HAMBURGO','NOVO TIRADENTES','NOVO XINGU','NOVO BARREIRO','OSÓRIO',
-      'PAIM FILHO','PALMEIRA DAS MISSÕES','PALMITINHO','PANAMBI','PANTANO GRANDE','PARAÍ','PAROBÉ','PASSO DO SOBRADO','PASSO FUNDO',
-      'PAVERAMA','PELOTAS','PICADA CAFÉ','PINHAL','PINHAL DA SERRA','PINHAL GRANDE','PINHEIRINHO DO VALE','PINHEIRO MACHADO','PIRATINI',
-      'PLANALTO','POÇO DAS ANTAS','PONTÃO','PORTO ALEGRE','PORTO XAVIER','POUSO NOVO','PROGRESSO','PROTÁSIO ALVES','PUTINGA','QUARAÍ',
-      'REDENTORA','RELVADO','RESTINGA SECA','RIO DOS ÍNDIOS','RIO GRANDE','RIO PARDO','ROCA SALES','RODEIO BONITO','ROLANTE','RONDA ALTA',
-      'ROSÁRIO DO SUL','SAGRADA FAMÍLIA','SALVADOR DO SUL','SANANDUVA','SANTA CECÍLIA DO SUL','SANTA CLARA DO SUL','SANTA CRUZ DO SUL',
-      'SANTA MARIA','SANTANA DA BOA VISTA','SANT’ANA DO LIVRAMENTO','SANTA ROSA','SANTA TEREZA','SANTA VITÓRIA DO PALMAR','SANTIAGO',
-      'SANTO ÂNGELO','SANTO ANTÔNIO DO PALMA','SANTO ANTÔNIO DA PATRULHA','SANTO ANTÔNIO DAS MISSÕES','SANTO ANTÔNIO DO PLANALTO',
-      'SANTO AUGUSTO','SANTO CRISTO','SANTO EXPEDITO DO SUL','SÃO BORJA','SÃO DOMINGOS DO SUL','SÃO FRANCISCO DE ASSIS','SÃO FRANCISCO DE PAULA',
-      'SÃO GABRIEL','SÃO JERÔNIMO','SÃO JOÃO DA URTIGA','SÃO JORGE','SÃO JOSÉ DO HERVAL','SÃO JOSÉ DO INHACORÁ','SÃO JOSÉ DO NORTE',
-      'SÃO JOSÉ DO OURO','SÃO JOSÉ DOS AUSENTES','SÃO LEOPOLDO','SÃO LOURENÇO DO SUL','SÃO LUIZ GONZAGA','SÃO MARCOS','SÃO MARTINHO',
-      'SÃO NICOLAU','SÃO PEDRO DA SERRA','SÃO PEDRO DO SUL','SÃO SEBASTIÃO DO CAÍ','SÃO SEPÉ','SÃO VENDELINO','SÃO VICENTE DO SUL',
-      'SAPIRANGA','SAPUCAIA DO SUL','SARANDI','SEBERI','SEDE NOVA','SERAFINA CORRÊA','SÉRIO','SERTÃO','SERTÃO SANTANA','SEVERIANO DE ALMEIDA',
-      'SINIMBU','SOLEDADE','TAPEJARA','TAPERA','TAPES','TAQUARA','TAQUARI','TAVARES','TENENTE PORTELA','TERRA DE AREIA','TEUTÔNIA',
-      'TIO HUGO','TIRADENTES DO SUL','TORRES','TRAMANDAÍ','TRÊS ARROIOS','TRÊS CACHOEIRAS','TRÊS COROAS','TRÊS DE MAIO','TRÊS PALMEIRAS',
-      'TRÊS PASSOS','TRINDADE DO SUL','TRIUNFO','TUCUNDUVA','TUNAS','TUPANCI DO SUL','TUPANCIRETÃ','TUPARENDI','UNIÃO DA SERRA',
-      'URUGUAIANA','VACARIA','VALE DO SOL','VALE REAL','VANINI','VENÂNCIO AIRES','VERA CRUZ','VERANÓPOLIS','VESPASIANO CORREA','VIAMÃO',
-      'VICENTE DUTRA','VICTOR GRAEFF','VILA FLORES','VILA MARIA','VISTA ALEGRE','VISTA ALEGRE DO PRATA','VITÓRIA DAS MISSÕES','WESTFALIA','XANGRI-LÁ'
-    ];
-
-    const bairros = [
-      "Centro Histórico","Floresta","Auxiliadora","Moinhos de Vento","Independência","Bom Fim","Rio Branco","Montserrat","Bela Vista",
-      "Farroupilha","Santana","Petrópolis","Santa Cecília","Jardim Botânico","Praia de Belas","Cidade Baixa","Menino Deus","Azenha",
-      "Farrapos","Humaitá","Navegantes","São Geraldo","Anchieta","São João","Santa Maria Goretti","Higienópolis","Boa Vista","Passo D'Areia",
-      "Jardim São Pedro","Jardim Floresta","Cristo Redentor","Jardim Lindóia","São Sebastião","Vila Ipiranga","Jardim Itu","Jardim Europa",
-      "Camaquã","Cavalhada","Nonoai","Teresópolis","Vila Nova","Vila Assunção","Tristeza","Vila Conceição","Pedra Redonda","Ipanema",
-      "Espírito Santo","Guarujá","Serraria","Hípica","Campo Novo","Jardim Isabel","Aberta dos Morros","Sétimo Céu",
-      "Sarandi","Rubem Berta","Passo das Pedras","Santa Rosa de Lima","Parque Santa Fé","Costa e Silva","Jardim Leopoldina","Jardim Itu"
-    ];
-
-
-    function popularSelects() {
-      const selMunicipio = document.getElementById("municipio");
-      municipios.forEach(c => selMunicipio.appendChild(new Option(c,c)));
-      const selBairro = document.getElementById("bairro");
-      bairros.forEach(b => selBairro.appendChild(new Option(b,b)));
-    }
-
-    function toggleBairro() {
-      const municipio = document.getElementById("municipio").value;
-      document.getElementById("bairro").classList.toggle("hidden", municipio !== "Porto Alegre");
-    }
-
-    function salvarCliente() {
-      const cliente = {
-        nome: document.getElementById("nome").value,
-        telefone: document.getElementById("telefone").value,
-        municipio: document.getElementById("municipio").value,
-        bairro: document.getElementById("bairro").value,
-        dataNascimento: document.getElementById("dataNascimento").value
-      };
-      const lista = JSON.parse(localStorage.getItem("clientes")) || [];
-      lista.push(cliente);
-      localStorage.setItem("clientes", JSON.stringify(lista));
-      alert("Cliente salvo com sucesso!");
-      atualizarListaTransmissao();
-    }
-
-    function atualizarListaTransmissao() {
-      const lista = JSON.parse(localStorage.getItem("clientes")) || [];
-      const ul = document.getElementById("listaClientes");
-      ul.innerHTML = "";
-      lista.forEach(c => {
-        const li = document.createElement("li");
-        li.className = "py-2";
-        li.textContent = `${c.nome} - ${c.telefone} - ${c.municipio}${c.bairro ? ' - ' + c.bairro : ''}`;
-        ul.appendChild(li);
-      });
-    }
-
-    window.addEventListener("DOMContentLoaded", () => {
-      buildMenu(); // <-- Chamando o menu dinâmico
-      mostrarAba("dadosPessoais");
-      popularSelects();
-      atualizarListaTransmissao();
-    });
-  </script>
 </body>
 </html>
