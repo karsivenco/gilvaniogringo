@@ -3,15 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Contatos - Intranet do Gringo</title>
+  <title>Contato - Intranet do Gringo</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 </head>
 <body class="bg-gray-100 flex">
 
-  <!-- Sidebar lateral fixa -->
+  <!-- Menu lateral fixo -->
   <aside class="bg-[#09679c] w-64 p-6 text-white flex flex-col gap-4 fixed h-screen top-0 left-0">
-    <h2 class="font-bold text-lg border-b border-white pb-2">CADASTRO</h2>
+    <h2 class="font-bold text-lg border-b border-white pb-2">CONTATO</h2>
     <button onclick="mostrarAba('dadosPessoais')" class="text-left hover:underline">Dados Pessoais</button>
     <button onclick="mostrarAba('aniversario')" class="text-left hover:underline">Aniversário</button>
     <button onclick="mostrarAba('mensagens')" class="text-left hover:underline">Mensagens Prontas</button>
@@ -20,54 +20,106 @@
 
   <!-- Conteúdo principal -->
   <div class="flex-1 ml-64 flex flex-col">
+
     <!-- Menu superior fixo -->
     <header class="flex justify-between items-center bg-[#09679c] text-white p-4 shadow-md fixed top-0 left-64 w-full z-50">
       <div class="flex items-center gap-3">
         <img src="img/logo.png" alt="Logo Gringo" class="h-10 w-auto" />
-        <h1 class="text-xl font-bold">Contatos</h1>
+        <h1 class="text-xl font-bold">Contato</h1>
       </div>
       <nav id="mainMenu" class="flex items-center gap-3"></nav>
     </header>
 
-    <!-- Seção principal -->
+    <!-- Área de abas -->
     <main class="flex-1 p-6 pt-24 overflow-y-auto">
-
+      
       <!-- Dados Pessoais -->
       <div id="dadosPessoais" class="aba bg-white text-black shadow rounded-lg p-6 hidden">
-        <h3 class="text-xl font-bold mb-4 text-[#09679c]">Dados Pessoais</h3>
-        <p class="text-gray-500">Pesquise nomes cadastrados na base de dados:</p>
-        <input type="text" id="pesquisaNome" placeholder="Digite o nome" class="w-full border border-gray-300 rounded p-2 mb-4" oninput="filtrarClientes()"/>
-        <ul id="listaClientesPesquisados" class="divide-y divide-gray-200"></ul>
+        <h3 class="text-xl font-bold mb-4">Dados Pessoais</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <input type="text" id="pesquisarNome" placeholder="Pesquisar Nome" class="p-2 rounded border border-gray-300 bg-white"/>
+          <input type="text" id="telefone" placeholder="Telefone" class="p-2 rounded border border-gray-300 bg-white"/>
+          <input type="email" id="email" placeholder="E-mail" class="p-2 rounded border border-gray-300 bg-white"/>
+          <select id="municipio" class="p-2 rounded border border-gray-300 bg-white" onchange="toggleBairro()">
+            <option value="">Selecione o município</option>
+          </select>
+          <select id="bairro" class="p-2 rounded border border-gray-300 bg-white hidden">
+            <option value="">Selecione o bairro</option>
+          </select>
+        </div>
+        <button onclick="buscarCliente()" class="mt-4 bg-[#09679c] text-white px-4 py-2 rounded hover:bg-[#074d6b] transition">Pesquisar</button>
+        <div id="resultadoPesquisa" class="mt-4"></div>
       </div>
 
       <!-- Aniversário -->
       <div id="aniversario" class="aba bg-white text-black shadow rounded-lg p-6 hidden">
-        <h3 class="text-xl font-bold mb-4 text-[#09679c]">Aniversariantes do Mês</h3>
-        <div id="calendarioAniversario" class="grid grid-cols-3 md:grid-cols-4 gap-4">
-          <!-- JS irá popular mês a mês com quantidade de aniversariantes e imagem -->
-        </div>
+        <h3 class="text-xl font-bold mb-4">Aniversário</h3>
+        <div id="aniversariantesMes"></div>
       </div>
 
       <!-- Mensagens Prontas -->
       <div id="mensagens" class="aba bg-white text-black shadow rounded-lg p-6 hidden">
-        <h3 class="text-xl font-bold mb-4 text-[#09679c]">Mensagens Prontas</h3>
-        <div id="listaMensagens" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <!-- JS irá popular por evento cronológico com imagem e botão enviar -->
+        <h3 class="text-xl font-bold mb-4">Mensagens Prontas</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Exemplo de eventos -->
+          <div>
+            <h4 class="font-semibold">Bom Dia</h4>
+            <textarea class="w-full border rounded p-2" placeholder="Mensagem de Bom Dia"></textarea>
+          </div>
+          <div>
+            <h4 class="font-semibold">Boa Tarde</h4>
+            <textarea class="w-full border rounded p-2" placeholder="Mensagem de Boa Tarde"></textarea>
+          </div>
+          <div>
+            <h4 class="font-semibold">Boa Noite</h4>
+            <textarea class="w-full border rounded p-2" placeholder="Mensagem de Boa Noite"></textarea>
+          </div>
+          <div>
+            <h4 class="font-semibold">Natal</h4>
+            <textarea class="w-full border rounded p-2" placeholder="Mensagem de Natal"></textarea>
+          </div>
+          <div>
+            <h4 class="font-semibold">Ano Novo</h4>
+            <textarea class="w-full border rounded p-2" placeholder="Mensagem de Ano Novo"></textarea>
+          </div>
+          <div>
+            <h4 class="font-semibold">Páscoa</h4>
+            <textarea class="w-full border rounded p-2" placeholder="Mensagem de Páscoa"></textarea>
+          </div>
+          <div>
+            <h4 class="font-semibold">7 de Setembro</h4>
+            <textarea class="w-full border rounded p-2" placeholder="Mensagem 7 de Setembro"></textarea>
+          </div>
+          <div>
+            <h4 class="font-semibold">20 de Setembro</h4>
+            <textarea class="w-full border rounded p-2" placeholder="Mensagem 20 de Setembro"></textarea>
+          </div>
+          <div>
+            <h4 class="font-semibold">Dia dos Pais</h4>
+            <textarea class="w-full border rounded p-2" placeholder="Mensagem Dia dos Pais"></textarea>
+          </div>
+          <div>
+            <h4 class="font-semibold">Dia das Mães</h4>
+            <textarea class="w-full border rounded p-2" placeholder="Mensagem Dia das Mães"></textarea>
+          </div>
+          <div>
+            <h4 class="font-semibold">Dia do Amigo</h4>
+            <textarea class="w-full border rounded p-2" placeholder="Mensagem Dia do Amigo"></textarea>
+          </div>
         </div>
+        <button class="mt-4 bg-[#09679c] text-white px-4 py-2 rounded hover:bg-[#074d6b] transition">Enviar Mensagem</button>
       </div>
 
       <!-- Lista de Transmissão -->
       <div id="listaTransmissao" class="aba bg-white text-black shadow rounded-lg p-6 hidden">
-        <h3 class="text-xl font-bold mb-4 text-[#09679c]">Lista de Transmissão</h3>
-        <div id="transmissaoPorBairro" class="space-y-4">
-          <!-- JS irá separar os contatos por bairro -->
-        </div>
+        <h3 class="text-xl font-bold mb-4">Lista de Transmissão</h3>
+        <div id="listaPorBairro"></div>
       </div>
 
     </main>
   </div>
 
-  <!-- Scripts separados -->
+  <!-- JS separados -->
   <script src="menu.js"></script>
   <script src="clientes.js"></script>
   <script src="aniversario.js"></script>
