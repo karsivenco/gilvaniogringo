@@ -25,7 +25,12 @@ document.getElementById("pesquisaNome")?.addEventListener("input", e => {
   resultado.forEach(c => {
     const li = document.createElement("li");
     li.className = "py-2";
-    li.textContent = `${c.nome} - ${c.telefone} - ${c.municipio}${c.bairro ? ' - ' + c.bairro : ''}`;
+    li.innerHTML = `
+      <strong>${c.nome}</strong> - ${c.dataNascimento ? new Date(c.dataNascimento).toLocaleDateString() : ''}<br>
+      Município: ${c.municipio} ${c.bairro ? '- ' + c.bairro : ''}<br>
+      Telefone: ${c.telefone} - Email: ${c.email || ''}<br>
+      Endereço: ${c.endereco || ''}
+    `;
     ul.appendChild(li);
   });
 });
@@ -70,7 +75,12 @@ function mostrarAniversariantesDoMes(mes) {
   aniversariantes.forEach(c => {
     const li = document.createElement("li");
     li.className = "py-2";
-    li.textContent = `${c.nome} - ${c.telefone} - ${c.municipio}${c.bairro ? ' - ' + c.bairro : ''}`;
+    li.innerHTML = `
+      <strong>${c.nome}</strong> - ${new Date(c.dataNascimento).toLocaleDateString()}<br>
+      Município: ${c.municipio} ${c.bairro ? '- ' + c.bairro : ''}<br>
+      Telefone: ${c.telefone} - Email: ${c.email || ''}<br>
+      Endereço: ${c.endereco || ''}
+    `;
     listaEl.appendChild(li);
   });
 }
