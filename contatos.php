@@ -1,25 +1,22 @@
 <?php
-header('Content-Type: application/json');
-include 'conexao.php';
+$host = 'gilvaniogringo.mysql.dbaas.com.br'; // servidor do Locaweb
+$db   = 'gilvaniogringo';                   // nome do banco de dados
+$user = 'gilvaniogringo';                   // usuário do banco
+$pass = 'Gringo@20';                        // senha do banco
+$charset = 'utf8mb4';
 
-$nome = $_POST['nome'] ?? '';
-$email = $_POST['email'] ?? '';
-$mensagem = $_POST['mensagem'] ?? '';
-
-if(!$nome || !$email || !$mensagem){
-    echo json_encode(["sucesso" => false, "mensagem" => "Todos os campos são obrigatórios."]);
-    exit;
-}
+$dsn = "mysql:host=$host;dbname=$db;charset=$charset";
+$options = [
+    PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+    PDO::ATTR_EMULATE_PREPARES   => false,
+];
 
 try {
-    $stmt = $pdo->prepare("INSERT INTO contatos (nome, email, mensagem) VALUES (:nome, :email, :mensagem)");
-    $stmt->execute([
-        ":nome" => $nome,
-        ":email" => $email,
-        ":mensagem" => $mensagem
-    ]);
-    echo json_encode(["sucesso" => true, "mensagem" => "Contato enviado com sucesso!"]);
-} catch(PDOException $e){
-    echo json_encode(["sucesso" => false, "mensagem" => "Erro ao enviar contato: " . $e->getMessage()]);
+    $pdo = new PDO($dsn, $user, $pass, $options);
+} catch(PDOException $e) {
+    // Retorna erro em JSON
+    echo json_encode(["sucesso" => false, "mensagem" => "Erro ao conectar ao banco: " . $e->getMessage()]);
+    exit;
 }
 ?>
