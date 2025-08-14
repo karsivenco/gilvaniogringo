@@ -62,15 +62,13 @@
       <!-- Select Município -->
       <div>
         <label for="municipio" class="block mb-1 font-semibold text-gray-700">Município</label>
-        <select id="municipio" name="municipio" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#09679c]" required>
-        </select>
+        <select id="municipio" name="municipio" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#09679c]" required></select>
       </div>
 
       <!-- Select Bairro de Porto Alegre -->
       <div id="bairroContainer" class="hidden">
         <label for="bairro" class="block mb-1 font-semibold text-gray-700">Bairro (Porto Alegre)</label>
-        <select id="bairro" name="bairro" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#09679c]">
-        </select>
+        <select id="bairro" name="bairro" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#09679c]"></select>
       </div>
 
       <button type="submit" class="w-full bg-[#09679c] text-white font-semibold py-2 rounded hover:bg-[#074d6b] transition">Cadastrar</button>
@@ -78,100 +76,10 @@
     <p id="msgStatus" class="mt-4 text-center text-sm font-semibold"></p>
   </main>
 
-  <script>
-    // ----- Dados -----
-    const municipios = ['PORTO ALEGRE','ACEGUÁ','ÁGUA SANTA','AGUDO','AJURICABA','ALECRIM','ALEGRETE','ALMIRANTE TAMANDARÉ DO SUL','ALPESTRE','ALTO ALEGRE','ALVORADA','AMETISTA DO SUL','ANDRÉ DA ROCHA','ANTA GORDA','ANTÔNIO PRADO','ARATIBA','ARROIO DO MEIO','ARROIO DO SAL','ARROIO DO TIGRE','ARROIO GRANDE','ARVOREZINHA','AUGUSTO PESTANA','BAGÉ','BALNEÁRIO PINHAL','BARÃO DE COTEGIPE','BARÃO DO TRIUNFO','BARRACÃO','BARRA DO QUARAÍ','BARRA DO RIBEIRO','BARRA FUNDA','BARROS CASSAL','BENTO GONÇALVES','BOA VISTA DAS MISSÕES','BOA VISTA DO BURICÁ','BOA VISTA DO CADEADO','BOA VISTA DO SUL','BOM JESUS','BOM PRINCÍPIO','BOM RETIRO DO SUL','BOQUEIRÃO DO LEÃO','BRAGA','BROCHIER','BUTIÁ','CAÇAPAVA DO SUL','CACEQUI','CACHOEIRA DO SUL','CACHOEIRINHA','CACIQUE DOBLE','CAIBATÉ','CAIÇARA','CAMAQUÃ','CAMARGO','CAMBARÁ DO SUL','CAMPESTRE DA SERRA','CAMPINAS DO SUL','CAMPO BOM','CAMPOS BORGES','CANDELÁRIA','CÂNDIDO GODÓI','CANDIOTA','CANELA','CANGUÇU','CANOAS','CAPÃO BONITO DO SUL','CAPÃO DA CANOA','CAPÃO DO LEÃO','CARAZINHO','CARLOS BARBOSA','CASCA','CASEIROS','CAXIAS DO SUL','CERRO GRANDE','CERRO LARGO','CHAPADA','CHARQUEADAS','CHARRUA','CHIAPETTA','CIRÍACO','COLORADO','CONDOR','CONSTANTINA','COQUEIROS DO SUL','CORONEL BARROS','CORONEL BICACO','CORONEL PILAR','COTIPORÃ','CRISSIUMAL','CRISTAL','CRISTAL DO SUL','CRUZ ALTA','CRUZALTENSE','CRUZEIRO DO SUL','DAVID CANABARRO','DERRUBADAS','DOIS IRMÃOS','DOM FELICIANO','DOM PEDRO DE ALCÂNTARA','DOM PEDRITO','DONA FRANCISCA','ELDORADO DO SUL','ENCANTADO','ENCRUZILHADA DO SUL','ENGENHO VELHO','ENTRE-IJUÍS','ENTRE RIOS DO SUL','ERECHIM','ERNESTINA','ERVAL GRANDE','ERVAL SECO','ESMERALDA','ESPUMOSO','ESTÂNCIA VELHA','ESTEIO','ESTRELA','FAGUNDES VARELA','FARROUPILHA','FAXINAL DO SOTURNO','FAZENDA VILANOVA','FELIZ','FLORES DA CUNHA','FONTOURA XAVIER','FORQUETINHA','FORTALEZA DOS VALOS','FREDERICO WESTPHALEN','GARIBALDI','GENERAL CÂMARA','GENTIL','GETÚLIO VARGAS','GIRUÁ','GRAMADO','GRAMADO XAVIER','GRAVATAÍ','GUABIJU','GUAÍBA','GUAPORÉ','GUARANI DAS MISSÕES','HORIZONTINA','HUMAITÁ','IBIAÇÁ','IBIRAIARAS','IBIRAPUITÃ','IBIRUBÁ','IGREJINHA','IJUÍ','ILÓPOLIS','IMBÉ','IMIGRANTE','INDEPENDÊNCIA','IPÊ','IRAÍ','ITAPUCA','ITAQUI','ITATIBA DO SUL','IVOTI','JABOTICABA','JAGUARÃO','JAGUARI','JAQUIRANA','JÓIA','JÚLIO DE CASTILHOS','LAGOÃO','LAGOA DOS TRÊS CANTOS','LAGOA VERMELHA','LAJEADO','LAVRAS DO SUL','LIBERATO SALZANO','LINHA NOVA','MACHADINHO','MANOEL VIANA','MARATÁ','MARAU','MARCELINO RAMOS','MARQUES DE SOUZA','MATO CASTELHANO','MATO LEITÃO','MAXIMILIANO DE ALMEIDA','MINAS DO LEÃO','MIRAGUAÍ','MONTAURI','MONTE ALEGRE DOS CAMPOS','MONTE BELO DO SUL','MONTENEGRO','MORMAÇO','MUÇUM','MUITOS CAPÕES','MULITERNO','NICOLAU VERGUEIRO','NONOAI','NOVA ALVORADA','NOVA ARAÇÁ','NOVA BASSANO','NOVA BOA VISTA','NOVA BRÉSCIA','NOVA CANDELÁRIA','NOVA PÁDUA','NOVA PALMA','NOVA PETRÓPOLIS','NOVA PRATA','NOVA ROMA DO SUL','NOVA SANTA RITA','NOVO HAMBURGO','NOVO TIRADENTES','NOVO XINGU','NOVO BARREIRO','OSÓRIO','PAIM FILHO','PALMEIRA DAS MISSÕES','PALMITINHO','PANAMBI','PANTANO GRANDE','PARAÍ','PAROBÉ','PASSO DO SOBRADO','PASSO FUNDO','PAVERAMA','PELOTAS','PICADA CAFÉ','PINHAL','PINHAL DA SERRA','PINHAL GRANDE','PINHEIRINHO DO VALE','PINHEIRO MACHADO','PIRATINI','PLANALTO','POÇO DAS ANTAS','PONTÃO','PORTO XAVIER','POUSO NOVO','PROGRESSO','PROTÁSIO ALVES','PUTINGA','QUARAÍ','REDENTORA','RELVADO','RESTINGA SECA','RIO DOS ÍNDIOS','RIO GRANDE','RIO PARDO','ROCA SALES','RODEIO BONITO','ROLANTE','RONDA ALTA','ROSÁRIO DO SUL','SAGRADA FAMÍLIA','SALVADOR DO SUL','SANANDUVA','SANTA CECÍLIA DO SUL','SANTA CLARA DO SUL','SANTA CRUZ DO SUL','SANTA MARIA','SANTANA DA BOA VISTA','SANT’ANA DO LIVRAMENTO','SANTA ROSA','SANTA TEREZA','SANTA VITÓRIA DO PALMAR','SANTIAGO','SANTO ÂNGELO','SANTO ANTÔNIO DO PALMA','SANTO ANTÔNIO DA PATRULHA','SANTO ANTÔNIO DAS MISSÕES','SANTO ANTÔNIO DO PLANALTO','SANTO AUGUSTO','SANTO CRISTO','SANTO EXPEDITO DO SUL','SÃO BORJA','SÃO DOMINGOS DO SUL','SÃO FRANCISCO DE ASSIS','SÃO FRANCISCO DE PAULA','SÃO GABRIEL','SÃO JERÔNIMO','SÃO JOÃO DA URTIGA','SÃO JORGE','SÃO JOSÉ DO HERVAL','SÃO JOSÉ DO INHACORÁ','SÃO JOSÉ DO NORTE','SÃO JOSÉ DO OURO','SÃO JOSÉ DOS AUSENTES','SÃO LEOPOLDO','SÃO LOURENÇO DO SUL','SÃO LUIZ GONZAGA','SÃO MARCOS','SÃO MARTINHO','SÃO NICOLAU','SÃO PEDRO DA SERRA','SÃO PEDRO DO SUL','SÃO SEBASTIÃO DO CAÍ','SÃO SEPÉ','SÃO VENDELINO','SÃO VICENTE DO SUL','SAPIRANGA','SAPUCAIA DO SUL','SARANDI','SEBERI','SEDE NOVA','SERAFINA CORRÊA','SÉRIO','SERTÃO','SERTÃO SANTANA','SEVERIANO DE ALMEIDA','SINIMBU','SOLEDADE','TAPEJARA','TAPERA','TAPES','TAQUARA','TAQUARI','TAVARES','TENENTE PORTELA','TERRA DE AREIA','TEUTÔNIA','TIO HUGO','TIRADENTES DO SUL','TORRES','TRAMANDAÍ','TRÊS ARROIOS','TRÊS CACHOEIRAS','TRÊS COROAS','TRÊS DE MAIO','TRÊS PALMEIRAS','TRÊS PASSOS','TRINDADE DO SUL','TRIUNFO','TUCUNDUVA','TUNAS','TUPANCI DO SUL','TUPANCIRETÃ','TUPARENDI','UNIÃO DA SERRA','URUGUAIANA','VACARIA','VALE DO SOL','VALE REAL','VANINI','VENÂNCIO AIRES','VERA CRUZ','VERANÓPOLIS','VESPASIANO CORREA','VIAMÃO','VICENTE DUTRA','VICTOR GRAEFF','VILA FLORES','VILA MARIA','VISTA ALEGRE','VISTA ALEGRE DO PRATA','VITÓRIA DAS MISSÕES','WESTFALIA','XANGRI-LÁ'];
+  <!-- Scripts externos -->
+  <script src="menu.js"></script>
+  <script src="localidade.js"></script>
+  <script src="contato.js"></script> <!-- Seu código de submissão pode ficar aqui -->
 
-    const bairrosPOA = ["Centro Histórico","Floresta","Auxiliadora","Moinhos de Vento","Independência","Bom Fim","Rio Branco","Montserrat","Bela Vista","Farroupilha","Santana","Petrópolis","Santa Cecília","Jardim Botânico","Praia de Belas","Cidade Baixa","Menino Deus","Azenha","Farrapos","Humaitá","Navegantes","São Geraldo","Anchieta","São João","Santa Maria Goretti","Higienópolis","Boa Vista","Passo D'Areia","Jardim São Pedro","Jardim Floresta","Cristo Redentor","Jardim Lindóia","São Sebastião","Vila Ipiranga","Jardim Itu","Jardim Europa","Camaquã","Cavalhada","Nonoai","Teresópolis","Vila Nova","Vila Assunção","Tristeza","Vila Conceição","Pedra Redonda","Ipanema","Espírito Santo","Guarujá","Serraria","Hípica","Campo Novo","Jardim Isabel","Aberta dos Morros","Sétimo Céu","Sarandi","Rubem Berta","Passo das Pedras","Santa Rosa de Lima","Parque Santa Fé","Costa e Silva","Jardim Leopoldina","Jardim Itu"];
-
-    // ----- Popula selects -----
-    function popularSelectMunicipios(){
-      const select = document.getElementById('municipio');
-      select.innerHTML = '';
-      select.appendChild(new Option('PORTO ALEGRE','PORTO ALEGRE'));
-      municipios.filter(m => m !== 'PORTO ALEGRE').sort().forEach(m => select.appendChild(new Option(m,m)));
-    }
-
-    function popularSelectBairros(){
-      const select = document.getElementById('bairro');
-      select.innerHTML = '';
-      bairrosPOA.forEach(b => select.appendChild(new Option(b,b)));
-    }
-
-    document.getElementById('municipio').addEventListener('change', function(){
-      const bairroContainer = document.getElementById('bairroContainer');
-      if(this.value === 'PORTO ALEGRE'){
-        bairroContainer.classList.remove('hidden');
-        popularSelectBairros();
-      } else {
-        bairroContainer.classList.add('hidden');
-      }
-    });
-
-    // ----- Menu -----
-    function logout(){
-      localStorage.removeItem("usuarioLogado");
-      window.location.href = "intranet.html";
-    }
-
-    function buildMenu(){
-      const userLogged = localStorage.getItem("usuarioLogado");
-      const menu = document.getElementById("mainMenu");
-      menu.innerHTML = `
-        <a href="painel.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition"><i class="fas fa-home"></i> Início</a>
-        <a href="cadastro.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition"><i class="fas fa-user-plus"></i> Cadastro</a>
-        <a href="contatos.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition"><i class="fas fa-address-book"></i> Contatos</a>
-        <a href="perfil.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1"><i class="fas fa-user"></i> Perfil</a>
-        ${userLogged === "gilvaniogringo" ? `<a href="dashboard.html" class="bg-[#053646] px-3 py-2 rounded hover:bg-[#032d39] transition flex items-center gap-1"><i class="fas fa-chart-line"></i> Dashboard</a>` : ""}
-        <button onclick="logout()" class="bg-red-600 px-3 py-2 rounded hover:bg-red-700 transition"><i class="fas fa-sign-out-alt"></i> Sair</button>
-      `;
-    }
-
-    buildMenu();
-    popularSelectMunicipios();
-
-    // ----- Envio via fetch -----
-    document.getElementById("formCadastro").addEventListener("submit", async function(e){
-      e.preventDefault();
-      const nome = this.nome.value.trim();
-      const numero = this.numero.value.trim();
-      const endereco = this.endereco.value.trim();
-      const origem = this.origem.value;
-      const municipio = this.municipio.value;
-      const bairro = this.bairro.value;
-      const msgStatus = document.getElementById("msgStatus");
-
-      if(!nome || !numero || !origem || !municipio){
-        msgStatus.textContent = "Por favor, preencha os campos obrigatórios.";
-        msgStatus.className = "mt-4 text-center text-sm font-semibold text-red-600";
-        return;
-      }
-
-      try{
-        const formData = new FormData();
-        formData.append("nome", nome);
-        formData.append("numero", numero);
-        formData.append("endereco", endereco);
-        formData.append("origem", origem);
-        formData.append("municipio", municipio);
-        formData.append("bairro", bairro);
-
-        const response = await fetch("salvar_contato.php", { method: "POST", body: formData });
-        const result = await response.json();
-
-        if(result.sucesso){
-          msgStatus.textContent = result.mensagem;
-          msgStatus.className = "mt-4 text-center text-sm font-semibold text-green-600";
-          setTimeout(()=> window.location.href="contatos.html", 1500);
-        } else {
-          msgStatus.textContent = result.mensagem;
-          msgStatus.className = "mt-4 text-center text-sm font-semibold text-red-600";
-        }
-      } catch(err){
-        msgStatus.textContent = "Erro ao enviar contato: " + err;
-        msgStatus.className = "mt-4 text-center text-sm font-semibold text-red-600";
-      }
-    });
-  </script>
 </body>
 </html>
