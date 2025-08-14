@@ -3,49 +3,73 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Contatos - Intranet do Gringo</title>
+  <title>Cadastro de Clientes - Intranet do Gringo</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 </head>
 <body class="bg-gray-100 min-h-screen flex flex-col">
 
-  <!-- Header padrão -->
+  <!-- Header -->
   <header class="flex justify-between items-center bg-[#09679c] text-white p-4 shadow-md">
     <div class="flex items-center gap-3">
       <img src="img/logo.png" alt="Logo Gringo" class="h-10 w-auto" />
-      <h1 class="text-xl font-bold">Contatos</h1>
+      <h1 class="text-xl font-bold">Cadastro de Clientes</h1>
     </div>
-    <nav id="mainMenu" class="flex items-center gap-3"></nav>
+    <nav id="mainMenu" class="flex items-center gap-3">
+      <button onclick="logout()" class="bg-[#053646] px-3 py-2 rounded hover:bg-[#032d39] transition flex items-center gap-1">
+        <i class="fas fa-sign-out-alt"></i> Sair
+      </button>
+    </nav>
   </header>
 
-  <!-- Conteúdo -->
-  <main class="flex-grow p-6 max-w-4xl mx-auto">
-    <h2 class="text-2xl font-bold mb-4 text-[#005075]">Lista de Contatos</h2>
+  <main class="flex flex-1">
+    <!-- Menu lateral -->
+    <aside class="bg-yellow-500 w-64 p-6 text-black flex flex-col gap-4">
+      <h2 class="font-bold text-lg border-b border-black pb-2">RC DESIGNER VBA</h2>
+      <button onclick="mostrarAba('dadosPessoais')" class="text-left hover:underline">Dados Pessoais</button>
+      <button onclick="mostrarAba('aniversario')" class="text-left hover:underline">Aniversário</button>
+      <button onclick="mostrarAba('mensagens')" class="text-left hover:underline">Mensagens Prontas</button>
+      <button onclick="mostrarAba('listaTransmissao')" class="text-left hover:underline">Lista de Transmissão</button>
+    </aside>
 
-    <div id="msgSucesso" class="mb-4 text-center text-green-600 font-semibold"></div>
-
-    <!-- Filtros -->
-    <div class="bg-white shadow rounded-lg p-6 mb-6">
-      <h3 class="text-lg font-bold mb-2 text-[#005075]">Filtrar Contatos</h3>
-      <div class="flex flex-col md:flex-row gap-4">
-        <!-- Multi-select Municípios -->
-        <div class="flex-1">
-          <label class="block font-semibold mb-1">Município</label>
-          <select id="municipios" multiple class="w-full border rounded p-2 h-40 overflow-y-auto"></select>
+    <!-- Conteúdo principal -->
+    <section class="flex-1 p-6 space-y-6">
+      <!-- Dados Pessoais -->
+      <div id="dadosPessoais" class="aba bg-[#1f2937] text-white shadow rounded-lg p-6 hidden">
+        <h3 class="text-xl font-bold mb-4">Dados Pessoais</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <input type="text" id="nome" placeholder="Nome" class="p-2 rounded border border-yellow-500 bg-[#1f2937]"/>
+          <input type="tel" id="telefone" placeholder="Telefone" class="p-2 rounded border border-yellow-500 bg-[#1f2937]"/>
+          <select id="municipio" class="p-2 rounded border border-yellow-500 bg-[#1f2937]" onchange="toggleBairro()">
+            <option value="">Selecione a cidade</option>
+          </select>
+          <select id="bairro" class="p-2 rounded border border-yellow-500 bg-[#1f2937] hidden">
+            <option value="">Selecione o bairro</option>
+          </select>
+          <input type="date" id="dataNascimento" class="p-2 rounded border border-yellow-500 bg-[#1f2937]" />
         </div>
-
-        <!-- Multi-select Bairros Porto Alegre -->
-        <div class="flex-1">
-          <label class="block font-semibold mb-1">Bairro (Porto Alegre)</label>
-          <select id="bairros" multiple class="w-full border rounded p-2 h-40 overflow-y-auto"></select>
-        </div>
+        <button onclick="salvarCliente()" class="mt-4 bg-yellow-500 text-black px-4 py-2 rounded hover:bg-yellow-600 transition">Salvar</button>
       </div>
-    </div>
 
-    <!-- Lista de contatos -->
-    <div class="bg-white shadow rounded-lg p-6">
-      <ul id="listaContatos" class="divide-y divide-gray-200"></ul>
-    </div>
+      <!-- Aniversário -->
+      <div id="aniversario" class="aba bg-[#1f2937] text-white shadow rounded-lg p-6 hidden">
+        <h3 class="text-xl font-bold mb-4">Aniversário</h3>
+        <p>Os aniversariantes cadastrados receberão um cartão automaticamente no dia do aniversário.</p>
+      </div>
+
+      <!-- Mensagens Prontas -->
+      <div id="mensagens" class="aba bg-[#1f2937] text-white shadow rounded-lg p-6 hidden">
+        <h3 class="text-xl font-bold mb-4">Mensagens Prontas</h3>
+        <p>Escolha uma festividade para enviar a mensagem com anexo.</p>
+        <button class="bg-yellow-500 text-black px-4 py-2 rounded hover:bg-yellow-600 transition">Enviar Mensagem</button>
+      </div>
+
+      <!-- Lista de Transmissão -->
+      <div id="listaTransmissao" class="aba bg-[#1f2937] text-white shadow rounded-lg p-6 hidden">
+        <h3 class="text-xl font-bold mb-4">Lista de Transmissão</h3>
+        <ul id="listaClientes" class="divide-y divide-gray-600"></ul>
+      </div>
+    </section>
   </main>
 
   <script>
@@ -54,83 +78,11 @@
       window.location.href = "intranet.html";
     }
 
-    /* ---------- Menu dinâmico ---------- */
-    function buildMenu() {
-      const userLogged = localStorage.getItem("usuarioLogado");
-      const menu = document.getElementById("mainMenu");
-      menu.innerHTML = `
-        <a href="painel.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition" title="Início">
-          <i class="fas fa-home"></i> Início
-        </a>
-        <a href="cadastro.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition" title="Cadastro">
-          <i class="fas fa-user-plus"></i> Cadastro
-        </a>
-        <a href="contatos.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition" title="Contatos">
-          <i class="fas fa-address-book"></i> Contatos
-        </a>
-        <a href="perfil.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1">
-          <i class="fas fa-user"></i> Perfil
-        </a>
-        ${userLogged === "gilvaniogringo" ? `
-          <a href="dashboard.html" class="bg-[#053646] px-3 py-2 rounded hover:bg-[#032d39] transition flex items-center gap-1">
-            <i class="fas fa-chart-line"></i> Dashboard
-          </a>
-        ` : ""}
-        <button onclick="logout()" class="bg-[#053646] px-3 py-2 rounded hover:bg-[#032d39] transition flex items-center gap-1">
-          <i class="fas fa-sign-out-alt"></i> Sair
-        </button>
-      `;
+    function mostrarAba(id) {
+      document.querySelectorAll('.aba').forEach(el => el.classList.add('hidden'));
+      document.getElementById(id).classList.remove('hidden');
     }
 
-    /* ---------- Contatos ---------- */
-    function pegarContatos() {
-      return JSON.parse(localStorage.getItem("contatos")) || [];
-    }
-
-    function salvarContatos(contatos) {
-      localStorage.setItem("contatos", JSON.stringify(contatos));
-    }
-
-    function excluirContato(index) {
-      if (confirm("Deseja realmente excluir este contato?")) {
-        let contatos = pegarContatos();
-        contatos.splice(index, 1);
-        salvarContatos(contatos);
-        renderizarContatos();
-      }
-    }
-
-    function renderizarContatos() {
-      const listaEl = document.getElementById("listaContatos");
-      const contatos = pegarContatos();
-      listaEl.innerHTML = "";
-
-      if (contatos.length === 0) {
-        listaEl.innerHTML = '<li class="py-4 text-gray-500 italic">Nenhum contato encontrado.</li>';
-        return;
-      }
-
-      contatos.forEach((contato, idx) => {
-        const li = document.createElement("li");
-        li.className = "py-4 flex flex-col md:flex-row md:justify-between md:items-center";
-        li.innerHTML = `
-          <div class="mb-2 md:mb-0">
-            <p><strong class="text-[#09679c]">${contato.nome}</strong></p>
-            <p>Telefone: ${contato.numero}</p>
-            ${contato.endereco ? `<p>Endereço: ${contato.endereco}</p>` : ""}
-            <p>Origem: <em>${contato.origem}</em></p>
-          </div>
-          <div class="flex gap-3">
-            <button onclick="excluirContato(${idx})" class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 transition">
-              <i class="fas fa-trash"></i> Excluir
-            </button>
-          </div>
-        `;
-        listaEl.appendChild(li);
-      });
-    }
-
-    /* ---------- Municípios e Bairros ---------- */
     const municipios = [
       'ACEGUÁ','ÁGUA SANTA','AGUDO','AJURICABA','ALECRIM','ALEGRETE','ALMIRANTE TAMANDARÉ DO SUL',
       'ALPESTRE','ALTO ALEGRE','ALVORADA','AMETISTA DO SUL','ANDRÉ DA ROCHA','ANTA GORDA','ANTÔNIO PRADO',
@@ -176,38 +128,57 @@
       'VICENTE DUTRA','VICTOR GRAEFF','VILA FLORES','VILA MARIA','VISTA ALEGRE','VISTA ALEGRE DO PRATA','VITÓRIA DAS MISSÕES','WESTFALIA','XANGRI-LÁ'
     ];
 
-    const bairros = [
-      "Centro Histórico","Floresta","Auxiliadora","Moinhos de Vento","Independência","Bom Fim","Rio Branco","Montserrat","Bela Vista",
+    const bairros = ["Centro Histórico","Floresta","Auxiliadora","Moinhos de Vento","Independência","Bom Fim","Rio Branco","Montserrat","Bela Vista",
       "Farroupilha","Santana","Petrópolis","Santa Cecília","Jardim Botânico","Praia de Belas","Cidade Baixa","Menino Deus","Azenha",
       "Farrapos","Humaitá","Navegantes","São Geraldo","Anchieta","São João","Santa Maria Goretti","Higienópolis","Boa Vista","Passo D'Areia",
       "Jardim São Pedro","Jardim Floresta","Cristo Redentor","Jardim Lindóia","São Sebastião","Vila Ipiranga","Jardim Itu","Jardim Europa",
       "Camaquã","Cavalhada","Nonoai","Teresópolis","Vila Nova","Vila Assunção","Tristeza","Vila Conceição","Pedra Redonda","Ipanema",
       "Espírito Santo","Guarujá","Serraria","Hípica","Campo Novo","Jardim Isabel","Aberta dos Morros","Sétimo Céu",
-      "Sarandi","Rubem Berta","Passo das Pedras","Santa Rosa de Lima","Parque Santa Fé","Costa e Silva","Jardim Leopoldina","Jardim Itu"
-    ];
+      "Sarandi","Rubem Berta","Passo das Pedras","Santa Rosa de Lima","Parque Santa Fé","Costa e Silva","Jardim Leopoldina","Jardim Itu"];
 
-    function popularSelect(id, lista) {
-      const select = document.getElementById(id);
-      lista.forEach(item => {
-        const option = document.createElement("option");
-        option.value = item;
-        option.textContent = item;
-        select.appendChild(option);
+    function popularSelects() {
+      const selMunicipio = document.getElementById("municipio");
+      municipios.forEach(c => selMunicipio.appendChild(new Option(c,c)));
+      const selBairro = document.getElementById("bairro");
+      bairros.forEach(b => selBairro.appendChild(new Option(b,b)));
+    }
+
+    function toggleBairro() {
+      const municipio = document.getElementById("municipio").value;
+      document.getElementById("bairro").classList.toggle("hidden", municipio !== "PORTO ALEGRE");
+    }
+
+    function salvarCliente() {
+      const cliente = {
+        nome: document.getElementById("nome").value,
+        telefone: document.getElementById("telefone").value,
+        municipio: document.getElementById("municipio").value,
+        bairro: document.getElementById("bairro").value,
+        dataNascimento: document.getElementById("dataNascimento").value
+      };
+      const lista = JSON.parse(localStorage.getItem("clientes")) || [];
+      lista.push(cliente);
+      localStorage.setItem("clientes", JSON.stringify(lista));
+      alert("Cliente salvo com sucesso!");
+      atualizarListaTransmissao();
+    }
+
+    function atualizarListaTransmissao() {
+      const lista = JSON.parse(localStorage.getItem("clientes")) || [];
+      const ul = document.getElementById("listaClientes");
+      ul.innerHTML = "";
+      lista.forEach(c => {
+        const li = document.createElement("li");
+        li.className = "py-2";
+        li.textContent = `${c.nome} - ${c.telefone} - ${c.municipio}${c.bairro ? ' - ' + c.bairro : ''}`;
+        ul.appendChild(li);
       });
     }
 
     window.addEventListener("DOMContentLoaded", () => {
-      buildMenu();
-
-      const msgSucesso = sessionStorage.getItem("msgSucessoCadastro");
-      if (msgSucesso) {
-        document.getElementById("msgSucesso").textContent = msgSucesso;
-        sessionStorage.removeItem("msgSucessoCadastro");
-      }
-
-      renderizarContatos();
-      popularSelect("municipios", municipios);
-      popularSelect("bairros", bairros);
+      mostrarAba("dadosPessoais");
+      popularSelects();
+      atualizarListaTransmissao();
     });
   </script>
 </body>
