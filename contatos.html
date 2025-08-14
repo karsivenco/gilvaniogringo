@@ -20,8 +20,8 @@
 
   <main class="flex flex-1">
     <!-- Menu lateral -->
-    <aside class="bg-yellow-500 w-64 p-6 text-black flex flex-col gap-4">
-      <h2 class="font-bold text-lg border-b border-black pb-2">CADASTRO</h2>
+    <aside class="bg-[#09679c] w-64 p-6 text-white flex flex-col gap-4">
+      <h2 class="font-bold text-lg border-b border-[#096 pb-2">CADASTRO</h2>
       <button onclick="mostrarAba('dadosPessoais')" class="text-left hover:underline">Dados Pessoais</button>
       <button onclick="mostrarAba('aniversario')" class="text-left hover:underline">Aniversário</button>
       <button onclick="mostrarAba('mensagens')" class="text-left hover:underline">Mensagens Prontas</button>
@@ -31,7 +31,7 @@
     <!-- Conteúdo principal -->
     <section class="flex-1 p-6 space-y-6">
       <!-- Dados Pessoais -->
-      <div id="dadosPessoais" class="aba bg-[#1f2937] text-white shadow rounded-lg p-6 hidden">
+      <div id="dadosPessoais" class="aba bg-white text-black shadow rounded-lg p-6 hidden">
         <h3 class="text-xl font-bold mb-4">Dados Pessoais</h3>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <input type="text" id="nome" placeholder="Nome" class="p-2 rounded border border-yellow-500 bg-[#1f2937]"/>
@@ -39,31 +39,31 @@
           <select id="municipio" class="p-2 rounded border border-yellow-500 bg-[#1f2937]" onchange="toggleBairro()">
             <option value="">Selecione a cidade</option>
           </select>
-          <select id="bairro" class="p-2 rounded border border-yellow-500 bg-[#1f2937] hidden">
+          <select id="bairro" class="p-2 rounded border border-[#09679c] bg-white hidden">
             <option value="">Selecione o bairro</option>
           </select>
           <input type="date" id="dataNascimento" class="p-2 rounded border border-yellow-500 bg-[#1f2937]" />
         </div>
-        <button onclick="salvarCliente()" class="mt-4 bg-yellow-500 text-black px-4 py-2 rounded hover:bg-yellow-600 transition">Salvar</button>
+        <button onclick="salvarCliente()" class="mt-4 bg-[#09679c] text-white px-4 py-2 rounded hover:bg-[#09679c] transition">Salvar</button>
       </div>
 
       <!-- Aniversário -->
-      <div id="aniversario" class="aba bg-[#1f2937] text-white shadow rounded-lg p-6 hidden">
+      <div id="aniversario" class="aba bg-white text-black shadow rounded-lg p-6 hidden">
         <h3 class="text-xl font-bold mb-4">Aniversário</h3>
         <p>Os aniversariantes cadastrados receberão um cartão automaticamente no dia do aniversário.</p>
       </div>
 
       <!-- Mensagens Prontas -->
-      <div id="mensagens" class="aba bg-[#1f2937] text-white shadow rounded-lg p-6 hidden">
+      <div id="mensagens" class="aba bg-white text-black shadow rounded-lg p-6 hidden">
         <h3 class="text-xl font-bold mb-4">Mensagens Prontas</h3>
         <p>Escolha uma festividade para enviar a mensagem com anexo.</p>
-        <button class="bg-yellow-500 text-black px-4 py-2 rounded hover:bg-yellow-600 transition">Enviar Mensagem</button>
+        <button class="bg-[#09679c] text-white px-4 py-2 rounded hover:bg-[#09679c] transition">Enviar Mensagem</button>
       </div>
 
       <!-- Lista de Transmissão -->
-      <div id="listaTransmissao" class="aba bg-[#1f2937] text-white shadow rounded-lg p-6 hidden">
+      <div id="listaTransmissao" class="aba bg-[#09679c] text-white shadow rounded-lg p-6 hidden">
         <h3 class="text-xl font-bold mb-4">Lista de Transmissão</h3>
-        <ul id="listaClientes" class="divide-y divide-gray-600"></ul>
+        <ul id="listaClientes" class="divide-y divide-black-600"></ul>
       </div>
     </section>
   </main>
