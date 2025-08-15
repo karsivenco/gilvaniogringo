@@ -95,13 +95,15 @@
   <script src="menu.js"></script>
 
   <!-- JS com listagem de municípios e bairros -->
-  <script src="municipio.js"></script>
+  <script src="municipios.js"></script>
   <script src="bairros.js"></script>
 
-  <!-- Script para preencher selects -->
+  <!-- Script para preencher selects e redirecionar -->
   <script>
     function popularSelect(id, lista) {
       const select = document.getElementById(id);
+      // Limpa opções antigas, exceto a primeira
+      select.length = 1;
       lista.forEach(item => {
         const option = document.createElement('option');
         option.value = item;
@@ -110,8 +112,8 @@
       });
     }
 
-    // Preenche ao carregar
     document.addEventListener("DOMContentLoaded", () => {
+      // Preenche os selects
       if (typeof municipios !== "undefined") {
         popularSelect("municipio", municipios);
       }
@@ -120,10 +122,10 @@
       }
     });
 
-    // Aqui você conecta com o salvar-contato.php
+    // Redireciona para contato.html ao enviar
     document.getElementById("formCadastro").addEventListener("submit", e => {
       e.preventDefault();
-      alert("Cadastro enviado! (Aqui entraria o fetch para salvar-contato.php)");
+      window.location.href = "contato.html";
     });
   </script>
 
