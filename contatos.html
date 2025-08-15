@@ -21,7 +21,7 @@
   <!-- Menu lateral fixo -->
   <aside class="bg-[#09679c] w-64 p-6 text-white flex flex-col gap-4 fixed top-16 h-[calc(100vh-4rem)]">
     <h2 class="font-bold text-lg border-b border-white pb-2">CONTATO</h2>
-    <button onclick="mostrarAba('dadosPessoais')" class="text-left hover:underline">Dados Pessoais</button>
+    <button onclick="mostrarAba('dadosPessoais')" class="text-left hover:underline">Eleitores</button>
     <button onclick="mostrarAba('aniversario')" class="text-left hover:underline">Aniversário</button>
     <button onclick="mostrarAba('mensagens')" class="text-left hover:underline">Mensagens Prontas</button>
     <button onclick="mostrarAba('listaTransmissao')" class="text-left hover:underline">Lista de Transmissão</button>
@@ -30,9 +30,9 @@
   <!-- Área principal -->
   <main class="flex-1 ml-64 pt-24 p-6 overflow-y-auto">
 
-    <!-- Dados Pessoais / Clientes -->
+    <!-- Dados Pessoais / Eleitores -->
     <div id="dadosPessoais" class="aba bg-white text-black shadow rounded-lg p-6 hidden">
-      <h3 class="text-xl font-bold mb-4">Clientes</h3>
+      <h3 class="text-xl font-bold mb-4">Eleitores</h3>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
         <div class="relative">
           <input type="text" id="pesquisarNome" placeholder="Pesquisar Nome" class="p-2 rounded border border-gray-300 w-full"/>
@@ -44,10 +44,10 @@
         <select id="bairro" class="p-2 rounded border border-gray-300 hidden">
           <option value="">Selecione o Bairro</option>
         </select>
-        <button onclick="buscarCliente()" class="col-span-1 md:col-span-3 bg-[#09679c] text-white px-4 py-2 rounded hover:bg-[#074d6b] transition">Pesquisar</button>
+        <button onclick="buscarEleitor()" class="col-span-1 md:col-span-3 bg-[#09679c] text-white px-4 py-2 rounded hover:bg-[#074d6b] transition">Pesquisar</button>
       </div>
       <div id="resultadoPesquisa" class="mt-4 grid grid-cols-1 gap-3">
-        <p>Nenhum cliente pesquisado ainda.</p>
+        <p>Nenhum eleitor pesquisado ainda.</p>
       </div>
     </div>
 
@@ -121,7 +121,7 @@
     function montarCalendario() {
       const container = document.getElementById("aniversariantesMes");
       container.innerHTML = "";
-      meses.forEach((mes, idx) => {
+      meses.forEach((mes) => {
         const count = pegarClientes().filter(c => c.mesAniversario === mes).length;
         const div = document.createElement("div");
         div.className = "bg-gray-100 p-3 rounded text-center cursor-pointer hover:bg-gray-200";
@@ -139,10 +139,13 @@
         lista.innerHTML = '<li class="py-2 text-gray-500 italic">Nenhum aniversariante neste mês.</li>';
         return;
       }
-      clientes.forEach(c => {
+      clientes.forEach((c, index) => {
         const li = document.createElement("li");
-        li.className = "py-2";
-        li.innerHTML = `<strong>${c.nome}</strong> - ${c.municipio} - ${c.bairro || ''} - ${c.numero || ''} - ${c.endereco || ''}`;
+        li.className = "py-2 flex justify-between items-center";
+        li.innerHTML = `
+          <span><strong>${c.nome}</strong> - ${c.municipio} - ${c.bairro || ''} - ${c.numero || ''} - ${c.endereco || ''}</span>
+          <a href="base.html?id=${index}" class="bg-[#09679c] text-white px-2 py-1 rounded hover:bg-[#074d6b]">Abrir ficha</a>
+        `;
         lista.appendChild(li);
       });
     }
@@ -167,7 +170,7 @@
       }
     }
 
-    function buscarCliente() {
+    function buscarEleitor() {
       const nome = document.getElementById('pesquisarNome').value.toLowerCase();
       const municipio = document.getElementById('municipio').value;
       const resultadoDiv = document.getElementById('resultadoPesquisa');
@@ -178,13 +181,16 @@
         (!nome || c.nome.toLowerCase().includes(nome))
       );
       if (filtrados.length === 0) {
-        resultadoDiv.innerHTML = '<p>Nenhum cliente encontrado.</p>';
+        resultadoDiv.innerHTML = '<p>Nenhum eleitor encontrado.</p>';
         return;
       }
-      filtrados.forEach(c => {
+      filtrados.forEach((c, index) => {
         const div = document.createElement('div');
-        div.className = 'bg-gray-100 p-3 rounded shadow';
-        div.innerHTML = `<strong>${c.nome}</strong> - ${c.municipio}${c.bairro ? ' - ' + c.bairro : ''} <br> ${c.numero} - ${c.origem}`;
+        div.className = 'bg-gray-100 p-3 rounded shadow flex justify-between items-center';
+        div.innerHTML = `
+          <span><strong>${c.nome}</strong> - ${c.municipio}${c.bairro ? ' - ' + c.bairro : ''} - ${c.numero || ''} - ${c.origem || ''}</span>
+          <a href="base.html?id=${index}" class="bg-[#09679c] text-white px-2 py-1 rounded hover:bg-[#074d6b]">Abrir ficha</a>
+        `;
         resultadoDiv.appendChild(div);
       });
     }
