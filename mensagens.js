@@ -30,19 +30,13 @@ function montarMensagens() {
         Enviar
       </button>
     `;
+
     const botao = div.querySelector("button");
     botao.addEventListener("click", () => {
       const municipio = document.getElementById("mensagemMunicipio").value;
       const texto = div.querySelector("textarea").value;
-      if (!municipio) {
-        alert("Selecione um município para enviar.");
-        return;
-      }
-      if (!texto) {
-        alert("Digite a mensagem antes de enviar.");
-        return;
-      }
-      // Aqui você pode integrar com envio real
+      if (!municipio) { alert("Selecione um município."); return; }
+      if (!texto) { alert("Digite a mensagem."); return; }
       alert(`Mensagem "${texto}" enviada para ${municipio}.`);
     });
 
@@ -50,20 +44,4 @@ function montarMensagens() {
   });
 }
 
-// Preenche select de municípios (reaproveitando array municipios.js)
-function popularSelectMunicipios() {
-  const select = document.getElementById("mensagemMunicipio");
-  if (!select || typeof municipios === "undefined") return;
-
-  municipios.forEach(m => {
-    const option = document.createElement("option");
-    option.value = m;
-    option.textContent = m;
-    select.appendChild(option);
-  });
-}
-
-window.addEventListener("DOMContentLoaded", () => {
-  popularSelectMunicipios();
-  montarMensagens();
-});
+window.addEventListener("DOMContentLoaded", montarMensagens);
