@@ -1,5 +1,3 @@
-// mensagens.js
-
 const eventos = [
   {nome: "Bom Dia", img: "img/bomDia.png"},
   {nome: "Boa Tarde", img: "img/boaTarde.png"},
@@ -28,10 +26,44 @@ function montarMensagens() {
       <img src="${evento.img}" alt="${evento.nome}" class="h-20 mb-2"/>
       <strong>${evento.nome}</strong>
       <textarea class="border p-2 mt-2 w-full" placeholder="Mensagem para ${evento.nome}..."></textarea>
-      <button class="bg-[#09679c] text-white px-4 py-2 mt-2 rounded hover:bg-[#074d6b] transition">Enviar</button>
+      <button class="bg-[#09679c] text-white px-4 py-2 mt-2 rounded hover:bg-[#074d6b] transition">
+        Enviar
+      </button>
     `;
+    const botao = div.querySelector("button");
+    botao.addEventListener("click", () => {
+      const municipio = document.getElementById("mensagemMunicipio").value;
+      const texto = div.querySelector("textarea").value;
+      if (!municipio) {
+        alert("Selecione um município para enviar.");
+        return;
+      }
+      if (!texto) {
+        alert("Digite a mensagem antes de enviar.");
+        return;
+      }
+      // Aqui você pode integrar com envio real
+      alert(`Mensagem "${texto}" enviada para ${municipio}.`);
+    });
+
     grid.appendChild(div);
   });
 }
 
-window.addEventListener("DOMContentLoaded", montarMensagens);
+// Preenche select de municípios (reaproveitando array municipios.js)
+function popularSelectMunicipios() {
+  const select = document.getElementById("mensagemMunicipio");
+  if (!select || typeof municipios === "undefined") return;
+
+  municipios.forEach(m => {
+    const option = document.createElement("option");
+    option.value = m;
+    option.textContent = m;
+    select.appendChild(option);
+  });
+}
+
+window.addEventListener("DOMContentLoaded", () => {
+  popularSelectMunicipios();
+  montarMensagens();
+});
