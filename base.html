@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ficha do Eleitor - Intranet do Gringo</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body class="bg-gray-100 flex">
+
+  <!-- Menu superior fixo -->
+  <header class="fixed top-0 left-0 w-full bg-[#09679c] text-white p-4 shadow-md z-50 flex justify-between items-center">
+    <div class="flex items-center gap-3">
+      <img src="img/logo.png" alt="Logo Gringo" class="h-10 w-auto" />
+      <h1 class="text-xl font-bold">Ficha do Eleitor</h1>
+    </div>
+    <nav id="mainMenu" class="flex items-center gap-3"></nav>
+  </header>
+
+  <!-- Menu lateral -->
+  <aside class="bg-[#09679c] w-64 p-6 text-white flex flex-col gap-4 fixed top-16 h-[calc(100vh-4rem)]">
+    <h2 class="font-bold text-lg border-b border-white pb-2">CONTATO</h2>
+    <button onclick="mostrarAba('ficha')" class="text-left hover:underline">Dados do Eleitor</button>
+    <button onclick="window.location.href='contatos.html'" class="text-left hover:underline">Voltar</button>
+  </aside>
+
+  <!-- Área principal -->
+  <main class="flex-1 ml-64 pt-24 p-6 overflow-y-auto">
+
+    <div id="ficha" class="aba bg-white text-black shadow rounded-lg p-6">
+      <h3 class="text-xl font-bold mb-4">Dados do Eleitor</h3>
+
+      <form id="formFicha" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+        <!-- Nome completo -->
+        <div>
+          <label for="nome" class="block font-medium mb-1">Nome completo</label>
+          <input type="text" id="nome" name="nome" required class="p-2 rounded border border-gray-300 w-full"/>
+        </div>
+
+        <!-- Número -->
+        <div>
+          <label for="numero" class="block font-medium mb-1">Número (DDI + DDD)</label>
+          <input type="text" id="numero" name="numero" placeholder="+55 51 ..." class="p-2 rounded border border-gray-300 w-full"/>
+        </div>
+
+        <!-- Endereço -->
+        <div class="md:col-span-2">
+          <label for="endereco" class="block font-medium mb-1">Endereço (opcional)</label>
+          <input type="text" id="endereco" name="endereco" placeholder="Rua, número, bairro, cidade" class="p-2 rounded border border-gray-300 w-full"/>
+        </div>
+
+        <!-- Origem do contato -->
+        <div>
+          <label for="origem" class="block font-medium mb-1">Origem do contato</label>
+          <select id="origem" name="origem" class="p-2 rounded border border-gray-300 w-full">
+            <option value="">Selecione a origem</option>
+            <option value="instagram">Instagram</option>
+            <option value="facebook">Facebook</option>
+            <option value="whatsapp">WhatsApp</option>
+            <option value="presencial">Presencial</option>
+            <option value="outro">Outro</option>
+          </select>
+        </div>
+
+        <!-- Município -->
+        <div>
+          <label for="municipio" class="block font-medium mb-1">Município</label>
+          <select id="municipio" name="municipio" class="p-2 rounded border border-gray-300 w-full">
+            <option value="">Selecione o Município</option>
+          </select>
+        </div>
+
+        <!-- Bairro -->
+        <div>
+          <label for="bairro" class="block font-medium mb-1">Bairro</label>
+          <select id="bairro" name="bairro" class="p-2 rounded border border-gray-300 w-full">
+            <option value="">Selecione o Bairro</option>
+          </select>
+        </div>
+
+        <!-- Mês de Aniversário -->
+        <div>
+          <label for="mesAniversario" class="block font-medium mb-1">Mês de Aniversário</label>
+          <select id="mesAniversario" name="mesAniversario" class="p-2 rounded border border-gray-300 w-full">
+            <option value="">Selecione o mês</option>
+            <option value="Janeiro">Janeiro</option>
+            <option value="Fevereiro">Fevereiro</option>
+            <option value="Março">Março</option>
+            <option value="Abril">Abril</option>
+            <option value="Maio">Maio</option>
+            <option value="Junho">Junho</option>
+            <option value="Julho">Julho</option>
+            <option value="Agosto">Agosto</option>
+            <option value="Setembro">Setembro</option>
+            <option value="Outubro">Outubro</option>
+            <option value="Novembro">Novembro</option>
+            <option value="Dezembro">Dezembro</option>
+          </select>
+        </div>
+
+        <!-- Botão -->
+        <div class="md:col-span-2 flex justify-end gap-2">
+          <button type="submit" class="bg-[#09679c] text-white px-4 py-2 rounded hover:bg-[#074d6b] transition">Salvar</button>
+          <button type="button" onclick="excluirFicha()" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition">Excluir</button>
+        </div>
+
+      </form>
+    </div>
+
+  </main>
+
+  <!-- Scripts -->
+  <script src="menu.js"></script>
+  <script src="municipios.js"></script>
+  <script src="bairros.js"></script>
+
+  <script>
+    // Função para mostrar aba (caso tenha mais abas futuramente)
+    function mostrarAba(id) {
+      document.querySelectorAll('.aba').forEach(div => div.classList.add('hidden'));
+      const aba = document.getElementById(id);
+      if (aba) aba.classList.remove('hidden');
+    }
+
+    // Popula selects
+    function popularSelect(id, lista) {
+      const select = document.getElementById(id);
+      select.length = 1;
+      lista.forEach(item => {
+        const option = document.createElement('option');
+        option.value = item;
+        option.textContent = item;
+        select.appendChild(option);
+      });
+    }
+
+    // Carregar dados do eleitor
+    function carregarFicha() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const id = urlParams.get('id');
+      const clientes = JSON.parse(localStorage.getItem('clientes')) || [];
+      const cliente = clientes[id];
+      if (!cliente) return;
+
+      document.getElementById("nome").value = cliente.nome;
+      document.getElementById("numero").value = cliente.numero;
+      document.getElementById("endereco").value = cliente.endereco;
+      document.getElementById("origem").value = cliente.origem;
+      document.getElementById("municipio").value = cliente.municipio;
+      document.getElementById("bairro").value = cliente.bairro;
+      document.getElementById("mesAniversario").value = cliente.mesAniversario;
+
+      // Salvar alterações
+      document.getElementById("formFicha").addEventListener("submit", e => {
+        e.preventDefault();
+        clientes[id] = {
+          nome: document.getElementById("nome").value,
+          numero: document.getElementById("numero").value,
+          endereco: document.getElementById("endereco").value,
+          origem: document.getElementById("origem").value,
+          municipio: document.getElementById("municipio").value,
+          bairro: document.getElementById("bairro").value,
+          mesAniversario: document.getElementById("mesAniversario").value
+        };
+        localStorage.setItem("clientes", JSON.stringify(clientes));
+        alert("Ficha atualizada com sucesso!");
+      });
+    }
+
+    // Excluir ficha
+    function excluirFicha() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const id = urlParams.get('id');
+      let clientes = JSON.parse(localStorage.getItem('clientes')) || [];
+      if (!clientes[id]) return;
+
+      const confirmacao = confirm(`Deseja realmente excluir ${clientes[id].nome}?`);
+      if (!confirmacao) return;
+
+      clientes.splice(id, 1);
+      localStorage.setItem('clientes', JSON.stringify(clientes));
+      alert("Ficha excluída com sucesso!");
+      window.location.href = "contatos.html";
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      if (typeof municipios !== "undefined") popularSelect("municipio", municipios);
+      if (typeof bairrosPOA !== "undefined") popularSelect("bairro", bairrosPOA);
+      carregarFicha();
+      mostrarAba('ficha');
+    });
+  </script>
+
+</body>
+</html>
