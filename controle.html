@@ -60,6 +60,28 @@
       </div>
     </section>
 
+    <!-- Dashboard gerente -->
+    <section id="dashboardGerente" class="hidden bg-white rounded shadow p-6 space-y-8">
+      <h2 class="text-3xl font-bold text-[#09679c] border-b-4 border-[#FF7DA4] pb-2">Dashboard Gerente - Métricas</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+        <div class="bg-[#09679c] text-white rounded-lg p-5 shadow flex flex-col items-center">
+          <i class="fas fa-user-friends fa-3x mb-3"></i>
+          <p class="text-3xl font-semibold" id="colaboradoresLogados">0</p>
+          <p class="text-lg">Colaboradores Logados</p>
+        </div>
+        <div class="bg-[#DB2356] text-white rounded-lg p-5 shadow flex flex-col items-center">
+          <i class="fas fa-envelope-open-text fa-3x mb-3"></i>
+          <p class="text-3xl font-semibold" id="mensagensResponder">0</p>
+          <p class="text-lg">Mensagens a Responder</p>
+        </div>
+        <div class="bg-[#09679c] text-white rounded-lg p-5 shadow flex flex-col items-center">
+          <i class="fas fa-stopwatch fa-3x mb-3"></i>
+          <p class="text-3xl font-semibold" id="tempoEsperaMedia">0s</p>
+          <p class="text-lg">Tempo Médio de Espera</p>
+        </div>
+      </div>
+    </section>
+
   </main>
 
   <footer class="bg-[#005075] text-white p-4 flex justify-center space-x-8">
@@ -73,6 +95,8 @@
   <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
 
   <script>
+    let usuariosLogados = [];
+
     const usuariosDistribuicao = [
       "anne.mattos",
       "gabriel.amaral",
@@ -82,50 +106,138 @@
       "grazielle.albuquerque"
     ];
 
-    // Inicializa select de usuários
-    const selectUser = document.getElementById("selectUser");
-    usuariosDistribuicao.forEach(u => {
-      const option = document.createElement("option");
-      option.value = u;
-      option.textContent = u;
-      selectUser.appendChild(option);
-    });
+    function carregarUsuariosLogados() {
+      const logados = localStorage.getItem("usuariosLogados");
+      usuariosLogados = logados ? JSON.parse(logados) : [];
+    }
 
-    // Leitor QR Code WhatsApp
-    const sessionId = "ea8f1c30-23ad-438d-9fcf-a28942f0b413";
-    const canvas = document.getElementById("qrCodeCanvas");
-    QRCode.toCanvas(canvas, sessionId, { width: 200 }, function (error) {
-      if (error) console.error(error);
-    });
+    function salvarUsuariosLogados() {
+      localStorage.setItem("usuariosLogados", JSON.stringify(usuariosLogados));
+    }
 
-    // Distribuição de contatos
-    document.getElementById("distribuirBtn").addEventListener("click", () => {
-      const totalContatos = parseInt(document.getElementById("inputTotalContatos").value);
-      const distribuirPara = parseInt(document.getElementById("inputDistribuir").value);
-      const usuarioSelecionado = selectUser.value;
+    function registrarUsuarioLogado(usuario) {
+      if (!usuariosLogados.includes(usuario)) {
+        usuariosLogados.push(usuario);
+        salvarUsuariosLogados();
+      }
+    }
 
-      if (!totalContatos || !distribuirPara || !usuarioSelecionado) {
-        alert("Preencha todos os campos corretamente!");
+    function logout() {
+      const usuario = localStorage.getItem("usuarioLogado");
+      if (usuario) {
+        carregarUsuariosLogados();
+        usuariosLogados = usuariosLogados.filter(u => u !== usuario);
+        salvarUsuariosLogados();
+      }
+      localStorage.removeItem("usuarioLogado");
+      window.location.href = "intranet.html";
+    }
+
+    async function buscarDadosWhatsApp() {
+      return { mensagensResponder: 8, tempoEsperaMedia: 35 };
+    }
+
+    async function iniciarPainel() {
+      const usuario = localStorage.getItem("usuarioLogado");
+      carregarUsuariosLogados();
+
+      if (!usuario) {
+        alert("Usuário não logado. Redirecionando para login...");
+        window.location.href = "intranet.html";
         return;
       }
 
-      if (distribuirPara > totalContatos) {
-        alert("Não é possível distribuir mais contatos do que o total disponível.");
-        return;
-      }
+      registrarUsuarioLogado(usuario);
+      document.getElementById("colaboradoresLogados").textContent = usuariosLogados.length;
 
-      // Gera números aleatórios simulando contatos
-      const numerosAleatorios = [];
-      for (let i = 0; i < distribuirPara; i++) {
-        const numero = Math.floor(Math.random() * totalContatos) + 1;
-        numerosAleatorios.push(numero);
-      }
-
-      document.getElementById("resultadoDistribuicao").innerHTML = `
-        <p>Distribuição para <strong>${usuarioSelecionado}</strong>:</p>
-        <p>${numerosAleatorios.join(", ")}</p>
+      // Menu dinâmico
+      const menu = document.getElementById("menuTop");
+      const usuariosControle = ["cristiano.santos", "gilvaniogringo", "karina.maia"]; 
+      let menuHTML = `
+        <a href="whatsapp.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1">
+          <i class="fab fa-whatsapp"></i> WhatsApp
+        </a>
+        <a href="nova-postagem.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1">
+          <i class="fas fa-plus"></i> Nova Postagem
+        </a>
+        <a href="publicacoes.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1">
+          <i class="fas fa-newspaper"></i> Últimas Notícias
+        </a>
+        <a href="perfil.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1">
+          <i class="fas fa-user"></i> Perfil
+        </a>
       `;
-    });
+      if (usuariosControle.includes(usuario)) {
+        menuHTML += `
+          <a href="controle.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1">
+            <i class="fas fa-home"></i> Painel de Controle
+          </a>
+        `;
+      }
+      menuHTML += `
+        <button onclick="logout()" class="bg-[#053646] px-3 py-2 rounded hover:bg-[#032d39] transition flex items-center gap-1">
+          <i class="fas fa-sign-out-alt"></i> Sair
+        </button>
+      `;
+      menu.innerHTML = menuHTML;
+
+      // Dashboard visível apenas para gilvaniogringo
+      if (usuario === "gilvaniogringo") {
+        document.getElementById("dashboardGerente").classList.remove("hidden");
+        const dadosWhatsapp = await buscarDadosWhatsApp();
+        document.getElementById("mensagensResponder").textContent = dadosWhatsapp.mensagensResponder;
+        document.getElementById("tempoEsperaMedia").textContent = dadosWhatsapp.tempoEsperaMedia + "s";
+      } else {
+        document.getElementById("dashboardGerente").classList.add("hidden");
+      }
+
+      // Inicializa select de distribuição
+      const selectUser = document.getElementById("selectUser");
+      selectUser.innerHTML = "";
+      usuariosDistribuicao.forEach(u => {
+        const option = document.createElement("option");
+        option.value = u;
+        option.textContent = u;
+        selectUser.appendChild(option);
+      });
+
+      // QR Code WhatsApp
+      const sessionId = "ea8f1c30-23ad-438d-9fcf-a28942f0b413";
+      const canvas = document.getElementById("qrCodeCanvas");
+      QRCode.toCanvas(canvas, sessionId, { width: 200 }, function (error) {
+        if (error) console.error(error);
+      });
+
+      // Distribuição de contatos
+      document.getElementById("distribuirBtn").addEventListener("click", () => {
+        const totalContatos = parseInt(document.getElementById("inputTotalContatos").value);
+        const distribuirPara = parseInt(document.getElementById("inputDistribuir").value);
+        const usuarioSelecionado = selectUser.value;
+
+        if (!totalContatos || !distribuirPara || !usuarioSelecionado) {
+          alert("Preencha todos os campos corretamente!");
+          return;
+        }
+
+        if (distribuirPara > totalContatos) {
+          alert("Não é possível distribuir mais contatos do que o total disponível.");
+          return;
+        }
+
+        const numerosAleatorios = [];
+        for (let i = 0; i < distribuirPara; i++) {
+          numerosAleatorios.push(Math.floor(Math.random() * totalContatos) + 1);
+        }
+
+        document.getElementById("resultadoDistribuicao").innerHTML = `
+          <p>Distribuição para <strong>${usuarioSelecionado}</strong>:</p>
+          <p>${numerosAleatorios.join(", ")}</p>
+        `;
+      });
+
+    }
+
+    window.onload = iniciarPainel;
   </script>
 
 </body>
