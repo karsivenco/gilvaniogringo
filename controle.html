@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Painel de Controle WhatsApp</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/static/css/adminlte.min.css">
+    <style>
+        .qr_code_display, .qr_code_row { margin-top: 20px; }
+        .hidden { display: none; }
+        .btn { margin-top: 10px; }
+    </style>
+</head>
+<body class="hold-transition sidebar-mini">
+
+<!-- Painel lateral -->
+<aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <a href="#" class="brand-link text-center">
+        <span class="brand-text font-weight-light">Controle WhatsApp</span>
+    </a>
+    <div class="sidebar">
+        <nav>
+            <ul class="nav nav-pills nav-sidebar flex-column">
+                <li class="nav-item"><a href="#" class="nav-link active">Dashboard</a></li>
+                <li class="nav-item"><a href="#" class="nav-link">Configurações</a></li>
+            </ul>
+        </nav>
+    </div>
+</aside>
+
+<!-- Conteúdo principal -->
+<div class="content-wrapper">
+    <section class="content-header">
+        <h1>Controle WhatsApp</h1>
+    </section>
+
+    <section class="content">
+        <div class="container-fluid">
+
+            <!-- Seleção de usuário -->
+            <div class="form-group">
+                <label for="selectUser">Selecione o usuário:</label>
+                <select id="selectUser" class="form-control">
+                    <option value="gilvaniogringo">gilvaniogringo</option>
+                    <option value="karina.maia">karina.maia</option>
+                    <option value="cristiano.santos">cristiano.santos</option>
+                </select>
+            </div>
+
+            <!-- QR Code WhatsApp -->
+            <div class="account__qr_code box box-default">
+                <div class="box-body wa-account-body">
+                    <div class="qr_code_row">
+                        <div class="qr_code_description">
+                            <div class="qrcode_instructions">
+                                <p>Abra o WhatsApp no celular, Menu → Dispositivos conectados → “Vincular um dispositivo”.</p>
+                                <p>Clique em “Gerar QR” e escaneie.</p>
+                            </div>
+                            <div class="whatsapp_status">
+                                <span id="whatsapp_status_outer"></span>
+                            </div>
+                        </div>
+
+                        <div class="qr_code_display">
+                            <div id="qrcode_image_outer" class="hidden"></div>
+                            <button class="btn btn-primary js-wa-connect"><i class="fa fa-qrcode"></i> Generate QR</button>
+                            <button class="btn btn-danger js-wa-disconnect hidden"><i class="fa fa-times"></i> Disconnect</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+</div>
+
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+<script src="/static/js/dragscroll.410e9752d9e1.js"></script>
+
+<script>
+// Configuração inicial
+const users = {
+    "gilvaniogringo": { ws_pk: "gilvani-o-gringo" },
+    "karina.maia": { ws_pk: "karina-maia" },
+    "cristiano.santos": { ws_pk: "cristiano-santos" }
+};
+
+let currentUser = document.getElementById('selectUser').value;
+let qrContainer = document.getElementById('qrcode_image_outer');
+let statusOuter = document.getElementById('whatsapp_status_outer');
+let btnGenerate = document.querySelector('.js-wa-connect');
+let btnDisconnect = document.querySelector('.js-wa-disconnect');
+
+// Funções QR
+function gerarQRCode() {
+    qrContainer.innerHTML = "";
+    qrContainer.classList.remove("hidden");
+    btnDisconnect.classList.remove("hidden");
+    statusOuter.innerText = `Gerando QR Code para ${currentUser}...`;
+
+    QRCode.toCanvas(qrContainer, `https://web.whatsapp.com?user=${currentUser}`, function(error) {
+        if (error) {
+            console.error(error);
+            statusOuter.innerText = "Erro ao gerar QR Code";
+        } else {
+            statusOuter.innerText = `QR Code gerado para ${currentUser}. Escaneie no WhatsApp.`;
+        }
+    });
+}
+
+function desconectarWhatsapp() {
+    statusOuter.innerText = `Conta ${currentUser} desconectada`;
+    qrContainer.innerHTML = "";
+    qrContainer.classList.add("hidden");
+    btnDisconnect.classList.add("hidden");
+}
+
+// Eventos
+btnGenerate.addEventListener('click', gerarQRCode);
+btnDisconnect.addEventListener('click', desconectarWhatsapp);
+document.getElementById('selectUser').addEventListener('change', function() {
+    currentUser = this.value;
+    qrContainer.innerHTML = "";
+    qrContainer.classList.add("hidden");
+    btnDisconnect.classList.add("hidden");
+    statusOuter.innerText = "";
+});
+</script>
+
+</body>
+</html>
