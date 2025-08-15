@@ -15,10 +15,9 @@
       <img src="img/logo.png" alt="Logo Gringo" class="h-10 w-auto" />
       <h1 class="text-xl font-bold">Cadastro</h1>
     </div>
-    <nav id="mainMenu" class="flex items-center gap-3"></nav>
   </header>
 
-  <!-- Menu lateral fixo abaixo do header -->
+  <!-- Menu lateral -->
   <aside class="bg-[#09679c] w-64 p-6 text-white flex flex-col gap-4 fixed top-16 h-[calc(100vh-4rem)]">
     <h2 class="font-bold text-lg border-b border-white pb-2">CADASTRO</h2>
     <button onclick="mostrarAba('cadastro')" class="text-left hover:underline">Dados Pessoais</button>
@@ -27,12 +26,11 @@
   <!-- Área principal -->
   <main class="flex-1 ml-64 pt-24 p-6 overflow-y-auto">
 
-    <!-- Cadastro -->
     <div id="cadastro" class="aba bg-white text-black shadow rounded-lg p-6">
       <h3 class="text-xl font-bold mb-4">Dados Pessoais</h3>
 
       <form id="formCadastro" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        
+
         <!-- Nome completo -->
         <div>
           <label for="nome" class="block font-medium mb-1">Nome completo</label>
@@ -72,11 +70,31 @@
           </select>
         </div>
 
-        <!-- Bairros (POA) -->
+        <!-- Bairro -->
         <div>
           <label for="bairro" class="block font-medium mb-1">Bairro</label>
           <select id="bairro" name="bairro" class="p-2 rounded border border-gray-300 w-full">
             <option value="">Selecione o Bairro</option>
+          </select>
+        </div>
+
+        <!-- Mês de Aniversário -->
+        <div>
+          <label for="mesAniversario" class="block font-medium mb-1">Mês de Aniversário</label>
+          <select id="mesAniversario" name="mesAniversario" class="p-2 rounded border border-gray-300 w-full">
+            <option value="">Selecione o mês</option>
+            <option value="Janeiro">Janeiro</option>
+            <option value="Fevereiro">Fevereiro</option>
+            <option value="Março">Março</option>
+            <option value="Abril">Abril</option>
+            <option value="Maio">Maio</option>
+            <option value="Junho">Junho</option>
+            <option value="Julho">Julho</option>
+            <option value="Agosto">Agosto</option>
+            <option value="Setembro">Setembro</option>
+            <option value="Outubro">Outubro</option>
+            <option value="Novembro">Novembro</option>
+            <option value="Dezembro">Dezembro</option>
           </select>
         </div>
 
@@ -86,21 +104,21 @@
             Cadastrar
           </button>
         </div>
+
       </form>
     </div>
 
   </main>
 
-  <!-- JS para carregar menus -->
+  <!-- JS -->
   <script src="menu.js"></script>
   <script src="municipios.js"></script>
   <script src="bairros.js"></script>
 
-  <!-- Script para preencher selects e salvar no localStorage -->
   <script>
     function popularSelect(id, lista) {
       const select = document.getElementById(id);
-      select.length = 1; // limpa mantendo a primeira opção
+      select.length = 1;
       lista.forEach(item => {
         const option = document.createElement('option');
         option.value = item;
@@ -110,30 +128,24 @@
     }
 
     document.addEventListener("DOMContentLoaded", () => {
-      // Preenche selects
       if (typeof municipios !== "undefined") popularSelect("municipio", municipios);
       if (typeof bairrosPOA !== "undefined") popularSelect("bairro", bairrosPOA);
     });
 
     document.getElementById("formCadastro").addEventListener("submit", e => {
       e.preventDefault();
-
-      // Captura dados do formulário
       const cliente = {
         nome: document.getElementById("nome").value,
         numero: document.getElementById("numero").value,
         endereco: document.getElementById("endereco").value,
         origem: document.getElementById("origem").value,
         municipio: document.getElementById("municipio").value,
-        bairro: document.getElementById("bairro").value
+        bairro: document.getElementById("bairro").value,
+        mesAniversario: document.getElementById("mesAniversario").value
       };
-
-      // Salva no localStorage
       let clientes = JSON.parse(localStorage.getItem("clientes")) || [];
       clientes.push(cliente);
       localStorage.setItem("clientes", JSON.stringify(clientes));
-
-      // Redireciona para contatos.html
       window.location.href = "contatos.html";
     });
   </script>
