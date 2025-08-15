@@ -1,3 +1,4 @@
+<!-- CONTATO.HTML -->
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -21,7 +22,7 @@
   <!-- Conteúdo principal -->
   <main class="flex-grow p-6 max-w-lg mx-auto">
     <h2 class="text-2xl font-bold mb-4 text-[#005075]">Cadastrar Novo Contato</h2>
-    <form id="formCadastro" class="bg-white p-6 rounded shadow space-y-4">
+    <form id="formCadastro" class="bg-white p-6 rounded shadow space-y-4" method="POST" action="salvar_contato.php">
 
       <!-- Nome -->
       <div>
@@ -78,8 +79,37 @@
 
   <!-- Scripts externos -->
   <script src="menu.js"></script>
-  <script src="localidade.js"></script>
-  <script src="contato.js"></script> <!-- Seu código de submissão pode ficar aqui -->
+  <script src="municipios.js"></script>
+  <script src="bairros.js"></script>
+  <script>
+    // Preencher municípios
+    const municipioSelect = document.getElementById("municipio");
+    const bairroSelect = document.getElementById("bairro");
+    const bairroContainer = document.getElementById("bairroContainer");
 
+    municipios.forEach(m => {
+      const option = document.createElement("option");
+      option.value = m;
+      option.textContent = m;
+      municipioSelect.appendChild(option);
+    });
+
+    // Mostrar bairros só se Porto Alegre for selecionado
+    municipioSelect.addEventListener("change", function() {
+      if (this.value === "Porto Alegre") {
+        bairroContainer.classList.remove("hidden");
+        bairroSelect.innerHTML = "";
+        bairrosPOA.forEach(b => {
+          const option = document.createElement("option");
+          option.value = b;
+          option.textContent = b;
+          bairroSelect.appendChild(option);
+        });
+      } else {
+        bairroContainer.classList.add("hidden");
+        bairroSelect.innerHTML = "";
+      }
+    });
+  </script>
 </body>
 </html>
