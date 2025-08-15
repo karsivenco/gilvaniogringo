@@ -10,7 +10,6 @@
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     crossorigin="anonymous"
   />
-  <!-- Importa o arquivo de usuários e senhas -->
   <script src="senhas.js" defer></script>
 </head>
 <body class="bg-gray-100 min-h-screen flex flex-col">
@@ -29,7 +28,7 @@
   <!-- Main Content -->
   <main class="flex-grow p-6 max-w-5xl mx-auto space-y-10">
 
-    <!-- Conteúdo comum para todos -->
+    <!-- Conteúdo comum -->
     <section id="conteudoComum" class="">
       <h2 class="text-2xl font-bold mb-6 text-[#005075]">Distribuição de Contatos</h2>
 
@@ -42,10 +41,14 @@
         <button id="distribuirBtn" class="bg-[#09679c] text-white px-4 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-2">
           <i class="fas fa-share"></i> Distribuir Contatos
         </button>
+
+        <div id="listaDistribuicoes" class="mt-6 space-y-4">
+          <!-- Lista de contatos distribuídos -->
+        </div>
       </div>
     </section>
 
-    <!-- Dashboard gerente, só visível para gilvaniogringo -->
+    <!-- Dashboard gerente -->
     <section id="dashboardGerente" class="hidden bg-white rounded shadow p-6 space-y-8">
       <h2 class="text-3xl font-bold text-[#09679c] border-b-4 border-[#FF7DA4] pb-2">Dashboard Gerente - Métricas</h2>
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
@@ -91,6 +94,55 @@
   <script>
     let usuariosLogados = [];
 
+    // Distribuições armazenadas no localStorage
+    function carregarDistribuicoes() {
+      const dados = localStorage.getItem("distribuicoesContatos");
+      return dados ? JSON.parse(dados) : {};
+    }
+
+    function salvarDistribuicoes(distribuicoes) {
+      localStorage.setItem("distribuicoesContatos", JSON.stringify(distribuicoes));
+    }
+
+    function registrarDistribuicao(remetente, destinatario, contato) {
+      const distribuicoes = carregarDistribuicoes();
+      if (!distribuicoes[destinatario]) distribuicoes[destinatario] = [];
+      distribuicoes[destinatario].push({
+        contato: contato,
+        remetente: remetente,
+        data: new Date().toISOString()
+      });
+      salvarDistribuicoes(distribuicoes);
+    }
+
+    function mostrarDistribuicoes() {
+      const listaDiv = document.getElementById("listaDistribuicoes");
+      const distribuicoes = carregarDistribuicoes();
+      listaDiv.innerHTML = "";
+
+      for (const destinatario in distribuicoes) {
+        const container = document.createElement("div");
+        container.className = "border border-gray-300 rounded p-3";
+
+        const titulo = document.createElement("h3");
+        titulo.className = "font-semibold text-[#005075]";
+        titulo.textContent = `Destinatário: ${destinatario}`;
+        container.appendChild(titulo);
+
+        const ul = document.createElement("ul");
+        ul.className = "list-disc list-inside mt-2";
+
+        distribuicoes[destinatario].forEach(item => {
+          const li = document.createElement("li");
+          li.textContent = `${item.contato} (Distribuído por ${item.remetente} em ${new Date(item.data).toLocaleString()})`;
+          ul.appendChild(li);
+        });
+
+        container.appendChild(ul);
+        listaDiv.appendChild(container);
+      }
+    }
+
     function carregarUsuariosLogados() {
       const logados = localStorage.getItem("usuariosLogados");
       usuariosLogados = logados ? JSON.parse(logados) : [];
@@ -105,11 +157,6 @@
         usuariosLogados.push(usuario);
         salvarUsuariosLogados();
       }
-    }
-
-    function removerUsuarioLogado(usuario) {
-      usuariosLogados = usuariosLogados.filter(u => u !== usuario);
-      salvarUsuariosLogados();
     }
 
     function logout() {
@@ -128,7 +175,6 @@
       carregarUsuariosLogados();
 
       const usuariosPainel = ["cristiano.santos", "gilvaniogringo", "karina.maia"];
-
       if (!usuariosPainel.includes(usuario)) {
         alert("Você não tem acesso a esta página.");
         window.location.href = "intranet.html";
@@ -142,27 +188,27 @@
       // Menu dinâmico
       const menu = document.getElementById("menuTop");
       menu.innerHTML = `
-        <a href="whatsapp.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="WhatsApp">
+        <a href="whatsapp.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1">
           <i class="fab fa-whatsapp"></i> WhatsApp
         </a>
-        <a href="nova-postagem.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="Nova Postagem">
+        <a href="nova-postagem.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1">
           <i class="fas fa-plus"></i> Nova Postagem
         </a>
-        <a href="publicacoes.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="Últimas Notícias">
+        <a href="publicacoes.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1">
           <i class="fas fa-newspaper"></i> Últimas Notícias
         </a>
-        <a href="perfil.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="Perfil">
+        <a href="perfil.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1">
           <i class="fas fa-user"></i> Perfil
         </a>
-        <a href="controle.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="Controle">
+        <a href="controle.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1">
           <i class="fas fa-home"></i> Controle
         </a>
-        <button onclick="logout()" class="bg-[#053646] px-3 py-2 rounded hover:bg-[#032d39] transition flex items-center gap-1" title="Sair">
+        <button onclick="logout()" class="bg-[#053646] px-3 py-2 rounded hover:bg-[#032d39] transition flex items-center gap-1">
           <i class="fas fa-sign-out-alt"></i> Sair
         </button>
       `;
 
-      // Select de usuários para distribuir contatos
+      // Select de usuários para distribuição
       const selectUser = document.getElementById("selectUser");
       const usuariosDistribuicao = [
         "anne.mattos",
@@ -172,7 +218,6 @@
         "lucas.bitencourt",
         "grazielle.albuquerque"
       ];
-
       selectUser.innerHTML = "";
       usuariosDistribuicao.forEach(u => {
         const option = document.createElement("option");
@@ -181,13 +226,20 @@
         selectUser.appendChild(option);
       });
 
-      // Botão distribuir (simples alerta, pode ser integrado com backend)
+      // Botão distribuir
       document.getElementById("distribuirBtn").addEventListener("click", () => {
-        const selecionado = selectUser.value;
-        alert(`Contatos distribuídos para: ${selecionado}`);
+        const destinatario = selectUser.value;
+        const contato = prompt("Digite o nome do contato que deseja distribuir:");
+        if (contato && contato.trim() !== "") {
+          registrarDistribuicao(usuario, destinatario, contato.trim());
+          mostrarDistribuicoes();
+          alert(`Contato "${contato}" distribuído para ${destinatario}`);
+        }
       });
 
-      // Dashboard visível apenas para gilvaniogringo
+      mostrarDistribuicoes();
+
+      // Dashboard gerente
       if (usuario === "gilvaniogringo") {
         document.getElementById("dashboardGerente").classList.remove("hidden");
       } else {
