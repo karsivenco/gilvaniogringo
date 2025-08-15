@@ -1,11 +1,23 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title>WhatsApp - Intranet do Gringo</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  
+  <!-- Favicon -->
+  <link rel="icon" href="/static/img/favicon/favicon.9d22dcd0a823.ico"/>
+  <link rel="icon" type="image/png" href="/static/img/favicon/favicon-32x32.20dabd51e0ff.png" sizes="32x32"/>
+  <link rel="icon" type="image/png" href="/static/img/favicon/favicon-16x16.bda746574050.png" sizes="16x16"/>
+  
+  <!-- CSS externo -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.20.1/cdn/themes/light.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.3/dist/tailwind.min.css">
+  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700" rel="stylesheet">
+  
+  <!-- FontAwesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
   <style>
     .contact-line { cursor: pointer; }
     .bubble { max-width: 70%; padding: 10px 12px; border-radius: 16px; margin: 6px 0; line-height: 1.3; }
@@ -14,6 +26,9 @@
     .time-small { font-size: 0.72rem; color: #6b7280; }
     .scroll-area { max-height: 60vh; overflow-y: auto; }
   </style>
+
+  <!-- Shoelace Autoloader -->
+  <script type="module" src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.20.1/cdn/shoelace-autoloader.js"></script>
 </head>
 <body class="bg-gray-100 min-h-screen flex flex-col">
 
@@ -40,9 +55,6 @@
         </div>
       </div>
       <div id="contactsList" class="flex-grow overflow-y-auto space-y-2"></div>
-      <div class="mt-3 text-sm text-center text-gray-500">
-        <small>Fonte: TimelinesAI</small>
-      </div>
     </section>
 
     <!-- CHAT -->
@@ -54,12 +66,6 @@
             <div id="chatName" class="font-semibold text-lg">Selecione uma conversa</div>
             <div id="chatOrigin" class="text-sm text-gray-500">—</div>
           </div>
-        </div>
-        <div class="flex items-center gap-2">
-          <a id="btnOpenExternal" target="_blank"
-             class="bg-[#e6f6fb] text-[#09679c] px-3 py-1 rounded hover:bg-[#d8f0fa]">
-            <i class="fas fa-external-link-alt"></i> Abrir no Timelines
-          </a>
         </div>
       </div>
 
@@ -79,8 +85,6 @@
   </main>
 
   <!-- SCRIPTS -->
-  <script src="menu.js"></script> <!-- menu dinâmico -->
-
   <script>
     // Menu dinâmico
     const usuario = localStorage.getItem("usuarioLogado") || "";
@@ -103,7 +107,7 @@
       window.location.href = "intranet.html";
     }
 
-    // Contatos cadastrados (exemplo)
+    // Contatos cadastrados
     const contatosCadastrados = JSON.parse(localStorage.getItem("contatos") || "[]");
 
     function atualizarListaContatos() {
@@ -127,8 +131,6 @@
     }
 
     document.getElementById("btnRefresh").addEventListener("click", atualizarListaContatos);
-
-    // Inicializa
     atualizarListaContatos();
   </script>
 
