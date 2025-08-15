@@ -33,7 +33,6 @@
     <!-- Dados Pessoais / Clientes -->
     <div id="dadosPessoais" class="aba bg-white text-black shadow rounded-lg p-6 hidden">
       <h3 class="text-xl font-bold mb-4">Clientes</h3>
-
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
         <div class="relative">
           <input type="text" id="pesquisarNome" placeholder="Pesquisar Nome" class="p-2 rounded border border-gray-300 w-full"/>
@@ -51,33 +50,78 @@
         <button onclick="buscarCliente()" class="col-span-1 md:col-span-3 bg-[#09679c] text-white px-4 py-2 rounded hover:bg-[#074d6b] transition">Pesquisar</button>
       </div>
 
-      <div id="resultadoPesquisa" class="mt-4 grid grid-cols-1 gap-3"></div>
+      <div id="resultadoPesquisa" class="mt-4 grid grid-cols-1 gap-3">
+        <p>Nenhum cliente pesquisado ainda.</p>
+      </div>
     </div>
 
     <!-- Aniversário -->
     <div id="aniversario" class="aba bg-white text-black shadow rounded-lg p-6 hidden">
       <h3 class="text-xl font-bold mb-4">Aniversário</h3>
-      <div id="aniversariantesMes"></div>
+      <div id="aniversariantesMes">
+        <p>Não há aniversariantes para este mês.</p>
+      </div>
     </div>
 
     <!-- Mensagens Prontas -->
     <div id="mensagens" class="aba bg-white text-black shadow rounded-lg p-6 hidden">
       <h3 class="text-xl font-bold mb-4">Mensagens Prontas</h3>
+      <p>Ainda não há mensagens cadastradas.</p>
     </div>
 
     <!-- Lista de Transmissão -->
     <div id="listaTransmissao" class="aba bg-white text-black shadow rounded-lg p-6 hidden">
       <h3 class="text-xl font-bold mb-4">Lista de Transmissão</h3>
+      <p>Nenhuma lista de transmissão cadastrada.</p>
     </div>
 
   </main>
 
   <!-- JS separados -->
   <script src="menu.js"></script>
+  <script src="municipios.js"></script>
+  <script src="bairros.js"></script>
   <script src="clientes.js"></script>
   <script src="aniversario.js"></script>
   <script src="mensagens.js"></script>
   <script src="transmissao.js"></script>
+
+  <!-- Script para gerenciar abas e selects -->
+  <script>
+    function mostrarAba(id) {
+      // esconde todas as abas
+      document.querySelectorAll('.aba').forEach(div => div.classList.add('hidden'));
+      // mostra a aba selecionada
+      const aba = document.getElementById(id);
+      if (aba) aba.classList.remove('hidden');
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      // Preenche selects de município e bairro se existirem
+      if (typeof municipios !== "undefined") {
+        const selectMun = document.getElementById('municipio');
+        municipios.forEach(m => {
+          const option = document.createElement('option');
+          option.value = m;
+          option.textContent = m;
+          selectMun.appendChild(option);
+        });
+      }
+
+      if (typeof bairrosPOA !== "undefined") {
+        const selectBairro = document.getElementById('bairro');
+        bairrosPOA.forEach(b => {
+          const option = document.createElement('option');
+          option.value = b;
+          option.textContent = b;
+          selectBairro.appendChild(option);
+        });
+      }
+
+      // mostra a primeira aba por padrão
+      mostrarAba('dadosPessoais');
+    });
+  </script>
+
 </body>
 </html>
-
