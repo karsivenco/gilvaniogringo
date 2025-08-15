@@ -69,28 +69,8 @@
   </main>
 
   <!-- SCRIPTS -->
+  <script src="menu.js"></script> <!-- menu dinâmico -->
   <script>
-    // Menu superior dinâmico
-    const usuario = localStorage.getItem("usuarioLogado") || "";
-    const menu = document.getElementById("mainMenu");
-    const usuariosControle = ["cristiano.santos", "gilvaniogringo", "karina.maia"];
-    let menuHTML = `
-      <a href="intranet.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b]">Início</a>
-      <a href="cadastro.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b]">Cadastro</a>
-      <a href="contatos.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b]">Contatos</a>
-      <a href="perfil.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b]">Perfil</a>
-    `;
-    if (usuariosControle.includes(usuario)) {
-      menuHTML += `<a href="controle.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b]">Painel de Controle</a>`;
-    }
-    menuHTML += `<button onclick="logout()" class="bg-[#053646] px-3 py-2 rounded hover:bg-[#032d39] text-white">Sair</button>`;
-    menu.innerHTML = menuHTML;
-
-    function logout() {
-      localStorage.removeItem("usuarioLogado");
-      window.location.href = "intranet.html";
-    }
-
     // Contatos integrados do cadastro
     const contatosCadastrados = JSON.parse(localStorage.getItem("contatos") || "[]");
 
@@ -117,6 +97,5 @@
     document.getElementById("btnRefresh").addEventListener("click", atualizarListaContatos);
     atualizarListaContatos();
   </script>
-
 </body>
 </html>
