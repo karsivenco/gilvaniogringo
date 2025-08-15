@@ -1,134 +1,134 @@
-let conversations = [];
+// whatsapp.js
+const API_BASE = "https://api.timelines.ai/v1";
+const TOKEN = "ea8f1c30-23ad-438d-9fcf-a28942f0b413";
+
+let chatsList = [];
 let currentChat = null;
 
-document.addEventListener("DOMContentLoaded", () => {
-  loadConversations();
-  setupSendMessage();
-  document.getElementById("btnRefresh").addEventListener("click", loadConversations);
-});
+// -------------------- FUNÇÕES DE API --------------------
+async function fetchAPI(endpoint, method = "GET", body = null) {
+  const options = {
+    method,
+    headers: {
+      "Authorization": `Bearer ${TOKEN}`,
+      "Content-Type": "application/json",
+    },
+  };
+  if (body) options.body = JSON.stringify(body);
 
-async function loadConversations() {
-  const listEl = document.getElementById("contactsList");
-  listEl.innerHTML = '<div class="text-gray-500 italic">Carregando...</div>';
-
-  try {
-    const data = await fetchChats();
-    conversations = data.data.chats || [];
-    renderConversations();
-  } catch (err) {
-    listEl.innerHTML = '<div class="text-red-500 italic">Erro ao carregar conversas.</div>';
-    console.error(err);
-  }
+  const res = await fetch(`${API_BASE}${endpoint}`, options);
+  if (!res.ok) throw new Error("Erro ao acessar a API");
+  return res.json();
 }
 
-function renderConversations() {
-  const listEl = document.getElementById("contactsList");
-  listEl.innerHTML = "";
-  if (!conversations.length) {
-    listEl.innerHTML = '<div class="text-gray-500 italic">Nenhuma conversa encontrada.</div>';
+async function getChats() {
+  const res = await fetchAPI("/chats");
+  chatsList = res.data || [];
+  renderContactsList();
+}
+
+async function getChatDetails(chatId) {
+  const res = await fetchAPI(`/chats/${chatId}`);
+  return res.data;
+}
+
+async function sendMessage(chatId, message) {
+  const body = { message };
+  await fetchAPI(`/chats/${chatId}/messages`, "POST", body);
+}
+
+// -------------------- FUNÇÕES DE UI --------------------
+function renderContactsList() {
+  const contactsList = document.getElementById("contactsList");
+  contactsList.innerHTML = "";
+
+  if (chatsList.length === 0) {
+    contactsList.innerHTML = '<div class="text-gray-500 text-sm">Nenhuma conversa encontrada.</div>';
     return;
   }
 
-  conversations.forEach((chat, idx) => {
+  chatsList.forEach(chat => {
     const div = document.createElement("div");
-    div.className = "contact-line p-2 rounded hover:bg-[#e0f2fe] flex justify-between items-center";
+    div.className = "contact-line flex items-center gap-2 p-2 rounded hover:bg-gray-100 cursor-pointer";
     div.innerHTML = `
-      <span>${chat.name || chat.phone}</span>
-      <span class="text-xs text-gray-400">${chat.last_message_timestamp ? formatDateTime(chat.last_message_timestamp) : ""}</span>
+      <img src="${chat.photo || 'img/logo.png'}" class="h-8 w-8 rounded-full">
+      <div class="flex-1">
+        <div class="font-semibold">${chat.name}</div>
+        <div class="text-xs text-gray-500">${chat.phone}</div>
+      </div>
     `;
-    div.addEventListener("click", () => selectConversation(idx));
-    listEl.appendChild(div);
+    div.addEventListener("click", () => selectChat(chat.id));
+    contactsList.appendChild(div);
   });
 }
 
-async function selectConversation(idx) {
-  currentChat = conversations[idx];
-  document.getElementById("chatName").textContent = currentChat.name || currentChat.phone;
+async function selectChat(chatId) {
+  currentChat = await getChatDetails(chatId);
+
+  // Atualiza cabeçalho
+  document.getElementById("chatName").textContent = currentChat.name;
   document.getElementById("chatAvatar").src = currentChat.photo || "img/logo.png";
-  document.getElementById("chatOrigin").textContent = currentChat.labels ? currentChat.labels.join(", ") : "-";
+  document.getElementById("chatOrigin").textContent = currentChat.is_group ? "Grupo" : currentChat.phone;
   document.getElementById("btnOpenExternal").href = currentChat.chat_url;
 
-  document.getElementById("inputMessage").disabled = false;
-  document.getElementById("btnSend").disabled = false;
+  // Habilita ou desabilita input
+  document.getElementById("inputMessage").disabled = !currentChat.is_allowed_to_message;
+  document.getElementById("btnSend").disabled = !currentChat.is_allowed_to_message;
 
-  await loadMessages(currentChat.id);
-}
+  // Limpa histórico de mensagens
+  const messagesArea = document.getElementById("messagesArea");
+  messagesArea.innerHTML = `<div class="text-gray-500 italic">Nenhuma mensagem carregada.</div>`;
 
-async function loadMessages(chatId) {
-  const area = document.getElementById("messagesArea");
-  area.innerHTML = '<div class="text-gray-500 italic">Carregando mensagens...</div>';
+  // Exibe labels
+  const chatHeader = document.getElementById("chatHeader");
+  const existingBadges = chatHeader.querySelectorAll(".chat-badge, .chat-responsible");
+  existingBadges.forEach(el => el.remove());
 
-  try {
-    const data = await fetchMessages(chatId);
-    renderMessages(data.data.messages || []);
-  } catch (err) {
-    area.innerHTML = '<div class="text-red-500 italic">Erro ao carregar mensagens.</div>';
-    console.error(err);
-  }
-}
-
-function renderMessages(messages) {
-  const area = document.getElementById("messagesArea");
-  area.innerHTML = "";
-
-  if (!messages.length) {
-    area.innerHTML = '<div class="text-gray-500 italic">Nenhuma mensagem ainda.</div>';
-    return;
-  }
-
-  messages.forEach(msg => {
-    const div = document.createElement("div");
-    div.className = "flex flex-col";
-    const bubble = document.createElement("div");
-    bubble.className = `bubble ${msg.from_me ? "sent" : "recv"}`;
-    bubble.textContent = msg.body;
-    const ts = document.createElement("div");
-    ts.className = "time-small ml-1";
-    ts.textContent = formatDateTime(msg.timestamp);
-    div.appendChild(bubble);
-    div.appendChild(ts);
-    area.appendChild(div);
+  currentChat.labels.forEach(label => {
+    const badge = document.createElement("span");
+    badge.textContent = label;
+    badge.className = "ml-2 px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded-full chat-badge";
+    chatHeader.appendChild(badge);
   });
 
-  area.scrollTop = area.scrollHeight;
+  // Responsável
+  const respInfo = document.createElement("div");
+  respInfo.textContent = `Responsável: ${currentChat.responsible_name} (${currentChat.responsible_email})`;
+  respInfo.className = "text-sm text-gray-500 mt-1 chat-responsible";
+  chatHeader.appendChild(respInfo);
+
+  // Aqui você pode chamar função para carregar mensagens reais via API se disponível
 }
 
-function setupSendMessage() {
-  const btn = document.getElementById("btnSend");
+// -------------------- ENVIO DE MENSAGEM --------------------
+document.getElementById("btnSend").addEventListener("click", async () => {
   const input = document.getElementById("inputMessage");
+  const message = input.value.trim();
+  if (!message || !currentChat) return;
 
-  btn.addEventListener("click", sendMessage);
-  input.addEventListener("keydown", (e) => { if (e.key === "Enter") sendMessage(); });
-}
+  // Adiciona a mensagem na tela
+  const messagesArea = document.getElementById("messagesArea");
+  const bubble = document.createElement("div");
+  bubble.className = "bubble sent";
+  bubble.innerHTML = `${message} <div class="time-small">${new Date().toLocaleTimeString()}</div>`;
+  messagesArea.appendChild(bubble);
+  messagesArea.scrollTop = messagesArea.scrollHeight;
 
-async function sendMessage() {
-  const input = document.getElementById("inputMessage");
-  const text = input.value.trim();
-  if (!text || !currentChat) return;
-
-  appendLocalMessage({body: text, from_me: true, timestamp: new Date().toISOString()});
   input.value = "";
 
   try {
-    await sendMessage(currentChat.id, text);
+    await sendMessage(currentChat.id, message);
   } catch (err) {
     console.error("Erro ao enviar mensagem:", err);
-    alert("Falha ao enviar mensagem.");
   }
-}
+});
 
-function appendLocalMessage(msg) {
-  const area = document.getElementById("messagesArea");
-  const div = document.createElement("div");
-  div.className = "flex flex-col";
-  const bubble = document.createElement("div");
-  bubble.className = `bubble ${msg.from_me ? "sent" : "recv"}`;
-  bubble.textContent = msg.body;
-  const ts = document.createElement("div");
-  ts.className = "time-small ml-1";
-  ts.textContent = formatDateTime(msg.timestamp);
-  div.appendChild(bubble);
-  div.appendChild(ts);
-  area.appendChild(div);
-  area.scrollTop = area.scrollHeight;
-}
+// -------------------- BOTÃO ATUALIZAR --------------------
+document.getElementById("btnRefresh").addEventListener("click", () => {
+  getChats();
+});
+
+// -------------------- INICIALIZAÇÃO --------------------
+window.addEventListener("DOMContentLoaded", () => {
+  getChats();
+});
