@@ -66,19 +66,20 @@
 
         <!-- Município -->
         <div>
-          <label for="municipio" class="block font-medium mb-1">Município</label>
-          <select id="municipio" name="municipio" class="p-2 rounded border border-gray-300 w-full">
+          <label for="municipios" class="block font-medium mb-1">Municípios</label>
+          <select id="municipios" name="municipios" class="p-2 rounded border border-gray-300 w-full">
             <option value="">Selecione o Município</option>
           </select>
         </div>
 
         <!-- Bairros (POA) -->
-        <div>
-          <label for="bairro" class="block font-medium mb-1">Bairro</label>
-          <select id="bairro" name="bairro" class="p-2 rounded border border-gray-300 w-full">
-            <option value="">Selecione o Bairro</option>
-          </select>
-        </div>
+        <div id="bairroContainer" class="hidden">
+                <label for="bairrosPOA" class="block font-semibold">Bairro (somente para Porto Alegre):</label>
+                <select id="bairrosPOA" name="bairro"
+                    class="w-full border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-[#09679c]">
+                    <option value="">Selecione o Bairro</option>
+                </select>
+            </div>
 
         <!-- Botão -->
         <div class="md:col-span-2 flex justify-end">
