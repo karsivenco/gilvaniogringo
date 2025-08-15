@@ -20,234 +20,112 @@
       <img src="img/logo.png" alt="Logo Gringo" class="h-10 w-auto" />
       <h1 class="text-xl font-bold">Painel do Gringo</h1>
     </div>
-    <nav id="menuTop" class="flex items-center gap-3">
-      <!-- Menu dinâmico será inserido via JS -->
-    </nav>
+    <nav id="menuTop" class="flex items-center gap-3"></nav>
   </header>
 
   <!-- Main Content -->
   <main class="flex-grow p-6 max-w-5xl mx-auto space-y-10">
 
-    <!-- Conteúdo comum -->
-    <section id="conteudoComum" class="">
-      <h2 class="text-2xl font-bold mb-6 text-[#005075]">Distribuição de Contatos</h2>
+    <section id="conteudoComum">
+      <h2 class="text-2xl font-bold mb-6 text-[#005075]">Controle WhatsApp e Distribuição</h2>
 
-      <div class="bg-white rounded shadow p-6 space-y-6">
-        <label for="selectUser" class="font-semibold text-lg">Selecione o usuário para distribuir contatos:</label>
-        <select id="selectUser" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#09679c]">
-          <!-- Opções inseridas via JS -->
-        </select>
-
-        <button id="distribuirBtn" class="bg-[#09679c] text-white px-4 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-2">
-          <i class="fas fa-share"></i> Distribuir Contatos
-        </button>
-
-        <div id="listaDistribuicoes" class="mt-6 space-y-4">
-          <!-- Lista de contatos distribuídos -->
+      <!-- Leitor QR Code -->
+      <div class="bg-white rounded shadow p-6 mb-6">
+        <h3 class="font-semibold text-lg mb-3">Integração WhatsApp</h3>
+        <p>Escaneie o QR Code para autenticar a sessão:</p>
+        <div id="qrCodeContainer" class="mt-4 flex justify-center">
+          <canvas id="qrCodeCanvas" class="border p-2"></canvas>
         </div>
       </div>
-    </section>
 
-    <!-- Dashboard gerente -->
-    <section id="dashboardGerente" class="hidden bg-white rounded shadow p-6 space-y-8">
-      <h2 class="text-3xl font-bold text-[#09679c] border-b-4 border-[#FF7DA4] pb-2">Dashboard Gerente - Métricas</h2>
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
-        <div class="bg-[#09679c] text-white rounded-lg p-5 shadow flex flex-col items-center">
-          <i class="fas fa-user-friends fa-3x mb-3"></i>
-          <p class="text-3xl font-semibold" id="colaboradoresLogados">0</p>
-          <p class="text-lg">Colaboradores Logados</p>
-        </div>
-        <div class="bg-[#DB2356] text-white rounded-lg p-5 shadow flex flex-col items-center">
-          <i class="fas fa-envelope-open-text fa-3x mb-3"></i>
-          <p class="text-3xl font-semibold" id="mensagensResponder">0</p>
-          <p class="text-lg">Mensagens a Responder</p>
-        </div>
-        <div class="bg-[#09679c] text-white rounded-lg p-5 shadow flex flex-col items-center">
-          <i class="fas fa-stopwatch fa-3x mb-3"></i>
-          <p class="text-3xl font-semibold" id="tempoEsperaMedia">0s</p>
-          <p class="text-lg">Tempo Médio de Espera</p>
+      <!-- Distribuição de contatos -->
+      <div class="bg-white rounded shadow p-6">
+        <h3 class="font-semibold text-lg mb-3">Distribuição de Contatos</h3>
+        <div class="space-y-4">
+          <label for="inputTotalContatos">Número total de contatos disponíveis:</label>
+          <input type="number" id="inputTotalContatos" placeholder="Ex: 200" class="w-32 border border-gray-300 rounded px-2 py-1" />
+
+          <label for="selectUser" class="font-semibold">Selecione o usuário:</label>
+          <select id="selectUser" class="w-64 border border-gray-300 rounded px-3 py-2"></select>
+
+          <label for="inputDistribuir">Número de contatos para distribuir:</label>
+          <input type="number" id="inputDistribuir" placeholder="Ex: 40" class="w-32 border border-gray-300 rounded px-2 py-1" />
+
+          <button id="distribuirBtn" class="bg-[#09679c] text-white px-4 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-2">
+            <i class="fas fa-share"></i> Distribuir Contatos
+          </button>
+
+          <div id="resultadoDistribuicao" class="mt-4 p-3 bg-gray-50 rounded border border-gray-200"></div>
         </div>
       </div>
     </section>
 
   </main>
 
-  <!-- Rodapé redes sociais -->
   <footer class="bg-[#005075] text-white p-4 flex justify-center space-x-8">
-    <a href="https://www.instagram.com/gilvaniogringo" target="_blank" rel="noopener" class="hover:text-[#FF7DA4] transition" aria-label="Instagram">
-      <i class="fab fa-instagram fa-lg"></i>
-    </a>
-    <a href="https://www.facebook.com/gilvaniogringo" target="_blank" rel="noopener" class="hover:text-[#FF7DA4] transition" aria-label="Facebook">
-      <i class="fab fa-facebook-f fa-lg"></i>
-    </a>
-    <a href="https://twitter.com/gilvaniogringo" target="_blank" rel="noopener" class="hover:text-[#FF7DA4] transition" aria-label="X Twitter">
-      <i class="fab fa-twitter fa-lg"></i>
-    </a>
-    <a href="https://www.tiktok.com/@gilvaniogringo" target="_blank" rel="noopener" class="hover:text-[#FF7DA4] transition" aria-label="TikTok">
-      <i class="fab fa-tiktok fa-lg"></i>
-    </a>
-    <a href="https://www.kwai.com/gilvaniogringo" target="_blank" rel="noopener" class="hover:text-[#FF7DA4] transition" aria-label="Kwai">
-      <i class="fas fa-video fa-lg"></i>
-    </a>
+    <a href="#" class="hover:text-[#FF7DA4] transition"><i class="fab fa-instagram fa-lg"></i></a>
+    <a href="#" class="hover:text-[#FF7DA4] transition"><i class="fab fa-facebook-f fa-lg"></i></a>
+    <a href="#" class="hover:text-[#FF7DA4] transition"><i class="fab fa-twitter fa-lg"></i></a>
+    <a href="#" class="hover:text-[#FF7DA4] transition"><i class="fab fa-tiktok fa-lg"></i></a>
+    <a href="#" class="hover:text-[#FF7DA4] transition"><i class="fas fa-video fa-lg"></i></a>
   </footer>
 
+  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+
   <script>
-    let usuariosLogados = [];
+    const usuariosDistribuicao = [
+      "anne.mattos",
+      "gabriel.amaral",
+      "tati.garcia",
+      "vitor.mello",
+      "lucas.bitencourt",
+      "grazielle.albuquerque"
+    ];
 
-    // Distribuições armazenadas no localStorage
-    function carregarDistribuicoes() {
-      const dados = localStorage.getItem("distribuicoesContatos");
-      return dados ? JSON.parse(dados) : {};
-    }
+    // Inicializa select de usuários
+    const selectUser = document.getElementById("selectUser");
+    usuariosDistribuicao.forEach(u => {
+      const option = document.createElement("option");
+      option.value = u;
+      option.textContent = u;
+      selectUser.appendChild(option);
+    });
 
-    function salvarDistribuicoes(distribuicoes) {
-      localStorage.setItem("distribuicoesContatos", JSON.stringify(distribuicoes));
-    }
+    // Leitor QR Code WhatsApp
+    const sessionId = "ea8f1c30-23ad-438d-9fcf-a28942f0b413";
+    const canvas = document.getElementById("qrCodeCanvas");
+    QRCode.toCanvas(canvas, sessionId, { width: 200 }, function (error) {
+      if (error) console.error(error);
+    });
 
-    function registrarDistribuicao(remetente, destinatario, contato) {
-      const distribuicoes = carregarDistribuicoes();
-      if (!distribuicoes[destinatario]) distribuicoes[destinatario] = [];
-      distribuicoes[destinatario].push({
-        contato: contato,
-        remetente: remetente,
-        data: new Date().toISOString()
-      });
-      salvarDistribuicoes(distribuicoes);
-    }
+    // Distribuição de contatos
+    document.getElementById("distribuirBtn").addEventListener("click", () => {
+      const totalContatos = parseInt(document.getElementById("inputTotalContatos").value);
+      const distribuirPara = parseInt(document.getElementById("inputDistribuir").value);
+      const usuarioSelecionado = selectUser.value;
 
-    function mostrarDistribuicoes() {
-      const listaDiv = document.getElementById("listaDistribuicoes");
-      const distribuicoes = carregarDistribuicoes();
-      listaDiv.innerHTML = "";
-
-      for (const destinatario in distribuicoes) {
-        const container = document.createElement("div");
-        container.className = "border border-gray-300 rounded p-3";
-
-        const titulo = document.createElement("h3");
-        titulo.className = "font-semibold text-[#005075]";
-        titulo.textContent = `Destinatário: ${destinatario}`;
-        container.appendChild(titulo);
-
-        const ul = document.createElement("ul");
-        ul.className = "list-disc list-inside mt-2";
-
-        distribuicoes[destinatario].forEach(item => {
-          const li = document.createElement("li");
-          li.textContent = `${item.contato} (Distribuído por ${item.remetente} em ${new Date(item.data).toLocaleString()})`;
-          ul.appendChild(li);
-        });
-
-        container.appendChild(ul);
-        listaDiv.appendChild(container);
-      }
-    }
-
-    function carregarUsuariosLogados() {
-      const logados = localStorage.getItem("usuariosLogados");
-      usuariosLogados = logados ? JSON.parse(logados) : [];
-    }
-
-    function salvarUsuariosLogados() {
-      localStorage.setItem("usuariosLogados", JSON.stringify(usuariosLogados));
-    }
-
-    function registrarUsuarioLogado(usuario) {
-      if (!usuariosLogados.includes(usuario)) {
-        usuariosLogados.push(usuario);
-        salvarUsuariosLogados();
-      }
-    }
-
-    function logout() {
-      const usuario = localStorage.getItem("usuarioLogado");
-      if (usuario) {
-        carregarUsuariosLogados();
-        usuariosLogados = usuariosLogados.filter(u => u !== usuario);
-        salvarUsuariosLogados();
-      }
-      localStorage.removeItem("usuarioLogado");
-      window.location.href = "intranet.html";
-    }
-
-    async function iniciarPainel() {
-      const usuario = localStorage.getItem("usuarioLogado");
-      carregarUsuariosLogados();
-
-      const usuariosPainel = ["cristiano.santos", "gilvaniogringo", "karina.maia"];
-      if (!usuariosPainel.includes(usuario)) {
-        alert("Você não tem acesso a esta página.");
-        window.location.href = "intranet.html";
+      if (!totalContatos || !distribuirPara || !usuarioSelecionado) {
+        alert("Preencha todos os campos corretamente!");
         return;
       }
 
-      registrarUsuarioLogado(usuario);
-      document.getElementById("colaboradoresLogados").textContent = usuariosLogados.length;
-      document.getElementById("conteudoComum").classList.remove("hidden");
-
-      // Menu dinâmico
-      const menu = document.getElementById("menuTop");
-      menu.innerHTML = `
-        <a href="whatsapp.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1">
-          <i class="fab fa-whatsapp"></i> WhatsApp
-        </a>
-        <a href="nova-postagem.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1">
-          <i class="fas fa-plus"></i> Nova Postagem
-        </a>
-        <a href="publicacoes.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1">
-          <i class="fas fa-newspaper"></i> Últimas Notícias
-        </a>
-        <a href="perfil.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1">
-          <i class="fas fa-user"></i> Perfil
-        </a>
-        <a href="controle.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1">
-          <i class="fas fa-home"></i> Controle
-        </a>
-        <button onclick="logout()" class="bg-[#053646] px-3 py-2 rounded hover:bg-[#032d39] transition flex items-center gap-1">
-          <i class="fas fa-sign-out-alt"></i> Sair
-        </button>
-      `;
-
-      // Select de usuários para distribuição
-      const selectUser = document.getElementById("selectUser");
-      const usuariosDistribuicao = [
-        "anne.mattos",
-        "gabriel.amaral",
-        "tati.garcia",
-        "vitor.mello",
-        "lucas.bitencourt",
-        "grazielle.albuquerque"
-      ];
-      selectUser.innerHTML = "";
-      usuariosDistribuicao.forEach(u => {
-        const option = document.createElement("option");
-        option.value = u;
-        option.textContent = u;
-        selectUser.appendChild(option);
-      });
-
-      // Botão distribuir
-      document.getElementById("distribuirBtn").addEventListener("click", () => {
-        const destinatario = selectUser.value;
-        const contato = prompt("Digite o nome do contato que deseja distribuir:");
-        if (contato && contato.trim() !== "") {
-          registrarDistribuicao(usuario, destinatario, contato.trim());
-          mostrarDistribuicoes();
-          alert(`Contato "${contato}" distribuído para ${destinatario}`);
-        }
-      });
-
-      mostrarDistribuicoes();
-
-      // Dashboard gerente
-      if (usuario === "gilvaniogringo") {
-        document.getElementById("dashboardGerente").classList.remove("hidden");
-      } else {
-        document.getElementById("dashboardGerente").classList.add("hidden");
+      if (distribuirPara > totalContatos) {
+        alert("Não é possível distribuir mais contatos do que o total disponível.");
+        return;
       }
-    }
 
-    window.onload = iniciarPainel;
+      // Gera números aleatórios simulando contatos
+      const numerosAleatorios = [];
+      for (let i = 0; i < distribuirPara; i++) {
+        const numero = Math.floor(Math.random() * totalContatos) + 1;
+        numerosAleatorios.push(numero);
+      }
+
+      document.getElementById("resultadoDistribuicao").innerHTML = `
+        <p>Distribuição para <strong>${usuarioSelecionado}</strong>:</p>
+        <p>${numerosAleatorios.join(", ")}</p>
+      `;
+    });
   </script>
 
 </body>
