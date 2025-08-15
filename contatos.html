@@ -66,7 +66,17 @@
     <!-- Mensagens Prontas -->
     <div id="mensagens" class="aba bg-white text-black shadow rounded-lg p-6 hidden">
       <h3 class="text-xl font-bold mb-4">Mensagens Prontas</h3>
-      <p>Ainda não há mensagens cadastradas.</p>
+
+      <!-- Select de município para envio -->
+      <div class="mb-4">
+        <label for="mensagemMunicipio" class="block font-medium mb-1">Enviar por Município:</label>
+        <select id="mensagemMunicipio" class="p-2 rounded border border-gray-300 w-full md:w-1/3">
+          <option value="">Selecione o Município</option>
+        </select>
+      </div>
+
+      <!-- Container para as mensagens -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4"></div>
     </div>
 
     <!-- Lista de Transmissão -->
@@ -89,22 +99,26 @@
   <!-- Script para gerenciar abas e selects -->
   <script>
     function mostrarAba(id) {
-      // esconde todas as abas
       document.querySelectorAll('.aba').forEach(div => div.classList.add('hidden'));
-      // mostra a aba selecionada
       const aba = document.getElementById(id);
       if (aba) aba.classList.remove('hidden');
     }
 
     document.addEventListener("DOMContentLoaded", () => {
-      // Preenche selects de município e bairro se existirem
+      // Preenche selects de município e bairro
       if (typeof municipios !== "undefined") {
         const selectMun = document.getElementById('municipio');
+        const selectMens = document.getElementById('mensagemMunicipio');
         municipios.forEach(m => {
-          const option = document.createElement('option');
-          option.value = m;
-          option.textContent = m;
-          selectMun.appendChild(option);
+          const option1 = document.createElement('option');
+          option1.value = m;
+          option1.textContent = m;
+          selectMun.appendChild(option1);
+
+          const option2 = document.createElement('option');
+          option2.value = m;
+          option2.textContent = m;
+          if(selectMens) selectMens.appendChild(option2);
         });
       }
 
@@ -118,7 +132,6 @@
         });
       }
 
-      // mostra a primeira aba por padrão
       mostrarAba('dadosPessoais');
     });
   </script>
