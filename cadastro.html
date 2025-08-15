@@ -93,17 +93,14 @@
 
   <!-- JS para carregar menus -->
   <script src="menu.js"></script>
-
-  <!-- JS com listagem de municípios e bairros -->
   <script src="municipios.js"></script>
   <script src="bairros.js"></script>
 
-  <!-- Script para preencher selects e redirecionar -->
+  <!-- Script para preencher selects e salvar no localStorage -->
   <script>
     function popularSelect(id, lista) {
       const select = document.getElementById(id);
-      // Limpa opções antigas, exceto a primeira
-      select.length = 1;
+      select.length = 1; // limpa mantendo a primeira opção
       lista.forEach(item => {
         const option = document.createElement('option');
         option.value = item;
@@ -113,18 +110,30 @@
     }
 
     document.addEventListener("DOMContentLoaded", () => {
-      // Preenche os selects
-      if (typeof municipios !== "undefined") {
-        popularSelect("municipio", municipios);
-      }
-      if (typeof bairrosPOA !== "undefined") {
-        popularSelect("bairro", bairrosPOA);
-      }
+      // Preenche selects
+      if (typeof municipios !== "undefined") popularSelect("municipio", municipios);
+      if (typeof bairrosPOA !== "undefined") popularSelect("bairro", bairrosPOA);
     });
 
-    // Redireciona para contatos.html ao enviar
     document.getElementById("formCadastro").addEventListener("submit", e => {
       e.preventDefault();
+
+      // Captura dados do formulário
+      const cliente = {
+        nome: document.getElementById("nome").value,
+        numero: document.getElementById("numero").value,
+        endereco: document.getElementById("endereco").value,
+        origem: document.getElementById("origem").value,
+        municipio: document.getElementById("municipio").value,
+        bairro: document.getElementById("bairro").value
+      };
+
+      // Salva no localStorage
+      let clientes = JSON.parse(localStorage.getItem("clientes")) || [];
+      clientes.push(cliente);
+      localStorage.setItem("clientes", JSON.stringify(clientes));
+
+      // Redireciona para contatos.html
       window.location.href = "contatos.html";
     });
   </script>
