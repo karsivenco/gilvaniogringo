@@ -31,14 +31,25 @@ function mostrarAniversariantesMes(mes) {
     return;
   }
 
-  clientes.forEach(c => {
+  clientes.forEach((c, index) => {
     const li = document.createElement("li");
-    li.className = "py-2";
+    li.className = "py-2 flex justify-between items-center";
     li.innerHTML = `
-      <strong>${c.nome}</strong> - ${c.municipio} - ${c.bairro || ''} - ${c.numero || ''} - ${c.endereco || ''}
+      <span><strong>${c.nome}</strong> - ${c.municipio} - ${c.bairro || ''} - ${c.numero || ''} - ${c.endereco || ''}</span>
+      <div class="flex gap-2">
+        <a href="base.html?id=${index}" class="bg-[#09679c] text-white px-2 py-1 rounded hover:bg-[#074d6b]">Abrir ficha</a>
+        <button onclick="enviarMensagem('${index}')" class="bg-green-600 text-white px-2 py-1 rounded hover:bg-green-700">Enviar</button>
+      </div>
     `;
     lista.appendChild(li);
   });
+}
+
+// Função de envio de mensagem (exemplo)
+function enviarMensagem(index) {
+  const cliente = pegarClientes()[index];
+  if (!cliente) return;
+  alert(`Mensagem enviada para ${cliente.nome} (${cliente.numero})!`);
 }
 
 window.addEventListener("DOMContentLoaded", montarCalendario);
