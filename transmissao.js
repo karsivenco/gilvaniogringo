@@ -1,39 +1,102 @@
 // transmissao.js
 
+// Lista completa de municípios
+const municipiosRS = [
+  'ACEGUÁ','ÁGUA SANTA','AGUDO','AJURICABA','ALECRIM','ALEGRETE','ALMIRANTE TAMANDARÉ DO SUL',
+  'ALPESTRE','ALTO ALEGRE','ALVORADA','AMETISTA DO SUL','ANDRÉ DA ROCHA','ANTA GORDA','ANTÔNIO PRADO',
+  'ARATIBA','ARROIO DO MEIO','ARROIO DO SAL','ARROIO DO TIGRE','ARROIO GRANDE','ARVOREZINHA','AUGUSTO PESTANA',
+  'BAGÉ','BALNEÁRIO PINHAL','BARÃO DE COTEGIPE','BARÃO DO TRIUNFO','BARRACÃO','BARRA DO QUARAÍ','BARRA DO RIBEIRO',
+  'BARRA FUNDA','BARROS CASSAL','BENTO GONÇALVES','BOA VISTA DAS MISSÕES','BOA VISTA DO BURICÁ','BOA VISTA DO CADEADO',
+  'BOA VISTA DO SUL','BOM JESUS','BOM PRINCÍPIO','BOM RETIRO DO SUL','BOQUEIRÃO DO LEÃO','BRAGA','BROCHIER','BUTIÁ',
+  'CAÇAPAVA DO SUL','CACEQUI','CACHOEIRA DO SUL','CACHOEIRINHA','CACIQUE DOBLE','CAIBATÉ','CAIÇARA','CAMAQUÃ','CAMARGO',
+  'CAMBARÁ DO SUL','CAMPESTRE DA SERRA','CAMPINAS DO SUL','CAMPO BOM','CAMPOS BORGES','CANDELÁRIA','CÂNDIDO GODÓI',
+  'CANDIOTA','CANELA','CANGUÇU','CANOAS','CAPÃO BONITO DO SUL','CAPÃO DA CANOA','CAPÃO DO LEÃO','CARAZINHO','CARLOS BARBOSA',
+  'CASCA','CASEIROS','CAXIAS DO SUL','CERRO GRANDE','CERRO LARGO','CHAPADA','CHARQUEADAS','CHARRUA','CHIAPETTA','CIRÍACO',
+  'COLORADO','CONDOR','CONSTANTINA','COQUEIROS DO SUL','CORONEL BARROS','CORONEL BICACO','CORONEL PILAR','COTIPORÃ',
+  'CRISSIUMAL','CRISTAL','CRISTAL DO SUL','CRUZ ALTA','CRUZALTENSE','CRUZEIRO DO SUL','DAVID CANABARRO','DERRUBADAS',
+  'DOIS IRMÃOS','DOM FELICIANO','DOM PEDRO DE ALCÂNTARA','DOM PEDRITO','DONA FRANCISCA','ELDORADO DO SUL','ENCANTADO',
+  'ENCRUZILHADA DO SUL','ENGENHO VELHO','ENTRE-IJUÍS','ENTRE RIOS DO SUL','ERECHIM','ERNESTINA','ERVAL GRANDE','ERVAL SECO',
+  'ESMERALDA','ESPUMOSO','ESTÂNCIA VELHA','ESTEIO','ESTRELA','FAGUNDES VARELA','FARROUPILHA','FAXINAL DO SOTURNO',
+  'FAZENDA VILANOVA','FELIZ','FLORES DA CUNHA','FONTOURA XAVIER','FORQUETINHA','FORTALEZA DOS VALOS','FREDERICO WESTPHALEN',
+  'GARIBALDI','GENERAL CÂMARA','GENTIL','GETÚLIO VARGAS','GIRUÁ','GRAMADO','GRAMADO XAVIER','GRAVATAÍ','GUABIJU','GUAÍBA',
+  'GUAPORÉ','GUARANI DAS MISSÕES','HORIZONTINA','HUMAITÁ','IBIAÇÁ','IBIRAIARAS','IBIRAPUITÃ','IBIRUBÁ','IGREJINHA','IJUÍ',
+  'ILÓPOLIS','IMBÉ','IMIGRANTE','INDEPENDÊNCIA','IPÊ','IRAÍ','ITAPUCA','ITAQUI','ITATIBA DO SUL','IVOTI','JABOTICABA','JAGUARÃO',
+  'JAGUARI','JAQUIRANA','JÓIA','JÚLIO DE CASTILHOS','LAGOÃO','LAGOA DOS TRÊS CANTOS','LAGOA VERMELHA','LAJEADO','LAVRAS DO SUL',
+  'LIBERATO SALZANO','LINHA NOVA','MACHADINHO','MANOEL VIANA','MARATÁ','MARAU','MARCELINO RAMOS','MARQUES DE SOUZA',
+  'MATO CASTELHANO','MATO LEITÃO','MAXIMILIANO DE ALMEIDA','MINAS DO LEÃO','MIRAGUAÍ','MONTAURI','MONTE ALEGRE DOS CAMPOS',
+  'MONTE BELO DO SUL','MONTENEGRO','MORMAÇO','MUÇUM','MUITOS CAPÕES','MULITERNO','NICOLAU VERGUEIRO','NONOAI','NOVA ALVORADA',
+  'NOVA ARAÇÁ','NOVA BASSANO','NOVA BOA VISTA','NOVA BRÉSCIA','NOVA CANDELÁRIA','NOVA PÁDUA','NOVA PALMA','NOVA PETRÓPOLIS',
+  'NOVA PRATA','NOVA ROMA DO SUL','NOVA SANTA RITA','NOVO HAMBURGO','NOVO TIRADENTES','NOVO XINGU','NOVO BARREIRO','OSÓRIO',
+  'PAIM FILHO','PALMEIRA DAS MISSÕES','PALMITINHO','PANAMBI','PANTANO GRANDE','PARAÍ','PAROBÉ','PASSO DO SOBRADO','PASSO FUNDO',
+  'PAVERAMA','PELOTAS','PICADA CAFÉ','PINHAL','PINHAL DA SERRA','PINHAL GRANDE','PINHEIRINHO DO VALE','PINHEIRO MACHADO','PIRATINI',
+  'PLANALTO','POÇO DAS ANTAS','PONTÃO','PORTO ALEGRE','PORTO XAVIER','POUSO NOVO','PROGRESSO','PROTÁSIO ALVES','PUTINGA','QUARAÍ',
+  'REDENTORA','RELVADO','RESTINGA SECA','RIO DOS ÍNDIOS','RIO GRANDE','RIO PARDO','ROCA SALES','RODEIO BONITO','ROLANTE','RONDA ALTA',
+  'ROSÁRIO DO SUL','SAGRADA FAMÍLIA','SALVADOR DO SUL','SANANDUVA','SANTA CECÍLIA DO SUL','SANTA CLARA DO SUL','SANTA CRUZ DO SUL',
+  'SANTA MARIA','SANTANA DA BOA VISTA','SANT’ANA DO LIVRAMENTO','SANTA ROSA','SANTA TEREZA','SANTA VITÓRIA DO PALMAR','SANTIAGO',
+  'SANTO ÂNGELO','SANTO ANTÔNIO DO PALMA','SANTO ANTÔNIO DA PATRULHA','SANTO ANTÔNIO DAS MISSÕES','SANTO ANTÔNIO DO PLANALTO',
+  'SANTO AUGUSTO','SANTO CRISTO','SANTO EXPEDITO DO SUL','SÃO BORJA','SÃO DOMINGOS DO SUL','SÃO FRANCISCO DE ASSIS','SÃO FRANCISCO DE PAULA',
+  'SÃO GABRIEL','SÃO JERÔNIMO','SÃO JOÃO DA URTIGA','SÃO JORGE','SÃO JOSÉ DO HERVAL','SÃO JOSÉ DO INHACORÁ','SÃO JOSÉ DO NORTE',
+  'SÃO JOSÉ DO OURO','SÃO JOSÉ DOS AUSENTES','SÃO LEOPOLDO','SÃO LOURENÇO DO SUL','SÃO LUIZ GONZAGA','SÃO MARCOS','SÃO MARTINHO',
+  'SÃO NICOLAU','SÃO PEDRO DA SERRA','SÃO PEDRO DO SUL','SÃO SEBASTIÃO DO CAÍ','SÃO SEPÉ','SÃO VENDELINO','SÃO VICENTE DO SUL',
+  'SAPIRANGA','SAPUCAIA DO SUL','SARANDI','SEBERI','SEDE NOVA','SERAFINA CORRÊA','SÉRIO','SERTÃO','SERTÃO SANTANA','SEVERIANO DE ALMEIDA',
+  'SINIMBU','SOLEDADE','TAPEJARA','TAPERA','TAPES','TAQUARA','TAQUARI','TAVARES','TENENTE PORTELA','TERRA DE AREIA','TEUTÔNIA',
+  'TIO HUGO','TIRADENTES DO SUL','TORRES','TRAMANDAÍ','TRÊS ARROIOS','TRÊS CACHOEIRAS','TRÊS COROAS','TRÊS DE MAIO','TRÊS PALMEIRAS',
+  'TRÊS PASSOS','TRINDADE DO SUL','TRIUNFO','TUCUNDUVA','TUNAS','TUPANCI DO SUL','TUPANCIRETÃ','TUPARENDI','UNIÃO DA SERRA',
+  'URUGUAIANA','VACARIA','VALE DO SOL','VALE REAL','VANINI','VENÂNCIO AIRES','VERA CRUZ','VERANÓPOLIS','VESPASIANO CORREA','VIAMÃO',
+  'VICENTE DUTRA','VICTOR GRAEFF','VILA FLORES','VILA MARIA','VISTA ALEGRE','VISTA ALEGRE DO PRATA','VITÓRIA DAS MISSÕES','WESTFALIA','XANGRI-LÁ'
+];
+
+// Função para montar lista de transmissão
 function montarListaTransmissao() {
   const container = document.getElementById("listaPorRegiao");
   if (!container) return;
 
   const clientes = JSON.parse(localStorage.getItem("clientes")) || [];
 
-  // Agrupar por município
-  const agrupados = {};
-  clientes.forEach(c => {
-    const reg = c.municipio || "Sem Município";
-    if (!agrupados[reg]) agrupados[reg] = [];
-    agrupados[reg].push(c);
-  });
-
   container.innerHTML = "";
 
-  for (const regiao in agrupados) {
-    const divReg = document.createElement("div");
-    divReg.className = "mb-4";
+  municipiosRS.forEach((municipio) => {
+    const clientesMun = clientes.filter(c => c.municipio === municipio);
+    const divMun = document.createElement("div");
+    divMun.className = "mb-6 p-4 bg-gray-50 rounded shadow";
 
-    divReg.innerHTML = `<h4 class="font-bold text-[#09679c] mb-2">${regiao} (${agrupados[regiao].length})</h4>`;
-    const ul = document.createElement("ul");
-    ul.className = "divide-y divide-gray-200";
+    const count = clientesMun.length;
+    divMun.innerHTML = `
+      <h4 class="font-bold text-[#09679c] mb-2">${municipio} (${count})</h4>
+      <textarea placeholder="Digite a mensagem para ${municipio}" class="w-full border border-gray-300 rounded p-2 mb-2"></textarea>
+      <button class="bg-[#09679c] text-white px-4 py-2 rounded hover:bg-[#074d6b]">Enviar</button>
+      <ul class="mt-2 divide-y divide-gray-200"></ul>
+    `;
 
-    agrupados[regiao].forEach(c => {
+    // Lista de clientes do município
+    const ul = divMun.querySelector("ul");
+    clientesMun.forEach(c => {
       const li = document.createElement("li");
-      li.className = "py-2";
-      li.textContent = `${c.nome} - ${c.bairro || ''} - ${c.telefone} - ${c.email || ''} - ${c.endereco || ''}`;
+      li.className = "py-1";
+      li.textContent = `${c.nome} - ${c.bairro || ''} - ${c.numero || ''} - ${c.endereco || ''}`;
       ul.appendChild(li);
     });
 
-    divReg.appendChild(ul);
-    container.appendChild(divReg);
-  }
+    // Botão de envio
+    const btn = divMun.querySelector("button");
+    const textarea = divMun.querySelector("textarea");
+    btn.addEventListener("click", () => {
+      if (clientesMun.length === 0) {
+        alert(`Não há contatos cadastrados em ${municipio}`);
+        return;
+      }
+      const msg = textarea.value.trim();
+      if (!msg) {
+        alert("Digite uma mensagem antes de enviar.");
+        return;
+      }
+      // Aqui pode ser integrado com envio real (WhatsApp API ou outro)
+      alert(`Mensagem enviada para ${clientesMun.length} contatos em ${municipio}:\n\n${msg}`);
+      textarea.value = "";
+    });
+
+    container.appendChild(divMun);
+  });
 }
 
 window.addEventListener("DOMContentLoaded", montarListaTransmissao);
