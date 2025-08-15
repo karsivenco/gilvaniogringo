@@ -21,84 +21,109 @@
   <!-- Menu lateral fixo abaixo do header -->
   <aside class="bg-[#09679c] w-64 p-6 text-white flex flex-col gap-4 fixed top-16 h-[calc(100vh-4rem)]">
     <h2 class="font-bold text-lg border-b border-white pb-2">CADASTRO</h2>
-    <span class="text-sm text-white/80">Preencha os dados</span>
+    <button onclick="mostrarAba('cadastro')" class="text-left hover:underline">Dados Pessoais</button>
   </aside>
 
   <!-- Área principal -->
   <main class="flex-1 ml-64 pt-24 p-6 overflow-y-auto">
 
-    <!-- Formulário de Cadastro -->
-    <div class="bg-white text-black shadow rounded-lg p-6">
+    <!-- Cadastro -->
+    <div id="cadastro" class="aba bg-white text-black shadow rounded-lg p-6">
       <h3 class="text-xl font-bold mb-4">Dados Pessoais</h3>
 
-      <form id="formCadastro" action="contato.php" method="POST" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-
-        <!-- Nome -->
-        <div class="col-span-2">
-          <label for="nome" class="block font-semibold mb-1">Nome Completo</label>
-          <input type="text" id="nome" name="nome" class="p-2 rounded border border-gray-300 w-full" required />
+      <form id="formCadastro" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        
+        <!-- Nome completo -->
+        <div>
+          <label for="nome" class="block font-medium mb-1">Nome completo</label>
+          <input type="text" id="nome" name="nome" required class="p-2 rounded border border-gray-300 w-full"/>
         </div>
 
         <!-- Número -->
         <div>
-          <label for="numero" class="block font-semibold mb-1">Número (com DDI + DDD)</label>
-          <input type="text" id="numero" name="numero" placeholder="+55 51 99999-9999" class="p-2 rounded border border-gray-300 w-full" required />
+          <label for="numero" class="block font-medium mb-1">Número (DDI + DDD)</label>
+          <input type="text" id="numero" name="numero" placeholder="+55 51 ..." class="p-2 rounded border border-gray-300 w-full"/>
         </div>
 
         <!-- Endereço -->
-        <div>
-          <label for="endereco" class="block font-semibold mb-1">Endereço (opcional)</label>
-          <input type="text" id="endereco" name="endereco" placeholder="Rua, número, bairro, cidade" class="p-2 rounded border border-gray-300 w-full" />
+        <div class="md:col-span-2">
+          <label for="endereco" class="block font-medium mb-1">Endereço (opcional)</label>
+          <input type="text" id="endereco" name="endereco" placeholder="Rua, número, bairro, cidade" class="p-2 rounded border border-gray-300 w-full"/>
         </div>
 
-        <!-- Origem -->
+        <!-- Origem do contato -->
         <div>
-          <label for="origem" class="block font-semibold mb-1">Origem do Contato</label>
-          <select id="origem" name="origem" class="p-2 rounded border border-gray-300 w-full" required>
+          <label for="origem" class="block font-medium mb-1">Origem do contato</label>
+          <select id="origem" name="origem" class="p-2 rounded border border-gray-300 w-full">
             <option value="">Selecione a origem</option>
-            <option value="Instagram">Instagram</option>
-            <option value="Facebook">Facebook</option>
-            <option value="WhatsApp">WhatsApp</option>
-            <option value="Telefone">Telefone</option>
-            <option value="Outros">Outros</option>
+            <option value="instagram">Instagram</option>
+            <option value="facebook">Facebook</option>
+            <option value="whatsapp">WhatsApp</option>
+            <option value="presencial">Presencial</option>
+            <option value="outro">Outro</option>
           </select>
         </div>
 
         <!-- Município -->
         <div>
-          <label for="municipio" class="block font-semibold mb-1">Município</label>
-          <select id="municipio" name="municipio" class="p-2 rounded border border-gray-300 w-full" required>
+          <label for="municipio" class="block font-medium mb-1">Município</label>
+          <select id="municipio" name="municipio" class="p-2 rounded border border-gray-300 w-full">
             <option value="">Selecione o Município</option>
           </select>
         </div>
 
-        <!-- Bairro -->
+        <!-- Bairros (POA) -->
         <div>
-          <label for="bairro" class="block font-semibold mb-1">Bairro</label>
-          <select id="bairro" name="bairro" class="p-2 rounded border border-gray-300 w-full" required>
+          <label for="bairro" class="block font-medium mb-1">Bairro</label>
+          <select id="bairro" name="bairro" class="p-2 rounded border border-gray-300 w-full">
             <option value="">Selecione o Bairro</option>
           </select>
         </div>
 
         <!-- Botão -->
-        <div class="col-span-2 mt-4">
-          <button type="submit" class="bg-[#09679c] text-white px-4 py-2 rounded hover:bg-[#074d6b] transition w-full">Cadastrar</button>
+        <div class="md:col-span-2 flex justify-end">
+          <button type="submit" class="bg-[#09679c] text-white px-4 py-2 rounded hover:bg-[#074d6b] transition">
+            Cadastrar
+          </button>
         </div>
       </form>
     </div>
 
   </main>
 
-  <!-- JS separados -->
+  <!-- JS para carregar menus -->
   <script src="menu.js"></script>
+
+  <!-- JS com listagem de municípios e bairros -->
   <script src="municipio.js"></script>
   <script src="bairros.js"></script>
 
+  <!-- Script para preencher selects -->
   <script>
-    // Preencher municípios e bairros
+    function popularSelect(id, lista) {
+      const select = document.getElementById(id);
+      lista.forEach(item => {
+        const option = document.createElement('option');
+        option.value = item;
+        option.textContent = item;
+        select.appendChild(option);
+      });
+    }
+
+    // Preenche ao carregar
     document.addEventListener("DOMContentLoaded", () => {
-      carregarMunicipios();
-      carregarBairros();
+      if (typeof municipios !== "undefined") {
+        popularSelect("municipio", municipios);
+      }
+      if (typeof bairrosPOA !== "undefined") {
+        popularSelect("bairro", bairrosPOA);
+      }
+    });
+
+    // Aqui você conecta com o salvar-contato.php
+    document.getElementById("formCadastro").addEventListener("submit", e => {
+      e.preventDefault();
+      alert("Cadastro enviado! (Aqui entraria o fetch para salvar-contato.php)");
     });
   </script>
 
