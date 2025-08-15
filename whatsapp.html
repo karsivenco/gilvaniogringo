@@ -17,6 +17,7 @@
 </head>
 <body class="bg-gray-100 min-h-screen flex flex-col">
 
+  <!-- HEADER COM MENU DINÂMICO -->
   <header class="flex justify-between items-center bg-[#09679c] text-white p-4 shadow-md">
     <div class="flex items-center gap-3">
       <img src="img/logo.png" alt="Logo Gringo" class="h-10 w-auto" />
@@ -25,7 +26,10 @@
     <nav id="mainMenu" class="flex items-center gap-3"></nav>
   </header>
 
+  <!-- MAIN -->
   <main class="flex-1 p-6 max-w-7xl mx-auto w-full grid grid-cols-1 md:grid-cols-4 gap-6">
+    
+    <!-- LISTA DE CONVERSAS -->
     <section class="md:col-span-1 bg-white rounded-lg shadow p-4 flex flex-col">
       <div class="flex justify-between items-center mb-3">
         <h2 class="text-lg font-semibold text-[#005075]">Conversas</h2>
@@ -41,6 +45,7 @@
       </div>
     </section>
 
+    <!-- CHAT -->
     <section class="md:col-span-3 bg-white rounded-lg shadow p-4 flex flex-col">
       <div id="chatHeader" class="flex items-center justify-between mb-4">
         <div class="flex items-center gap-3">
@@ -70,10 +75,11 @@
         </button>
       </div>
     </section>
+
   </main>
 
-  <!-- JS -->
-  <script src="js/menu.js"></script>
+  <!-- SCRIPTS -->
+  <script src="js/menu.js"></script> <!-- menu dinâmico -->
   <script src="js/utils.js"></script>
   <script src="js/timelinesClient.js"></script>
   <script src="js/whatsapp.js"></script>
