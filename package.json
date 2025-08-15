@@ -1,0 +1,7 @@
+{
+  "name": "gringo-crm-whatsapp",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js"
+  }
+}
