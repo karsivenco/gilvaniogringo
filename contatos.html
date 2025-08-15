@@ -76,7 +76,7 @@
       </div>
 
       <!-- Container para as mensagens -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4"></div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="containerMensagens"></div>
     </div>
 
     <!-- Lista de Transmissão -->
@@ -91,12 +91,10 @@
   <script src="menu.js"></script>
   <script src="municipios.js"></script>
   <script src="bairros.js"></script>
-  <script src="clientes.js"></script>
   <script src="aniversario.js"></script>
   <script src="mensagens.js"></script>
   <script src="transmissao.js"></script>
 
-  <!-- Script para gerenciar abas e selects -->
   <script>
     function mostrarAba(id) {
       document.querySelectorAll('.aba').forEach(div => div.classList.add('hidden'));
@@ -104,34 +102,68 @@
       if (aba) aba.classList.remove('hidden');
     }
 
-    document.addEventListener("DOMContentLoaded", () => {
-      // Preenche selects de município e bairro
+    function popularSelect(id, lista) {
+      const select = document.getElementById(id);
+      select.length = 1;
+      lista.forEach(item => {
+        const option = document.createElement('option');
+        option.value = item;
+        option.textContent = item;
+        select.appendChild(option);
+      });
+    }
+
+    function buscarCliente() {
+      const nome = document.getElementById('pesquisarNome').value.toLowerCase();
+      const municipio = document.getElementById('municipio').value;
+
+      const resultadoDiv = document.getElementById('resultadoPesquisa');
+      resultadoDiv.innerHTML = '';
+
+      const clientes = JSON.parse(localStorage.getItem('clientes')) || [];
+      const filtrados = clientes.filter(c => 
+        (!municipio || c.municipio === municipio) &&
+        (!nome || c.nome.toLowerCase().includes(nome))
+      );
+
+      if (filtrados.length === 0) {
+        resultadoDiv.innerHTML = '<p>Nenhum cliente encontrado.</p>';
+        return;
+      }
+
+      filtrados.forEach(c => {
+        const div = document.createElement('div');
+        div.className = 'bg-gray-100 p-3 rounded shadow';
+        div.innerHTML = `<strong>${c.nome}</strong> - ${c.municipio} ${c.bairro ? '- ' + c.bairro : ''} <br> ${c.numero} - ${c.origem}`;
+        resultadoDiv.appendChild(div);
+      });
+    }
+
+    function carregarClientes() {
+      const clientes = JSON.parse(localStorage.getItem('clientes')) || [];
+      const selectMun = document.getElementById('municipio');
+      const selectMens = document.getElementById('mensagemMunicipio');
+
       if (typeof municipios !== "undefined") {
-        const selectMun = document.getElementById('municipio');
-        const selectMens = document.getElementById('mensagemMunicipio');
-        municipios.forEach(m => {
-          const option1 = document.createElement('option');
-          option1.value = m;
-          option1.textContent = m;
-          selectMun.appendChild(option1);
-
-          const option2 = document.createElement('option');
-          option2.value = m;
-          option2.textContent = m;
-          if(selectMens) selectMens.appendChild(option2);
-        });
+        popularSelect('municipio', municipios);
+        if(selectMens) popularSelect('mensagemMunicipio', municipios);
       }
 
-      if (typeof bairrosPOA !== "undefined") {
-        const selectBairro = document.getElementById('bairro');
-        bairrosPOA.forEach(b => {
+      // Atualiza selectMensagem por município com base nos clientes cadastrados
+      if(selectMens) {
+        selectMens.innerHTML = '<option value="">Selecione o Município</option>';
+        const municipiosUnicos = [...new Set(clientes.map(c => c.municipio))];
+        municipiosUnicos.forEach(m => {
           const option = document.createElement('option');
-          option.value = b;
-          option.textContent = b;
-          selectBairro.appendChild(option);
+          option.value = m;
+          option.textContent = m;
+          selectMens.appendChild(option);
         });
       }
+    }
 
+    document.addEventListener("DOMContentLoaded", () => {
+      carregarClientes();
       mostrarAba('dadosPessoais');
     });
   </script>
