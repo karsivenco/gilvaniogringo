@@ -30,7 +30,7 @@
   <!-- Área principal -->
   <main class="flex-1 ml-64 pt-24 p-6 overflow-y-auto">
 
-    <!-- Dados Pessoais / Eleitores -->
+    <!-- Eleitores -->
     <div id="dadosPessoais" class="aba bg-white text-black shadow rounded-lg p-6 hidden">
       <h3 class="text-xl font-bold mb-4">Eleitores</h3>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
@@ -118,6 +118,10 @@
       return JSON.parse(localStorage.getItem('clientes')) || [];
     }
 
+    function salvarClientes(clientes) {
+      localStorage.setItem('clientes', JSON.stringify(clientes));
+    }
+
     function montarCalendario() {
       const container = document.getElementById("aniversariantesMes");
       container.innerHTML = "";
@@ -144,10 +148,19 @@
         li.className = "py-2 flex justify-between items-center";
         li.innerHTML = `
           <span><strong>${c.nome}</strong> - ${c.municipio} - ${c.bairro || ''} - ${c.numero || ''} - ${c.endereco || ''}</span>
-          <a href="base.html?id=${index}" class="bg-[#09679c] text-white px-2 py-1 rounded hover:bg-[#074d6b]">Abrir ficha</a>
+          <div class="flex gap-2">
+            <a href="base.html?id=${index}" class="bg-[#09679c] text-white px-2 py-1 rounded hover:bg-[#074d6b]">Abrir ficha</a>
+            <button onclick="enviarMensagem(${index})" class="bg-green-600 text-white px-2 py-1 rounded hover:bg-green-700">Enviar</button>
+          </div>
         `;
         lista.appendChild(li);
       });
+    }
+
+    function enviarMensagem(index) {
+      const cliente = pegarClientes()[index];
+      if (!cliente) return;
+      alert(`Mensagem enviada para ${cliente.nome} (${cliente.numero})!`);
     }
 
     function carregarClientes() {
@@ -175,7 +188,7 @@
       const municipio = document.getElementById('municipio').value;
       const resultadoDiv = document.getElementById('resultadoPesquisa');
       resultadoDiv.innerHTML = '';
-      const clientes = pegarClientes();
+      let clientes = pegarClientes();
       const filtrados = clientes.filter(c => 
         (!municipio || c.municipio === municipio) &&
         (!nome || c.nome.toLowerCase().includes(nome))
@@ -185,14 +198,27 @@
         return;
       }
       filtrados.forEach((c, index) => {
-        const div = document.createElement('div');
-        div.className = 'bg-gray-100 p-3 rounded shadow flex justify-between items-center';
-        div.innerHTML = `
+        const li = document.createElement('div');
+        li.className = 'bg-gray-100 p-3 rounded shadow flex justify-between items-center';
+        li.innerHTML = `
           <span><strong>${c.nome}</strong> - ${c.municipio}${c.bairro ? ' - ' + c.bairro : ''} - ${c.numero || ''} - ${c.origem || ''}</span>
-          <a href="base.html?id=${index}" class="bg-[#09679c] text-white px-2 py-1 rounded hover:bg-[#074d6b]">Abrir ficha</a>
+          <div class="flex gap-2">
+            <a href="base.html?id=${index}" class="bg-[#09679c] text-white px-2 py-1 rounded hover:bg-[#074d6b]">Abrir ficha</a>
+            <button onclick="excluirEleitor(${index})" class="bg-red-600 text-white px-2 py-1 rounded hover:bg-red-700">Excluir</button>
+          </div>
         `;
-        resultadoDiv.appendChild(div);
+        resultadoDiv.appendChild(li);
       });
+    }
+
+    function excluirEleitor(index) {
+      let clientes = pegarClientes();
+      const confirmacao = confirm(`Deseja realmente excluir ${clientes[index].nome}?`);
+      if (!confirmacao) return;
+      clientes.splice(index, 1);
+      salvarClientes(clientes);
+      buscarEleitor();
+      montarCalendario();
     }
 
     document.addEventListener("DOMContentLoaded", () => {
