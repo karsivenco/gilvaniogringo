@@ -1,6 +1,6 @@
 // bairros.js
 
-const bairros = [
+const bairrosPOA = [
   "Centro Histórico","Floresta","Auxiliadora","Moinhos de Vento","Independência","Bom Fim","Rio Branco","Montserrat","Bela Vista",
   "Farroupilha","Santana","Petrópolis","Santa Cecília","Jardim Botânico","Praia de Belas","Cidade Baixa","Menino Deus","Azenha",
   "Farrapos","Humaitá","Navegantes","São Geraldo","Anchieta","São João","Santa Maria Goretti","Higienópolis","Boa Vista","Passo D'Areia",
