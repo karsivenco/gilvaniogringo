@@ -79,78 +79,23 @@
   </form>
 </main>
 
+<!-- SCRIPTS SEPARADOS -->
+<script src="editor.js"></script>
+<script src="publicar.js"></script>
 <script>
-const usuariosAutorizados = ["gabriel.amaral","graziele.albuquerque","karina.maia","cristiano.santos","gilvaniogringo"];
-const usuarioLogado = localStorage.getItem("usuarioLogado");
-
-function montarMenu() {
-  const menu = document.getElementById("mainMenu");
-  menu.innerHTML = `
-      <a href="painel.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="Painel"><i class="fas fa-home"></i> Painel</a>
-      <a href="nova-postagem.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="Nova Postagem"><i class="fas fa-plus"></i> Nova Postagem</a>
-      <a href="publicacoes.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="Últimas Publicações"><i class="fas fa-newspaper"></i> Últimas Publicações</a>
-      <a href="rascunhos.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="Rascunhos"><i class="fas fa-file-alt"></i> Rascunhos</a>
-      <a href="perfil.html" class="bg-[#09679c] border border-white px-3 py-2 rounded hover:bg-[#074d6b] transition flex items-center gap-1" title="Perfil"><i class="fas fa-user"></i> Perfil</a>
-    <button onclick="logout()" class="bg-[#053646] px-3 py-2 rounded flex items-center gap-1">Sair</button>
-  `;
-}
-
-function logout() {
-  localStorage.removeItem("usuarioLogado");
-  window.location.href = "intranet.html";
-}
-
-function format(cmd, val = null) { document.execCommand(cmd, false, val); document.getElementById("editor").focus(); }
-function inserirLink() { const url = prompt("Digite o URL do link:"); if(url) format("createLink", url); }
-function toggleEmojiPicker() { document.getElementById("emojiPicker").classList.toggle("hidden"); }
-function inserirEmoji(emoji) { format("insertText", emoji); toggleEmojiPicker(); }
-function popularEmojis() {
-  const picker = document.getElementById("emojiPicker");
-  const emojis = ["😀","😃","😄","😁","😆","😅","😂","🤣","😊","😍","😎","😢","😭","😡","👍","👎","🙏","🎉","🔥","💡"];
-  emojis.forEach(e => { const span = document.createElement("span"); span.textContent = e; span.onclick = () => inserirEmoji(e); picker.appendChild(span); });
-}
-function inserirImagem(event) {
-  const file = event.target.files[0]; if (!file) return;
-  const reader = new FileReader();
-  reader.onload = e => { const img = document.createElement("img"); img.src = e.target.result; img.style.maxWidth="100%"; document.getElementById("editor").appendChild(img); };
-  reader.readAsDataURL(file);
-  event.target.value="";
-}
-function validarForm() {
-  if (!usuarioLogado || !usuariosAutorizados.includes(usuarioLogado)) { alert("Você não tem permissão para publicar."); return false; }
-  const conteudoHTML = document.getElementById("editor").innerHTML.trim();
-  if (!conteudoHTML) { alert("O conteúdo não pode estar vazio."); return false; }
-  document.getElementById("conteudo").value = conteudoHTML;
-  return true;
-}
-
-// AJAX para salvar postagem
-const form = document.getElementById("formPostagem");
-form.addEventListener("submit", async e => {
-  e.preventDefault();
-  if (!validarForm()) return;
-  const btnClicado = document.activeElement.value;
-  const formData = new FormData();
-  formData.append("titulo", document.getElementById("titulo").value.trim());
-  formData.append("conteudo", document.getElementById("editor").innerHTML.trim());
-  formData.append("tipo", btnClicado);
-
-  try {
-    const resp = await fetch("salvar-postagem.php",{ method:"POST", body:formData });
-    const data = await resp.json();
-    const msgEl = document.getElementById("msgSucesso");
-    if(data.sucesso){
-      msgEl.textContent = data.mensagem;
-      msgEl.classList.remove("text-red-600"); msgEl.classList.add("text-green-600");
-      if(data.tipo==="publicar") { document.getElementById("titulo").value=""; document.getElementById("editor").innerHTML=""; }
-    } else { msgEl.textContent=data.mensagem||"Erro ao salvar."; msgEl.classList.remove("text-green-600"); msgEl.classList.add("text-red-600"); }
-  } catch(err){ console.error(err); alert("Erro ao conectar com o servidor."); }
-});
-
 window.onload = () => {
-  if (!usuarioLogado || !usuariosAutorizados.includes(usuarioLogado)) { alert("Acesso negado."); window.location.href="intranet.html"; return; }
+  const usuarioLogado = localStorage.getItem("usuarioLogado");
+  const usuariosAutorizados = ["gabriel.amaral","graziele.albuquerque","karina.maia","cristiano.santos","gilvaniogringo"];
+
+  if(!usuarioLogado || !usuariosAutorizados.includes(usuarioLogado)) {
+    alert("Acesso negado.");
+    window.location.href = "intranet.html";
+    return;
+  }
+
   montarMenu();
   popularEmojis();
+  initPublicacao(); // inicializa submit com rascunho/publicar separado
 };
 </script>
 </body>
