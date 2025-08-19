@@ -1,27 +1,48 @@
 <?php
-header('Content-Type: application/json');
+header('Content-Type: application/json; charset=utf-8');
 include 'conexao.php';
 
-$titulo = $_POST['titulo'] ?? '';
-$conteudo = $_POST['conteudo'] ?? '';
-$tipo = $_POST['tipo'] ?? 'rascunho';
-$autor = $_POST['autor'] ?? 'Gilvani';
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $titulo   = trim($_POST['titulo'] ?? '');
+    $conteudo = trim($_POST['conteudo'] ?? '');
+    $tipo     = $_POST['tipo'] ?? 'rascunho';
+    $status   = $tipo === 'publicar' ? 'publicado' : 'rascunho';
+    $autor    = "Gilvani";
 
-if(!$titulo || !$conteudo){
-    echo json_encode(["sucesso" => false, "mensagem" => "Título e conteúdo são obrigatórios."]);
-    exit;
-}
+    if (empty($titulo) || empty($conteudo)) {
+        echo json_encode(["sucesso" => false, "mensagem" => "Título e conteúdo são obrigatórios."]);
+        exit;
+    }
 
-try {
-    $stmt = $pdo->prepare("INSERT INTO postagens (titulo, conteudo, autor, status) VALUES (:titulo, :conteudo, :autor, :status)");
-    $stmt->execute([
-        ":titulo" => $titulo,
-        ":conteudo" => $conteudo,
-        ":autor" => $autor,
-        ":status" => $tipo
-    ]);
-    echo json_encode(["sucesso" => true, "mensagem" => "Postagem salva com sucesso!", "tipo" => $tipo]);
-} catch(PDOException $e){
-    echo json_encode(["sucesso" => false, "mensagem" => "Erro ao salvar postagem: " . $e->getMessage()]);
+    try {
+        // grava no banco
+        $sql = "INSERT INTO postagens (titulo, conteudo, autor, status) VALUES (:titulo, :conteudo, :autor, :status)";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([
+            ":titulo"   => $titulo,
+            ":conteudo" => $conteudo,
+            ":autor"    => $autor,
+            ":status"   => $status
+        ]);
+
+        // gera JSON atualizado
+        $query = $pdo->query("SELECT id, titulo, conteudo, autor, status, data_publicacao FROM postagens ORDER BY data_publicacao DESC");
+        $postagens = $query->fetchAll(PDO::FETCH_ASSOC);
+
+        $jsonPath = __DIR__ . "/gilvaniogringo/dados/postagens.json";
+        if (!is_dir(dirname($jsonPath))) {
+            mkdir(dirname($jsonPath), 0777, true);
+        }
+        file_put_contents($jsonPath, json_encode($postagens, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+
+        echo json_encode([
+            "sucesso"  => true,
+            "mensagem" => $status === 'publicado' ? "Post publicado com sucesso!" : "Rascunho salvo com sucesso!",
+            "tipo"     => $status
+        ]);
+    } catch (PDOException $e) {
+        echo json_encode(["sucesso" => false, "mensagem" => "Erro no banco: " . $e->getMessage()]);
+    }
+} else {
+    echo json_encode(["sucesso" => false, "mensagem" => "Requisição inválida"]);
 }
-?>
