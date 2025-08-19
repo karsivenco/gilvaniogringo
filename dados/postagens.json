@@ -1,1 +1,18 @@
-[]
+[
+  {
+    "id": 3,
+    "titulo": "Primeiro Post",
+    "conteudo": "<p>Esse é um post de teste</p>",
+    "autor": "Gilvani",
+    "status": "publicado",
+    "data_publicacao": "2025-08-19 09:45:22"
+  },
+  {
+    "id": 2,
+    "titulo": "Rascunho Teste",
+    "conteudo": "<p>Ainda em edição...</p>",
+    "autor": "Gilvani",
+    "status": "rascunho",
+    "data_publicacao": "2025-08-18 14:10:05"
+  }
+]
