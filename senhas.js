@@ -10,6 +10,9 @@ const usuarios = {
   "cristiano.santos": "Gringo1975",
   "vitor.mello": "Gringo1975",
   "lucas.bitencourt": "Gringo1975",
+  "leticia.barros": "Gringo1975",
+  "vanusa.erem": "Gringo1975",
+  "marco.antonio": "Gringo1975",
 };
 
 const perfis = {
@@ -17,9 +20,12 @@ const perfis = {
   "cristiano.santos": "Mídias Sociais",
   "anne.mattos": "Comunicação",
   "tati.garcia": "Comunicação",
-  "gabriel.amaral": "Jornalismo",
-  "grazielle.albuquerque": "Jornalismo",
+  "gabriel.amaral": "Jornalista",
+  "grazielle.albuquerque": "Jornalista",
   "vitor.mello": "Comunicação",
   "gilvaniogringo": "Vereador",
-  "lucas.bitencourt": "Comunicação"
+  "lucas.bitencourt": "Comunicação",
+  "leticia.barros": "Comunicação",
+  "vanusa.erem": "Comunicação",
+  "marco.antonio": "Comunicação"
 };
