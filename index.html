@@ -342,15 +342,10 @@
   </div>
 </section>
 
-<div id="blog-posts-home" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
-
-<!-- Container dos posts -->
-<div id="blog-posts-home" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
-
 <!-- Container do iframe -->
 <div id="iframe-post" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-50">
   <div class="w-11/12 h-5/6 bg-white rounded-xl shadow-lg overflow-hidden relative">
-    <button onclick="fecharIframe()" class="absolute top-2 right-2 bg-[#005075] text-white px-3 py-1 rounded-lg">X</button>
+    <button onclick="fecharIframe()" class="absolute top-2 right-2 bg-gray-600 text-white px-3 py-1 rounded-lg hover:bg-gray-800">X</button>
     <iframe id="iframe-leitura" class="w-full h-full border-0"></iframe>
   </div>
 </div>
@@ -371,11 +366,11 @@
         const descricaoLimpa = post.description.replace(/<[^>]+>/g, '').slice(0, 120);
 
         const postCard = `
-          <div class="w-full sm:w-1/2 md:w-1/3 p-5 text-center bg-white rounded-xl shadow transition duration-500 hover:bg-[#005075] hover:text-white">
-            <h3 class="text-xl font-semibold mb-2">${post.title}</h3>
+          <div class="w-full sm:w-1/2 md:w-1/3 p-5 text-center bg-white rounded-xl shadow transition duration-300 hover:shadow-lg">
+            <h3 class="text-xl font-semibold mb-2 text-gray-800">${post.title}</h3>
             <p class="text-gray-600 text-sm mb-2">${new Date(post.pubDate).toLocaleDateString()}</p>
             <p class="text-gray-700 mb-4">${descricaoLimpa}...</p>
-            <button onclick="abrirPostagem('${post.link}')" class="font-medium underline">Leia mais</button>
+            <button onclick="abrirPostagem('${post.link}')" class="text-blue-600 hover:underline font-medium">Leia mais</button>
           </div>
         `;
         postsContainer.innerHTML += postCard;
@@ -401,7 +396,7 @@
 
   carregarNoticiasHome();
 </script>
-	
+
 	<section class="py-12 md:py-16 bg-white" id="materia-em-destaque-1">
   <div class="container mx-auto px-4">
     <div class="mx-auto max-w-3xl text-center wow animate__animated animate__fadeInUp space-y-10">
@@ -700,6 +695,7 @@
 </body>
 
 </html>
+
 
 
 
