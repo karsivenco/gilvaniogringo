@@ -261,7 +261,148 @@
   </section>
   <!-- Carousel End -->
 </main>
+        <!-- Divisor visual -->
+<div class="h-16 bg-gradient-to-r from-[#005075]/10 to-transparent"></div>
+
+<!-- Últimas Notícias start -->
+<section class="py-12 md:py-20 bg-[#F3F7F9]" id="Ultimas-noticias">
+  <div class="container mx-auto px-4">
+    <div class="mx-auto max-w-3xl text-center wow animate__animated animate__fadeInUp">
+      <h2 class="mb-4 text-3xl md:text-4xl font-bold text-[#005075]">Últimas Notícias</h2>
+      <p class="text-lg text-gray-600 mb-6">
+        Aqui você fica sabendo em primeira mão as notícias e novidades sobre o trabalho do vereador Gilvani.
+      </p>
+
+      <a href="https://gilvaniogringo.com/ultimas-noticias.html" class="text-[#005075] text-lg font-semibold inline-block hover:underline">
+        SAIBA MAIS NOTÍCIAS AQUI
+      </a>
+    </div>
+
+    <!-- Container dos posts do blog -->
+    <div id="blog-posts-home" class="my-10 flex justify-center flex-wrap gap-6 px-4"></div>
+  </div>
+</section>
+
+<div id="blog-posts-home" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+
+<!-- Container do iframe -->
+<div id="iframe-post" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+  <div class="w-11/12 h-5/6 bg-white rounded-xl shadow-lg overflow-hidden relative">
+    <button onclick="fecharIframe()" class="absolute top-2 right-2 bg-[#005075] text-white px-3 py-1 rounded-lg">X</button>
+    <iframe id="iframe-leitura" class="w-full h-full border-0"></iframe>
+  </div>
+</div>
+
+<script>
+  async function carregarNoticiasHome() {
+    const url = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent('https://gilvaniogringo.blogspot.com/feeds/posts/default?alt=rss')}&_=${Date.now()}`;
+
+    try {
+      const res = await fetch(url);
+      if (!res.ok) throw new Error('Erro ao buscar dados: ' + res.status);
+
+      const data = await res.json();
+      const postsContainer = document.getElementById("blog-posts-home");
+      postsContainer.innerHTML = "";
+
+      data.items.slice(0, 6).forEach(post => {
+        // Remove tags HTML da descrição
+        const descricaoLimpa = post.description.replace(/<[^>]+>/g, '').slice(0, 120);
+
+        // Ajusta link para evitar redirect
+        let linkLimpo = post.link.replace("?m=1", "");
+
+        const postCard = `
+          <div class="p-5 text-center bg-white shadow rounded-xl">
+            <h3 class="text-xl font-semibold text-[#005075] mb-2">${post.title}</h3>
+            <p class="text-gray-600 text-sm mb-2">${new Date(post.pubDate).toLocaleDateString()}</p>
+            <p class="text-gray-700 mb-4">${descricaoLimpa}...</p>
+            <button onclick="abrirPostagem('${linkLimpo}')" class="text-[#005075] font-medium hover:underline">Leia mais</button>
+          </div>
+        `;
+        postsContainer.innerHTML += postCard;
+      });
+
+    } catch (error) {
+      console.error(error);
+      document.getElementById("blog-posts-home").innerHTML = `
+        <p class="text-red-600 text-center">Erro ao carregar notícias. Tente novamente mais tarde.</p>
+      `;
+    }
+  }
+
+  function abrirPostagem(link) {
+    document.getElementById('iframe-leitura').src = link;
+    document.getElementById('iframe-post').classList.remove('hidden');
+  }
+
+  function fecharIframe() {
+    document.getElementById('iframe-post').classList.add('hidden');
+    document.getElementById('iframe-leitura').src = '';
+  }
+
+  carregarNoticiasHome();
+</script>
+
 	
+<!-- Matéria em destaque start -->
+<section class="py-12 md:py-16 bg-white" id="materia-em-destaque-1">
+  <div class="container mx-auto px-4">
+    <div class="mx-auto max-w-3xl text-center wow animate__animated animate__fadeInUp space-y-10">
+        <h2 class="mb-4 text-3xl md:text-4xl font-bold text-[#005075]"> NOTÍCIAS EM DESTAQUE</h2>
+        
+<!-- Terceiro destaque -->
+<div>
+  <h2 class="mb-2 text-2xl md:text-3xl font-extrabold text-[#005075]">
+    VEREADOR GRINGO QUER REFORÇAR A RESPONSABILIDADE DA FISCALIZAÇÃO
+  </h2>
+  <p class="text-base text-gray-700 mt-2">
+   Audiência pública para debater segurança em academias - 21/08/25 - PLE 261/25  </p>
+  <div class="mt-3">
+    <a href="/vidros-de-seguranca.html" class="text-[#005075] text-base font-bold inline-block hover:underline">
+      CLIQUE E CONFIRA
+    </a>
+  </div>
+</div>
+
+ <!-- segundo destaque -->
+		<div>
+  <h2 class="mb-2 text-2xl md:text-3xl font-extrabold text-[#005075]">
+    MAIS TRANSPARÊNCIA NO USO DE RADARES MÓVEIS EM PORTO ALEGRE, PROPOSTA DO GRINGO
+  </h2>
+  <p class="text-base text-gray-700 mt-2">
+    O vereador Gilvani "O Gringo" apresenta projeto que obriga a divulgação antecipada dos locais e horários de fiscalização com radares móveis, garantindo educação no trânsito e segurança para motoristas.
+  </p>
+  <div class="mt-3">
+    <a href="/radar-movel-eptc.html" class="text-[#005075] text-base font-bold inline-block hover:underline">
+      CLIQUE E CONFIRA
+    </a>
+  </div>
+</div>
+
+      <!-- primeiro destaque -->
+     <div>
+  <h2 class="mb-2 text-2xl md:text-3xl font-extrabold text-[#005075]">
+   INSENÇÃO DO IPTU A PESSOAS COM DOENÇAS GRAVES EM PORTO ALEGRE, UMA LUTA DO GRINGO </h2>
+  <p class="text-base text-gray-700 mt-2">
+    Gringo apresenta projeto para isenção do IPTU a pacientes com doenças graves em Porto Alegre, buscando aliviar custos e garantir dignidade.
+  </p>
+  <div class="mt-3">
+    <a href="/iptu.html" class="text-[#005075] text-base font-bold inline-block hover:underline">
+      CLIQUE E CONFIRA
+    </a>
+  </div>
+</div>
+		
+    </div>
+  </div>
+</div>
+</section>
+<!-- Matéria em destaque end -->       
+        
+        <!-- Divisor visual -->
+<div class="h-16 bg-gradient-to-r from-[#005075]/10 to-transparent"></div>
+        
 <section class="py-12 md:py-16 bg-white" id="materia-em-destaque-1">
   <div class="container mx-auto px-4">
     <div class="mx-auto max-w-3xl text-center wow animate__animated animate__fadeInUp space-y-10">
@@ -294,137 +435,6 @@
  <!-- Divisor visual -->
 <div class="h-16 bg-gradient-to-r from-[#005075]/10 to-transparent"></div>
 	
-<!-- Matéria em destaque start -->
-<section class="py-12 md:py-16 bg-white" id="materia-em-destaque-1">
-  <div class="container mx-auto px-4">
-    <div class="mx-auto max-w-3xl text-center wow animate__animated animate__fadeInUp space-y-10">
-        <h2 class="mb-4 text-3xl md:text-4xl font-bold text-[#005075]"> NOTÍCIAS EM DESTAQUE</h2>
-        
-<!-- Terceiro destaque -->
-<div>
-  <h2 class="mb-2 text-2xl md:text-3xl font-extrabold text-[#005075]">
-    MAIS TRANSPARÊNCIA NO USO DE RADARES MÓVEIS EM PORTO ALEGRE, PROPOSTA DO GRINGO
-  </h2>
-  <p class="text-base text-gray-700 mt-2">
-    O vereador Gilvani "O Gringo" apresenta projeto que obriga a divulgação antecipada dos locais e horários de fiscalização com radares móveis, garantindo educação no trânsito e segurança para motoristas.
-  </p>
-  <div class="mt-3">
-    <a href="/radar-movel-eptc.html" class="text-[#005075] text-base font-bold inline-block hover:underline">
-      CLIQUE E CONFIRA
-    </a>
-  </div>
-</div>
-
- <!-- segundo destaque -->
-		<div>
-  <h2 class="mb-2 text-2xl md:text-3xl font-extrabold text-[#005075]">
-   INSENÇÃO DO IPTU A PESSOAS COM DOENÇAS GRAVES EM PORTO ALEGRE, UMA LUTA DO GRINGO </h2>
-  <p class="text-base text-gray-700 mt-2">
-    Gringo apresenta projeto para isenção do IPTU a pacientes com doenças graves em Porto Alegre, buscando aliviar custos e garantir dignidade.
-  </p>
-  <div class="mt-3">
-    <a href="/iptu.html" class="text-[#005075] text-base font-bold inline-block hover:underline">
-      CLIQUE E CONFIRA
-    </a>
-  </div>
-</div>
-
-      <!-- primeiro destaque -->
-     <div>
-  <h2 class="mb-2 text-2xl md:text-3xl font-extrabold text-[#005075]">
-    VEREADOR GILVANI O GRINGO COBRA PROJETO AMPLO PARA PROTEGER SÃO LUÍS/CANOAS DAS ENCHENTES</h2>
-  <p class="text-base text-gray-700 mt-2">
-    Preocupado com a segurança da população, o Gringo defende anel de diques integrado para garantir proteção real e evitar novos prejuízos na região.
-  </p>
-  <div class="mt-3">
-    <a href="/canoas-sao-luis.html" class="text-[#005075] text-base font-bold inline-block hover:underline">
-      CLIQUE AQUI E LEIA A MATÉRIA COMPLETA
-    </a>
-  </div>
-</div>
-		
-    </div>
-  </div>
-</div>
-</section>
-<!-- Matéria em destaque end -->       
-        <!-- Divisor visual -->
-<div class="h-16 bg-gradient-to-r from-[#005075]/10 to-transparent"></div>
-        
-<!-- Últimas Notícias start -->
-<section class="py-12 md:py-20 bg-[#F3F7F9]" id="Ultimas-noticias">
-  <div class="container mx-auto px-4">
-    <div class="mx-auto max-w-3xl text-center wow animate__animated animate__fadeInUp">
-      <h2 class="mb-4 text-3xl md:text-4xl font-bold text-[#005075]">Últimas Notícias</h2>
-      <p class="text-lg text-gray-600 mb-6">
-        Aqui você fica sabendo em primeira mão as notícias e novidades sobre o trabalho do vereador Gilvani.
-      </p>
-
-      <a href="https://gilvaniogringo.com/ultimas-noticias.html" class="text-[#005075] text-lg font-semibold inline-block hover:underline">
-        SAIBA MAIS NOTÍCIAS AQUI
-      </a>
-    </div>
-
-    <!-- Container dos posts do blog -->
-    <div id="blog-posts-home" class="my-10 flex justify-center flex-wrap gap-6 px-4"></div>
-  </div>
-</section>
-
-<!-- Script para carregar os 6 primeiros posts -->
-<script>
-  async function carregarNoticiasHome() {
-    // URL do feed com timestamp para evitar cache
-    const url = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent('https://gilvaniogringo.blogspot.com/feeds/posts/default?alt=rss')}&_=${Date.now()}`;
-
-    try {
-      const res = await fetch(url);
-      if (!res.ok) throw new Error('Erro ao buscar dados: ' + res.status);
-
-      const data = await res.json();
-      console.log('Feed carregado:', data); // Para debug
-
-      const postsContainer = document.getElementById("blog-posts-home");
-      postsContainer.innerHTML = "";
-
-      // Mostra até 6 posts
-      data.items.slice(0, 6).forEach(post => {
-        const descricaoLimpa = post.description.replace(/<[^>]+>/g, '').slice(0, 120);
-        const postCard = `
-          <div class="w-full max-w-md p-5 text-center bg-white shadow-none">
-            <h3 class="text-xl font-semibold text-[#005075] mb-2">${post.title}</h3>
-            <p class="text-gray-600 text-sm mb-2">${new Date(post.pubDate).toLocaleDateString()}</p>
-            <p class="text-gray-700 mb-4">${descricaoLimpa}...</p>
-            <button onclick="abrirPostagem('${post.link}')" class="text-[#005075] font-medium hover:underline">Leia mais</button>
-          </div>
-        `;
-        postsContainer.innerHTML += postCard;
-      });
-
-    } catch (error) {
-      console.error(error);
-      document.getElementById("blog-posts-home").innerHTML = `
-        <p class="text-red-600 text-center">Erro ao carregar notícias. Tente novamente mais tarde.</p>
-      `;
-    }
-  }
-
-  function abrirPostagem(link) {
-    document.getElementById('iframe-leitura').src = link;
-    document.getElementById('iframe-post').classList.remove('hidden');
-  }
-
-  function fecharIframe() {
-    document.getElementById('iframe-post').classList.add('hidden');
-    document.getElementById('iframe-leitura').src = '';
-  }
-
-  carregarNoticiasHome();
-</script>
-<!-- Últimas Notícias end -->
-
-        <!-- Divisor visual -->
-<div class="h-16 bg-gradient-to-r from-[#005075]/10 to-transparent"></div>
-        
   <!-- Principais Pautas Start -->
 <section id="Principais-Pautas" class="py-12 md:py-20 bg-white">
   <div class="container mx-auto px-4 wow animate__animated animate__fadeInUp">
@@ -691,6 +701,7 @@
 </body>
 
 </html>
+
 
 
 
