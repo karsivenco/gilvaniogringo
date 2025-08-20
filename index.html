@@ -369,21 +369,13 @@
 
       data.items.slice(0, 6).forEach(post => {
         const descricaoLimpa = post.description.replace(/<[^>]+>/g, '').slice(0, 120);
-        let linkLimpo = post.link.replace("?m=1", "");
 
         const postCard = `
-          <div class="p-5 bg-white shadow rounded-xl flex flex-col justify-between h-full 
-                      transition duration-500 hover:bg-[#005075] hover:text-white">
-            <div>
-              <h3 class="text-lg font-semibold mb-1">${post.title}</h3>
-              <p class="text-gray-500 text-xs mb-2">${new Date(post.pubDate).toLocaleDateString()}</p>
-              <p class="text-sm mb-3">${descricaoLimpa}...</p>
-            </div>
-            <div class="mt-auto">
-              <button onclick="abrirPostagem('${linkLimpo}')" class="font-medium underline">
-                Leia mais
-              </button>
-            </div>
+          <div class="w-full sm:w-1/2 md:w-1/3 p-5 text-center bg-white rounded-xl shadow transition duration-500 hover:bg-[#005075] hover:text-white">
+            <h3 class="text-xl font-semibold mb-2">${post.title}</h3>
+            <p class="text-gray-600 text-sm mb-2">${new Date(post.pubDate).toLocaleDateString()}</p>
+            <p class="text-gray-700 mb-4">${descricaoLimpa}...</p>
+            <button onclick="abrirPostagem('${post.link}')" class="font-medium underline">Leia mais</button>
           </div>
         `;
         postsContainer.innerHTML += postCard;
@@ -409,7 +401,6 @@
 
   carregarNoticiasHome();
 </script>
-
 	
 	<section class="py-12 md:py-16 bg-white" id="materia-em-destaque-1">
   <div class="container mx-auto px-4">
@@ -709,6 +700,7 @@
 </body>
 
 </html>
+
 
 
 
