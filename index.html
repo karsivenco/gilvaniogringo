@@ -15,25 +15,29 @@
 
   <!-- Ícones Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-	<style>
+
+  <style>
     body {
       font-family: 'Inter', sans-serif;
       background: #f9fafb;
     }
 
-    /* Botão customizado */
+    /* Botão customizado em CSS */
     .btn-imagem {
       display: inline-flex;
       align-items: center;
       justify-content: center;
       font-weight: 700;
+      color: white;
       background: linear-gradient(to right, #000 0 20%, #006298 20% 100%);
-      border-radius: 0 2vw 2vw 0; 
+      border-radius: 0 2vw 2vw 0; /* só arredonda canto direito */
       box-shadow: 0 0.3vw 0.6vw rgba(0, 0, 0, 0.3);
-      text-decoration: none;
-      padding: 0 1.5vw;
-      height: 6vw;
       transition: all 0.3s ease-in-out;
+      text-decoration: none;
+
+      width: 28vw;   /* responsivo */
+      height: 6vw;
+      font-size: 2vw;
     }
 
     .btn-imagem:hover {
@@ -41,36 +45,29 @@
       transform: scale(1.05);
     }
 
-    /* Seta preta */
-    .btn-seta {
-      color: black;
-      font-size: 2vw;
+    /* seta no lado esquerdo */
+    .btn-imagem::before {
+      content: "→";
       margin-right: 1vw;
+      font-size: 2vw;
       font-weight: bold;
     }
 
-    /* Texto azul */
-    .btn-texto {
-      color: #0074b8;
-      font-size: 2vw;
-      font-weight: 700;
-    }
-
-    /* Responsividade */
+    /* Ajuste responsivo do botão */
     @media (max-width: 768px) {
       .btn-imagem {
         width: 60vw;
         height: 12vw;
+        font-size: 4vw;
       }
-      .btn-seta,
-      .btn-texto {
+      .btn-imagem::before {
         font-size: 4vw;
       }
     }
   </style>
 </head>
 <body>
-  <!-- Navbar -->
+  <!-- Navbar Start -->
   <nav id="navbar" class="fixed top-0 left-0 z-40 w-full bg-gradient-to-r from-[#004989] to-[#3e6f98] shadow-md">
     <div class="container mx-auto flex h-20 items-center justify-between px-4">
       <a href="index.html">
@@ -90,20 +87,19 @@
       </div>
     </div>
   </nav>
+  <!-- Navbar End -->
 
-  <!-- Banner + Botão -->
   <main class="pt-20">
+    <!-- Banner + Botão -->
     <div class="relative">
-      <img src="img/banner.png" 
-           alt="Edital de Emendas 2026 — Inscrições Abertas - vereador gilvani o gringo - saude - educacao - meio ambiente - cultura - segurança" 
-           class="w-full object-cover" />
+      <img src="img/banner.png" alt="Edital de Emendas 2026 — Inscrições Abertas - vereador gilvani o gringo - saude - educacao - meio ambiente - cultura - segurança" class="w-full object-cover" />
       
+      <!-- Botão posicionado -->
       <a href="/edital-gringo" 
          class="btn-imagem absolute"
          aria-label="Saiba mais sobre o edital"
-         style="bottom: 17%; right: 9%;">
-        <span class="btn-seta">→</span>
-        <span class="btn-texto">Saiba mais</span>
+         style="bottom: 8%; right: 5%;">
+        Saiba mais
       </a>
     </div>
   </main>
@@ -545,5 +541,3 @@ O que precisamos é dar segurança para que a população saiba o que comprar, q
 </body>
 
 </html>
-
-
