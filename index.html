@@ -19,25 +19,35 @@
       background: #f9fafb;
     }
 
+    /* Botão customizado em CSS */
     .btn-imagem {
-      background-image: url('img/botao.png');
-      background-size: contain;
-      background-repeat: no-repeat;
-      background-position: center;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       font-weight: 700;
-      color: transparent; /* Esconde texto, só usa a imagem */
-      width: 220px;
-      height: 50px;
+      color: white;
+      background: linear-gradient(to right, #000 0 20%, #006298 20% 100%);
+      border-radius: 0 2vw 2vw 0; /* só arredonda canto direito */
+      box-shadow: 0 0.3vw 0.6vw rgba(0, 0, 0, 0.3);
+      transition: all 0.3s ease-in-out;
+      text-decoration: none;
+
+      width: 30vw;   /* responsivo */
+      height: 6vw;
+      font-size: 2vw;
     }
 
-    @media (min-width: 768px) {
-      .btn-imagem {
-        width: 260px;
-        height: 64px;
-      }
+    .btn-imagem:hover {
+      background: linear-gradient(to right, #111 0 20%, #0074b8 20% 100%);
+      transform: scale(1.05);
+    }
+
+    /* seta no lado esquerdo */
+    .btn-imagem::before {
+      content: "→";
+      margin-right: 1vw;
+      font-size: 2vw;
+      font-weight: bold;
     }
   </style>
 </head>
@@ -63,25 +73,22 @@
     </div>
   </nav>
   <!-- Navbar End -->
-<main class="pt-20">
-  <!-- Banner + Botão -->
-  <div class="relative">
-    <img src="img/banner.png" alt="Edital de Emendas 2026 — Inscrições Abertas - vereador gilvani o gringo - saude - educacao - meio ambiente - cultura - segurança" class="w-full object-cover" />
-    
-    <!-- Botão posicionado -->
-    <a href="/edital-gringo" 
-       class="btn-imagem absolute text-white text-sm md:text-base" 
-       aria-label="Saiba mais sobre o edital"
-       style="bottom: 0%;
-    left: 79%;
-    width: 30vw;
-    font-size: 2vw;
-    transform: translate(-50%, -50%);">
-      Saiba mais
-    </a>
-  </div>
-</main>
+
+  <main class="pt-20">
+    <!-- Banner + Botão -->
+    <div class="relative">
+      <img src="img/banner.png" alt="Edital de Emendas 2026 — Inscrições Abertas - vereador gilvani o gringo - saude - educacao - meio ambiente - cultura - segurança" class="w-full object-cover" />
       
+      <!-- Botão posicionado -->
+      <a href="/edital-gringo" 
+         class="btn-imagem absolute"
+         aria-label="Saiba mais sobre o edital"
+         style="bottom: 0%; left: 79%; transform: translate(-50%, -50%);">
+        Saiba mais
+      </a>
+    </div>
+  </main>
+     
 	
 <!-- Matéria em destaque start -->
 <section class="py-12 md:py-16 bg-white" id="materia-em-destaque-1">
@@ -520,6 +527,7 @@ O que precisamos é dar segurança para que a população saiba o que comprar, q
 </body>
 
 </html>
+
 
 
 
