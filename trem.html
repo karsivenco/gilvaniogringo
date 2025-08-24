@@ -13,7 +13,7 @@
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
 
-  <!-- Ícones Font Awesome -->
+  <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
   <style>
@@ -22,7 +22,7 @@
       background: #f9fafb;
     }
 
-    /* Botão customizado em CSS */
+    /* Botão do banner */
     .btn-imagem {
       display: inline-flex;
       align-items: center;
@@ -30,65 +30,88 @@
       font-weight: 700;
       color: white;
       background: linear-gradient(to right, #000 0 20%, #006298 20% 100%);
-      border-radius: 0 2vw 2vw 0; /* só arredonda canto direito */
+      border-radius: 0 2vw 2vw 0;
       box-shadow: 0 0.3vw 0.6vw rgba(0, 0, 0, 0.3);
       transition: all 0.3s ease-in-out;
       text-decoration: none;
-
-      width: 28vw;   /* responsivo */
+      width: 28vw;
       height: 6vw;
       font-size: 2vw;
     }
-
     .btn-imagem:hover {
       background: linear-gradient(to right, #111 0 20%, #0074b8 20% 100%);
       transform: scale(1.05);
     }
-
-    /* seta no lado esquerdo */
     .btn-imagem::before {
-      content: "→";
       margin-right: 1vw;
       font-size: 2vw;
       font-weight: bold;
     }
-
-    /* Ajuste responsivo do botão */
     @media (max-width: 768px) {
       .btn-imagem {
-        width: 60vw;
-        height: 12vw;
-        font-size: 4vw;
+        width: 33vw;
+        height: 8vw;
+        font-size: 3vw;
       }
       .btn-imagem::before {
-        font-size: 4vw;
+        font-size: 3vw;
       }
     }
   </style>
 </head>
 <body>
-  <!-- Navbar Start -->
-  <nav id="navbar" class="fixed top-0 left-0 z-40 w-full bg-gradient-to-r from-[#004989] to-[#3e6f98] shadow-md">
-    <div class="container mx-auto flex h-20 items-center justify-between px-4">
-      <a href="index.html">
-        <img src="img/logo.png" alt="Logo Gilvani O Gringo" class="h-12">
-      </a>
-      <button id="navbar-toggler" class="rounded border border-white p-2 text-white lg:hidden">
-        <i class="fa fa-bars text-xl"></i>
-      </button>
-      <div class="hidden lg:flex">
-        <div class="absolute lg:static top-20 left-0 w-full bg-gradient-to-r from-[#004989] to-[#3e6f98] lg:bg-none p-4 lg:p-0 flex flex-col space-y-4 lg:flex-row lg:space-x-2 lg:space-y-0">
-          <a href="https://wa.me/+5551981221708" target="_blank" class="rounded-md px-4 py-2 text-white hover:bg-white/20 font-medium">Contato com o Gringo</a>
-          <a href="/Ultimas-noticias.html" class="rounded-md px-4 py-2 text-white hover:bg-white/20 font-medium">Últimas Notícias</a>
-          <a href="/Projetos.html" class="rounded-md px-4 py-2 text-white hover:bg-white/20 font-medium">Projetos</a>
-          <a href="/Principais-Pautas.html" class="rounded-md px-4 py-2 text-white hover:bg-white/20 font-medium">Principais Pautas</a>
-          <a href="/Conheca-o-Gringo.html" class="rounded-md px-4 py-2 text-white hover:bg-white/20 font-medium">Conheça o Gringo</a>
-        </div>
-      </div>
-    </div>
-  </nav>
-  <!-- Navbar End -->
+ <!-- Navbar Start -->
+<nav id="navbar" class="fixed top-0 left-0 z-50 w-full bg-gradient-to-r from-[#004989] to-[#3e6f98] shadow-md">
+  <div class="container mx-auto flex items-center justify-between h-20 px-4">
+    <!-- Logo -->
+    <a href="index.html">
+      <img src="img/logo.png" alt="Logo Gilvani O Gringo" class="h-12">
+    </a>
 
+    <!-- Botão mobile -->
+    <button id="navbar-toggler" class="lg:hidden rounded border border-white p-2 text-white">
+      <i class="fa fa-bars text-xl"></i>
+    </button>
+
+    <!-- Menu -->
+    <div id="navbar-menu" class="hidden absolute top-20 left-0 w-full bg-gradient-to-r from-[#004989] to-[#3e6f98] p-4 flex flex-col space-y-4 lg:flex lg:static lg:flex-row lg:space-x-4 lg:space-y-0">
+      <a href="/index.html" class="rounded-md px-4 py-2 text-white hover:bg-white/20 font-medium">Ínicio</a>
+      <a href="/edital-gringo.html" class="rounded-md px-4 py-2 text-white hover:bg-white/20 font-medium">Emendas Impositivas</a>
+      <a href="https://wa.me/+5551981221708" target="_blank" class="rounded-md px-4 py-2 text-white hover:bg-white/20 font-medium">Contato com o Gringo</a>
+      <a href="/Ultimas-noticias.html" class="rounded-md px-4 py-2 text-white hover:bg-white/20 font-medium">Últimas Notícias</a>
+      <a href="/Projetos.html" class="rounded-md px-4 py-2 text-white hover:bg-white/20 font-medium">Projetos</a>
+      <a href="/Principais-Pautas.html" class="rounded-md px-4 py-2 text-white hover:bg-white/20 font-medium">Principais Pautas</a>
+      <a href="/Conheca-o-Gringo.html" class="rounded-md px-4 py-2 text-white hover:bg-white/20 font-medium">Conheça o Gringo</a>
+    </div>
+  </div>
+</nav>
+
+<!-- Script para toggle mobile -->
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const toggler = document.getElementById('navbar-toggler');
+    const menu = document.getElementById('navbar-menu');
+
+    toggler.addEventListener('click', () => {
+      menu.classList.toggle('hidden');
+      // opcional: animação suave
+      menu.classList.toggle('transition-all');
+      menu.classList.toggle('duration-300');
+      menu.classList.toggle('ease-in-out');
+    });
+
+    // Fecha o menu ao clicar em um link (mobile)
+    menu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        if (window.innerWidth < 1024) {
+          menu.classList.add('hidden');
+        }
+      });
+    });
+  });
+</script>
+  
+<!-- Navbar End -->	
   <main class="pt-20">
     <!-- Banner + Botão -->
     <div class="relative">
