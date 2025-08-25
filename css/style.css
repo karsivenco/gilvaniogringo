@@ -63,7 +63,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-weight: normal;
+    font-weight: 8vw;
 }
 
 .btn.btn-primary {
@@ -124,7 +124,7 @@
     margin-right: 25px;
     padding: 25px 0;
     color: var(--bs-white);
-    font-size: 17px;
+    font-size: 17vw;
     font-weight: 400;
     outline: none;
     transition: .5s;
@@ -895,5 +895,6 @@
     background: var(--bs-dark);
 }
 /*** copyright end ***/
+
 
 
