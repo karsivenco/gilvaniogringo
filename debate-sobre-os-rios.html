@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="pt-br" class="scroll-smooth">
+<head>
+  <meta charset="utf-8">
+  <title>Gilvani o Gringo</title>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta name="description" content="Ciclo de debates 'Navegar é preciso' discute dragagem, desassoreamento, proteção contra enchentes e economia azul em Porto Alegre com o vereador Gilvani o Gringo.">
+  <meta content="vereador, porto alegre, gilvani, gringo, projetos, comunidade, política, gilvani dall oglio, gilvani o gringo, gilvani gringo, sarandi" name="keywords">
+ 
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f9fafb;
+    }
+
+    /* Botão do banner */
+    .btn-imagem {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      color: white;
+      background: linear-gradient(to right, #000 0 20%, #006298 20% 100%);
+      border-radius: 0 2vw 2vw 0;
+      box-shadow: 0 0.3vw 0.6vw rgba(0, 0, 0, 0.3);
+      transition: all 0.3s ease-in-out;
+      text-decoration: none;
+      width: 28vw;
+      height: 6vw;
+      font-size: 2vw;
+    }
+    .btn-imagem:hover {
+      background: linear-gradient(to right, #111 0 20%, #0074b8 20% 100%);
+      transform: scale(1.05);
+    }
+    .btn-imagem::before {
+      margin-right: 1vw;
+      font-size: 2vw;
+      font-weight: bold;
+    }
+    @media (max-width: 768px) {
+      .btn-imagem {
+        width: 33vw;
+        height: 8vw;
+        font-size: 3vw;
+      }
+      .btn-imagem::before {
+        font-size: 3vw;
+      }
+    }
+  </style>
+</head>
+<body>
+ <!-- Navbar Start -->
+<nav id="navbar" class="fixed top-0 left-0 z-50 w-full bg-gradient-to-r from-[#004989] to-[#3e6f98] shadow-md">
+  <div class="container mx-auto flex items-center justify-between h-20 px-4">
+    <!-- Logo -->
+    <a href="index.html">
+      <img src="img/logo.png" alt="Logo Gilvani O Gringo" class="h-12">
+    </a>
+
+    <!-- Botão mobile -->
+    <button id="navbar-toggler" class="lg:hidden rounded border border-white p-2 text-white">
+      <i class="fa fa-bars text-xl"></i>
+    </button>
+
+    <!-- Menu -->
+    <div id="navbar-menu" class="hidden absolute top-20 left-0 w-full bg-gradient-to-r from-[#004989] to-[#3e6f98] p-4 flex flex-col space-y-4 lg:flex lg:static lg:flex-row lg:space-x-4 lg:space-y-0">
+      <a href="/index.html" class="rounded-md px-4 py-2 text-white hover:bg-white/20 font-medium">Ínicio</a>
+      <a href="/edital-gringo.html" class="rounded-md px-4 py-2 text-white hover:bg-white/20 font-medium">Emendas Impositivas</a>
+      <a href="https://wa.me/+5551981221708" target="_blank" class="rounded-md px-4 py-2 text-white hover:bg-white/20 font-medium">Contato com o Gringo</a>
+      <a href="/Ultimas-noticias.html" class="rounded-md px-4 py-2 text-white hover:bg-white/20 font-medium">Últimas Notícias</a>
+      <a href="/Projetos.html" class="rounded-md px-4 py-2 text-white hover:bg-white/20 font-medium">Projetos</a>
+      <a href="/Principais-Pautas.html" class="rounded-md px-4 py-2 text-white hover:bg-white/20 font-medium">Principais Pautas</a>
+      <a href="/Conheca-o-Gringo.html" class="rounded-md px-4 py-2 text-white hover:bg-white/20 font-medium">Conheça o Gringo</a>
+    </div>
+  </div>
+</nav>
+
+<!-- Script para toggle mobile -->
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const toggler = document.getElementById('navbar-toggler');
+    const menu = document.getElementById('navbar-menu');
+
+    toggler.addEventListener('click', () => {
+      menu.classList.toggle('hidden');
+      // opcional: animação suave
+      menu.classList.toggle('transition-all');
+      menu.classList.toggle('duration-300');
+      menu.classList.toggle('ease-in-out');
+    });
+
+    // Fecha o menu ao clicar em um link (mobile)
+    menu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        if (window.innerWidth < 1024) {
+          menu.classList.add('hidden');
+        }
+      });
+    });
+  });
+</script>
+  
+<!-- Navbar End -->	
+  <main class="pt-20">
+    <!-- Banner + Botão -->
+    <div class="relative">
+      <img src="img/banner.png" alt="Edital de Emendas 2026 — Inscrições Abertas - vereador gilvani o gringo - saude - educacao - meio ambiente - cultura - segurança" class="w-full object-cover" />
+      
+      <!-- Botão posicionado -->
+      <a href="/edital-gringo" 
+         class="btn-imagem absolute"
+         aria-label="Saiba mais sobre o edital"
+         style="bottom: 17%; right: 9%;">
+        Saiba mais
+      </a>
+    </div>
+  </main>
+
+<!-- Matéria start -->
+<section class="py-12 md:py-16 bg-[#F3F7F9]">
+  <div class="container mx-auto px-4">
+    <div class="max-w-4xl mx-auto bg-white shadow-md rounded-2xl p-6 md:p-10">
+      
+      <!-- Título -->
+      <h1 class="text-2xl md:text-3xl font-bold text-[#005075] mb-3">
+        Dragagem e Desassoreamento: Protegendo Nossos Rios
+      </h1>
+      
+      <!-- Data -->
+      <div class="text-gray-500 text-sm mb-6">29/08/2025</div>
+
+      <!-- Conteúdo -->
+      <div class="prose prose-gray max-w-none text-justify">
+        <p>
+          A Câmara Municipal de Porto Alegre promoveu recentemente o ciclo de debates <strong>“Navegar é preciso: nossos rios em debate”</strong>, que trouxe à pauta a dragagem e o desassoreamento de rios e canais navegáveis da Capital e do Rio Grande do Sul. A iniciativa, realizada em parceria com a Escola do Legislativo, reuniu representantes governamentais, Marinha do Brasil, universidades, clubes náuticos e iniciativa privada, com o objetivo de discutir soluções técnicas para a proteção das águas e o desenvolvimento da economia ligada à navegação.
+        </p>
+        <p>
+          O evento destacou a importância de um olhar integrado sobre os rios, considerando aspectos ambientais, socioeconômicos e a prevenção de enchentes, como as ocorridas em 2024. A presidente da Câmara, <strong>vereadora Comandante Nádia</strong>, ressaltou a necessidade de cada ente federativo assumir sua responsabilidade. A vice-prefeita <strong>Bettina Worm</strong> lembrou que, embora os municípios façam sua parte, a proteção contra cheias é responsabilidade do governo federal, devendo ser tratada com pragmatismo e ciência.
+        </p>
+        <p>
+          O vereador <strong>Giovani o Gringo</strong>, diretor da Escola do Legislativo e proponente do evento, reforçou que o desassoreamento é prioridade para a proteção contra enchentes. Segundo ele, é necessário olhar para o futuro, com ações rápidas e efetivas, unindo esforços da população, governos e iniciativa privada. Gringo também destacou a importância de estudos para a construção de reguladores de vazão e barragens estratégicas, garantindo a segurança hídrica e a preservação ambiental sem prejudicar os ecossistemas.
+        </p>
+
+        <h2>Principais Temas Abordados</h2>
+        <ul>
+          <li>Proteção das margens e reflorestamento das matas ciliares;</li>
+          <li>Manutenção da sinalização náutica e segurança da navegação;</li>
+          <li>Licenciamento ambiental e desafios para dragagem fora de hidrovias portuárias;</li>
+          <li>Perdas econômicas causadas pela falta de navegabilidade e interrupção logística;</li>
+          <li>Necessidade de políticas permanentes de monitoramento e manutenção dos rios.</li>
+        </ul>
+
+        <p class="italic">
+          "Porto Alegre tem que trabalhar unida, garantindo que as águas corram de forma segura, sem prejuízos ambientais, e que nossa população tenha segurança e qualidade de vida." — Gringo
+        </p>
+
+        <h2>Contribuições Técnicas e Científicas</h2>
+        <ul>
+          <li><strong>Elisete de Freitas (Univale Taquari):</strong> eventos climáticos extremos aumentam a força da água e causam destruição significativa.</li>
+          <li><strong>Carlos Tucci (IPH-UFRGS):</strong> enchentes geram grande acúmulo de sedimentos, alterando a dinâmica dos rios.</li>
+          <li><strong>Glauber Silveira (Feevale):</strong> proteção das margens, reflorestamento e cuidado dos banhados são essenciais para prevenção.</li>
+          <li><strong>Fernando Meirelles (IPH-UFRGS):</strong> estruturas como a Usina do Gasômetro influenciam na sedimentação do Guaíba.</li>
+        </ul>
+
+        <h2>Marinha, FEPAM e DMAE</h2>
+        <ul>
+          <li><strong>Mario Santos (Marinha):</strong> destacou a destruição de sinalização náutica por enchentes e eventos extremos.</li>
+          <li><strong>Gabriel Ritter (FEPAM):</strong> reforçou avanços na agilização de licenças ambientais e desafios em hidrovias não portuárias.</li>
+          <li><strong>Darcy Nunes (DMAE):</strong> explicou ações de enfrentamento da enchente de 2024, destacando medidas de proteção baseadas no histórico de 1941.</li>
+          <li><strong>Coronel Evaldo Rodrigues Júnior (Defesa Civil):</strong> detalhou mudanças estruturais implementadas desde 2023, fundamentais para resposta rápida a cheias.</li>
+        </ul>
+
+        <h2>Dragagem, Assoreamento e Economia Azul</h2>
+        <ul>
+          <li><strong>Ivo Lessa (Comitê Lago Guaíba):</strong> questionou a definição de órgãos responsáveis pelo licenciamento e monitoramento da remoção de sedimentos.</li>
+          <li><strong>Laércio Thadeu (Sindicato Indústrias de Extração de Areia):</strong> defendeu participação ativa na dragagem do Guaíba, com aproveitamento comercial da areia.</li>
+          <li><strong>Sandro Figueiredo (Portos RS):</strong> explicou a manutenção de canais de navegação e os gargalos ainda existentes, como o Canal da Feitoria.</li>
+          <li><strong>Fernanda Barth (Desenvolvimento Econômico):</strong> destacou perdas econômicas devido à falta de navegabilidade e o impacto ambiental.</li>
+          <li><strong>Sergio Luiz Klein (FIERGS-RS):</strong> ressaltou prejuízos na logística e transporte de mercadorias causados por enchentes.</li>
+          <li><strong>Felipe Teixeira Neto (Ministério Público):</strong> defendeu política permanente de dragagem e monitoramento técnico contínuo.</li>
+          <li><strong>Wilen Manteli (Hidrovias RS):</strong> criticou poluição e uso ineficiente de terrenos às margens do Rio Gravataí e defendeu a reformulação do porto de Porto Alegre.</li>
+          <li><strong>João Pedro Wolff (Clubes Náuticos):</strong> destacou a importância econômica e social da manutenção dos leitos da bacia, com geração de empregos e movimentação de embarcações de recreio.</li>
+        </ul>
+
+        <p>
+          O ciclo de debates reforça que <strong>dragagem, desassoreamento e planejamento integrado são essenciais não apenas para prevenção de cheias</strong>, mas também para a economia azul, preservação ambiental e desenvolvimento sustentável, garantindo que Porto Alegre e o Rio Grande do Sul estejam preparados para os desafios climáticos.
+        </p>
+
+        <h2>Vídeos do Ciclo de Debates</h2>
+        <div class="mb-6">
+          <iframe width="560" height="315" src="https://www.youtube.com/embed/W90W4Yk_mhM?si=xBbKPyv1wUzvOZI7" title="Ciclo de debates sobre o Guaíba parte 1" frameborder="0" allowfullscreen></iframe>
+        </div>
+        <div class="mb-6">
+          <iframe width="560" height="315" src="https://www.youtube.com/embed/4dYf-QmGG7U?si=6BQ_q2HheQqKzxld" title="Ciclo de debates sobre o Guaíba parte 2" frameborder="0" allowfullscreen></iframe>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- Matéria end -->
+
+
+<!-- Botão de Ação -->
+      <div class="mt-10 text-center">
+        <a href="/index.html" 
+           class="inline-block bg-[#005075] text-white font-semibold px-6 py-3 rounded-full shadow-md hover:bg-[#003f5c] transition duration-300">
+          VOLTAR PARA A PÁGINA PRINCIPAL
+        </a>
+      </div>
+<br>
+	<br>
+<!-- Footer Start -->
+    <footer class="bg-gradient-to-r from-[#004989] to-[#3e6f98] py-12 text-white" >
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 gap-8 text-center md:text-left md:grid-cols-2 lg:grid-cols-4">
+                <div>
+                    <h4 class="mb-4 text-xl font-bold">Conheça o Gringo</h4>
+                    <p class="mb-4 opacity-80">Com ampla experiência em saneamento e emergências ambientais, atuo para trazer soluções práticas para os desafios de Porto Alegre.</p>
+                    <a href="/conheca-o-gringo.html" class="no-underline hover:opacity-100 opacity-80"><i class="fas fa-angle-right me-2"></i>Sobre o Gringo</a>
+                </div>
+                <div>
+                    <h4 class="mb-4 text-xl font-bold">Links Úteis</h4>
+                    <a href="/projetos.html" class="block mb-2 no-underline hover:opacity-100 opacity-80"><i class="fas fa-angle-right me-2"></i>Projetos do Gringo</a>
+                    <a href="https://wa.me/+5551981221708" target="_blank" class="block no-underline hover:opacity-100 opacity-80"><i class="fas fa-angle-right me-2"></i>Seja um Apoiador</a>
+                </div>
+                <div>
+                    <h4 class="mb-4 text-xl font-bold">Contato</h4>
+                    <p class="flex items-center justify-center md:justify-start mb-2"><i class="fas fa-envelope mr-3"></i><a href="mailto:contato@gilvaniogringo.com" class="no-underline hover:opacity-100 opacity-80">contato@gilvaniogringo.com</a></p>
+                    <p class="flex items-center justify-center md:justify-start mb-2"><i class="fa fa-phone-alt mr-3"></i><a href="https://wa.me/+5551981221708" class="no-underline hover:opacity-100 opacity-80">(51) 98122-1708</a></p>
+                    <p class="flex items-center justify-center md:justify-start"><i class="fab fa-instagram mr-3"></i><a href="https://www.instagram.com/gilvaniogringo/" class="no-underline hover:opacity-100 opacity-80">@gilvaniogringo</a></p>
+                </div>
+                 <div>
+                    <h4 class="mb-4 text-xl font-bold">Redes Sociais</h4>
+                     <div class="flex justify-center md:justify-start space-x-3">
+                         <a class="flex h-10 w-10 items-center justify-center rounded-full bg-white text-[#004989] transition-transform hover:scale-110" href="https://www.facebook.com/gilvanigringors" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                         <a class="flex h-10 w-10 items-center justify-center rounded-full bg-white text-[#004989] transition-transform hover:scale-110" href="https://www.tiktok.com/@gilvaniogringo" target="_blank"><i class="fab fa-tiktok"></i></a>
+                         <a class="flex h-10 w-10 items-center justify-center rounded-full bg-white text-[#004989] transition-transform hover:scale-110" href="https://www.instagram.com/gilvaniogringo/" target="_blank"><i class="fab fa-instagram"></i></a>
+                         <a class="flex h-10 w-10 items-center justify-center rounded-full bg-white text-[#004989] transition-transform hover:scale-110" href="https://www.youtube.com/@GilvanioGringo" target="_blank"><i class="fab fa-youtube"></i></a>
+                     </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- Footer End -->
+
+    <!-- Copyright Start -->
+    <div class="py-4" style="background-color: #01131c;">
+        <div class="container mx-auto px-4">
+            <div class="text-center text-gray-400 text-sm">
+                <span class="text-body">
+                    <a href="#" class="border-b border-transparent text-white no-underline"><i class="fas fa-copyright text-light me-2"></i>Gringo.rs</a>, Todos os direitos reservados.
+                </span>
+            </div>
+        </div>
+    </div>
+    <!-- Copyright End -->
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.min.js"></script>
+
+    <!-- Template Javascript -->
+    <script>
+        $(document).ready(function() {
+            // Spinner
+            setTimeout(function() {
+                if ($('#spinner').length > 0) {
+                    $('#spinner').removeClass('show').hide();
+                }
+            }, 1);
+
+            // WOW.js initialization
+            new WOW().init();
+
+            // Header Carousel
+            $(".header-carousel").owlCarousel({
+                autoplay: true,
+                smartSpeed: 1500,
+                items: 1,
+                dots: true,
+                loop: true,
+                nav: true,
+                navText: [
+                    '<i class="fa fa-chevron-left"></i>',
+                    '<i class="fa fa-chevron-right"></i>'
+                ]
+            });
+
+            // Mobile Navbar Toggle
+            const navbarToggler = $('#navbar-toggler');
+            const navbarCollapse = $('#navbarCollapse');
+            
+            navbarToggler.click(function() {
+                if (navbarCollapse.is(':visible')) {
+                    navbarCollapse.addClass('hidden');
+                } else {
+                    navbarCollapse.removeClass('hidden');
+                }
+            });
+            
+            // Hide mobile menu on link click
+            $('#navbarCollapse a').on('click', function() {
+                if (navbarCollapse.is(':visible') && $(window).width() < 1024) {
+                    navbarCollapse.addClass('hidden');
+                }
+            });
+
+
+            // Smooth scrolling for anchor links
+            $('a.nav-link[href*="#"]').on('click', function(e) {
+                if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') && location.hostname == this.hostname) {
+                    var target = $(this.hash);
+                    target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
+                    if (target.length) {
+                         e.preventDefault();
+                        $('html, body').animate({
+                            scrollTop: target.offset().top
+                        }, 500);
+                    }
+                }
+            });
+            
+            // Accordion/Tab functionality for "Conheça o Gringo" section
+            $('.accordion-link').on('click', function(e) {
+                e.preventDefault();
+                var target = $(this).data('target');
+                
+                // Update active link style
+                $('.accordion-link').removeClass('active');
+                $(this).addClass('active');
+                
+                // Show/hide content panes
+                $('.tab-content .tab-pane').addClass('hidden').removeClass('active');
+                $(target).removeClass('hidden').addClass('active');
+            });
+            
+        });
+    </script>
+</body>
+
+</html>
