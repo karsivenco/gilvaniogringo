@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="pt-br" class="scroll-smooth">
+<head>
+  <meta charset="utf-8">
+  <title>Gilvani o Gringo</title>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="vereador, porto alegre, gilvani, gringo, projetos, comunidade, política, gilvani dall oglio, gilvani o gringo, gilvani gringo, sarandi" name="keywords">
+  <meta content="Site oficial de Gilvani Dall Oglio, o Gringo. Conheça os projetos, pautas e formas de contato para melhorar nossa comunidade em Porto Alegre." name="description">
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f9fafb;
+    }
+
+    /* Botão do banner */
+    .btn-imagem {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      color: white;
+      background: linear-gradient(to right, #000 0 20%, #006298 20% 100%);
+      border-radius: 0 2vw 2vw 0;
+      box-shadow: 0 0.3vw 0.6vw rgba(0, 0, 0, 0.3);
+      transition: all 0.3s ease-in-out;
+      text-decoration: none;
+      width: 28vw;
+      height: 6vw;
+      font-size: 2vw;
+    }
+    .btn-imagem:hover {
+      background: linear-gradient(to right, #111 0 20%, #0074b8 20% 100%);
+      transform: scale(1.05);
+    }
+    .btn-imagem::before {
+      margin-right: 1vw;
+      font-size: 2vw;
+      font-weight: bold;
+    }
+    @media (max-width: 768px) {
+      .btn-imagem {
+        width: 33vw;
+        height: 8vw;
+        font-size: 3vw;
+      }
+      .btn-imagem::before {
+        font-size: 3vw;
+      }
+    }
+  </style>
+</head>
+<body>
+ <!-- Navbar Start -->
+<nav id="navbar" class="fixed top-0 left-0 z-50 w-full bg-gradient-to-r from-[#004989] to-[#3e6f98] shadow-md">
+  <div class="container mx-auto flex items-center justify-between h-20 px-4">
+    <!-- Logo -->
+    <a href="index.html">
+      <img src="img/logo.png" alt="Logo Gilvani O Gringo" class="h-12">
+    </a>
+
+    <!-- Botão mobile -->
+    <button id="navbar-toggler" class="lg:hidden rounded border border-white p-2 text-white">
+      <i class="fa fa-bars text-xl"></i>
+    </button>
+
+    <!-- Menu -->
+    <div id="navbar-menu" class="hidden absolute top-20 left-0 w-full bg-gradient-to-r from-[#004989] to-[#3e6f98] p-4 flex flex-col space-y-4 lg:flex lg:static lg:flex-row lg:space-x-4 lg:space-y-0">
+      <a href="/index.html" class="rounded-md px-4 py-2 text-white hover:bg-white/20 font-medium">Ínicio</a>
+      <a href="/edital-gringo.html" class="rounded-md px-4 py-2 text-white hover:bg-white/20 font-medium">Emendas Impositivas</a>
+      <a href="https://wa.me/+5551981221708" target="_blank" class="rounded-md px-4 py-2 text-white hover:bg-white/20 font-medium">Contato com o Gringo</a>
+      <a href="/Ultimas-noticias.html" class="rounded-md px-4 py-2 text-white hover:bg-white/20 font-medium">Últimas Notícias</a>
+      <a href="/Projetos.html" class="rounded-md px-4 py-2 text-white hover:bg-white/20 font-medium">Projetos</a>
+      <a href="/Principais-Pautas.html" class="rounded-md px-4 py-2 text-white hover:bg-white/20 font-medium">Principais Pautas</a>
+      <a href="/Conheca-o-Gringo.html" class="rounded-md px-4 py-2 text-white hover:bg-white/20 font-medium">Conheça o Gringo</a>
+    </div>
+  </div>
+</nav>
+
+<!-- Script para toggle mobile -->
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const toggler = document.getElementById('navbar-toggler');
+    const menu = document.getElementById('navbar-menu');
+
+    toggler.addEventListener('click', () => {
+      menu.classList.toggle('hidden');
+      // opcional: animação suave
+      menu.classList.toggle('transition-all');
+      menu.classList.toggle('duration-300');
+      menu.classList.toggle('ease-in-out');
+    });
+
+    // Fecha o menu ao clicar em um link (mobile)
+    menu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        if (window.innerWidth < 1024) {
+          menu.classList.add('hidden');
+        }
+      });
+    });
+  });
+</script>
+  
+<!-- Navbar End -->	
+  <main class="pt-20">
+    <!-- Banner + Botão -->
+    <div class="relative">
+      <img src="img/banner.png" alt="Edital de Emendas 2026 — Inscrições Abertas - vereador gilvani o gringo - saude - educacao - meio ambiente - cultura - segurança" class="w-full object-cover" />
+      
+      <!-- Botão posicionado -->
+      <a href="/edital-gringo" 
+         class="btn-imagem absolute"
+         aria-label="Saiba mais sobre o edital"
+         style="bottom: 17%; right: 9%;">
+        Saiba mais
+      </a>
+    </div>
+  </main>
+	
+<!-- Materia start --><section class="py-12 md:py-20" id="Materia">
+  <div class="container mx-auto px-4">
+    <div class="mx-auto max-w-3xl text-center wow animate__animated animate__fadeInUp">
+	
+      <h2 class="mb-4 text-3xl md:text-4xl font-bold text-[#005075]">
+        A CRISE DO LIXO E O POTENCIAL DE TRANSFORMAÇÃO EM ENERGIA LIMPA
+      </h2>
+      <br><b>10/09/2025</b>
+      <br><br>
+
+      <p>o lixo que produzimos entope bueiros, polui os rios, traz doenças e, pra piorar, custa caro demais? Em 2020, o Brasil gastou mais de <b>R$ 30 bilhões</b> só para lidar com o lixo. Se a gente soma o estrago no meio ambiente e na saúde, esse valor passa fácil dos <b>R$ 90 bilhões em um único ano</b> — estudos mostram que a crise do lixo chega a custar <b>R$ 97 bilhões por ano</b> ao país.</p>
+      <br>
+
+      <h3><b>1) Custos da gestão de resíduos no mundo e no Brasil</b></h3>
+      <img src="img/lixoimg1.png" alt="Custos da gestão de resíduos no mundo e no Brasil" class="mx-auto my-4">
+      <br>
+
+      <p>Imagina isso se repetindo por cinco anos seguidos. São centenas de bilhões indo embora, quando poderiam ser investidos em saúde, educação, transporte, saneamento.</p>
+      <br>
+
+      <h3><b>2) Destinação final de RSU após tratamentos e destinações disponíveis</b></h3>
+      <img src="img/lixoimg2.png" alt="Destinação final de RSU" class="mx-auto my-4">
+      <br>
+
+      <p>Hoje, <b>38% dos resíduos no Brasil ainda têm destinação inadequada</b> — ou seja, vão parar em lixões ou aterros controlados sem tratamento ambiental. Só <b>3%</b> do lixo é reciclado.</p>
+      <p>Enquanto isso, na Europa, países como Suécia e Noruega transformaram quase todo o lixo em solução. <b>Quase 100%</b> do que antes era problema agora vira eletricidade e aquecimento para milhões de casas. Isso tem um nome: <b>Waste to Energy</b>, traduzindo, transformar lixo em energia renovável.</p>
+      <br>
+
+      <h3><b>3) Composição do lixo e projeção de geração no mundo</b></h3>
+      <img src="img/lixoimg3.png" alt="Composição e projeção de geração de lixo" class="mx-auto my-4">
+      <br>
+
+      <p>O mundo gera cada vez mais lixo. Em 2020, eram 2,13 bilhões de toneladas. Em 2050, serão <b>3,78 bilhões</b> — um crescimento de <b>77%</b>.</p>
+      <p>Desse total, quase <b>metade é material orgânico</b> (alimentos e podas) — o que poderia virar adubo, biogás e energia. O resto é reciclável: papel, plástico, vidro, metais. Ou seja, <b>a maior parte do que chamamos de lixo, na verdade, é recurso</b>.</p>
+      <br>
+
+      <h3><b>4) Coleta de resíduos no Brasil</b></h3>
+      <img src="img/lixoimg4.png" alt="Coleta de resíduos por região" class="mx-auto my-4">
+      <br>
+
+      <p>Mesmo com avanços, <b>19,8 milhões de brasileiros não têm coleta regular de resíduos domésticos</b>. No Norte, mais de 20% da população ainda fica sem esse serviço básico.</p>
+      <p>Sem coleta, esses resíduos vão parar em terrenos, rios, córregos, contaminando o solo, as águas e podendo chegar ao mar. É saúde pública e meio ambiente sendo colocados em risco todos os dias.</p>
+      <br>
+
+      <h3><b>5) Para onde vai o resíduo coletado</b></h3>
+      <img src="img/lixoimg5.png" alt="Destino do resíduo coletado" class="mx-auto my-4">
+      <br>
+
+      <p>Dos resíduos coletados, <b>96% vão para disposição no solo</b>, sendo <b>58%</b> em aterros sanitários adequados e <b>38%</b> em lixões e aterros controlados — que poluem o solo, as águas e a saúde da população. Apenas <b>4%</b> é reciclado.</p>
+      <br>
+
+      <p>Agora pensem comigo: se nós aplicássemos a tecnologia de <b>Waste to Energy</b> aqui também, transformaríamos o problema em oportunidade. Em vez de pagar caro para lidar com o lixo, geraríamos energia, empregos e espaço para a cidade respirar.</p>
+      <p>Em Barueri (SP), a primeira usina desse tipo já está saindo do papel. Quando entrar em operação em 2027, vai processar <b>300 mil toneladas de lixo por ano</b> e gerar <b>energia limpa para mais de 320 mil pessoas</b>.</p>
+      <br>
+
+      <p>Com incentivo, planejamento e participação da população, dá pra mudar tudo isso. Imagine um <b>Selo Verde</b>, em que cada bairro que separar corretamente o lixo ganhe <b>desconto no IPTU</b>. Bairros competindo para reciclar mais, população ganhando, cidade ficando limpa, meio ambiente agradecendo.</p>
+      <p>Enquanto isso, a <b>China</b> já tem <b>mais de 600 usinas</b> que transformam lixo em energia, e a <b>Europa</b> manda só <b>20%</b> para aterros, reciclando <b>mais de 40%</b>.</p>
+      <br>
+
+      <p><b>Mas ainda dá tempo de virar o jogo.</b> Só precisamos de <b>visão, parceria, incentivo e da participação de vocês</b>. Do lixão à energia limpa, do problema ao orgulho. Vamos fazer barulho, compartilhar essa ideia, cobrar essa mudança. Se a gente se mexer agora, a gente muda a história da nossa cidade.</p>
+    </div>
+  </div>
+
+  <div class="mt-10 text-center">
+    <a href="/index.html" class="inline-block bg-[#005075] text-white font-semibold px-6 py-3 rounded-full shadow-md hover:bg-[#003f5c] transition duration-300">
+      VOLTAR PARA A PÁGINA PRINCIPAL
+    </a>
+  </div>
+</section>
+
+<!-- Materia end -->
+
+
+	    
+
+    <!-- Footer Start -->
+    <footer class="bg-gradient-to-r from-[#004989] to-[#3e6f98] py-12 text-white" >
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 gap-8 text-center md:text-left md:grid-cols-2 lg:grid-cols-4">
+                <div>
+                    <h4 class="mb-4 text-xl font-bold">Conheça o Gringo</h4>
+                    <p class="mb-4 opacity-80">Com ampla experiência em saneamento e emergências ambientais, atuo para trazer soluções práticas para os desafios de Porto Alegre.</p>
+                    <a href="/conheca-o-gringo.html" class="no-underline hover:opacity-100 opacity-80"><i class="fas fa-angle-right me-2"></i>Sobre o Gringo</a>
+                </div>
+                <div>
+                    <h4 class="mb-4 text-xl font-bold">Links Úteis</h4>
+                    <a href="/projetos.html" class="block mb-2 no-underline hover:opacity-100 opacity-80"><i class="fas fa-angle-right me-2"></i>Projetos do Gringo</a>
+                    <a href="https://wa.me/+5551981221708" target="_blank" class="block no-underline hover:opacity-100 opacity-80"><i class="fas fa-angle-right me-2"></i>Seja um Apoiador</a>
+                </div>
+                <div>
+                    <h4 class="mb-4 text-xl font-bold">Contato</h4>
+                    <p class="flex items-center justify-center md:justify-start mb-2"><i class="fas fa-envelope mr-3"></i><a href="mailto:contato@gilvaniogringo.com" class="no-underline hover:opacity-100 opacity-80">contato@gilvaniogringo.com</a></p>
+                    <p class="flex items-center justify-center md:justify-start mb-2"><i class="fa fa-phone-alt mr-3"></i><a href="https://wa.me/+5551981221708" class="no-underline hover:opacity-100 opacity-80">(51) 98122-1708</a></p>
+                    <p class="flex items-center justify-center md:justify-start"><i class="fab fa-instagram mr-3"></i><a href="https://www.instagram.com/gilvaniogringo/" class="no-underline hover:opacity-100 opacity-80">@gilvaniogringo</a></p>
+                </div>
+                 <div>
+                    <h4 class="mb-4 text-xl font-bold">Redes Sociais</h4>
+                     <div class="flex justify-center md:justify-start space-x-3">
+                         <a class="flex h-10 w-10 items-center justify-center rounded-full bg-white text-[#004989] transition-transform hover:scale-110" href="https://www.facebook.com/gilvanigringors" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                         <a class="flex h-10 w-10 items-center justify-center rounded-full bg-white text-[#004989] transition-transform hover:scale-110" href="https://www.tiktok.com/@gilvaniogringo" target="_blank"><i class="fab fa-tiktok"></i></a>
+                         <a class="flex h-10 w-10 items-center justify-center rounded-full bg-white text-[#004989] transition-transform hover:scale-110" href="https://www.instagram.com/gilvaniogringo/" target="_blank"><i class="fab fa-instagram"></i></a>
+                         <a class="flex h-10 w-10 items-center justify-center rounded-full bg-white text-[#004989] transition-transform hover:scale-110" href="https://www.youtube.com/@GilvanioGringo" target="_blank"><i class="fab fa-youtube"></i></a>
+                     </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- Footer End -->
+
+    <!-- Copyright Start -->
+    <div class="py-4" style="background-color: #01131c;">
+        <div class="container mx-auto px-4">
+            <div class="text-center text-gray-400 text-sm">
+                <span class="text-body">
+                    <a href="#" class="border-b border-transparent text-white no-underline"><i class="fas fa-copyright text-light me-2"></i>Gringo.rs</a>, Todos os direitos reservados.
+                </span>
+            </div>
+        </div>
+    </div>
+    <!-- Copyright End -->
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.min.js"></script>
+
+    <!-- Template Javascript -->
+    <script>
+        $(document).ready(function() {
+            // Spinner
+            setTimeout(function() {
+                if ($('#spinner').length > 0) {
+                    $('#spinner').removeClass('show').hide();
+                }
+            }, 1);
+
+            // WOW.js initialization
+            new WOW().init();
+
+            // Header Carousel
+            $(".header-carousel").owlCarousel({
+                autoplay: true,
+                smartSpeed: 1500,
+                items: 1,
+                dots: true,
+                loop: true,
+                nav: true,
+                navText: [
+                    '<i class="fa fa-chevron-left"></i>',
+                    '<i class="fa fa-chevron-right"></i>'
+                ]
+            });
+
+            // Mobile Navbar Toggle
+            const navbarToggler = $('#navbar-toggler');
+            const navbarCollapse = $('#navbarCollapse');
+            
+            navbarToggler.click(function() {
+                if (navbarCollapse.is(':visible')) {
+                    navbarCollapse.addClass('hidden');
+                } else {
+                    navbarCollapse.removeClass('hidden');
+                }
+            });
+            
+            // Hide mobile menu on link click
+            $('#navbarCollapse a').on('click', function() {
+                if (navbarCollapse.is(':visible') && $(window).width() < 1024) {
+                    navbarCollapse.addClass('hidden');
+                }
+            });
+
+
+            // Smooth scrolling for anchor links
+            $('a.nav-link[href*="#"]').on('click', function(e) {
+                if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') && location.hostname == this.hostname) {
+                    var target = $(this.hash);
+                    target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
+                    if (target.length) {
+                         e.preventDefault();
+                        $('html, body').animate({
+                            scrollTop: target.offset().top
+                        }, 500);
+                    }
+                }
+            });
+            
+            // Accordion/Tab functionality for "Conheça o Gringo" section
+            $('.accordion-link').on('click', function(e) {
+                e.preventDefault();
+                var target = $(this).data('target');
+                
+                // Update active link style
+                $('.accordion-link').removeClass('active');
+                $(this).addClass('active');
+                
+                // Show/hide content panes
+                $('.tab-content .tab-pane').addClass('hidden').removeClass('active');
+                $(target).removeClass('hidden').addClass('active');
+            });
+            
+        });
+    </script>
+</body>
+
+</html>
+
+
+
+
+
+
