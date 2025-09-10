@@ -138,53 +138,152 @@
     </div>
 
     <!-- Container dos posts -->
-    <div id="blog-posts-home" class="my-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 justify-items-center"></div>
+    <div id="blog-posts-home"
+         class="my-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 justify-items-center">
+    </div>
   </div>
 </section>
 
-<!-- Script para carregar os posts --> 
 <script>
-  async function carregarNoticiasHome() {
-    const url = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent('https://gilvaniogringo.blogspot.com/feeds/posts/default?alt=rss')}&_=${Date.now()}`;
-
-    try {
-      const res = await fetch(url);
-      if (!res.ok) throw new Error('Erro ao buscar dados: ' + res.status);
-
-      const data = await res.json();
-      const postsContainer = document.getElementById("blog-posts-home");
-      postsContainer.innerHTML = "";
-
-      data.items.slice(0, 100).forEach(post => {
-        const descricaoLimpa = post.description.replace(/<[^>]+>/g, '').slice(0, 120);
-
-        const postCard = `
-          <div class="w-full bg-white rounded-xl shadow p-5 text-center">
-            <h3 class="text-xl font-semibold text-[#005075] mb-2">${post.title}</h3>
-            <p class="text-gray-600 text-sm mb-2">${new Date(post.pubDate).toLocaleDateString()}</p>
-            <p class="text-gray-700 mb-4">${descricaoLimpa}...</p>
-            <a href="${post.link}" target="_blank" rel="noopener noreferrer" 
-               class="text-[#005075] font-medium underline">
-              Leia mais
-            </a>
-          </div>
-        `;
-        postsContainer.innerHTML += postCard;
-      });
-
-    } catch (error) {
-      console.error(error);
-      document.getElementById("blog-posts-home").innerHTML = `
-        <p class="text-red-600 text-center">Erro ao carregar notícias. Tente novamente mais tarde.</p>
-      `;
-    }
+ const posts = [
+  {
+    title: "Audiência pública debate segurança em academias",
+    date: "25/08/2025",
+    desc: "Câmara debate redes de proteção em academias e normas já existentes para segurança.",
+    link: "/seguranca-academias.html"
+  },
+  {
+    title: "Fiscalização no Brique da Redenção",
+    date: "21/08/2025",
+    desc: "Reforço na fiscalização e segurança para proteger comerciantes formais no Brique.",
+    link: "/brique-redencao.html"
+  },
+  {
+    title: "Mais transparência no uso de radares móveis",
+    date: "13/08/2025",
+    desc: "Projeto propõe divulgar dias, horários e locais onde os radares móveis serão usados.",
+    link: "/radar-movel-eptc.html"
+  },
+  {
+    title: "Plano para proteger o bairro São Luís",
+    date: "13/08/2025",
+    desc: "Planejamento mais abrangente para proteger Canoas de futuras enchentes.",
+    link: "/canoas-sao-luis.html"
+  },
+  {
+    title: "Mudanças em linhas de ônibus",
+    date: "12/08/2025",
+    desc: "Pedido de informações sobre alterações de horários de 21 linhas de ônibus.",
+    link: "/mudancas-onibus.html"
+  },
+  {
+    title: "O Gringo luta pelo trem em Porto Alegre",
+    date: "11/08/2025",
+    desc: "Frente Parlamentar quer ampliar o metrô e melhorar o transporte público na capital.",
+    link: "/trem.html"
+  },
+  {
+    title: "Reconstrução dentária para mulheres vítimas de violência",
+    date: "08/08/2025",
+    desc: "Projeto cria programa no SUS para mulheres vítimas de agressão.",
+    link: "/violencia-contra-mulher.html"
+  },
+  {
+    title: "Adote a Saúde: projeto ampliado",
+    date: "01/08/2025",
+    desc: "Nova proposta permite capacitação, gestão e melhorias em UBSs e pronto atendimentos.",
+    link: "/saude-ja.html"
+  },
+  {
+    title: "Obras dos diques e CEEE Equatorial",
+    date: "30/07/2025",
+    desc: "Vereador cobra urgência e transparência nas obras de contenção em Canoas.",
+    link: "/obras-diques.html"
+  },
+  {
+    title: "Vidros seguros em edificações",
+    date: "29/07/2025",
+    desc: "Projeto torna obrigatória informação técnica sobre segurança dos vidros.",
+    link: "/vidros-de-seguranca.html"
+  },
+  {
+    title: "Faixas exclusivas para motoristas de aplicativo",
+    date: "29/07/2025",
+    desc: "Projeto libera faixas exclusivas para motoristas de aplicativo identificados.",
+    link: "/faixas-exclusivas.html"
+  },
+  {
+    title: "Dragagem dos rios e uso da areia",
+    date: "24/07/2025",
+    desc: "Proposta da FEPAM visa reaproveitar areia retirada das dragagens para prevenção e economia.",
+    link: "/debate-sobre-os-rios.html"
+  },
+  {
+    title: "Contaminantes emergentes e riscos à saúde",
+    date: "14/07/2025",
+    desc: "Especialistas alertam para riscos à saúde com poluição na água do Guaíba.",
+    link: "/contaminantes.html"
+  },
+  {
+    title: "Aplicativo municipal TEMOVEPOA",
+    date: "10/07/2025",
+    desc: "Projeto cria app com taxas menores para motoristas e verba para a saúde.",
+    link: "/temovepoa.html"
+  },
+  {
+    title: "Audiência Pública sobre TEMOVEPOA",
+    date: "09/07/2025",
+    desc: "Câmara debate criação do aplicativo TEMOVEPOA para mobilidade urbana.",
+    link: "/audiencia-temovepoa.html"
+  },
+  {
+    title: "Banco de Água Mineral POA",
+    date: "07/07/2025",
+    desc: "Projeto prevê arrecadar e distribuir água mineral para famílias de baixa renda.",
+    link: "/banco-agua-mineral.html"
+  },
+  {
+    title: "Discussão sobre qualidade da água em Porto Alegre",
+    date: "07/07/2025",
+    desc: "Seminário debate riscos de contaminação e qualidade da água na capital.",
+    link: "/qualidade-agua-poa.html"
+  },
+  {
+    title: "Seminário do Meio Ambiente – participação de Gilvani 'o Gringo'",
+    date: "17/06/2025",
+    desc: "Evento discutiu contaminação hídrica e riscos à saúde da população.",
+    link: "/seminario-meio-ambiente.html"
+  },
+  {
+    title: "COSMAM promove Seminário sobre Meio Ambiente",
+    date: "16/06/2025",
+    desc: "Evento reúne especialistas e sociedade civil para debater proteção ambiental.",
+    link: "/cosmam-seminario.html"
+  },
+  {
+    title: "Conheça o TEMOVEPOA",
+    date: "13/06/2025",
+    desc: "Novo aplicativo municipal de transporte com taxa reduzida e verba para a saúde.",
+    link: "/conheca-temovepoa.html"
   }
+];
 
-  carregarNoticiasHome();
+  const postsContainer = document.getElementById("blog-posts-home");
+
+  posts.forEach(post => {
+    const postCard = `
+      <div class="w-full bg-white rounded-xl shadow p-5 text-center wow animate__animated animate__fadeInUp">
+        <h3 class="text-xl font-semibold text-[#005075] mb-2">${post.title}</h3>
+        <p class="text-gray-600 text-sm mb-2">${post.date}</p>
+        <p class="text-gray-700 mb-4">${post.desc}</p>
+        <a href="${post.link}" class="text-[#005075] font-medium underline">Leia mais</a>
+      </div>
+    `;
+    postsContainer.innerHTML += postCard;
+  });
 </script>
-
-
 <!-- Últimas Notícias end -->
+
 
 <br>
 <br>
