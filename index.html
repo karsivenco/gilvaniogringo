@@ -185,6 +185,7 @@ O que precisamos é dar segurança para que a população saiba o que comprar, q
         <!-- Divisor visual -->
 <div class="h-16 bg-gradient-to-r from-[#005075]/10 to-transparent"></div>
 <!-- Últimas Notícias start -->
+<!-- Últimas Notícias start -->
 <section class="py-12 md:py-20 bg-[#F3F7F9]" id="Ultimas-noticias">
   <div class="container mx-auto px-4">
     <div class="mx-auto max-w-3xl text-center wow animate__animated animate__fadeInUp">
@@ -193,13 +194,14 @@ O que precisamos é dar segurança para que a população saiba o que comprar, q
         Aqui você fica sabendo em primeira mão as notícias e novidades sobre o trabalho do vereador Gilvani.
       </p>
 
-      <a href="https://gilvaniogringo.com/ultimas-noticias.html" class="text-[#005075] text-lg font-semibold inline-block hover:underline">
+      <a href="https://gilvaniogringo.com/ultimas-noticias.html" 
+         class="text-[#005075] text-lg font-semibold inline-block hover:underline">
         SAIBA MAIS NOTÍCIAS AQUI
       </a>
     </div>
 
     <!-- Container posts -->
-    <div id="blog-posts-home" 
+    <div id="blog-posts-home"
          class="mt-10 flex flex-col gap-6 
                 md:grid md:grid-cols-3 md:grid-rows-2 md:gap-6">
     </div>
@@ -208,56 +210,62 @@ O que precisamos é dar segurança para que a população saiba o que comprar, q
 <!-- Últimas Notícias End -->
 
 <script>
-  async function carregarNoticiasHome() {
-    const url = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent('https://gilvaniogringo.blogspot.com/feeds/posts/default?alt=rss')}&_=${Date.now()}`;
-
-    try {
-      const res = await fetch(url);
-      if (!res.ok) throw new Error('Erro ao buscar dados: ' + res.status);
-
-      const data = await res.json();
-      const postsContainer = document.getElementById("blog-posts-home");
-      postsContainer.innerHTML = "";
-
-      // Sempre limitar a 6 posts
-      data.items.slice(0, 6).forEach(post => {
-        const descricaoLimpa = post.description.replace(/<[^>]+>/g, '').slice(0, 120);
-
-        const postCard = `
-          <div class="border rounded-lg p-4 bg-white shadow hover:shadow-lg transition flex flex-col justify-between">
-            <div>
-              <h3 class="text-lg font-semibold mb-2 text-gray-800">${post.title}</h3>
-              <p class="text-gray-500 text-sm mb-2">${new Date(post.pubDate).toLocaleDateString()}</p>
-              <p class="text-gray-700 mb-4">${descricaoLimpa}...</p>
-            </div>
-            <button onclick="abrirPostagem('${post.link}')" 
-                    class="text-[#005075] hover:underline font-medium">
-              Leia mais
-            </button>
-          </div>
-        `;
-        postsContainer.innerHTML += postCard;
-      });
-
-    } catch (error) {
-      console.error(error);
-      document.getElementById("blog-posts-home").innerHTML = `
-        <p class="text-red-600 text-center">Erro ao carregar notícias. Tente novamente mais tarde.</p>
-      `;
+  const posts = [
+    {
+      title: "Audiência pública debate segurança em academias",
+      date: "25/08/2025",
+      desc: "Câmara discute projeto de lei sobre redes de proteção em academias de ginástica e segurança para usuários.",
+      link: "/seguranca-academias.html"
+    },
+    {
+      title: "Fiscalização no Brique da Redenção",
+      date: "21/08/2025",
+      desc: "Solicitado reforço na fiscalização e segurança para proteger comerciantes formais no Brique da Redenção.",
+      link: "/brique-redencao.html"
+    },
+    {
+      title: "Mais transparência no uso de radares móveis",
+      date: "13/08/2025",
+      desc: "Projeto propõe divulgar previamente dias, horários e locais onde os radares móveis serão utilizados.",
+      link: "/radar-movel-eptc.html"
+    },
+    {
+      title: "Plano mais amplo para proteger o bairro São Luís",
+      date: "13/08/2025",
+      desc: "Vereador cobra planejamento mais abrangente para proteger Canoas de futuras enchentes.",
+      link: "/canoas-sao-luis.html"
+    },
+    {
+      title: "O Gringo luta pelo trem em Porto Alegre",
+      date: "11/08/2025",
+      desc: "Frente Parlamentar quer ampliar o metrô e melhorar o transporte público na capital.",
+      link: "/trem.html"
+    },
+    {
+      title: "Reconstrução dentária para mulheres vítimas de violência",
+      date: "08/08/2025",
+      desc: "Projeto cria programa no SUS para atender mulheres que sofreram agressões e perderam dentes.",
+      link: "/violencia-contra-mulher.html"
     }
-  }
+  ];
 
-  function abrirPostagem(link) {
-    document.getElementById('iframe-leitura').src = link;
-    document.getElementById('iframe-post').classList.remove('hidden');
-  }
+  const postsContainer = document.getElementById("blog-posts-home");
 
-  function fecharIframe() {
-    document.getElementById('iframe-post').classList.add('hidden');
-    document.getElementById('iframe-leitura').src = '';
-  }
-
-  carregarNoticiasHome();
+  posts.forEach(post => {
+    const postCard = `
+      <div class="border rounded-lg p-4 bg-white shadow hover:shadow-lg transition flex flex-col justify-between wow animate__animated animate__fadeInUp">
+        <div>
+          <h3 class="text-lg font-semibold mb-2 text-gray-800">${post.title}</h3>
+          <p class="text-gray-500 text-sm mb-2">${post.date}</p>
+          <p class="text-gray-700 mb-4">${post.desc}</p>
+        </div>
+        <a href="${post.link}" class="text-[#005075] hover:underline font-medium">
+          Leia mais
+        </a>
+      </div>
+    `;
+    postsContainer.innerHTML += postCard;
+  });
 </script>
 
 		  <!-- Ultimas noticias end -->
@@ -564,6 +572,7 @@ O que precisamos é dar segurança para que a população saiba o que comprar, q
 </body>
 
 </html>
+
 
 
 
