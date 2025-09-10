@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="pt-br" class="scroll-smooth">
+<head>
+  <meta charset="utf-8">
+  <title>Gilvani o Gringo</title>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="vereador, porto alegre, gilvani, gringo, projetos, comunidade, política, gilvani dall oglio, gilvani o gringo, gilvani gringo, sarandi" name="keywords">
+  <meta content="Site oficial de Gilvani Dall Oglio, o Gringo. Conheça os projetos, pautas e formas de contato para melhorar nossa comunidade em Porto Alegre." name="description">
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #fffff;
+    }
+
+    /* Botão do banner */
+    .btn-imagem {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      color: white;
+      background: linear-gradient(to right, #000 0 20%, #006298 20% 100%);
+      border-radius: 0 2vw 2vw 0;
+      box-shadow: 0 0.3vw 0.6vw rgba(0, 0, 0, 0.3);
+      transition: all 0.3s ease-in-out;
+      text-decoration: none;
+      width: 28vw;
+      height: 6vw;
+      font-size: 2vw;
+    }
+    .btn-imagem:hover {
+      background: linear-gradient(to right, #111 0 20%, #0074b8 20% 100%);
+      transform: scale(1.05);
+    }
+    .btn-imagem::before {
+      margin-right: 1vw;
+      font-size: 2vw;
+      font-weight: bold;
+    }
+    @media (max-width: 768px) {
+      .btn-imagem {
+        width: 33vw;
+        height: 8vw;
+        font-size: 3vw;
+      }
+      .btn-imagem::before {
+        font-size: 3vw;
+      }
+    }
+  </style>
+</head>
+<body>
+ <!-- Navbar Start -->
+<nav id="navbar" class="fixed top-0 left-0 z-50 w-full bg-gradient-to-r from-[#004989] to-[#3e6f98] shadow-md">
+  <div class="container mx-auto flex items-center justify-between h-20 px-4">
+    <!-- Logo -->
+    <a href="index.html">
+      <img src="img/logo.png" alt="Logo Gilvani O Gringo" class="h-12">
+    </a>
+
+    <!-- Botão mobile -->
+    <button id="navbar-toggler" class="lg:hidden rounded border border-white p-2 text-white">
+      <i class="fa fa-bars text-xl"></i>
+    </button>
+
+    <!-- Menu -->
+    <div id="navbar-menu" class="hidden absolute top-20 left-0 w-full bg-gradient-to-r from-[#004989] to-[#3e6f98] p-4 flex flex-col space-y-4 lg:flex lg:static lg:flex-row lg:space-x-4 lg:space-y-0">
+      <a href="/index.html" class="rounded-md px-4 py-2 text-white hover:bg-white/20 font-medium">Ínicio</a>
+      <a href="/edital-gringo.html" class="rounded-md px-4 py-2 text-white hover:bg-white/20 font-medium">Emendas Impositivas</a>
+      <a href="https://wa.me/+5551981221708" target="_blank" class="rounded-md px-4 py-2 text-white hover:bg-white/20 font-medium">Contato com o Gringo</a>
+      <a href="/Ultimas-noticias.html" class="rounded-md px-4 py-2 text-white hover:bg-white/20 font-medium">Últimas Notícias</a>
+      <a href="/Projetos.html" class="rounded-md px-4 py-2 text-white hover:bg-white/20 font-medium">Projetos</a>
+      <a href="/Principais-Pautas.html" class="rounded-md px-4 py-2 text-white hover:bg-white/20 font-medium">Principais Pautas</a>
+      <a href="/Conheca-o-Gringo.html" class="rounded-md px-4 py-2 text-white hover:bg-white/20 font-medium">Conheça o Gringo</a>
+    </div>
+  </div>
+</nav>
+
+<!-- Script para toggle mobile -->
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const toggler = document.getElementById('navbar-toggler');
+    const menu = document.getElementById('navbar-menu');
+
+    toggler.addEventListener('click', () => {
+      menu.classList.toggle('hidden');
+      // opcional: animação suave
+      menu.classList.toggle('transition-all');
+      menu.classList.toggle('duration-300');
+      menu.classList.toggle('ease-in-out');
+    });
+
+    // Fecha o menu ao clicar em um link (mobile)
+    menu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        if (window.innerWidth < 1024) {
+          menu.classList.add('hidden');
+        }
+      });
+    });
+  });
+</script>
+  
+<!-- Navbar End -->	
+  <main class="pt-20">
+    <!-- Banner + Botão -->
+    <div class="relative">
+      <img src="img/banner.png" alt="Edital de Emendas 2026 — Inscrições Abertas - vereador gilvani o gringo - saude - educacao - meio ambiente - cultura - segurança" class="w-full object-cover" />
+      
+      <!-- Botão posicionado -->
+      <a href="/edital-gringo" 
+         class="btn-imagem absolute"
+         aria-label="Saiba mais sobre o edital"
+         style="bottom: 17%; right: 9%;">
+        Saiba mais
+      </a>
+    </div>
+  </main>
+	
+<!-- Materia start -->
+<section class="py-12 md:py-20" id="Materia">
+  <div class="container mx-auto px-4">
+    <div class="mx-auto max-w-3xl text-center wow animate__animated animate__fadeInUp">
+  
+      <h2 class="mb-4 text-3xl md:text-4xl font-bold text-[#005075]">
+        Vereador Gilvani “o Gringo” defende urgência nas obras dos diques e cobra ações firmes das prefeituras com a CEEE Equatorial
+      </h2>
+      <br><b>30/07/2025</b>
+      <br><br>
+      Nesta quarta-feira (30), em entrevista à Rádio Metropolitana de Canoas, o vereador Gilvani “o Gringo” (Republicanos) destacou a importância dos recursos enviados pelo governador Eduardo Leite para as obras de contenção na cidade, mas fez um alerta claro: as obras precisam andar com urgência, responsabilidade e total transparência.
+      <br><br>
+      “O apoio do Governo do Estado é fundamental. Mas não basta o recurso chegar. É preciso fiscalizar, garantir que os custos estejam sob controle e que os prazos sejam cumpridos. Fazer um dique bom não é tão difícil: é usar os materiais certos, trazer força de trabalho e colocar as máquinas para funcionar. Se for preciso, tem que trabalhar 24 horas por dia”, afirmou o vereador.
+      <br><br>
+      Gringo foi enfático ao tratar da insegurança vivida pela população. “É inadmissível que a cada nova chuva as pessoas revivam o medo da tragédia do ano passado. Isso não pode ser normalizado. Precisamos de obras que protejam de verdade e tragam segurança para as famílias.”
+      <br><br>
+      Em relação ao bairro São Luís, uma das áreas atingidas que ainda não possui sistema de proteção, o vereador cobrou uma definição imediata da Prefeitura: “A BR-448 precisa ser oficializada como dique. Essa é a prioridade. Os diques internos têm que vir, claro, mas tudo começa ali. Tenho conversado com moradores e empresários da região, que estão assustados com o modelo atual das obras. O diálogo com a comunidade precisa ser permanente”, disse.
+      <br><br>
+      Gringo também cobrou mais atenção às casas de bombas, com presença constante de equipes e monitoramento eficaz. “Cada casa de bomba precisa ter sensor de nível, monitoramento em tempo real e total transparência para a população. As pessoas têm que poder acompanhar o funcionamento, até pela própria segurança. E nos dias de chuva, tem que ter gente lá, de prontidão. Não adianta ligar a bomba quando a água já entrou nas casas.”
+      <br><br>
+      O vereador também propôs a criação de uma comissão de prefeitos das cidades com casas de bombas, junto ao Governo do Estado, para exigir da CEEE Equatorial a instalação de geradores em todas essas estruturas. “Se eu fosse governador, já teria determinado que a CEEE Equatorial colocasse geradores em todos os locais que não podem ficar sem energia, como também nos hospitais e UPAs. Isso depende da atitude de quem tem a caneta na mão. E deixa claro, que se não fizer, o Estado vai e depois cobrar com juros. Essa empresa vem causando muitos prejuízos ao povo gaúcho. O que não dá é pra aceitar esse descaso com a população”, criticou.
+      <br><br>
+      Por fim, Gringo reforçou seu compromisso com a população: “A força da comunidade é o que me move. Sempre que começa uma chuva forte, as pessoas me acionam direto no telefone, nas redes, pela assessoria. E eu não abro mão de ir pra rua, de estar junto. Ser a voz do povo, para cobrar, fiscalizar e lutar onde for necessário. É por isso que entrei na política e essa é minha prioridade”.
+      
+    </div>
+  </div>
+</section>
+<!-- Materia end -->
+
+	    
+
+    <!-- Footer Start -->
+    <footer class="bg-gradient-to-r from-[#004989] to-[#3e6f98] py-12 text-white" >
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 gap-8 text-center md:text-left md:grid-cols-2 lg:grid-cols-4">
+                <div>
+                    <h4 class="mb-4 text-xl font-bold">Conheça o Gringo</h4>
+                    <p class="mb-4 opacity-80">Com ampla experiência em saneamento e emergências ambientais, atuo para trazer soluções práticas para os desafios de Porto Alegre.</p>
+                    <a href="/conheca-o-gringo.html" class="no-underline hover:opacity-100 opacity-80"><i class="fas fa-angle-right me-2"></i>Sobre o Gringo</a>
+                </div>
+                <div>
+                    <h4 class="mb-4 text-xl font-bold">Links Úteis</h4>
+                    <a href="/projetos.html" class="block mb-2 no-underline hover:opacity-100 opacity-80"><i class="fas fa-angle-right me-2"></i>Projetos do Gringo</a>
+                    <a href="https://wa.me/+5551981221708" target="_blank" class="block no-underline hover:opacity-100 opacity-80"><i class="fas fa-angle-right me-2"></i>Seja um Apoiador</a>
+                </div>
+                <div>
+                    <h4 class="mb-4 text-xl font-bold">Contato</h4>
+                    <p class="flex items-center justify-center md:justify-start mb-2"><i class="fas fa-envelope mr-3"></i><a href="mailto:contato@gilvaniogringo.com" class="no-underline hover:opacity-100 opacity-80">contato@gilvaniogringo.com</a></p>
+                    <p class="flex items-center justify-center md:justify-start mb-2"><i class="fa fa-phone-alt mr-3"></i><a href="https://wa.me/+5551981221708" class="no-underline hover:opacity-100 opacity-80">(51) 98122-1708</a></p>
+                    <p class="flex items-center justify-center md:justify-start"><i class="fab fa-instagram mr-3"></i><a href="https://www.instagram.com/gilvaniogringo/" class="no-underline hover:opacity-100 opacity-80">@gilvaniogringo</a></p>
+                </div>
+                 <div>
+                    <h4 class="mb-4 text-xl font-bold">Redes Sociais</h4>
+                     <div class="flex justify-center md:justify-start space-x-3">
+                         <a class="flex h-10 w-10 items-center justify-center rounded-full bg-white text-[#004989] transition-transform hover:scale-110" href="https://www.facebook.com/gilvanigringors" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                         <a class="flex h-10 w-10 items-center justify-center rounded-full bg-white text-[#004989] transition-transform hover:scale-110" href="https://www.tiktok.com/@gilvaniogringo" target="_blank"><i class="fab fa-tiktok"></i></a>
+                         <a class="flex h-10 w-10 items-center justify-center rounded-full bg-white text-[#004989] transition-transform hover:scale-110" href="https://www.instagram.com/gilvaniogringo/" target="_blank"><i class="fab fa-instagram"></i></a>
+                         <a class="flex h-10 w-10 items-center justify-center rounded-full bg-white text-[#004989] transition-transform hover:scale-110" href="https://www.youtube.com/@GilvanioGringo" target="_blank"><i class="fab fa-youtube"></i></a>
+                     </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- Footer End -->
+
+    <!-- Copyright Start -->
+    <div class="py-4" style="background-color: #01131c;">
+        <div class="container mx-auto px-4">
+            <div class="text-center text-gray-400 text-sm">
+                <span class="text-body">
+                    <a href="#" class="border-b border-transparent text-white no-underline"><i class="fas fa-copyright text-light me-2"></i>Gringo.rs</a>, Todos os direitos reservados.
+                </span>
+            </div>
+        </div>
+    </div>
+    <!-- Copyright End -->
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.min.js"></script>
+
+    <!-- Template Javascript -->
+    <script>
+        $(document).ready(function() {
+            // Spinner
+            setTimeout(function() {
+                if ($('#spinner').length > 0) {
+                    $('#spinner').removeClass('show').hide();
+                }
+            }, 1);
+
+            // WOW.js initialization
+            new WOW().init();
+
+            // Header Carousel
+            $(".header-carousel").owlCarousel({
+                autoplay: true,
+                smartSpeed: 1500,
+                items: 1,
+                dots: true,
+                loop: true,
+                nav: true,
+                navText: [
+                    '<i class="fa fa-chevron-left"></i>',
+                    '<i class="fa fa-chevron-right"></i>'
+                ]
+            });
+
+            // Mobile Navbar Toggle
+            const navbarToggler = $('#navbar-toggler');
+            const navbarCollapse = $('#navbarCollapse');
+            
+            navbarToggler.click(function() {
+                if (navbarCollapse.is(':visible')) {
+                    navbarCollapse.addClass('hidden');
+                } else {
+                    navbarCollapse.removeClass('hidden');
+                }
+            });
+            
+            // Hide mobile menu on link click
+            $('#navbarCollapse a').on('click', function() {
+                if (navbarCollapse.is(':visible') && $(window).width() < 1024) {
+                    navbarCollapse.addClass('hidden');
+                }
+            });
+
+
+            // Smooth scrolling for anchor links
+            $('a.nav-link[href*="#"]').on('click', function(e) {
+                if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') && location.hostname == this.hostname) {
+                    var target = $(this.hash);
+                    target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
+                    if (target.length) {
+                         e.preventDefault();
+                        $('html, body').animate({
+                            scrollTop: target.offset().top
+                        }, 500);
+                    }
+                }
+            });
+            
+            // Accordion/Tab functionality for "Conheça o Gringo" section
+            $('.accordion-link').on('click', function(e) {
+                e.preventDefault();
+                var target = $(this).data('target');
+                
+                // Update active link style
+                $('.accordion-link').removeClass('active');
+                $(this).addClass('active');
+                
+                // Show/hide content panes
+                $('.tab-content .tab-pane').addClass('hidden').removeClass('active');
+                $(target).removeClass('hidden').addClass('active');
+            });
+            
+        });
+    </script>
+</body>
+
+</html>
