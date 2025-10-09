@@ -372,6 +372,7 @@ Visão, parceria, incentivo e da participação de vocês. Do lixão à energia 
 	<!-- Divisor visual -->
 <div class="my-16 h-[6px] w-full bg-[#005075] rounded-full opacity-95"></div>
       <!-- Conheça o Gringo Start -->
+<!-- Conheça o Gringo Start -->
 <section class="py-12 md:py-20 bg-white" id="Conheca-o-Gringo">
   <div class="container mx-auto px-4">
     <div class="mx-auto max-w-3xl text-center pb-10">
@@ -385,7 +386,7 @@ Visão, parceria, incentivo e da participação de vocês. Do lixão à energia 
 
     <div class="flex flex-wrap items-start -mx-4">
       
-      <!-- Lado esquerdo: botões -->
+      <!-- Botões laterais -->
       <div class="w-full lg:w-5/12 px-4 mb-8 lg:mb-0 space-y-4">
         <button class="accordion-link w-full text-left py-4 px-6 font-semibold text-white bg-[#365f8f] rounded-xl shadow-md transition-all duration-300 hover:bg-[#518cd2]" data-target="#collapseOne">
           Apoio em situações de emergência
@@ -401,13 +402,13 @@ Visão, parceria, incentivo e da participação de vocês. Do lixão à energia 
         </button>
       </div>
 
-      <!-- Lado direito: conteúdo dinâmico -->
+      <!-- Conteúdo das abas -->
       <div class="w-full lg:w-7/12 px-4 mt-4 lg:mt-0">
         <div class="tab-content relative">
 
           <!-- Aba 1 -->
           <div id="collapseOne" class="tab-pane active">
-            <div class="transition-all duration-500 bg-white p-6 rounded-2xl shadow-lg border border-gray-200">
+            <div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-200 transition-all duration-500">
               <div class="flex flex-wrap items-center -mx-2">
                 <div class="w-full md:w-7/12 px-2 mb-4 md:mb-0">
                   <img src="img/_ATF6132.jpg" class="w-full rounded-xl shadow-lg object-cover" alt="Gringo em apoio a emergências" onerror="this.onerror=null;this.src='https://placehold.co/600x400/cccccc/ffffff?text=Imagem+Indisponível';">
@@ -426,7 +427,7 @@ Visão, parceria, incentivo e da participação de vocês. Do lixão à energia 
 
           <!-- Aba 2 -->
           <div id="collapseTwo" class="tab-pane hidden">
-            <div class="transition-all duration-500 bg-white p-6 rounded-2xl shadow-lg border border-gray-200">
+            <div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-200 transition-all duration-500">
               <div class="flex flex-wrap items-center -mx-2">
                 <div class="w-full md:w-7/12 px-2 mb-4 md:mb-0">
                   <img src="img/_FSA8055.jpg" class="w-full rounded-xl shadow-lg object-cover" alt="Gringo em projeto de saneamento" onerror="this.onerror=null;this.src='https://placehold.co/600x400/cccccc/ffffff?text=Imagem+Indisponível';">
@@ -445,7 +446,7 @@ Visão, parceria, incentivo e da participação de vocês. Do lixão à energia 
 
           <!-- Aba 3 -->
           <div id="collapseThree" class="tab-pane hidden">
-            <div class="transition-all duration-500 bg-white p-6 rounded-2xl shadow-lg border border-gray-200">
+            <div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-200 transition-all duration-500">
               <div class="flex flex-wrap items-center -mx-2">
                 <div class="w-full md:w-7/12 px-2 mb-4 md:mb-0">
                   <img src="img/_JCM4249.jpg" class="w-full rounded-xl shadow-lg object-cover" alt="Gringo em projeto de segurança contra enchentes" onerror="this.onerror=null;this.src='https://placehold.co/600x400/cccccc/ffffff?text=Imagem+Indisponível';">
@@ -464,7 +465,7 @@ Visão, parceria, incentivo e da participação de vocês. Do lixão à energia 
 
           <!-- Aba 4 -->
           <div id="collapseFour" class="tab-pane hidden">
-            <div class="transition-all duration-500 bg-white p-6 rounded-2xl shadow-lg border border-gray-200">
+            <div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-200 transition-all duration-500">
               <div class="flex flex-wrap items-center -mx-2">
                 <div class="w-full md:w-7/12 px-2 mb-4 md:mb-0">
                   <img src="img/_JCM7134.jpg" class="w-full rounded-xl shadow-lg object-cover" alt="Gringo em comunicação com a população" onerror="this.onerror=null;this.src='https://placehold.co/600x400/cccccc/ffffff?text=Imagem+Indisponível';">
@@ -489,27 +490,20 @@ Visão, parceria, incentivo e da participação de vocês. Do lixão à energia 
 </section>
 
 <script>
-  // Controle das abas e mudança de cor
+  // Controle das abas e mudança de cor dos botões
   document.querySelectorAll('.accordion-link').forEach(btn => {
     btn.addEventListener('click', () => {
+      // reseta botões e abas
       document.querySelectorAll('.accordion-link').forEach(b => b.classList.remove('bg-[#518cd2]'));
-      document.querySelectorAll('.tab-pane').forEach(p => {
-        p.classList.add('hidden');
-        p.querySelector('div').classList.remove('bg-[#365f8f]', 'text-white');
-        p.querySelector('div p').classList.remove('text-white');
-      });
+      document.querySelectorAll('.tab-pane').forEach(p => p.classList.add('hidden'));
 
+      // ativa o botão e aba correspondentes
       btn.classList.add('bg-[#518cd2]');
-      const target = document.querySelector(btn.dataset.target);
-      target.classList.remove('hidden');
-
-      // Muda a cor do card ativo
-      const card = target.querySelector('div');
-      card.classList.add('bg-[#365f8f]', 'text-white');
-      card.querySelector('p').classList.add('text-white');
+      document.querySelector(btn.dataset.target).classList.remove('hidden');
     });
   });
 </script>
+
 
 
     </main>
@@ -752,6 +746,7 @@ Visão, parceria, incentivo e da participação de vocês. Do lixão à energia 
 </body>
 
 </html>
+
 
 
 
