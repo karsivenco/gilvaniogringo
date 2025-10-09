@@ -127,7 +127,7 @@
   </main>
 	
 <!-- Seção do Gringômetro -->
-<section id="gringometro" class="py-12 md:py-20 bg-white" id="materia-em-destaque-1">
+<section id="gringometro" class="py-12 md:py-20 bg-white">
   <div class="container mx-auto px-4">
     <div class="mx-auto max-w-3xl text-center space-y-10">
     <h2 class="mb-4 text-3xl md:text-4xl font-bold text-[#005075]">GRINGÔMETRO
@@ -577,42 +577,113 @@ Visão, parceria, incentivo e da participação de vocês. Do lixão à energia 
             
         });
     </script>
+	<!-- WhatsApp Flutuante - Fale com o Gringo -->
+<style>
+  /* Container principal */
+  .whats-popup {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    z-index: 9999;
+  }
+
+  /* Botão do WhatsApp */
+  .whats-button {
+    background-color: #25d366;
+    color: white;
+    width: 68px;
+    height: 68px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    animation: pulse 2s infinite;
+  }
+
+  .whats-button:hover {
+    transform: scale(1.1);
+  }
+
+  /* Ícone */
+  .whats-button i {
+    font-size: 34px;
+  }
+
+  /* Efeito de “nova mensagem” */
+  .whats-badge {
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    background: #ff2e63;
+    color: white;
+    font-size: 13px;
+    font-weight: bold;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: blink 1.4s infinite;
+  }
+
+  /* Balão de mensagem */
+  .whats-msg {
+    position: absolute;
+    bottom: 80px;
+    right: 0;
+    background: white;
+    color: #005075;
+    font-size: 15px;
+    font-weight: 600;
+    border-radius: 10px;
+    padding: 10px 14px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    animation: fadeIn 0.8s ease forwards;
+  }
+
+  .whats-msg::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    right: 25px;
+    border-width: 8px;
+    border-style: solid;
+    border-color: white transparent transparent transparent;
+  }
+
+  /* Animações */
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.5); }
+    70% { box-shadow: 0 0 0 15px rgba(37, 211, 102, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+
+<div class="whats-popup">
+  <a href="https://wa.me/5551980211001" target="_blank" rel="noopener" class="whats-button" aria-label="Fale com o Gringo no WhatsApp">
+    <i class="fab fa-whatsapp"></i>
+    <span class="whats-badge">1</span>
+  </a>
+  <div class="whats-msg">
+    Fale com o Gringo!
+  </div>
+</div>
+
 </body>
 
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
