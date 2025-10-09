@@ -126,24 +126,161 @@
       </a>
     </div>
   </main>
-<!-- ====================== -->
-<!-- GRINGÔMETRO — LINHAS AZUL E AMARELA -->
-<!-- ====================== -->
-<section id="gringometro" class="bg-white py-10 px-6 md:px-20 text-center">
-  <div class="bg-white rounded-3xl shadow-lg p-10 w-full max-w-4xl mx-auto border border-gray-100">
-    <h2 class="text-3xl md:text-4xl font-extrabold text-[#09679c] tracking-wide uppercase mb-3">
-      GRINGÔMETRO
-    </h2>
-    <p class="text-gray-600 text-base mb-8">
-      Nossa jornada até agora<br>
-      Comparativo de protocolos <strong>abertos</strong> e <strong>concluídos</strong> de Janeiro a Setembro de 2025
-    </p>
+<script>
+/* ===========================
+   GRINGÔMETRO (SVG + Animação)
+   =========================== */
+(function() {
+  // Paleta
+  const AZUL   = "#0099cc";
+  const AZUL_TX= "#005075";       // textos azuis escuros já usados no site
+  const AMARELO= "#fdc303";
 
-    <div class="flex justify-center">
-      <svg id="grafico-gringometro" viewBox="0 0 650 230" class="w-full max-w-3xl"></svg>
-    </div>
-  </div>
-</section>
+  // Dados
+  const TOTAL_ABERTOS    = 1121;
+  const TOTAL_CONCLUIDOS = 813;
+  const dadosMensais = [
+    { mes: "Jan", valor: 316 },
+    { mes: "Fev", valor: 124 },
+    { mes: "Mar", valor: 49  },
+    { mes: "Abr", valor: 47  },
+    { mes: "Mai", valor: 31  },
+    { mes: "Jun", valor: 121 },
+    { mes: "Jul", valor: 29  },
+    { mes: "Ago", valor: 53  },
+    { mes: "Set", valor: 43  }
+  ];
+
+  // Cores por bloco (de mais claro p/ mais escuro)
+  const tonsAzuis = [
+    "#bfe8fb","#a6e1fa","#8fd7f7","#6ec8f0",
+    "#4fb8eb","#2798d0","#0f7fb9","#006aa1","#004f7a"
+  ];
+
+  // SVG alvo
+  const svg = document.getElementById("grafico-gringometro");
+  if (!svg) return;
+
+  // Dimensão & layout
+  const W = 650, H = 230;
+  const M = { top: 12, left: 120, right: 70, rowGap: 56 };
+  const barH = 26, rx = 6;
+  const barW = W - M.left - M.right;
+
+  svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+  svg.innerHTML = ""; // limpa
+
+  // Funções utilitárias
+  const el = (name, attrs = {}) => {
+    const n = document.createElementNS("http://www.w3.org/2000/svg", name);
+    for (const [k, v] of Object.entries(attrs)) n.setAttribute(k, v);
+    return n;
+  };
+  const add = (parent, child) => (parent.appendChild(child), child);
+
+  // --- Títulos das linhas
+  const y1 = M.top + 12;                // baseline primeira barra
+  const y2 = y1 + barH + M.rowGap;      // baseline segunda barra
+
+  add(svg, el("text", {
+    x: 20, y: y1 + barH - 8, "font-size": 14, "font-weight": 800, fill: AZUL_TX
+  })).textContent = "Abertos";
+
+  add(svg, el("text", {
+    x: 20, y: y2 + barH - 8, "font-size": 14, "font-weight": 800, fill: AZUL_TX
+  })).textContent = "Concluídos";
+
+  // --- Barra ABERTOS (cheia)
+  const abertoRect = add(svg, el("rect", {
+    x: M.left, y: y1, width: barW, height: barH, rx, fill: AMARELO
+  }));
+  // Número à direita
+  add(svg, el("text", {
+    x: M.left + barW + 10, y: y1 + barH - 7, "font-size": 16, "font-weight": 800, fill: AZUL_TX
+  })).textContent = TOTAL_ABERTOS.toLocaleString("pt-BR");
+
+  // --- Barra CONCLUÍDOS (segmentos por mês)
+  // Trilha sutil (opcional)
+  add(svg, el("rect", {
+    x: M.left, y: y2, width: barW, height: barH, rx, fill: "#e9eef3"
+  }));
+
+  // Número à direita
+  add(svg, el("text", {
+    x: M.left + barW + 10, y: y2 + barH - 7, "font-size": 16, "font-weight": 800, fill: AZUL_TX
+  })).textContent = TOTAL_CONCLUIDOS.toLocaleString("pt-BR");
+
+  // Segmentos com gap fino
+  const gap = 2;           // separação visual entre blocos
+  let cursorX = M.left;
+
+  // Guardar <rect> para animar
+  const segmentos = [];
+
+  dadosMensais.forEach((d, i) => {
+    const fra = d.valor / TOTAL_CONCLUIDOS;
+    // largura alvo do segmento
+    let w = Math.max(8, Math.round(barW * fra) - gap);
+    const isFirst = i === 0;
+    const isLast  = i === dadosMensais.length - 1;
+
+    // retângulo do segmento
+    const r = add(svg, el("rect", {
+      x: cursorX, y: y2, width: 0, height: barH, // começa em 0 p/ animar
+      rx: isFirst || isLast ? rx : 0,
+      fill: tonsAzuis[i % tonsAzuis.length]
+    }));
+    segmentos.push({ rect: r, targetW: w, startX: cursorX, mes: d.mes });
+
+    // rótulo do mês (pequeno, sem %)
+    const labelX = cursorX + w / 2;
+    add(svg, el("text", {
+      x: labelX, y: y2 + barH + 16,
+      "font-size": 10, "text-anchor": "middle",
+      fill: "#6b7b86", "font-weight": 600
+    })).textContent = d.mes;
+
+    cursorX += w + gap;
+  });
+
+  // --- Ticker de mês (texto que “se move” durante a animação)
+  // cria abaixo das barras, centralizado
+  const ticker = add(svg, el("text", {
+    x: W / 2, y: y2 + barH + 38, "text-anchor": "middle",
+    "font-size": 12, fill: AZUL_TX, "font-weight": 800
+  }));
+  ticker.textContent = " ";
+
+  // --- Animação mês a mês
+  const DUR_SEG = 600; // ms por bloco
+  const INTERVAL = 150; // intervalo entre blocos
+
+  function animateSegment(idx) {
+    if (idx >= segmentos.length) {
+      ticker.textContent = " ";
+      return;
+    }
+    const { rect, targetW, startX, mes } = segmentos[idx];
+    ticker.textContent = mes; // mostra o mês atual
+
+    const t0 = performance.now();
+    function step(t) {
+      const p = Math.min(1, (t - t0) / DUR_SEG);
+      rect.setAttribute("width", (targetW * p).toFixed(2));
+      rect.setAttribute("x", startX); // garante posição
+      if (p < 1) {
+        requestAnimationFrame(step);
+      } else {
+        setTimeout(() => animateSegment(idx + 1), INTERVAL);
+      }
+    }
+    requestAnimationFrame(step);
+  }
+
+  // Inicia animação
+  animateSegment(0);
+})();
+</script>
 
 
 <!-- Notícias em Destaque -->
@@ -597,6 +734,7 @@ Visão, parceria, incentivo e da participação de vocês. Do lixão à energia 
 </body>
 
 </html>
+
 
 
 
