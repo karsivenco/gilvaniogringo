@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="pt-br" class="scroll-smooth">
+<head>
+  <meta charset="utf-8">
+  <title>Gilvani o Gringo</title>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="vereador, porto alegre, gilvani, gringo, projetos, comunidade, política, gilvani dall oglio, gilvani o gringo, gilvani gringo, sarandi" name="keywords">
+  <meta content="Site oficial de Gilvani Dall Oglio, o Gringo. Conheça os projetos, pautas e formas de contato para melhorar nossa comunidade em Porto Alegre." name="description">
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f9fafb;
+    }
+
+    /* Botão do banner */
+    .btn-imagem {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      color: white;
+      background: linear-gradient(to right, #000 0 20%, #006298 20% 100%);
+      border-radius: 0 2vw 2vw 0;
+      box-shadow: 0 0.3vw 0.6vw rgba(0, 0, 0, 0.3);
+      transition: all 0.3s ease-in-out;
+      text-decoration: none;
+      width: 28vw;
+      height: 6vw;
+      font-size: 2vw;
+    }
+    .btn-imagem:hover {
+      background: linear-gradient(to right, #111 0 20%, #0074b8 20% 100%);
+      transform: scale(1.05);
+    }
+    .btn-imagem::before {
+      margin-right: 1vw;
+      font-size: 2vw;
+      font-weight: bold;
+    }
+    @media (max-width: 768px) {
+      .btn-imagem {
+        width: 33vw;
+        height: 8vw;
+        font-size: 3vw;
+      }
+      .btn-imagem::before {
+        font-size: 3vw;
+      }
+    }
+  </style>
+</head>
+<body>
+ <!-- Navbar Start -->
+<nav id="navbar" class="fixed top-0 left-0 z-50 w-full bg-gradient-to-r from-[#004989] to-[#3e6f98] shadow-md">
+  <div class="container mx-auto flex items-center justify-between h-20 px-4">
+    <!-- Logo -->
+    <a href="index.html">
+      <img src="img/logo.png" alt="Logo Gilvani O Gringo" class="h-12">
+    </a>
+
+    <!-- Botão mobile -->
+    <button id="navbar-toggler" class="lg:hidden rounded border border-white p-2 text-white">
+      <i class="fa fa-bars text-xl"></i>
+    </button>
+
+    <!-- Menu -->
+    <div id="navbar-menu" class="hidden absolute top-20 left-0 w-full bg-gradient-to-r from-[#004989] to-[#3e6f98] p-4 flex flex-col space-y-4 lg:flex lg:static lg:flex-row lg:space-x-4 lg:space-y-0">
+      <a href="/index.html" class="rounded-md px-4 py-2 text-white hover:bg-white/20 font-medium">Ínicio</a>
+      <a href="/edital-gringo.html" class="rounded-md px-4 py-2 text-white hover:bg-white/20 font-medium">Emendas Impositivas</a>
+      <a href="https://wa.me/+5551981221708" target="_blank" class="rounded-md px-4 py-2 text-white hover:bg-white/20 font-medium">Contato com o Gringo</a>
+      <a href="/Ultimas-noticias.html" class="rounded-md px-4 py-2 text-white hover:bg-white/20 font-medium">Últimas Notícias</a>
+      <a href="/Projetos.html" class="rounded-md px-4 py-2 text-white hover:bg-white/20 font-medium">Projetos</a>
+      <a href="/Principais-Pautas.html" class="rounded-md px-4 py-2 text-white hover:bg-white/20 font-medium">Principais Pautas</a>
+      <a href="/Conheca-o-Gringo.html" class="rounded-md px-4 py-2 text-white hover:bg-white/20 font-medium">Conheça o Gringo</a>
+    </div>
+  </div>
+</nav>
+
+<!-- Script para toggle mobile -->
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const toggler = document.getElementById('navbar-toggler');
+    const menu = document.getElementById('navbar-menu');
+
+    toggler.addEventListener('click', () => {
+      menu.classList.toggle('hidden');
+      // opcional: animação suave
+      menu.classList.toggle('transition-all');
+      menu.classList.toggle('duration-300');
+      menu.classList.toggle('ease-in-out');
+    });
+
+    // Fecha o menu ao clicar em um link (mobile)
+    menu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        if (window.innerWidth < 1024) {
+          menu.classList.add('hidden');
+        }
+      });
+    });
+  });
+</script>
+  
+<!-- Navbar End -->	
+  <main class="pt-20">
+    <!-- Banner + Botão -->
+    <div class="relative">
+      <img src="img/banner.png" alt="Edital de Emendas 2026 — Inscrições Abertas - vereador gilvani o gringo - saude - educacao - meio ambiente - cultura - segurança" class="w-full object-cover" />
+      
+      <!-- Botão posicionado -->
+      <a href="/edital-gringo" 
+         class="btn-imagem absolute"
+         aria-label="Saiba mais sobre o edital"
+         style="bottom: 17%; right: 9%;">
+        Saiba mais
+      </a>
+    </div>
+  </main>
+<!-- Matéria start -->
+<section class="py-12 md:py-16 bg-[#F3F7F9]">
+  <div class="container mx-auto px-4">
+    <div class="max-w-4xl mx-auto bg-white shadow-md rounded-2xl p-6 md:p-10">
+      
+      <!-- Título -->
+      <h1 class="text-2xl md:text-3xl font-bold text-[#005075] mb-3">
+        Projetos Homologados no Programa “O Povo pelo Povo” — Emendas Impositivas 2026
+      </h1>
+      
+      <!-- Data -->
+      <div class="text-gray-500 text-sm mb-6">08/10/2025</div>
+
+      <!-- Conteúdo -->
+      <div class="prose prose-gray max-w-none text-justify">
+        <p>
+          O Gabinete do Vereador <strong>Gilvani Dall Oglio — “O Gringo”</strong> divulgou a lista de projetos 
+          <strong>homologados</strong> no <em>Programa O Povo pelo Povo — Edital 01/2025</em>, 
+          que destina recursos de <strong>emendas impositivas do orçamento municipal de 2026</strong>.
+        </p>
+
+        <p>
+          A homologação marca uma etapa importante do processo, confirmando que as instituições e iniciativas inscritas 
+          atenderam aos critérios técnicos e documentais exigidos pelo edital. 
+          Esses projetos agora seguem para as próximas fases, que incluem <strong>entrevistas e análises complementares</strong>, 
+          conforme previsto no regulamento.
+        </p>
+
+        <p>
+          O vereador <strong>Gringo</strong> destacou que o objetivo do programa é 
+          <strong>garantir transparência, participação e impacto social real</strong> 
+          na destinação dos recursos públicos:
+        </p>
+
+        <blockquote class="border-l-4 border-[#005075] pl-4 italic text-gray-700">
+          “Cada projeto aprovado representa o esforço coletivo da comunidade. 
+          A gente quer que o dinheiro público chegue onde faz diferença, 
+          transformando a vida das pessoas e melhorando o serviço público.”
+        </blockquote>
+
+        <p>
+          É importante lembrar que o <strong>não chamamento nesta etapa não significa desclassificação</strong>, 
+          já que os projetos não contemplados agora poderão ser analisados em futuras programações orçamentárias 
+          e novos editais.
+        </p>
+
+        <h2 class="text-xl md:text-2xl font-semibold text-[#005075] mt-8 mb-4">Projetos Homologados</h2>
+
+        <ul class="list-disc list-inside space-y-1 text-gray-800">
+          <li>INOVATECH</li>
+          <li>Hospital Vila Nova</li>
+          <li>Associação São Carlos CAPS Pernambuco — Bairro São Geraldo</li>
+          <li>Associação São Carlos CAPS Martins de Lima — Vila São José</li>
+          <li>Parque Belém</li>
+          <li>UPA Moacir Scliar</li>
+          <li>Instituto do Câncer Infantil — Bairro Santana</li>
+          <li>AAPPAD</li>
+          <li>Praça México — Serviços Urbanos (Câmeras de Segurança) — Bairro Alto Petrópolis</li>
+          <li>Qualificação da Praça México — Serviços Urbanos (Equipamentos) — Bairro Alto Petrópolis</li>
+          <li>CTG 35 — Cultura (Tablado) — Bairro Jardim Botânico</li>
+          <li>Mocidade Independente da Lomba do Pinheiro — Cultura e Descentralização da Cultura — Lomba do Pinheiro</li>
+          <li>Maurício Rech — Educação Infantil</li>
+          <li>Valão da Sezefredo (EPTC) — Instalação de Guardrail — Bairro Passo das Pedras</li>
+          <li>Praça na Travessa Quatro — Academia ao Ar Livre — Bairro Costa e Silva</li>
+          <li>Praça Franck Long — Cachorródromo — Bairro Passo D’Areia</li>
+          <li>Ginásio Cecove — Esportes (Melhorias) — Bairro Sarandi (Vila Elisabeth)</li>
+          <li>Jorge Iansen — Serviços Urbanos (Pavimentação) — Bairro Sarandi</li>
+          <li>Souza Lobo — Serviços Urbanos (Pavimentação) — Bairro Vila Jardim</li>
+          <li>Castramóvel — Projeto M. Lescano</li>
+          <li>CTG Raízes do Sul</li>
+          <li>Semana da Restinga — Cultura e Integração Comunitária</li>
+          <li>Educandário São João Batista</li>
+          <li>Alma Mater</li>
+          <li>Praça Antonio Valentim Stoll — Academia — Jardim Itu</li>
+          <li>Praça Monsenhor Roncato — Rua Leopoldo Bettiol — Jardim Itu</li>
+          <li>AMMG — Maria da Glória — Morro da Cruz</li>
+          <li>Instituto Social do Cristal — Cristal</li>
+          <li>Rede Calábria</li>
+        </ul>
+
+        <p class="mt-8">
+          Para mais informações ou dúvidas, entre em contato com o gabinete pelo e-mail: 
+          <a href="mailto:gilvaniogringo@camarapoa.rs.gov.br" class="text-[#005075] underline font-medium">
+            gilvaniogringo@camarapoa.rs.gov.br
+          </a>
+        </p>
+
+        <p class="text-gray-600 mt-6">
+          📅 Porto Alegre, outubro de 2025
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- Matéria end -->
+<!-- Footer Start -->
+    <footer class="bg-gradient-to-r from-[#004989] to-[#3e6f98] py-12 text-white" >
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 gap-8 text-center md:text-left md:grid-cols-2 lg:grid-cols-4">
+                <div>
+                    <h4 class="mb-4 text-xl font-bold">Conheça o Gringo</h4>
+                    <p class="mb-4 opacity-80">Com ampla experiência em saneamento e emergências ambientais, atuo para trazer soluções práticas para os desafios de Porto Alegre.</p>
+                    <a href="/conheca-o-gringo.html" class="no-underline hover:opacity-100 opacity-80"><i class="fas fa-angle-right me-2"></i>Sobre o Gringo</a>
+                </div>
+                <div>
+                    <h4 class="mb-4 text-xl font-bold">Links Úteis</h4>
+                    <a href="/projetos.html" class="block mb-2 no-underline hover:opacity-100 opacity-80"><i class="fas fa-angle-right me-2"></i>Projetos do Gringo</a>
+                    <a href="https://wa.me/+5551981221708" target="_blank" class="block no-underline hover:opacity-100 opacity-80"><i class="fas fa-angle-right me-2"></i>Seja um Apoiador</a>
+                </div>
+                <div>
+                    <h4 class="mb-4 text-xl font-bold">Contato</h4>
+                    <p class="flex items-center justify-center md:justify-start mb-2"><i class="fas fa-envelope mr-3"></i><a href="mailto:contato@gilvaniogringo.com" class="no-underline hover:opacity-100 opacity-80">contato@gilvaniogringo.com</a></p>
+                    <p class="flex items-center justify-center md:justify-start mb-2"><i class="fa fa-phone-alt mr-3"></i><a href="https://wa.me/+5551981221708" class="no-underline hover:opacity-100 opacity-80">(51) 98122-1708</a></p>
+                    <p class="flex items-center justify-center md:justify-start"><i class="fab fa-instagram mr-3"></i><a href="https://www.instagram.com/gilvaniogringo/" class="no-underline hover:opacity-100 opacity-80">@gilvaniogringo</a></p>
+                </div>
+                 <div>
+                    <h4 class="mb-4 text-xl font-bold">Redes Sociais</h4>
+                     <div class="flex justify-center md:justify-start space-x-3">
+                         <a class="flex h-10 w-10 items-center justify-center rounded-full bg-white text-[#004989] transition-transform hover:scale-110" href="https://www.facebook.com/gilvanigringors" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                         <a class="flex h-10 w-10 items-center justify-center rounded-full bg-white text-[#004989] transition-transform hover:scale-110" href="https://www.tiktok.com/@gilvaniogringo" target="_blank"><i class="fab fa-tiktok"></i></a>
+                         <a class="flex h-10 w-10 items-center justify-center rounded-full bg-white text-[#004989] transition-transform hover:scale-110" href="https://www.instagram.com/gilvaniogringo/" target="_blank"><i class="fab fa-instagram"></i></a>
+                         <a class="flex h-10 w-10 items-center justify-center rounded-full bg-white text-[#004989] transition-transform hover:scale-110" href="https://www.youtube.com/@GilvanioGringo" target="_blank"><i class="fab fa-youtube"></i></a>
+                     </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- Footer End -->
+
+    <!-- Copyright Start -->
+    <div class="py-4" style="background-color: #01131c;">
+        <div class="container mx-auto px-4">
+            <div class="text-center text-gray-400 text-sm">
+                <span class="text-body">
+                    <a href="#" class="border-b border-transparent text-white no-underline"><i class="fas fa-copyright text-light me-2"></i>Gringo.rs</a>, Todos os direitos reservados.
+                </span>
+            </div>
+        </div>
+    </div>
+    <!-- Copyright End -->
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.min.js"></script>
+
+    <!-- Template Javascript -->
+    <script>
+        $(document).ready(function() {
+            // Spinner
+            setTimeout(function() {
+                if ($('#spinner').length > 0) {
+                    $('#spinner').removeClass('show').hide();
+                }
+            }, 1);
+
+            // WOW.js initialization
+            new WOW().init();
+
+            // Header Carousel
+            $(".header-carousel").owlCarousel({
+                autoplay: true,
+                smartSpeed: 1500,
+                items: 1,
+                dots: true,
+                loop: true,
+                nav: true,
+                navText: [
+                    '<i class="fa fa-chevron-left"></i>',
+                    '<i class="fa fa-chevron-right"></i>'
+                ]
+            });
+
+            // Mobile Navbar Toggle
+            const navbarToggler = $('#navbar-toggler');
+            const navbarCollapse = $('#navbarCollapse');
+            
+            navbarToggler.click(function() {
+                if (navbarCollapse.is(':visible')) {
+                    navbarCollapse.addClass('hidden');
+                } else {
+                    navbarCollapse.removeClass('hidden');
+                }
+            });
+            
+            // Hide mobile menu on link click
+            $('#navbarCollapse a').on('click', function() {
+                if (navbarCollapse.is(':visible') && $(window).width() < 1024) {
+                    navbarCollapse.addClass('hidden');
+                }
+            });
+
+
+            // Smooth scrolling for anchor links
+            $('a.nav-link[href*="#"]').on('click', function(e) {
+                if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') && location.hostname == this.hostname) {
+                    var target = $(this.hash);
+                    target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
+                    if (target.length) {
+                         e.preventDefault();
+                        $('html, body').animate({
+                            scrollTop: target.offset().top
+                        }, 500);
+                    }
+                }
+            });
+            
+            // Accordion/Tab functionality for "Conheça o Gringo" section
+            $('.accordion-link').on('click', function(e) {
+                e.preventDefault();
+                var target = $(this).data('target');
+                
+                // Update active link style
+                $('.accordion-link').removeClass('active');
+                $(this).addClass('active');
+                
+                // Show/hide content panes
+                $('.tab-content .tab-pane').addClass('hidden').removeClass('active');
+                $(target).removeClass('hidden').addClass('active');
+            });
+            
+        });
+    </script>
+</body>
+
+</html>
