@@ -81,18 +81,24 @@
                     <i class="fas fa-download"></i> Baixar PDF
                 </a>
             </div>
+          <div class="bg-gray-100 h-screen w-full relative">
+                
+                <object data="PDFs/PLCE_30-25 iptu.pdf" type="application/pdf" class="w-full h-full">
+                    
+                    <embed src="PDFs/PLCE_30-25 iptu.pdf" type="application/pdf" class="w-full h-full" />
 
-            <div class="bg-gray-100 h-[75vh] relative">
-                <iframe src="PDFs/PLCE_30-25 iptu.pdf" class="w-full h-full border-0" title="Visualizador de PDF">
-                    <div class="flex flex-col items-center justify-center h-full text-center p-10">
+                    <div class="flex flex-col items-center justify-center h-full text-center p-10 bg-white">
                         <i class="fas fa-file-pdf text-6xl text-red-600 mb-4"></i>
-                        <p class="text-gray-600 mb-4 font-bold">Seu navegador não exibiu o PDF automaticamente.</p>
-                        <a href="PDFs/PLCE_30-25 iptu.pdf" class="bg-[#005075] text-white py-3 px-6 rounded font-bold hover:bg-[#003f5c]">
-                            Clique para Baixar o Arquivo
+                        <p class="text-gray-600 mb-4 font-bold">
+                            Este dispositivo não suporta a visualização direta do PDF aqui.
+                        </p>
+                        <a href="PDFs/PLCE_30-25 iptu.pdf" target="_blank" class="bg-[#005075] text-white py-3 px-6 rounded font-bold hover:bg-[#003f5c]">
+                            Clique para abrir o arquivo
                         </a>
                     </div>
-                </iframe>
-            </div>
+                </object>
+
+</div>
             
             <div class="bg-gray-50 p-3 text-center text-sm text-gray-500 border-t border-gray-200">
                 Visualização oficial - Gabinete Vereador Gilvani
@@ -100,7 +106,11 @@
         </div>
     </div>
 
-
+ <div class="mt-10 text-center">
+    <a href="/index.html" class="inline-block bg-[#005075] text-white font-semibold px-6 py-3 rounded-full shadow-md hover:bg-[#003f5c] transition duration-300">
+      VOLTAR PARA A PÁGINA PRINCIPAL
+    </a>
+ </div>
 
     </main>
 
