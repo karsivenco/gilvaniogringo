@@ -181,6 +181,54 @@
                 }
             }, 1);
 
-</html>
+            // WOW.js initialization
+            new WOW().init();
 
+            // Header Carousel
+            $(".header-carousel").owlCarousel({
+                autoplay: true,
+                smartSpeed: 1500,
+                items: 1,
+                dots: true,
+                loop: true,
+                nav: true,
+                navText: [
+                    '<i class="fa fa-chevron-left"></i>',
+                    '<i class="fa fa-chevron-right"></i>'
+                ]
+            });
+
+            // Mobile Navbar Toggle
+            const navbarToggler = $('#navbar-toggler');
+            const navbarCollapse = $('#navbarCollapse');
+            
+            navbarToggler.click(function() {
+                if (navbarCollapse.is(':visible')) {
+                    navbarCollapse.addClass('hidden');
+                } else {
+                    navbarCollapse.removeClass('hidden');
+                }
+            });
+            
+            // Hide mobile menu on link click
+            $('#navbarCollapse a').on('click', function() {
+                if (navbarCollapse.is(':visible') && $(window).width() < 1024) {
+                    navbarCollapse.addClass('hidden');
+                }
+            });
+
+
+            // Smooth scrolling for anchor links
+            $('a.nav-link[href*="#"]').on('click', function(e) {
+                if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') && location.hostname == this.hostname) {
+                    var target = $(this.hash);
+                    target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
+                    if (target.length) {
+                         e.preventDefault();
+                        $('html, body').animate({
+                            scrollTop: target.offset().top
+                        }, 500);
+                    }
+                }
+  </html>
 
