@@ -1,27 +1,27 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+
+<html lang="pt-br" class="scroll-smooth">
+
 <head>
   <meta charset="utf-8">
-  <title>IPTU Porto Alegre - Gilvani o Gringo</title>
+  <title>Gilvani o Gringo</title>
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  
+  <meta content="vereador, porto alegre, gilvani, gringo, projetos, comunidade, política, gilvani dall oglio, gilvani o gringo, gilvani gringo, sarandi" name="keywords">
+  <meta content="Site oficial de Gilvani Dall Oglio, o Gringo. Conheça os projetos, pautas e formas de contato para melhorar nossa comunidade em Porto Alegre." name="description">
+
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&family=Merriweather:wght@400;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
 
   <style>
     body { font-family: 'Inter', sans-serif; background: #f9fafb; }
-    .font-heading { font-family: 'Merriweather', serif; }
-    
-    /* Padrão de fundo sutil (marca d'água) */
-    .watermark-pattern {
-        background-image: repeating-linear-gradient(-45deg, transparent, transparent 20px, rgba(0, 80, 117, 0.03) 20px, rgba(0, 80, 117, 0.03) 40px);
-    }
   </style>
 </head>
-<body class="flex flex-col min-h-screen">
+<body>
 
 <nav id="navbar" class="fixed top-0 left-0 z-50 w-full bg-gradient-to-r from-[#004989] to-[#3e6f98] shadow-md">
   <div class="container mx-auto flex items-center justify-between h-20 px-4">
@@ -34,15 +34,27 @@
     </button>
 
     <div id="navbar-menu" class="hidden absolute top-20 left-0 w-full bg-gradient-to-r from-[#004989] to-[#3e6f98] p-4 flex flex-col space-y-4 lg:flex lg:static lg:flex-row lg:space-x-4 lg:space-y-0">
-      <a href="index.html" class="rounded-md px-4 py-2 text-white hover:bg-white/20 font-medium">Início</a>
-      <a href="iptupoa.html" class="rounded-md px-4 py-2 bg-white/20 text-white font-medium">IPTU POA</a>
+      <a href="/index.html" class="rounded-md px-4 py-2 text-white hover:bg-white/20 font-medium">Início</a>
+      <a href="/iptupoa.html" class="rounded-md px-4 py-2 text-white hover:bg-white/20 font-medium">IPTU PORTO ALEGRE</a>
       <a href="https://wa.me/+5551980211001" target="_blank" class="rounded-md px-4 py-2 text-white hover:bg-white/20 font-medium">Contato com o Gringo</a>
+      <a href="/Ultimas-noticias.html" class="rounded-md px-4 py-2 text-white hover:bg-white/20 font-medium">Últimas Notícias</a>
+      <a href="/Projetos.html" class="rounded-md px-4 py-2 text-white hover:bg-white/20 font-medium">Projetos</a>
+      <a href="/Principais-Pautas.html" class="rounded-md px-4 py-2 text-white hover:bg-white/20 font-medium">Principais Pautas</a>
+      <a href="/Conheca-o-Gringo.html" class="rounded-md px-4 py-2 text-white hover:bg-white/20 font-medium">Conheça o Gringo</a>
     </div>
   </div>
 </nav>
 
-<main class="flex-grow pt-28 pb-16 watermark-pattern">
-    
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const toggler = document.getElementById('navbar-toggler');
+    const menu = document.getElementById('navbar-menu');
+    toggler.addEventListener('click', () => { menu.classList.toggle('hidden'); });
+  });
+</script>
+<main class="pt-20">
+
+
     <div class="container mx-auto px-4 text-center mb-10">
         <a href="index.html" class="inline-flex items-center text-gray-500 hover:text-[#005075] mb-8 transition font-medium">
             <i class="fas fa-arrow-left mr-2"></i> Voltar para o início
@@ -91,34 +103,64 @@
         </div>
     </div>
 
+  <section class="py-12 md:py-20 bg-white" id="Conheca-o-Gringo">
+      <div class="container mx-auto px-4">
+        <div class="mx-auto max-w-3xl text-center pb-10">
+          <h2 class="mb-4 text-3xl md:text-4xl font-bold text-[#005075]">CONHEÇA O GRINGO</h2>
+          <p class="text-lg text-gray-600">História de luta e dedicação em Porto Alegre.</p>
+        </div>
+        <div class="flex flex-wrap items-start -mx-4">
+          <div class="w-full lg:w-5/12 px-4 mb-8 lg:mb-0 space-y-4">
+            <button class="accordion-link w-full text-left py-4 px-6 font-semibold text-white bg-[#365f8f] rounded-xl shadow-md transition-all duration-300 hover:bg-[#518cd2]" data-target="#collapseOne">Apoio em situações de emergência</button>
+            <button class="accordion-link w-full text-left py-4 px-6 font-semibold text-white bg-[#365f8f] rounded-xl shadow-md transition-all duration-300 hover:bg-[#518cd2]" data-target="#collapseTwo">Projetos saneamento básico</button>
+            <button class="accordion-link w-full text-left py-4 px-6 font-semibold text-white bg-[#365f8f] rounded-xl shadow-md transition-all duration-300 hover:bg-[#518cd2]" data-target="#collapseThree">TEMOVEPOA</button>
+            <button class="accordion-link w-full text-left py-4 px-6 font-semibold text-white bg-[#365f8f] rounded-xl shadow-md transition-all duration-300 hover:bg-[#518cd2]" data-target="#collapseFour">A saúde pede socorro</button>
+          </div>
+          <div class="w-full lg:w-7/12 px-4 mt-4 lg:mt-0">
+            <div class="tab-content relative">
+              <div id="collapseOne" class="tab-pane active"><div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-200"><p class="text-gray-700 mb-4">Atuei em muitos bairros em momentos críticos...</p><a href="#" class="text-[#005075] font-bold">Saiba Mais</a></div></div>
+              <div id="collapseTwo" class="tab-pane hidden"><div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-200"><p class="text-gray-700 mb-4">Soluções eficientes para saneamento...</p><a href="#" class="text-[#005075] font-bold">Saiba Mais</a></div></div>
+              <div id="collapseThree" class="tab-pane hidden"><div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-200"><p class="text-gray-700 mb-4">Apoio ao motorista...</p><a href="#" class="text-[#005075] font-bold">Saiba Mais</a></div></div>
+              <div id="collapseFour" class="tab-pane hidden"><div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-200"><p class="text-gray-700 mb-4">Luta pela saúde...</p><a href="#" class="text-[#005075] font-bold">Saiba Mais</a></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <script>
+      document.querySelectorAll('.accordion-link').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.accordion-link').forEach(b => b.classList.remove('bg-[#518cd2]'));
+          document.querySelectorAll('.tab-pane').forEach(p => p.classList.add('hidden'));
+          btn.classList.add('bg-[#518cd2]');
+          document.querySelector(btn.dataset.target).classList.remove('hidden');
+        });
+      });
+    </script>
+
 </main>
 
-<footer class="bg-gradient-to-r from-[#004989] to-[#3e6f98] py-12 text-white mt-auto">
-    <div class="container mx-auto px-4 text-center">
-       <div class="flex flex-col items-center">
-           <h4 class="font-bold text-xl mb-2">Gilvani o Gringo</h4>
-           <p class="opacity-80 mb-4">A verdade que Porto Alegre precisa ver.</p>
-           
-           <div class="flex space-x-4 mb-6">
-                <a href="https://www.instagram.com/gilvaniogringo/" target="_blank" class="hover:text-gray-300"><i class="fab fa-instagram text-2xl"></i></a>
-                <a href="https://www.facebook.com/gilvanigringors" target="_blank" class="hover:text-gray-300"><i class="fab fa-facebook text-2xl"></i></a>
-                <a href="https://wa.me/+5551980211001" target="_blank" class="hover:text-gray-300"><i class="fab fa-whatsapp text-2xl"></i></a>
-           </div>
-
-           <p class="text-sm opacity-60">© 2025 Todos os direitos reservados.</p>
+<footer class="bg-gradient-to-r from-[#004989] to-[#3e6f98] py-12 text-white" >
+    <div class="container mx-auto px-4 text-center md:text-left">
+       <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+           <div><h4 class="font-bold text-xl mb-4">Gilvani o Gringo</h4><p class="opacity-80">Vereador por Porto Alegre.</p></div>
+           <div><h4 class="font-bold text-xl mb-4">Contato</h4><p>contato@gilvaniogringo.com</p></div>
        </div>
     </div>
 </footer>
 
-<script>
-  document.addEventListener("DOMContentLoaded", function() {
-    const toggler = document.getElementById('navbar-toggler');
-    const menu = document.getElementById('navbar-menu');
-    if(toggler && menu) {
-        toggler.addEventListener('click', () => { menu.classList.toggle('hidden'); });
-    }
-  });
-</script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.min.js"></script>
+<script> new WOW().init(); </script>
+
+<div class="fixed bottom-6 right-6 z-50">
+    <a href="https://wa.me/5551980211001" target="_blank" class="bg-green-500 text-white w-16 h-16 rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition animate-bounce">
+        <i class="fab fa-whatsapp text-4xl"></i>
+    </a>
+</div>
 
 </body>
 </html>
+
+
+
