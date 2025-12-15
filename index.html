@@ -8,10 +8,10 @@
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
   <meta content="vereador, porto alegre, gilvani, gringo, projetos, comunidade, política, gilvani dall oglio, gilvani o gringo, gilvani gringo, sarandi" name="keywords">
   <meta content="Site oficial de Gilvani Dall Oglio, o Gringo. Conheça os projetos, pautas e formas de contato para melhorar nossa comunidade em Porto Alegre." name="description">
-  
+
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&family=Merriweather:wght@400;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   
@@ -19,14 +19,6 @@
 
   <style>
     body { font-family: 'Inter', sans-serif; background: #f9fafb; }
-    
-    /* Fonte Serifada para a Citação (igual ao exemplo React) */
-    .font-heading { font-family: 'Merriweather', serif; }
-    
-    /* Padrão de fundo sutil para a área da citação */
-    .watermark-pattern {
-        background-image: repeating-linear-gradient(-45deg, transparent, transparent 20px, rgba(0, 80, 117, 0.03) 20px, rgba(0, 80, 117, 0.03) 40px);
-    }
   </style>
 </head>
 <body>
@@ -43,7 +35,7 @@
 
     <div id="navbar-menu" class="hidden absolute top-20 left-0 w-full bg-gradient-to-r from-[#004989] to-[#3e6f98] p-4 flex flex-col space-y-4 lg:flex lg:static lg:flex-row lg:space-x-4 lg:space-y-0">
       <a href="/index.html" class="rounded-md px-4 py-2 text-white hover:bg-white/20 font-medium">Início</a>
-      <a href="iptupoa.html" class="rounded-md px-4 py-2 text-white hover:bg-white/20 font-medium">IPTU PORTO ALEGRE</a>
+      <a href="/iptupoa.html" class="rounded-md px-4 py-2 text-white hover:bg-white/20 font-medium">IPTU PORTO ALEGRE</a>
       <a href="https://wa.me/+5551980211001" target="_blank" class="rounded-md px-4 py-2 text-white hover:bg-white/20 font-medium">Contato com o Gringo</a>
       <a href="/Ultimas-noticias.html" class="rounded-md px-4 py-2 text-white hover:bg-white/20 font-medium">Últimas Notícias</a>
       <a href="/Projetos.html" class="rounded-md px-4 py-2 text-white hover:bg-white/20 font-medium">Projetos</a>
@@ -61,55 +53,48 @@
   });
 </script>
 <main class="pt-20">
-    <div class="relative">
-      <img src="img/banner.png" alt="Vereador Gilvani o Gringo" class="w-full object-cover" />
-    </div>
 
-    <section id="documento-destaque" class="py-16 bg-white relative overflow-hidden watermark-pattern">
-        
-        <div class="container mx-auto px-4 text-center mb-12">
-            <blockquote class="relative max-w-4xl mx-auto py-8">
-                <span class="absolute -top-4 left-0 md:left-20 text-6xl text-gray-200 font-serif leading-none select-none">"</span>
-                <h1 class="font-heading text-2xl md:text-4xl font-black text-[#005075] leading-tight px-8">
-                  Saio morto, saio cassado, mas não entrego a vida do povo porto-alegrense.
-                </h1>
-                <span class="absolute -bottom-8 right-0 md:right-20 text-6xl text-gray-200 font-serif leading-none select-none">"</span>
-            </blockquote>
-            <div class="w-24 h-1 bg-[#005075] mx-auto mt-6 mb-4"></div>
-            <p class="text-gray-600 text-lg">Documentos oficiais que mostram o que tentam esconder da população.</p>
-        </div>
-
-        <div class="container mx-auto px-4 max-w-5xl">
-            <div class="bg-white rounded-lg shadow-2xl overflow-hidden border border-gray-200 wow animate__animated animate__fadeInUp">
+    <section id="documento-destaque" class="py-16 bg-white relative overflow-hidden">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col lg:flex-row items-center gap-10">
                 
-                <div class="bg-[#005075] text-white p-4 flex flex-col md:flex-row items-center justify-between gap-4">
-                    <div class="flex items-center gap-3">
-                        <i class="fas fa-file-pdf text-2xl"></i>
-                        <span class="font-heading font-bold text-lg">PLCE 30-25 - Projeto de Lei sobre IPTU</span>
+                <div class="w-full lg:w-5/12 wow animate__animated animate__fadeInLeft">
+                    <div class="inline-block bg-blue-100 text-[#004989] font-bold px-3 py-1 rounded-full text-sm mb-4">
+                        <i class="fas fa-star me-2"></i>DOCUMENTO OFICIAL
                     </div>
-                    <a href="PDFs/PLCE_30-25 iptu.pdf" download class="bg-white text-[#005075] hover:bg-gray-100 font-bold py-2 px-6 rounded shadow transition flex items-center gap-2 text-sm uppercase">
-                        <i class="fas fa-download"></i> Baixar PDF
-                    </a>
+                    <h2 class="text-3xl md:text-4xl font-extrabold text-[#005075] mb-4 leading-tight">
+                        Confira nosso Relatório de Atividades e Resultados
+                    </h2>
+                    <p class="text-gray-600 text-lg mb-8">
+                        Transparência é compromisso. Disponibilizamos o documento completo para que você possa acompanhar cada detalhe do nosso trabalho, fiscalização e as conquistas para Porto Alegre.
+                    </p>
+                    
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <a href="seu-arquivo.pdf" download class="flex items-center justify-center bg-[#005075] hover:bg-[#003f5c] text-white font-bold py-4 px-8 rounded-lg shadow-lg transition transform hover:-translate-y-1">
+                            <i class="fas fa-download mr-3 text-xl"></i>
+                            BAIXAR PDF
+                        </a>
+                        <a href="seu-arquivo.pdf" target="_blank" class="flex items-center justify-center border-2 border-[#005075] text-[#005075] hover:bg-blue-50 font-bold py-4 px-8 rounded-lg transition">
+                            <i class="fas fa-eye mr-3 text-xl"></i>
+                            Visualizar
+                        </a>
+                    </div>
                 </div>
 
-                <div class="bg-gray-100 h-[600px] md:h-[800px] relative">
-                    <iframe src="PDFs/PLCE_30-25 iptu.pdf" class="w-full h-full border-0" title="Visualizador de PDF">
-                        <div class="flex flex-col items-center justify-center h-full text-center p-10">
-                            <i class="fas fa-file-pdf text-6xl text-red-600 mb-4"></i>
-                            <p class="text-gray-600 mb-4 font-bold">Não foi possível visualizar o PDF diretamente.</p>
-                            <a href="PDFs/PLCE_30-25 iptu.pdf" class="bg-[#005075] text-white py-3 px-6 rounded font-bold hover:bg-[#003f5c]">
-                                Clique aqui para baixar o arquivo
-                            </a>
-                        </div>
-                    </iframe>
+                <div class="w-full lg:w-7/12 wow animate__animated animate__fadeInRight">
+                    <div class="relative rounded-2xl shadow-2xl overflow-hidden border border-gray-200 bg-gray-100 h-[400px] md:h-[500px]">
+                        <iframe src="seu-arquivo.pdf" class="w-full h-full" style="border: none;">
+                            <div class="flex flex-col items-center justify-center h-full text-center p-10">
+                                <i class="fas fa-file-pdf text-6xl text-red-600 mb-4"></i>
+                                <p class="text-gray-600">Seu navegador não suporta visualização direta.</p>
+                                <a href="seu-arquivo.pdf" class="text-blue-600 font-bold underline mt-2">Clique para baixar</a>
+                            </div>
+                        </iframe>
+                    </div>
                 </div>
-                
-                <div class="bg-gray-50 p-3 text-center text-sm text-gray-500 border-t border-gray-200">
-                    Visualização do documento oficial
-                </div>
+
             </div>
         </div>
-
     </section>
     <div class="my-10 h-[6px] w-full bg-[#005075] rounded-full opacity-95"></div>
 
