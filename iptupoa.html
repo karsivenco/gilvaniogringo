@@ -1,1 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <title>IPTU Porto Alegre - Gilvani o Gringo</title>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  
+  <script src="https://cdn.tailwindcss.com"></script>
 
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&family=Merriweather:wght@400;700;900&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    body { font-family: 'Inter', sans-serif; background: #f9fafb; }
+    .font-heading { font-family: 'Merriweather', serif; }
+    
+    /* Padrão de fundo sutil (marca d'água) */
+    .watermark-pattern {
+        background-image: repeating-linear-gradient(-45deg, transparent, transparent 20px, rgba(0, 80, 117, 0.03) 20px, rgba(0, 80, 117, 0.03) 40px);
+    }
+  </style>
+</head>
+<body class="flex flex-col min-h-screen">
+
+<nav id="navbar" class="fixed top-0 left-0 z-50 w-full bg-gradient-to-r from-[#004989] to-[#3e6f98] shadow-md">
+  <div class="container mx-auto flex items-center justify-between h-20 px-4">
+    <a href="index.html">
+      <img src="img/logo.png" alt="Logo Gilvani O Gringo" class="h-12">
+    </a>
+
+    <button id="navbar-toggler" class="lg:hidden rounded border border-white p-2 text-white">
+      <i class="fa fa-bars text-xl"></i>
+    </button>
+
+    <div id="navbar-menu" class="hidden absolute top-20 left-0 w-full bg-gradient-to-r from-[#004989] to-[#3e6f98] p-4 flex flex-col space-y-4 lg:flex lg:static lg:flex-row lg:space-x-4 lg:space-y-0">
+      <a href="index.html" class="rounded-md px-4 py-2 text-white hover:bg-white/20 font-medium">Início</a>
+      <a href="iptupoa.html" class="rounded-md px-4 py-2 bg-white/20 text-white font-medium">IPTU POA</a>
+      <a href="https://wa.me/+5551980211001" target="_blank" class="rounded-md px-4 py-2 text-white hover:bg-white/20 font-medium">Contato com o Gringo</a>
+    </div>
+  </div>
+</nav>
+
+<main class="flex-grow pt-28 pb-16 watermark-pattern">
+    
+    <div class="container mx-auto px-4 text-center mb-10">
+        <a href="index.html" class="inline-flex items-center text-gray-500 hover:text-[#005075] mb-8 transition font-medium">
+            <i class="fas fa-arrow-left mr-2"></i> Voltar para o início
+        </a>
+
+        <blockquote class="relative max-w-4xl mx-auto py-6">
+            <span class="absolute -top-4 left-0 md:left-20 text-6xl text-gray-200 font-serif leading-none select-none">"</span>
+            <h1 class="font-heading text-2xl md:text-4xl font-black text-[#005075] leading-tight px-4 md:px-10">
+              Saio morto, saio cassado, mas não entrego a vida do povo porto-alegrense.
+            </h1>
+            <span class="absolute -bottom-8 right-0 md:right-20 text-6xl text-gray-200 font-serif leading-none select-none">"</span>
+        </blockquote>
+        
+        <div class="w-24 h-1 bg-[#005075] mx-auto mt-8 mb-4"></div>
+        <p class="text-gray-600 text-lg">Documentos oficiais que mostram o que tentam esconder da população.</p>
+    </div>
+
+    <div class="container mx-auto px-4 max-w-5xl">
+        <div class="bg-white rounded-lg shadow-2xl overflow-hidden border border-gray-200">
+            
+            <div class="bg-[#005075] text-white p-4 flex flex-col md:flex-row items-center justify-between gap-4">
+                <div class="flex items-center gap-3">
+                    <i class="fas fa-file-pdf text-2xl"></i>
+                    <span class="font-heading font-bold text-lg">PLCE 30-25 - Projeto de Lei IPTU</span>
+                </div>
+                <a href="PDFs/PLCE_30-25 iptu.pdf" download class="bg-white text-[#005075] hover:bg-gray-100 font-bold py-2 px-6 rounded shadow transition flex items-center gap-2 text-sm uppercase">
+                    <i class="fas fa-download"></i> Baixar PDF
+                </a>
+            </div>
+
+            <div class="bg-gray-100 h-[75vh] relative">
+                <iframe src="PDFs/PLCE_30-25 iptu.pdf" class="w-full h-full border-0" title="Visualizador de PDF">
+                    <div class="flex flex-col items-center justify-center h-full text-center p-10">
+                        <i class="fas fa-file-pdf text-6xl text-red-600 mb-4"></i>
+                        <p class="text-gray-600 mb-4 font-bold">Seu navegador não exibiu o PDF automaticamente.</p>
+                        <a href="PDFs/PLCE_30-25 iptu.pdf" class="bg-[#005075] text-white py-3 px-6 rounded font-bold hover:bg-[#003f5c]">
+                            Clique para Baixar o Arquivo
+                        </a>
+                    </div>
+                </iframe>
+            </div>
+            
+            <div class="bg-gray-50 p-3 text-center text-sm text-gray-500 border-t border-gray-200">
+                Visualização oficial - Gabinete Vereador Gilvani
+            </div>
+        </div>
+    </div>
+
+</main>
+
+<footer class="bg-gradient-to-r from-[#004989] to-[#3e6f98] py-12 text-white mt-auto">
+    <div class="container mx-auto px-4 text-center">
+       <div class="flex flex-col items-center">
+           <h4 class="font-bold text-xl mb-2">Gilvani o Gringo</h4>
+           <p class="opacity-80 mb-4">A verdade que Porto Alegre precisa ver.</p>
+           
+           <div class="flex space-x-4 mb-6">
+                <a href="https://www.instagram.com/gilvaniogringo/" target="_blank" class="hover:text-gray-300"><i class="fab fa-instagram text-2xl"></i></a>
+                <a href="https://www.facebook.com/gilvanigringors" target="_blank" class="hover:text-gray-300"><i class="fab fa-facebook text-2xl"></i></a>
+                <a href="https://wa.me/+5551980211001" target="_blank" class="hover:text-gray-300"><i class="fab fa-whatsapp text-2xl"></i></a>
+           </div>
+
+           <p class="text-sm opacity-60">© 2025 Todos os direitos reservados.</p>
+       </div>
+    </div>
+</footer>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const toggler = document.getElementById('navbar-toggler');
+    const menu = document.getElementById('navbar-menu');
+    if(toggler && menu) {
+        toggler.addEventListener('click', () => { menu.classList.toggle('hidden'); });
+    }
+  });
+</script>
+
+</body>
+</html>
