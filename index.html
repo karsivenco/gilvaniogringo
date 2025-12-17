@@ -1,7 +1,5 @@
 <!DOCTYPE html>
-
 <html lang="pt-br" class="scroll-smooth">
-
 <head>
   <meta charset="utf-8">
   <title>Gilvani o Gringo</title>
@@ -9,33 +7,76 @@
   <meta content="vereador, porto alegre, gilvani, gringo, projetos, comunidade, política, gilvani dall oglio, gilvani o gringo, gilvani gringo, sarandi" name="keywords">
   <meta content="Site oficial de Gilvani Dall Oglio, o Gringo. Conheça os projetos, pautas e formas de contato para melhorar nossa comunidade em Porto Alegre." name="description">
 
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
 
+  <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
 
+  <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
 
   <style>
-    body { font-family: 'Inter', sans-serif; background: #f9fafb; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f9fafb;
+    }
+
+    /* Botão do banner */
+    .btn-imagem {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      color: white;
+      background: linear-gradient(to right, #000 0 20%, #006298 20% 100%);
+      border-radius: 0 2vw 2vw 0;
+      box-shadow: 0 0.3vw 0.6vw rgba(0, 0, 0, 0.3);
+      transition: all 0.3s ease-in-out;
+      text-decoration: none;
+      width: 28vw;
+      height: 6vw;
+      font-size: 2vw;
+    }
+    .btn-imagem:hover {
+      background: linear-gradient(to right, #111 0 20%, #0074b8 20% 100%);
+      transform: scale(1.05);
+    }
+    .btn-imagem::before {
+      margin-right: 1vw;
+      font-size: 2vw;
+      font-weight: bold;
+    }
+    @media (max-width: 768px) {
+      .btn-imagem {
+        width: 33vw;
+        height: 8vw;
+        font-size: 3vw;
+      }
+      .btn-imagem::before {
+        font-size: 3vw;
+      }
+    }
   </style>
 </head>
 <body>
-
+ <!-- Navbar Start -->
 <nav id="navbar" class="fixed top-0 left-0 z-50 w-full bg-gradient-to-r from-[#004989] to-[#3e6f98] shadow-md">
   <div class="container mx-auto flex items-center justify-between h-20 px-4">
+    <!-- Logo -->
     <a href="index.html">
       <img src="img/logo.png" alt="Logo Gilvani O Gringo" class="h-12">
     </a>
 
+    <!-- Botão mobile -->
     <button id="navbar-toggler" class="lg:hidden rounded border border-white p-2 text-white">
       <i class="fa fa-bars text-xl"></i>
     </button>
 
+    <!-- Menu -->
     <div id="navbar-menu" class="hidden absolute top-20 left-0 w-full bg-gradient-to-r from-[#004989] to-[#3e6f98] p-4 flex flex-col space-y-4 lg:flex lg:static lg:flex-row lg:space-x-4 lg:space-y-0">
-      <a href="/index.html" class="rounded-md px-4 py-2 text-white hover:bg-white/20 font-medium">Início</a>
-      <a href="/iptupoa.html" class="rounded-md px-4 py-2 text-white hover:bg-white/20 font-medium">IPTU PORTO ALEGRE</a>
+      <a href="/index.html" class="rounded-md px-4 py-2 text-white hover:bg-white/20 font-medium">Ínicio</a>
+      <a href="/edital-gringo.html" class="rounded-md px-4 py-2 text-white hover:bg-white/20 font-medium">Emendas Impositivas</a>
       <a href="https://wa.me/+5551980211001" target="_blank" class="rounded-md px-4 py-2 text-white hover:bg-white/20 font-medium">Contato com o Gringo</a>
       <a href="/Ultimas-noticias.html" class="rounded-md px-4 py-2 text-white hover:bg-white/20 font-medium">Últimas Notícias</a>
       <a href="/Projetos.html" class="rounded-md px-4 py-2 text-white hover:bg-white/20 font-medium">Projetos</a>
@@ -44,130 +85,64 @@
     </div>
   </div>
 </nav>
-
+<!-- Script para toggle mobile -->
 <script>
   document.addEventListener("DOMContentLoaded", function() {
     const toggler = document.getElementById('navbar-toggler');
     const menu = document.getElementById('navbar-menu');
-    toggler.addEventListener('click', () => { menu.classList.toggle('hidden'); });
+
+    toggler.addEventListener('click', () => {
+      menu.classList.toggle('hidden');
+      // opcional: animação suave
+      menu.classList.toggle('transition-all');
+      menu.classList.toggle('duration-300');
+      menu.classList.toggle('ease-in-out');
+    });
+
+    // Fecha o menu ao clicar em um link (mobile)
+    menu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        if (window.innerWidth < 1024) {
+          menu.classList.add('hidden');
+        }
+      });
+    });
   });
 </script>
-<main class="pt-20">
-
-	<!-- iptu documento inicio -->
-<section id="documento-destaque" class="py-16 bg-white relative overflow-hidden">
-        <div class="container mx-auto px-4">
-            <div class="flex flex-col lg:flex-row items-center gap-10">
-                
-                <div class="w-full lg:w-5/12 wow animate__animated animate__fadeInLeft">
-                    <div class="inline-block bg-blue-100 text-[#004989] font-bold px-3 py-1 rounded-full text-sm mb-4">
-                        <i class="fas fa-star me-2"></i>DOCUMENTO OFICIAL
-                    </div>
-                    <h2 class="text-3xl md:text-4xl font-extrabold text-[#005075] mb-4 leading-tight">
-                       Saio morto, saio cassado, mas não entrego a vida do povo porto-alegrense.
-                    </h2>
-                    <p class="text-gray-600 text-lg mb-8">
-                        Transparência é compromisso. Disponibilizamos o documento completo para que você possa acompanhar cada detalhe do nosso trabalho, fiscalização e as conquistas para Porto Alegre.
-                    </p>
-                    
-                    <div class="flex flex-col sm:flex-row gap-4">
-                        <a href="PDFs/PLCE_30-25 iptu.pdf" download class="flex items-center justify-center bg-[#005075] hover:bg-[#003f5c] text-white font-bold py-4 px-8 rounded-lg shadow-lg transition transform hover:-translate-y-1">
-                            <i class="fas fa-download mr-3 text-xl"></i>
-                            BAIXAR PDF
-                        </a>
-                        <a href="PDFs/PLCE_30-25 iptu.pdf" target="_blank" class="flex items-center justify-center border-2 border-[#005075] text-[#005075] hover:bg-blue-50 font-bold py-4 px-8 rounded-lg transition">
-                            <i class="fas fa-eye mr-3 text-xl"></i>
-                            Visualizar
-                        </a>
-                    </div>
-                </div>
-
-              <div class="w-full lg:w-7/12 wow animate__animated animate__fadeInRight">
-    <div class="relative rounded-2xl shadow-2xl overflow-hidden border border-gray-200 bg-gray-100 h-[400px] md:h-[500px] group">
-        
-        <div id="carousel-images" class="w-full h-full relative bg-gray-200">
-            </div>
-
-        <button onclick="changeSlide(-1)" class="absolute left-2 top-1/2 -translate-y-1/2 bg-[#005075]/80 hover:bg-[#005075] text-white w-10 h-10 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10">
-            <i class="fas fa-chevron-left"></i>
-        </button>
-
-        <button onclick="changeSlide(1)" class="absolute right-2 top-1/2 -translate-y-1/2 bg-[#005075]/80 hover:bg-[#005075] text-white w-10 h-10 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10">
-            <i class="fas fa-chevron-right"></i>
-        </button>
-        
-        <div class="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/60 text-white px-4 py-1 rounded-full text-sm font-medium z-10 backdrop-blur-sm">
-            Página <span id="current-page">1</span> de 11
-        </div>
-
-        <a href="iptupoa.html" class="absolute inset-0 z-0 cursor-pointer" title="Ver documento completo"></a>
+  
+<!-- Navbar End -->	
+	<main class="pt-20">
+    <!-- Banner + Botão -->
+    <div class="relative">
+      <img src="img/banner.png" alt="Edital de Emendas 2026 — Inscrições Abertas - vereador gilvani o gringo - saude - educacao - meio ambiente - cultura - segurança" class="w-full object-cover" />
+      
+      <!-- Botão posicionado -->
+      <a href="/edital-gringo" 
+         class="btn-imagem absolute"
+         aria-label="Saiba mais sobre o edital"
+         style="bottom: 8%; right: 5%;">
+        Saiba mais
+      </a>
     </div>
+  </main>
+	
+<!-- Seção do Gringômetro -->
+<section id="gringometro" class="py-12 md:py-20 bg-white">
+  <div class="container mx-auto px-4">
+    <div class="mx-auto max-w-3xl text-center space-y-10">
+    <h2 class="mb-4 text-3xl md:text-4xl font-bold text-[#005075]">GRINGÔMETRO
+    </h2>
+    <p class="text-base text-gray-700 mt-2">
+     De janeiro a setembro de 2025, são dezenas de protocolos abertos e concluídos — cada um representa uma demanda que chegou até o meu gabinete e que eu fiz questão de acompanhar de perto.
 
-    <script>
-        const container = document.getElementById('carousel-images');
-        const pageLabel = document.getElementById('current-page');
-        const totalPages = 11;
-        let currentIndex = 0;
-        let autoSlideInterval;
-
-        // 1. Gera as imagens dinamicamente
-        for (let i = 1; i <= totalPages; i++) {
-            const img = document.createElement('img');
-            // Formata o número com zeros à esquerda (0001, 0002, etc)
-            const pageNum = String(i).padStart(4, '0'); 
-            img.src = `img/iptupoa/PLCE_30-25 iptu_page-${pageNum}.jpg`;
-            img.alt = `Página ${i}`;
-            // Classes Tailwind: Absoluto, invisível por padrão, transição suave
-            img.className = `absolute top-0 left-0 w-full h-full object-contain transition-opacity duration-500 ease-in-out ${i === 1 ? 'opacity-100' : 'opacity-0'}`;
-            img.id = `slide-${i}`;
-            container.appendChild(img);
-        }
-
-        // 2. Função para mudar o slide
-        function showSlide(index) {
-            // Garante o loop infinito
-            if (index >= totalPages) currentIndex = 0;
-            else if (index < 0) currentIndex = totalPages - 1;
-            else currentIndex = index;
-
-            // Atualiza visualização
-            for (let i = 1; i <= totalPages; i++) {
-                const slide = document.getElementById(`slide-${i}`);
-                if (i === currentIndex + 1) {
-                    slide.classList.remove('opacity-0');
-                    slide.classList.add('opacity-100');
-                } else {
-                    slide.classList.remove('opacity-100');
-                    slide.classList.add('opacity-0');
-                }
-            }
-            // Atualiza contador
-            pageLabel.innerText = currentIndex + 1;
-        }
-
-        // 3. Controle dos botões
-        function changeSlide(direction) {
-            clearInterval(autoSlideInterval); // Para o automático se o usuário clicar
-            showSlide(currentIndex + direction);
-            startAutoSlide(); // Reinicia o automático
-        }
-
-        // 4. Inicia Autoplay (passa a cada 4 segundos)
-        function startAutoSlide() {
-            autoSlideInterval = setInterval(() => {
-                showSlide(currentIndex + 1);
-            }, 4000);
-        }
-
-        // Inicia
-        startAutoSlide();
-    </script>
-</div>
-
-            </div>
-        </div>
-    </section>
-	<!-- IPTU DOCUMENTO END -->
+Eu acredito que transparência é mostrar o que está sendo feito, e o Gringômetro é exatamente pra isso: pra que todo mundo possa ver o avanço do nosso mandato, o que já foi entregue e o que ainda está em andamento.
+    </p>
+      <svg id="grafico-gringometro" viewBox="0 0 650 230" class="w-full max-w-3xl"></svg>
+  </div>
+  </div>
+</section>
+<!-- Script externo -->
+<script defer src="/js/gringometro.js"></script>
 	<!-- Divisor visual -->
 <div class="my-16 h-[6px] w-full bg-[#005075] rounded-full opacity-95"></div>
 <!-- Notícias em Destaque -->
@@ -772,9 +747,6 @@ Visão, parceria, incentivo e da participação de vocês. Do lixão à energia 
 </body>
 
 </html>
-
-
-
 
 
 
